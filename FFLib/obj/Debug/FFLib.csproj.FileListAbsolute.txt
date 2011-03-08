@@ -1,0 +1,5 @@
+D:\work\FlyingFish\FFLib\bin\Debug\FFLib.dll
+D:\work\FlyingFish\FFLib\bin\Debug\FFLib.pdb
+D:\work\FlyingFish\FFLib\obj\Debug\ResolveAssemblyReference.cache
+D:\work\FlyingFish\FFLib\obj\Debug\FFLib.dll
+D:\work\FlyingFish\FFLib\obj\Debug\FFLib.pdb
