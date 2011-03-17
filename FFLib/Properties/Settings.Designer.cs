@@ -33,5 +33,27 @@ namespace FFLib.Properties {
                 return ((string)(this["ASPNETDBConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;AttachDbFilename=|DataDirectory|\\FlyingFish.MDF;Integrat" +
+            "ed Security=True;User Instance=True")]
+        public string ffconn {
+            get {
+                return ((string)(this["ffconn"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;AttachDbFilename=D:\\work\\comp4911-flyingfish\\FFWeb\\App_D" +
+            "ata\\FlyingFish.MDF;Integrated Security=True;User Instance=True")]
+        public string FlyingFishConnectionString {
+            get {
+                return ((string)(this["FlyingFishConnectionString"]));
+            }
+        }
     }
 }
