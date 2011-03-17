@@ -15,7 +15,8 @@
             <br />
             <asp:CreateUserWizard ID="cuwCreateUser" runat="server" BackColor="#EFF3FB" BorderColor="#B5C7DE"
                 BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.8em"
-                CreateUserButtonText="Create New User">
+                CreateUserButtonText="Create New User" 
+                oncreateduser="cuwCreateUser_CreatedUser">
                 <ContinueButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
                     BorderWidth="1px" Font-Names="Verdana" ForeColor="#284E98" />
                 <CreateUserButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
@@ -65,6 +66,22 @@
                                 </tr>
                                 <tr>
                                     <td align="right">
+                                        <asp:Label ID="EmployeeIDLabel" runat="server" AssociatedControlID="EmployeeID">Employee ID:</asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="EmployeeID" runat="server" width="146"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="EmployeeIDRequired" runat="server" ControlToValidate="EmployeeID"
+                                            ErrorMessage="Employee ID is required." ToolTip="Employee ID is required." ValidationGroup="cuwCreateUser"
+                                            ForeColor="Red" Display="Dynamic">*</asp:RequiredFieldValidator>
+                                        <asp:CompareValidator ID="EmployeeIDInteger" runat="server" 
+                                            ErrorMessage="Employee ID must be a number." ControlToValidate="EmployeeID" 
+                                            Display="Dynamic" ForeColor="Red" Operator="DataTypeCheck" 
+                                            ToolTip="Employee ID must be a number." Type="Integer" 
+                                            ValidationGroup="cuwCreateUser">*</asp:CompareValidator>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
                                         <asp:Label ID="EmailLabel" runat="server" AssociatedControlID="Email">Email:</asp:Label>
                                     </td>
                                     <td>
@@ -104,8 +121,6 @@
                                         <asp:DropDownList ID="RoleList" runat="server" DataSourceID="RoleSource" 
                                             DataTextField="RoleName" DataValueField="RoleId">
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RoleRequired" runat="server" ErrorMessage="*" ControlToValidate="RoleList"
-                                            ForeColor="Red" ValidationGroup="cuwCreateUser"></asp:RequiredFieldValidator>
                                     </td>
                                 </tr>
                                 <tr>
