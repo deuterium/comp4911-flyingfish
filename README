@@ -2,4 +2,7 @@
 -- Project Managment Application --
 ---------- Flying Fish ------------
 
+To open: 
+1. Open Project > FFLib.proj
+2. Add Existing Website > FFWeb
 Please Note you need to open both projects in one solution and save the solution file on your LOCAL disk, do not add it to the repo
