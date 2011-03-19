@@ -54,8 +54,9 @@ public partial class UserManagement : System.Web.UI.Page
         string tmpEmpID = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("EmployeeID")).Text;
         if (ff.Employees.Where(te => te.empId == Convert.ToInt32(tmpEmpID)).ToArray().Length > 0)
         {
+            //throw new Exception("Employee Number already exists.");
             ((Literal)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ErrorMessage")).Text
-                = "Employee Number alerady exists.";
+                = "Employee Number already exists.";
             e.Cancel = true;
         }
         else
