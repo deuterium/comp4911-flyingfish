@@ -23,7 +23,7 @@ namespace FFLib
 	
 	
 	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FlyingFish")]
-	public partial class FlyingFishClassesDataContext : System.Data.Linq.DataContext
+	public partial class FlyingFishDataContext : System.Data.Linq.DataContext
 	{
 		
 		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
@@ -33,27 +33,24 @@ namespace FFLib
     partial void Insertaspnet_Membership(aspnet_Membership instance);
     partial void Updateaspnet_Membership(aspnet_Membership instance);
     partial void Deleteaspnet_Membership(aspnet_Membership instance);
-    partial void Insertaspnet_Profile(aspnet_Profile instance);
-    partial void Updateaspnet_Profile(aspnet_Profile instance);
-    partial void Deleteaspnet_Profile(aspnet_Profile instance);
     partial void Insertaspnet_Role(aspnet_Role instance);
     partial void Updateaspnet_Role(aspnet_Role instance);
     partial void Deleteaspnet_Role(aspnet_Role instance);
-    partial void Insertaspnet_User(aspnet_User instance);
-    partial void Updateaspnet_User(aspnet_User instance);
-    partial void Deleteaspnet_User(aspnet_User instance);
     partial void Insertaspnet_UsersInRole(aspnet_UsersInRole instance);
     partial void Updateaspnet_UsersInRole(aspnet_UsersInRole instance);
     partial void Deleteaspnet_UsersInRole(aspnet_UsersInRole instance);
-    partial void InsertDefaultTimeSheet(DefaultTimeSheet instance);
-    partial void UpdateDefaultTimeSheet(DefaultTimeSheet instance);
-    partial void DeleteDefaultTimeSheet(DefaultTimeSheet instance);
-    partial void InsertWorkPackageStatusReport(WorkPackageStatusReport instance);
-    partial void UpdateWorkPackageStatusReport(WorkPackageStatusReport instance);
-    partial void DeleteWorkPackageStatusReport(WorkPackageStatusReport instance);
+    partial void Insertaspnet_User(aspnet_User instance);
+    partial void Updateaspnet_User(aspnet_User instance);
+    partial void Deleteaspnet_User(aspnet_User instance);
+    partial void InsertEmployee(Employee instance);
+    partial void UpdateEmployee(Employee instance);
+    partial void DeleteEmployee(Employee instance);
     partial void InsertEmployeeMembership(EmployeeMembership instance);
     partial void UpdateEmployeeMembership(EmployeeMembership instance);
     partial void DeleteEmployeeMembership(EmployeeMembership instance);
+    partial void InsertDefaultTimeSheet(DefaultTimeSheet instance);
+    partial void UpdateDefaultTimeSheet(DefaultTimeSheet instance);
+    partial void DeleteDefaultTimeSheet(DefaultTimeSheet instance);
     partial void InsertEmployeePersonLevel(EmployeePersonLevel instance);
     partial void UpdateEmployeePersonLevel(EmployeePersonLevel instance);
     partial void DeleteEmployeePersonLevel(EmployeePersonLevel instance);
@@ -93,36 +90,36 @@ namespace FFLib
     partial void InsertWorkPackageResponsibleEngineer(WorkPackageResponsibleEngineer instance);
     partial void UpdateWorkPackageResponsibleEngineer(WorkPackageResponsibleEngineer instance);
     partial void DeleteWorkPackageResponsibleEngineer(WorkPackageResponsibleEngineer instance);
-    partial void InsertEmployee(Employee instance);
-    partial void UpdateEmployee(Employee instance);
-    partial void DeleteEmployee(Employee instance);
+    partial void InsertWorkPackageStatusReport(WorkPackageStatusReport instance);
+    partial void UpdateWorkPackageStatusReport(WorkPackageStatusReport instance);
+    partial void DeleteWorkPackageStatusReport(WorkPackageStatusReport instance);
     #endregion
 		
-		public FlyingFishClassesDataContext() : 
-				base(global::FFLib.Properties.Settings.Default.FlyingFishConnectionString, mappingSource)
+		public FlyingFishDataContext() : 
+				base(global::FFLib.Properties.Settings.Default.FlyingFishConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public FlyingFishClassesDataContext(string connection) : 
+		public FlyingFishDataContext(string connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public FlyingFishClassesDataContext(System.Data.IDbConnection connection) : 
+		public FlyingFishDataContext(System.Data.IDbConnection connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public FlyingFishClassesDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public FlyingFishDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public FlyingFishClassesDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public FlyingFishDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
@@ -136,27 +133,11 @@ namespace FFLib
 			}
 		}
 		
-		public System.Data.Linq.Table<aspnet_Profile> aspnet_Profiles
-		{
-			get
-			{
-				return this.GetTable<aspnet_Profile>();
-			}
-		}
-		
 		public System.Data.Linq.Table<aspnet_Role> aspnet_Roles
 		{
 			get
 			{
 				return this.GetTable<aspnet_Role>();
-			}
-		}
-		
-		public System.Data.Linq.Table<aspnet_User> aspnet_Users
-		{
-			get
-			{
-				return this.GetTable<aspnet_User>();
 			}
 		}
 		
@@ -168,19 +149,19 @@ namespace FFLib
 			}
 		}
 		
-		public System.Data.Linq.Table<DefaultTimeSheet> DefaultTimeSheets
+		public System.Data.Linq.Table<aspnet_User> aspnet_Users
 		{
 			get
 			{
-				return this.GetTable<DefaultTimeSheet>();
+				return this.GetTable<aspnet_User>();
 			}
 		}
 		
-		public System.Data.Linq.Table<WorkPackageStatusReport> WorkPackageStatusReports
+		public System.Data.Linq.Table<Employee> Employees
 		{
 			get
 			{
-				return this.GetTable<WorkPackageStatusReport>();
+				return this.GetTable<Employee>();
 			}
 		}
 		
@@ -189,6 +170,14 @@ namespace FFLib
 			get
 			{
 				return this.GetTable<EmployeeMembership>();
+			}
+		}
+		
+		public System.Data.Linq.Table<DefaultTimeSheet> DefaultTimeSheets
+		{
+			get
+			{
+				return this.GetTable<DefaultTimeSheet>();
 			}
 		}
 		
@@ -296,11 +285,11 @@ namespace FFLib
 			}
 		}
 		
-		public System.Data.Linq.Table<Employee> Employees
+		public System.Data.Linq.Table<WorkPackageStatusReport> WorkPackageStatusReports
 		{
 			get
 			{
-				return this.GetTable<Employee>();
+				return this.GetTable<WorkPackageStatusReport>();
 			}
 		}
 	}
@@ -916,205 +905,6 @@ namespace FFLib
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.aspnet_Profile")]
-	public partial class aspnet_Profile : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private System.Guid _UserId;
-		
-		private string _PropertyNames;
-		
-		private string _PropertyValuesString;
-		
-		private System.Data.Linq.Binary _PropertyValuesBinary;
-		
-		private System.DateTime _LastUpdatedDate;
-		
-		private EntityRef<aspnet_User> _aspnet_User;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnUserIdChanging(System.Guid value);
-    partial void OnUserIdChanged();
-    partial void OnPropertyNamesChanging(string value);
-    partial void OnPropertyNamesChanged();
-    partial void OnPropertyValuesStringChanging(string value);
-    partial void OnPropertyValuesStringChanged();
-    partial void OnPropertyValuesBinaryChanging(System.Data.Linq.Binary value);
-    partial void OnPropertyValuesBinaryChanged();
-    partial void OnLastUpdatedDateChanging(System.DateTime value);
-    partial void OnLastUpdatedDateChanged();
-    #endregion
-		
-		public aspnet_Profile()
-		{
-			this._aspnet_User = default(EntityRef<aspnet_User>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					if (this._aspnet_User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PropertyNames", DbType="NText NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string PropertyNames
-		{
-			get
-			{
-				return this._PropertyNames;
-			}
-			set
-			{
-				if ((this._PropertyNames != value))
-				{
-					this.OnPropertyNamesChanging(value);
-					this.SendPropertyChanging();
-					this._PropertyNames = value;
-					this.SendPropertyChanged("PropertyNames");
-					this.OnPropertyNamesChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PropertyValuesString", DbType="NText NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string PropertyValuesString
-		{
-			get
-			{
-				return this._PropertyValuesString;
-			}
-			set
-			{
-				if ((this._PropertyValuesString != value))
-				{
-					this.OnPropertyValuesStringChanging(value);
-					this.SendPropertyChanging();
-					this._PropertyValuesString = value;
-					this.SendPropertyChanged("PropertyValuesString");
-					this.OnPropertyValuesStringChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PropertyValuesBinary", DbType="Image NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary PropertyValuesBinary
-		{
-			get
-			{
-				return this._PropertyValuesBinary;
-			}
-			set
-			{
-				if ((this._PropertyValuesBinary != value))
-				{
-					this.OnPropertyValuesBinaryChanging(value);
-					this.SendPropertyChanging();
-					this._PropertyValuesBinary = value;
-					this.SendPropertyChanged("PropertyValuesBinary");
-					this.OnPropertyValuesBinaryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastUpdatedDate", DbType="DateTime NOT NULL")]
-		public System.DateTime LastUpdatedDate
-		{
-			get
-			{
-				return this._LastUpdatedDate;
-			}
-			set
-			{
-				if ((this._LastUpdatedDate != value))
-				{
-					this.OnLastUpdatedDateChanging(value);
-					this.SendPropertyChanging();
-					this._LastUpdatedDate = value;
-					this.SendPropertyChanged("LastUpdatedDate");
-					this.OnLastUpdatedDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_aspnet_Profile", Storage="_aspnet_User", ThisKey="UserId", OtherKey="UserId", IsForeignKey=true)]
-		public aspnet_User aspnet_User
-		{
-			get
-			{
-				return this._aspnet_User.Entity;
-			}
-			set
-			{
-				aspnet_User previousValue = this._aspnet_User.Entity;
-				if (((previousValue != value) 
-							|| (this._aspnet_User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._aspnet_User.Entity = null;
-						previousValue.aspnet_Profile = null;
-					}
-					this._aspnet_User.Entity = value;
-					if ((value != null))
-					{
-						value.aspnet_Profile = this;
-						this._UserId = value.UserId;
-					}
-					else
-					{
-						this._UserId = default(System.Guid);
-					}
-					this.SendPropertyChanged("aspnet_User");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.aspnet_Roles")]
 	public partial class aspnet_Role : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1301,6 +1091,174 @@ namespace FFLib
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.aspnet_UsersInRoles")]
+	public partial class aspnet_UsersInRole : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _UserId;
+		
+		private System.Guid _RoleId;
+		
+		private EntityRef<aspnet_Role> _aspnet_Role;
+		
+		private EntityRef<aspnet_User> _aspnet_User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUserIdChanging(System.Guid value);
+    partial void OnUserIdChanged();
+    partial void OnRoleIdChanging(System.Guid value);
+    partial void OnRoleIdChanged();
+    #endregion
+		
+		public aspnet_UsersInRole()
+		{
+			this._aspnet_Role = default(EntityRef<aspnet_Role>);
+			this._aspnet_User = default(EntityRef<aspnet_User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._aspnet_User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid RoleId
+		{
+			get
+			{
+				return this._RoleId;
+			}
+			set
+			{
+				if ((this._RoleId != value))
+				{
+					if (this._aspnet_Role.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRoleIdChanging(value);
+					this.SendPropertyChanging();
+					this._RoleId = value;
+					this.SendPropertyChanged("RoleId");
+					this.OnRoleIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Role_aspnet_UsersInRole", Storage="_aspnet_Role", ThisKey="RoleId", OtherKey="RoleId", IsForeignKey=true)]
+		public aspnet_Role aspnet_Role
+		{
+			get
+			{
+				return this._aspnet_Role.Entity;
+			}
+			set
+			{
+				aspnet_Role previousValue = this._aspnet_Role.Entity;
+				if (((previousValue != value) 
+							|| (this._aspnet_Role.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._aspnet_Role.Entity = null;
+						previousValue.aspnet_UsersInRoles.Remove(this);
+					}
+					this._aspnet_Role.Entity = value;
+					if ((value != null))
+					{
+						value.aspnet_UsersInRoles.Add(this);
+						this._RoleId = value.RoleId;
+					}
+					else
+					{
+						this._RoleId = default(System.Guid);
+					}
+					this.SendPropertyChanged("aspnet_Role");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_aspnet_UsersInRole", Storage="_aspnet_User", ThisKey="UserId", OtherKey="UserId", IsForeignKey=true)]
+		public aspnet_User aspnet_User
+		{
+			get
+			{
+				return this._aspnet_User.Entity;
+			}
+			set
+			{
+				aspnet_User previousValue = this._aspnet_User.Entity;
+				if (((previousValue != value) 
+							|| (this._aspnet_User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._aspnet_User.Entity = null;
+						previousValue.aspnet_UsersInRoles.Remove(this);
+					}
+					this._aspnet_User.Entity = value;
+					if ((value != null))
+					{
+						value.aspnet_UsersInRoles.Add(this);
+						this._UserId = value.UserId;
+					}
+					else
+					{
+						this._UserId = default(System.Guid);
+					}
+					this.SendPropertyChanged("aspnet_User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.aspnet_Users")]
 	public partial class aspnet_User : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1322,8 +1280,6 @@ namespace FFLib
 		private System.DateTime _LastActivityDate;
 		
 		private EntityRef<aspnet_Membership> _aspnet_Membership;
-		
-		private EntityRef<aspnet_Profile> _aspnet_Profile;
 		
 		private EntitySet<aspnet_UsersInRole> _aspnet_UsersInRoles;
 		
@@ -1350,7 +1306,6 @@ namespace FFLib
 		public aspnet_User()
 		{
 			this._aspnet_Membership = default(EntityRef<aspnet_Membership>);
-			this._aspnet_Profile = default(EntityRef<aspnet_Profile>);
 			this._aspnet_UsersInRoles = new EntitySet<aspnet_UsersInRole>(new Action<aspnet_UsersInRole>(this.attach_aspnet_UsersInRoles), new Action<aspnet_UsersInRole>(this.detach_aspnet_UsersInRoles));
 			OnCreated();
 		}
@@ -1524,35 +1479,6 @@ namespace FFLib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_aspnet_Profile", Storage="_aspnet_Profile", ThisKey="UserId", OtherKey="UserId", IsUnique=true, IsForeignKey=false)]
-		public aspnet_Profile aspnet_Profile
-		{
-			get
-			{
-				return this._aspnet_Profile.Entity;
-			}
-			set
-			{
-				aspnet_Profile previousValue = this._aspnet_Profile.Entity;
-				if (((previousValue != value) 
-							|| (this._aspnet_Profile.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._aspnet_Profile.Entity = null;
-						previousValue.aspnet_User = null;
-					}
-					this._aspnet_Profile.Entity = value;
-					if ((value != null))
-					{
-						value.aspnet_User = this;
-					}
-					this.SendPropertyChanged("aspnet_Profile");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_aspnet_UsersInRole", Storage="_aspnet_UsersInRoles", ThisKey="UserId", OtherKey="UserId")]
 		public EntitySet<aspnet_UsersInRole> aspnet_UsersInRoles
 		{
@@ -1599,149 +1525,603 @@ namespace FFLib
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.aspnet_UsersInRoles")]
-	public partial class aspnet_UsersInRole : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Employee")]
+	public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private System.Guid _UserId;
+		private int _empId;
 		
-		private System.Guid _RoleId;
+		private string _firstName;
 		
-		private EntityRef<aspnet_Role> _aspnet_Role;
+		private string _lastName;
 		
-		private EntityRef<aspnet_User> _aspnet_User;
+		private int _supervisor;
+		
+		private int _approver;
+		
+		private decimal _minHoursPerWeek;
+		
+		private int _vacationLeave;
+		
+		private int _sickDays;
+		
+		private decimal _flexHours;
+		
+		private int _isActive;
+		
+		private EntityRef<EmployeeMembership> _EmployeeMembership;
+		
+		private EntitySet<EmployeeProject> _EmployeeProjects;
+		
+		private EntityRef<HumanResourcesStaff> _HumanResourcesStaff;
+		
+		private EntitySet<Project> _Projects;
+		
+		private EntitySet<TimeSheetHeader> _TimeSheetHeaders;
+		
+		private EntitySet<TimeSheetHeader> _TimeSheetHeaders1;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnUserIdChanging(System.Guid value);
-    partial void OnUserIdChanged();
-    partial void OnRoleIdChanging(System.Guid value);
-    partial void OnRoleIdChanged();
+    partial void OnempIdChanging(int value);
+    partial void OnempIdChanged();
+    partial void OnfirstNameChanging(string value);
+    partial void OnfirstNameChanged();
+    partial void OnlastNameChanging(string value);
+    partial void OnlastNameChanged();
+    partial void OnsupervisorChanging(int value);
+    partial void OnsupervisorChanged();
+    partial void OnapproverChanging(int value);
+    partial void OnapproverChanged();
+    partial void OnminHoursPerWeekChanging(decimal value);
+    partial void OnminHoursPerWeekChanged();
+    partial void OnvacationLeaveChanging(int value);
+    partial void OnvacationLeaveChanged();
+    partial void OnsickDaysChanging(int value);
+    partial void OnsickDaysChanged();
+    partial void OnflexHoursChanging(decimal value);
+    partial void OnflexHoursChanged();
+    partial void OnisActiveChanging(int value);
+    partial void OnisActiveChanged();
     #endregion
 		
-		public aspnet_UsersInRole()
+		public Employee()
 		{
-			this._aspnet_Role = default(EntityRef<aspnet_Role>);
-			this._aspnet_User = default(EntityRef<aspnet_User>);
+			this._EmployeeMembership = default(EntityRef<EmployeeMembership>);
+			this._EmployeeProjects = new EntitySet<EmployeeProject>(new Action<EmployeeProject>(this.attach_EmployeeProjects), new Action<EmployeeProject>(this.detach_EmployeeProjects));
+			this._HumanResourcesStaff = default(EntityRef<HumanResourcesStaff>);
+			this._Projects = new EntitySet<Project>(new Action<Project>(this.attach_Projects), new Action<Project>(this.detach_Projects));
+			this._TimeSheetHeaders = new EntitySet<TimeSheetHeader>(new Action<TimeSheetHeader>(this.attach_TimeSheetHeaders), new Action<TimeSheetHeader>(this.detach_TimeSheetHeaders));
+			this._TimeSheetHeaders1 = new EntitySet<TimeSheetHeader>(new Action<TimeSheetHeader>(this.attach_TimeSheetHeaders1), new Action<TimeSheetHeader>(this.detach_TimeSheetHeaders1));
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid UserId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int empId
 		{
 			get
 			{
-				return this._UserId;
+				return this._empId;
 			}
 			set
 			{
-				if ((this._UserId != value))
+				if ((this._empId != value))
 				{
-					if (this._aspnet_User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIdChanging(value);
+					this.OnempIdChanging(value);
 					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
+					this._empId = value;
+					this.SendPropertyChanged("empId");
+					this.OnempIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid RoleId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_firstName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string firstName
 		{
 			get
 			{
-				return this._RoleId;
+				return this._firstName;
 			}
 			set
 			{
-				if ((this._RoleId != value))
+				if ((this._firstName != value))
 				{
-					if (this._aspnet_Role.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnRoleIdChanging(value);
+					this.OnfirstNameChanging(value);
 					this.SendPropertyChanging();
-					this._RoleId = value;
-					this.SendPropertyChanged("RoleId");
-					this.OnRoleIdChanged();
+					this._firstName = value;
+					this.SendPropertyChanged("firstName");
+					this.OnfirstNameChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Role_aspnet_UsersInRole", Storage="_aspnet_Role", ThisKey="RoleId", OtherKey="RoleId", IsForeignKey=true)]
-		public aspnet_Role aspnet_Role
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string lastName
 		{
 			get
 			{
-				return this._aspnet_Role.Entity;
+				return this._lastName;
 			}
 			set
 			{
-				aspnet_Role previousValue = this._aspnet_Role.Entity;
+				if ((this._lastName != value))
+				{
+					this.OnlastNameChanging(value);
+					this.SendPropertyChanging();
+					this._lastName = value;
+					this.SendPropertyChanged("lastName");
+					this.OnlastNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_supervisor", DbType="Int NOT NULL")]
+		public int supervisor
+		{
+			get
+			{
+				return this._supervisor;
+			}
+			set
+			{
+				if ((this._supervisor != value))
+				{
+					this.OnsupervisorChanging(value);
+					this.SendPropertyChanging();
+					this._supervisor = value;
+					this.SendPropertyChanged("supervisor");
+					this.OnsupervisorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_approver", DbType="Int NOT NULL")]
+		public int approver
+		{
+			get
+			{
+				return this._approver;
+			}
+			set
+			{
+				if ((this._approver != value))
+				{
+					this.OnapproverChanging(value);
+					this.SendPropertyChanging();
+					this._approver = value;
+					this.SendPropertyChanged("approver");
+					this.OnapproverChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_minHoursPerWeek", DbType="Decimal(3,1) NOT NULL")]
+		public decimal minHoursPerWeek
+		{
+			get
+			{
+				return this._minHoursPerWeek;
+			}
+			set
+			{
+				if ((this._minHoursPerWeek != value))
+				{
+					this.OnminHoursPerWeekChanging(value);
+					this.SendPropertyChanging();
+					this._minHoursPerWeek = value;
+					this.SendPropertyChanged("minHoursPerWeek");
+					this.OnminHoursPerWeekChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_vacationLeave", DbType="Int NOT NULL")]
+		public int vacationLeave
+		{
+			get
+			{
+				return this._vacationLeave;
+			}
+			set
+			{
+				if ((this._vacationLeave != value))
+				{
+					this.OnvacationLeaveChanging(value);
+					this.SendPropertyChanging();
+					this._vacationLeave = value;
+					this.SendPropertyChanged("vacationLeave");
+					this.OnvacationLeaveChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sickDays", DbType="Int NOT NULL")]
+		public int sickDays
+		{
+			get
+			{
+				return this._sickDays;
+			}
+			set
+			{
+				if ((this._sickDays != value))
+				{
+					this.OnsickDaysChanging(value);
+					this.SendPropertyChanging();
+					this._sickDays = value;
+					this.SendPropertyChanged("sickDays");
+					this.OnsickDaysChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_flexHours", DbType="Decimal(3,1) NOT NULL")]
+		public decimal flexHours
+		{
+			get
+			{
+				return this._flexHours;
+			}
+			set
+			{
+				if ((this._flexHours != value))
+				{
+					this.OnflexHoursChanging(value);
+					this.SendPropertyChanging();
+					this._flexHours = value;
+					this.SendPropertyChanged("flexHours");
+					this.OnflexHoursChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_isActive", DbType="Int NOT NULL")]
+		public int isActive
+		{
+			get
+			{
+				return this._isActive;
+			}
+			set
+			{
+				if ((this._isActive != value))
+				{
+					this.OnisActiveChanging(value);
+					this.SendPropertyChanging();
+					this._isActive = value;
+					this.SendPropertyChanged("isActive");
+					this.OnisActiveChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeMembership", Storage="_EmployeeMembership", ThisKey="empId", OtherKey="empId", IsUnique=true, IsForeignKey=false)]
+		public EmployeeMembership EmployeeMembership
+		{
+			get
+			{
+				return this._EmployeeMembership.Entity;
+			}
+			set
+			{
+				EmployeeMembership previousValue = this._EmployeeMembership.Entity;
 				if (((previousValue != value) 
-							|| (this._aspnet_Role.HasLoadedOrAssignedValue == false)))
+							|| (this._EmployeeMembership.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._aspnet_Role.Entity = null;
-						previousValue.aspnet_UsersInRoles.Remove(this);
+						this._EmployeeMembership.Entity = null;
+						previousValue.Employee = null;
 					}
-					this._aspnet_Role.Entity = value;
+					this._EmployeeMembership.Entity = value;
 					if ((value != null))
 					{
-						value.aspnet_UsersInRoles.Add(this);
-						this._RoleId = value.RoleId;
+						value.Employee = this;
 					}
-					else
-					{
-						this._RoleId = default(System.Guid);
-					}
-					this.SendPropertyChanged("aspnet_Role");
+					this.SendPropertyChanged("EmployeeMembership");
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_aspnet_UsersInRole", Storage="_aspnet_User", ThisKey="UserId", OtherKey="UserId", IsForeignKey=true)]
-		public aspnet_User aspnet_User
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeProject", Storage="_EmployeeProjects", ThisKey="empId", OtherKey="empId")]
+		public EntitySet<EmployeeProject> EmployeeProjects
 		{
 			get
 			{
-				return this._aspnet_User.Entity;
+				return this._EmployeeProjects;
 			}
 			set
 			{
-				aspnet_User previousValue = this._aspnet_User.Entity;
+				this._EmployeeProjects.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_HumanResourcesStaff", Storage="_HumanResourcesStaff", ThisKey="empId", OtherKey="empId", IsUnique=true, IsForeignKey=false)]
+		public HumanResourcesStaff HumanResourcesStaff
+		{
+			get
+			{
+				return this._HumanResourcesStaff.Entity;
+			}
+			set
+			{
+				HumanResourcesStaff previousValue = this._HumanResourcesStaff.Entity;
 				if (((previousValue != value) 
-							|| (this._aspnet_User.HasLoadedOrAssignedValue == false)))
+							|| (this._HumanResourcesStaff.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._aspnet_User.Entity = null;
-						previousValue.aspnet_UsersInRoles.Remove(this);
+						this._HumanResourcesStaff.Entity = null;
+						previousValue.Employee = null;
 					}
-					this._aspnet_User.Entity = value;
+					this._HumanResourcesStaff.Entity = value;
 					if ((value != null))
 					{
-						value.aspnet_UsersInRoles.Add(this);
-						this._UserId = value.UserId;
+						value.Employee = this;
+					}
+					this.SendPropertyChanged("HumanResourcesStaff");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Project", Storage="_Projects", ThisKey="empId", OtherKey="manager")]
+		public EntitySet<Project> Projects
+		{
+			get
+			{
+				return this._Projects;
+			}
+			set
+			{
+				this._Projects.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_TimeSheetHeader", Storage="_TimeSheetHeaders", ThisKey="empId", OtherKey="approvedBy")]
+		public EntitySet<TimeSheetHeader> TimeSheetHeaders
+		{
+			get
+			{
+				return this._TimeSheetHeaders;
+			}
+			set
+			{
+				this._TimeSheetHeaders.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_TimeSheetHeader1", Storage="_TimeSheetHeaders1", ThisKey="empId", OtherKey="empId")]
+		public EntitySet<TimeSheetHeader> TimeSheetHeaders1
+		{
+			get
+			{
+				return this._TimeSheetHeaders1;
+			}
+			set
+			{
+				this._TimeSheetHeaders1.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_EmployeeProjects(EmployeeProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = this;
+		}
+		
+		private void detach_EmployeeProjects(EmployeeProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = null;
+		}
+		
+		private void attach_Projects(Project entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = this;
+		}
+		
+		private void detach_Projects(Project entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = null;
+		}
+		
+		private void attach_TimeSheetHeaders(TimeSheetHeader entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = this;
+		}
+		
+		private void detach_TimeSheetHeaders(TimeSheetHeader entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = null;
+		}
+		
+		private void attach_TimeSheetHeaders1(TimeSheetHeader entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee1 = this;
+		}
+		
+		private void detach_TimeSheetHeaders1(TimeSheetHeader entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee1 = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeMembership")]
+	public partial class EmployeeMembership : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _empId;
+		
+		private System.Guid _userId;
+		
+		private EntityRef<Employee> _Employee;
+		
+		private EntityRef<aspnet_Membership> _aspnet_Membership;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnempIdChanging(int value);
+    partial void OnempIdChanged();
+    partial void OnuserIdChanging(System.Guid value);
+    partial void OnuserIdChanged();
+    #endregion
+		
+		public EmployeeMembership()
+		{
+			this._Employee = default(EntityRef<Employee>);
+			this._aspnet_Membership = default(EntityRef<aspnet_Membership>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int empId
+		{
+			get
+			{
+				return this._empId;
+			}
+			set
+			{
+				if ((this._empId != value))
+				{
+					if (this._Employee.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnempIdChanging(value);
+					this.SendPropertyChanging();
+					this._empId = value;
+					this.SendPropertyChanged("empId");
+					this.OnempIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userId", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid userId
+		{
+			get
+			{
+				return this._userId;
+			}
+			set
+			{
+				if ((this._userId != value))
+				{
+					if (this._aspnet_Membership.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnuserIdChanging(value);
+					this.SendPropertyChanging();
+					this._userId = value;
+					this.SendPropertyChanged("userId");
+					this.OnuserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeMembership", Storage="_Employee", ThisKey="empId", OtherKey="empId", IsForeignKey=true)]
+		public Employee Employee
+		{
+			get
+			{
+				return this._Employee.Entity;
+			}
+			set
+			{
+				Employee previousValue = this._Employee.Entity;
+				if (((previousValue != value) 
+							|| (this._Employee.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Employee.Entity = null;
+						previousValue.EmployeeMembership = null;
+					}
+					this._Employee.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeMembership = this;
+						this._empId = value.empId;
 					}
 					else
 					{
-						this._UserId = default(System.Guid);
+						this._empId = default(int);
 					}
-					this.SendPropertyChanged("aspnet_User");
+					this.SendPropertyChanged("Employee");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Membership_EmployeeMembership", Storage="_aspnet_Membership", ThisKey="userId", OtherKey="UserId", IsForeignKey=true)]
+		public aspnet_Membership aspnet_Membership
+		{
+			get
+			{
+				return this._aspnet_Membership.Entity;
+			}
+			set
+			{
+				aspnet_Membership previousValue = this._aspnet_Membership.Entity;
+				if (((previousValue != value) 
+							|| (this._aspnet_Membership.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._aspnet_Membership.Entity = null;
+						previousValue.EmployeeMemberships.Remove(this);
+					}
+					this._aspnet_Membership.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeMemberships.Add(this);
+						this._userId = value.UserId;
+					}
+					else
+					{
+						this._userId = default(System.Guid);
+					}
+					this.SendPropertyChanged("aspnet_Membership");
 				}
 			}
 		}
@@ -1875,479 +2255,6 @@ namespace FFLib
 						this._tsDate = default(System.DateTime);
 					}
 					this.SendPropertyChanged("TimeSheetHeader");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.WorkPackageStatusReport")]
-	public partial class WorkPackageStatusReport : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _projId;
-		
-		private string _wpId;
-		
-		private System.DateTime _reportDate;
-		
-		private string _comments;
-		
-		private string _workAccomplished;
-		
-		private string _workPlannedNext;
-		
-		private string _problemsEncountered;
-		
-		private string _problemsAnticipated;
-		
-		private EntitySet<EmployeeWorkPackageETC> _EmployeeWorkPackageETCs;
-		
-		private EntityRef<WorkPackage> _WorkPackage;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnprojIdChanging(int value);
-    partial void OnprojIdChanged();
-    partial void OnwpIdChanging(string value);
-    partial void OnwpIdChanged();
-    partial void OnreportDateChanging(System.DateTime value);
-    partial void OnreportDateChanged();
-    partial void OncommentsChanging(string value);
-    partial void OncommentsChanged();
-    partial void OnworkAccomplishedChanging(string value);
-    partial void OnworkAccomplishedChanged();
-    partial void OnworkPlannedNextChanging(string value);
-    partial void OnworkPlannedNextChanged();
-    partial void OnproblemsEncounteredChanging(string value);
-    partial void OnproblemsEncounteredChanged();
-    partial void OnproblemsAnticipatedChanging(string value);
-    partial void OnproblemsAnticipatedChanged();
-    #endregion
-		
-		public WorkPackageStatusReport()
-		{
-			this._EmployeeWorkPackageETCs = new EntitySet<EmployeeWorkPackageETC>(new Action<EmployeeWorkPackageETC>(this.attach_EmployeeWorkPackageETCs), new Action<EmployeeWorkPackageETC>(this.detach_EmployeeWorkPackageETCs));
-			this._WorkPackage = default(EntityRef<WorkPackage>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int projId
-		{
-			get
-			{
-				return this._projId;
-			}
-			set
-			{
-				if ((this._projId != value))
-				{
-					if (this._WorkPackage.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnprojIdChanging(value);
-					this.SendPropertyChanging();
-					this._projId = value;
-					this.SendPropertyChanged("projId");
-					this.OnprojIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wpId", DbType="VarChar(30) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string wpId
-		{
-			get
-			{
-				return this._wpId;
-			}
-			set
-			{
-				if ((this._wpId != value))
-				{
-					if (this._WorkPackage.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnwpIdChanging(value);
-					this.SendPropertyChanging();
-					this._wpId = value;
-					this.SendPropertyChanged("wpId");
-					this.OnwpIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reportDate", DbType="Date NOT NULL", IsPrimaryKey=true)]
-		public System.DateTime reportDate
-		{
-			get
-			{
-				return this._reportDate;
-			}
-			set
-			{
-				if ((this._reportDate != value))
-				{
-					this.OnreportDateChanging(value);
-					this.SendPropertyChanging();
-					this._reportDate = value;
-					this.SendPropertyChanged("reportDate");
-					this.OnreportDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_comments", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string comments
-		{
-			get
-			{
-				return this._comments;
-			}
-			set
-			{
-				if ((this._comments != value))
-				{
-					this.OncommentsChanging(value);
-					this.SendPropertyChanging();
-					this._comments = value;
-					this.SendPropertyChanged("comments");
-					this.OncommentsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_workAccomplished", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string workAccomplished
-		{
-			get
-			{
-				return this._workAccomplished;
-			}
-			set
-			{
-				if ((this._workAccomplished != value))
-				{
-					this.OnworkAccomplishedChanging(value);
-					this.SendPropertyChanging();
-					this._workAccomplished = value;
-					this.SendPropertyChanged("workAccomplished");
-					this.OnworkAccomplishedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_workPlannedNext", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string workPlannedNext
-		{
-			get
-			{
-				return this._workPlannedNext;
-			}
-			set
-			{
-				if ((this._workPlannedNext != value))
-				{
-					this.OnworkPlannedNextChanging(value);
-					this.SendPropertyChanging();
-					this._workPlannedNext = value;
-					this.SendPropertyChanged("workPlannedNext");
-					this.OnworkPlannedNextChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_problemsEncountered", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string problemsEncountered
-		{
-			get
-			{
-				return this._problemsEncountered;
-			}
-			set
-			{
-				if ((this._problemsEncountered != value))
-				{
-					this.OnproblemsEncounteredChanging(value);
-					this.SendPropertyChanging();
-					this._problemsEncountered = value;
-					this.SendPropertyChanged("problemsEncountered");
-					this.OnproblemsEncounteredChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_problemsAnticipated", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string problemsAnticipated
-		{
-			get
-			{
-				return this._problemsAnticipated;
-			}
-			set
-			{
-				if ((this._problemsAnticipated != value))
-				{
-					this.OnproblemsAnticipatedChanging(value);
-					this.SendPropertyChanging();
-					this._problemsAnticipated = value;
-					this.SendPropertyChanged("problemsAnticipated");
-					this.OnproblemsAnticipatedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackageStatusReport_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackageETCs", ThisKey="projId,wpId,reportDate", OtherKey="projId,wpId,dateUpdated")]
-		public EntitySet<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
-		{
-			get
-			{
-				return this._EmployeeWorkPackageETCs;
-			}
-			set
-			{
-				this._EmployeeWorkPackageETCs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_WorkPackageStatusReport", Storage="_WorkPackage", ThisKey="projId,wpId", OtherKey="projId,wpId", IsForeignKey=true)]
-		public WorkPackage WorkPackage
-		{
-			get
-			{
-				return this._WorkPackage.Entity;
-			}
-			set
-			{
-				WorkPackage previousValue = this._WorkPackage.Entity;
-				if (((previousValue != value) 
-							|| (this._WorkPackage.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._WorkPackage.Entity = null;
-						previousValue.WorkPackageStatusReports.Remove(this);
-					}
-					this._WorkPackage.Entity = value;
-					if ((value != null))
-					{
-						value.WorkPackageStatusReports.Add(this);
-						this._projId = value.projId;
-						this._wpId = value.wpId;
-					}
-					else
-					{
-						this._projId = default(int);
-						this._wpId = default(string);
-					}
-					this.SendPropertyChanged("WorkPackage");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
-		{
-			this.SendPropertyChanging();
-			entity.WorkPackageStatusReport = this;
-		}
-		
-		private void detach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
-		{
-			this.SendPropertyChanging();
-			entity.WorkPackageStatusReport = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeMembership")]
-	public partial class EmployeeMembership : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _empId;
-		
-		private System.Guid _userId;
-		
-		private EntityRef<aspnet_Membership> _aspnet_Membership;
-		
-		private EntityRef<Employee> _Employee;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnempIdChanging(int value);
-    partial void OnempIdChanged();
-    partial void OnuserIdChanging(System.Guid value);
-    partial void OnuserIdChanged();
-    #endregion
-		
-		public EmployeeMembership()
-		{
-			this._aspnet_Membership = default(EntityRef<aspnet_Membership>);
-			this._Employee = default(EntityRef<Employee>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int empId
-		{
-			get
-			{
-				return this._empId;
-			}
-			set
-			{
-				if ((this._empId != value))
-				{
-					if (this._Employee.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnempIdChanging(value);
-					this.SendPropertyChanging();
-					this._empId = value;
-					this.SendPropertyChanged("empId");
-					this.OnempIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userId", DbType="UniqueIdentifier NOT NULL")]
-		public System.Guid userId
-		{
-			get
-			{
-				return this._userId;
-			}
-			set
-			{
-				if ((this._userId != value))
-				{
-					if (this._aspnet_Membership.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnuserIdChanging(value);
-					this.SendPropertyChanging();
-					this._userId = value;
-					this.SendPropertyChanged("userId");
-					this.OnuserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Membership_EmployeeMembership", Storage="_aspnet_Membership", ThisKey="userId", OtherKey="UserId", IsForeignKey=true)]
-		public aspnet_Membership aspnet_Membership
-		{
-			get
-			{
-				return this._aspnet_Membership.Entity;
-			}
-			set
-			{
-				aspnet_Membership previousValue = this._aspnet_Membership.Entity;
-				if (((previousValue != value) 
-							|| (this._aspnet_Membership.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._aspnet_Membership.Entity = null;
-						previousValue.EmployeeMemberships.Remove(this);
-					}
-					this._aspnet_Membership.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeMemberships.Add(this);
-						this._userId = value.UserId;
-					}
-					else
-					{
-						this._userId = default(System.Guid);
-					}
-					this.SendPropertyChanged("aspnet_Membership");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeMembership", Storage="_Employee", ThisKey="empId", OtherKey="empId", IsForeignKey=true)]
-		public Employee Employee
-		{
-			get
-			{
-				return this._Employee.Entity;
-			}
-			set
-			{
-				Employee previousValue = this._Employee.Entity;
-				if (((previousValue != value) 
-							|| (this._Employee.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Employee.Entity = null;
-						previousValue.EmployeeMembership = null;
-					}
-					this._Employee.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeMembership = this;
-						this._empId = value.empId;
-					}
-					else
-					{
-						this._empId = default(int);
-					}
-					this.SendPropertyChanged("Employee");
 				}
 			}
 		}
@@ -2566,9 +2473,9 @@ namespace FFLib
 		
 		private EntitySet<EmployeeWorkPackage> _EmployeeWorkPackages;
 		
-		private EntityRef<Project> _Project;
-		
 		private EntityRef<Employee> _Employee;
+		
+		private EntityRef<Project> _Project;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2583,8 +2490,8 @@ namespace FFLib
 		public EmployeeProject()
 		{
 			this._EmployeeWorkPackages = new EntitySet<EmployeeWorkPackage>(new Action<EmployeeWorkPackage>(this.attach_EmployeeWorkPackages), new Action<EmployeeWorkPackage>(this.detach_EmployeeWorkPackages));
-			this._Project = default(EntityRef<Project>);
 			this._Employee = default(EntityRef<Employee>);
+			this._Project = default(EntityRef<Project>);
 			OnCreated();
 		}
 		
@@ -2649,40 +2556,6 @@ namespace FFLib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_EmployeeProject", Storage="_Project", ThisKey="projId", OtherKey="projId", IsForeignKey=true)]
-		public Project Project
-		{
-			get
-			{
-				return this._Project.Entity;
-			}
-			set
-			{
-				Project previousValue = this._Project.Entity;
-				if (((previousValue != value) 
-							|| (this._Project.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Project.Entity = null;
-						previousValue.EmployeeProjects.Remove(this);
-					}
-					this._Project.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeProjects.Add(this);
-						this._projId = value.projId;
-					}
-					else
-					{
-						this._projId = default(int);
-					}
-					this.SendPropertyChanged("Project");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeProject", Storage="_Employee", ThisKey="empId", OtherKey="empId", IsForeignKey=true)]
 		public Employee Employee
 		{
@@ -2713,6 +2586,40 @@ namespace FFLib
 						this._empId = default(int);
 					}
 					this.SendPropertyChanged("Employee");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_EmployeeProject", Storage="_Project", ThisKey="projId", OtherKey="projId", IsForeignKey=true)]
+		public Project Project
+		{
+			get
+			{
+				return this._Project.Entity;
+			}
+			set
+			{
+				Project previousValue = this._Project.Entity;
+				if (((previousValue != value) 
+							|| (this._Project.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Project.Entity = null;
+						previousValue.EmployeeProjects.Remove(this);
+					}
+					this._Project.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeProjects.Add(this);
+						this._projId = value.projId;
+					}
+					else
+					{
+						this._projId = default(int);
+					}
+					this.SendPropertyChanged("Project");
 				}
 			}
 		}
@@ -3022,9 +2929,9 @@ namespace FFLib
 		
 		private System.Nullable<int> _ETC_days;
 		
-		private EntityRef<WorkPackageStatusReport> _WorkPackageStatusReport;
-		
 		private EntityRef<EmployeeWorkPackage> _EmployeeWorkPackage;
+		
+		private EntityRef<WorkPackageStatusReport> _WorkPackageStatusReport;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -3044,8 +2951,8 @@ namespace FFLib
 		
 		public EmployeeWorkPackageETC()
 		{
-			this._WorkPackageStatusReport = default(EntityRef<WorkPackageStatusReport>);
 			this._EmployeeWorkPackage = default(EntityRef<EmployeeWorkPackage>);
+			this._WorkPackageStatusReport = default(EntityRef<WorkPackageStatusReport>);
 			OnCreated();
 		}
 		
@@ -3084,7 +2991,7 @@ namespace FFLib
 			{
 				if ((this._projId != value))
 				{
-					if ((this._WorkPackageStatusReport.HasLoadedOrAssignedValue || this._EmployeeWorkPackage.HasLoadedOrAssignedValue))
+					if ((this._EmployeeWorkPackage.HasLoadedOrAssignedValue || this._WorkPackageStatusReport.HasLoadedOrAssignedValue))
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -3108,7 +3015,7 @@ namespace FFLib
 			{
 				if ((this._wpId != value))
 				{
-					if ((this._WorkPackageStatusReport.HasLoadedOrAssignedValue || this._EmployeeWorkPackage.HasLoadedOrAssignedValue))
+					if ((this._EmployeeWorkPackage.HasLoadedOrAssignedValue || this._WorkPackageStatusReport.HasLoadedOrAssignedValue))
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -3165,44 +3072,6 @@ namespace FFLib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackageStatusReport_EmployeeWorkPackageETC", Storage="_WorkPackageStatusReport", ThisKey="projId,wpId,dateUpdated", OtherKey="projId,wpId,reportDate", IsForeignKey=true)]
-		public WorkPackageStatusReport WorkPackageStatusReport
-		{
-			get
-			{
-				return this._WorkPackageStatusReport.Entity;
-			}
-			set
-			{
-				WorkPackageStatusReport previousValue = this._WorkPackageStatusReport.Entity;
-				if (((previousValue != value) 
-							|| (this._WorkPackageStatusReport.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._WorkPackageStatusReport.Entity = null;
-						previousValue.EmployeeWorkPackageETCs.Remove(this);
-					}
-					this._WorkPackageStatusReport.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeWorkPackageETCs.Add(this);
-						this._projId = value.projId;
-						this._wpId = value.wpId;
-						this._dateUpdated = value.reportDate;
-					}
-					else
-					{
-						this._projId = default(int);
-						this._wpId = default(string);
-						this._dateUpdated = default(System.DateTime);
-					}
-					this.SendPropertyChanged("WorkPackageStatusReport");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EmployeeWorkPackage_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackage", ThisKey="empId,projId,wpId", OtherKey="empId,projId,wpId", IsForeignKey=true)]
 		public EmployeeWorkPackage EmployeeWorkPackage
 		{
@@ -3237,6 +3106,44 @@ namespace FFLib
 						this._wpId = default(string);
 					}
 					this.SendPropertyChanged("EmployeeWorkPackage");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackageStatusReport_EmployeeWorkPackageETC", Storage="_WorkPackageStatusReport", ThisKey="projId,wpId,dateUpdated", OtherKey="projId,wpId,reportDate", IsForeignKey=true)]
+		public WorkPackageStatusReport WorkPackageStatusReport
+		{
+			get
+			{
+				return this._WorkPackageStatusReport.Entity;
+			}
+			set
+			{
+				WorkPackageStatusReport previousValue = this._WorkPackageStatusReport.Entity;
+				if (((previousValue != value) 
+							|| (this._WorkPackageStatusReport.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._WorkPackageStatusReport.Entity = null;
+						previousValue.EmployeeWorkPackageETCs.Remove(this);
+					}
+					this._WorkPackageStatusReport.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeWorkPackageETCs.Add(this);
+						this._projId = value.projId;
+						this._wpId = value.wpId;
+						this._dateUpdated = value.reportDate;
+					}
+					else
+					{
+						this._projId = default(int);
+						this._wpId = default(string);
+						this._dateUpdated = default(System.DateTime);
+					}
+					this.SendPropertyChanged("WorkPackageStatusReport");
 				}
 			}
 		}
@@ -4500,8 +4407,6 @@ namespace FFLib
 		
 		private System.Nullable<decimal> _allocated_dollars;
 		
-		private EntitySet<WorkPackageStatusReport> _WorkPackageStatusReports;
-		
 		private EntitySet<EmployeeWorkPackage> _EmployeeWorkPackages;
 		
 		private EntitySet<TimeSheetEntry> _TimeSheetEntries;
@@ -4509,6 +4414,8 @@ namespace FFLib
 		private EntitySet<WorkPackageBudgetPM> _WorkPackageBudgetPMs;
 		
 		private EntitySet<WorkPackageEstimateRE> _WorkPackageEstimateREs;
+		
+		private EntitySet<WorkPackageStatusReport> _WorkPackageStatusReports;
 		
 		private EntityRef<Project> _Project;
 		
@@ -4532,11 +4439,11 @@ namespace FFLib
 		
 		public WorkPackage()
 		{
-			this._WorkPackageStatusReports = new EntitySet<WorkPackageStatusReport>(new Action<WorkPackageStatusReport>(this.attach_WorkPackageStatusReports), new Action<WorkPackageStatusReport>(this.detach_WorkPackageStatusReports));
 			this._EmployeeWorkPackages = new EntitySet<EmployeeWorkPackage>(new Action<EmployeeWorkPackage>(this.attach_EmployeeWorkPackages), new Action<EmployeeWorkPackage>(this.detach_EmployeeWorkPackages));
 			this._TimeSheetEntries = new EntitySet<TimeSheetEntry>(new Action<TimeSheetEntry>(this.attach_TimeSheetEntries), new Action<TimeSheetEntry>(this.detach_TimeSheetEntries));
 			this._WorkPackageBudgetPMs = new EntitySet<WorkPackageBudgetPM>(new Action<WorkPackageBudgetPM>(this.attach_WorkPackageBudgetPMs), new Action<WorkPackageBudgetPM>(this.detach_WorkPackageBudgetPMs));
 			this._WorkPackageEstimateREs = new EntitySet<WorkPackageEstimateRE>(new Action<WorkPackageEstimateRE>(this.attach_WorkPackageEstimateREs), new Action<WorkPackageEstimateRE>(this.detach_WorkPackageEstimateREs));
+			this._WorkPackageStatusReports = new EntitySet<WorkPackageStatusReport>(new Action<WorkPackageStatusReport>(this.attach_WorkPackageStatusReports), new Action<WorkPackageStatusReport>(this.detach_WorkPackageStatusReports));
 			this._Project = default(EntityRef<Project>);
 			OnCreated();
 		}
@@ -4665,19 +4572,6 @@ namespace FFLib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_WorkPackageStatusReport", Storage="_WorkPackageStatusReports", ThisKey="projId,wpId", OtherKey="projId,wpId")]
-		public EntitySet<WorkPackageStatusReport> WorkPackageStatusReports
-		{
-			get
-			{
-				return this._WorkPackageStatusReports;
-			}
-			set
-			{
-				this._WorkPackageStatusReports.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackage", Storage="_EmployeeWorkPackages", ThisKey="projId,wpId", OtherKey="projId,wpId")]
 		public EntitySet<EmployeeWorkPackage> EmployeeWorkPackages
 		{
@@ -4727,6 +4621,19 @@ namespace FFLib
 			set
 			{
 				this._WorkPackageEstimateREs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_WorkPackageStatusReport", Storage="_WorkPackageStatusReports", ThisKey="projId,wpId", OtherKey="projId,wpId")]
+		public EntitySet<WorkPackageStatusReport> WorkPackageStatusReports
+		{
+			get
+			{
+				return this._WorkPackageStatusReports;
+			}
+			set
+			{
+				this._WorkPackageStatusReports.Assign(value);
 			}
 		}
 		
@@ -4784,18 +4691,6 @@ namespace FFLib
 			}
 		}
 		
-		private void attach_WorkPackageStatusReports(WorkPackageStatusReport entity)
-		{
-			this.SendPropertyChanging();
-			entity.WorkPackage = this;
-		}
-		
-		private void detach_WorkPackageStatusReports(WorkPackageStatusReport entity)
-		{
-			this.SendPropertyChanging();
-			entity.WorkPackage = null;
-		}
-		
 		private void attach_EmployeeWorkPackages(EmployeeWorkPackage entity)
 		{
 			this.SendPropertyChanging();
@@ -4839,6 +4734,18 @@ namespace FFLib
 		}
 		
 		private void detach_WorkPackageEstimateREs(WorkPackageEstimateRE entity)
+		{
+			this.SendPropertyChanging();
+			entity.WorkPackage = null;
+		}
+		
+		private void attach_WorkPackageStatusReports(WorkPackageStatusReport entity)
+		{
+			this.SendPropertyChanging();
+			entity.WorkPackage = this;
+		}
+		
+		private void detach_WorkPackageStatusReports(WorkPackageStatusReport entity)
 		{
 			this.SendPropertyChanging();
 			entity.WorkPackage = null;
@@ -5560,501 +5467,274 @@ namespace FFLib
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Employee")]
-	public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.WorkPackageStatusReport")]
+	public partial class WorkPackageStatusReport : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _empId;
+		private int _projId;
 		
-		private string _firstName;
+		private string _wpId;
 		
-		private string _lastName;
+		private System.DateTime _reportDate;
 		
-		private int _supervisor;
+		private string _comments;
 		
-		private int _approver;
+		private string _workAccomplished;
 		
-		private decimal _minHoursPerWeek;
+		private string _workPlannedNext;
 		
-		private int _vacationLeave;
+		private string _problemsEncountered;
 		
-		private int _sickDays;
+		private string _problemsAnticipated;
 		
-		private decimal _flexHours;
+		private EntitySet<EmployeeWorkPackageETC> _EmployeeWorkPackageETCs;
 		
-		private int _isActive;
-		
-		private EntityRef<EmployeeMembership> _EmployeeMembership;
-		
-		private EntitySet<EmployeeProject> _EmployeeProjects;
-		
-		private EntityRef<HumanResourcesStaff> _HumanResourcesStaff;
-		
-		private EntitySet<Project> _Projects;
-		
-		private EntitySet<TimeSheetHeader> _TimeSheetHeaders;
-		
-		private EntitySet<TimeSheetHeader> _TimeSheetHeaders1;
-		
-		private EntitySet<Employee> _Employees;
-		
-		private EntitySet<Employee> _Employees1;
-		
-		private EntityRef<Employee> _Employee1;
-		
-		private EntityRef<Employee> _Employee2;
+		private EntityRef<WorkPackage> _WorkPackage;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnempIdChanging(int value);
-    partial void OnempIdChanged();
-    partial void OnfirstNameChanging(string value);
-    partial void OnfirstNameChanged();
-    partial void OnlastNameChanging(string value);
-    partial void OnlastNameChanged();
-    partial void OnsupervisorChanging(int value);
-    partial void OnsupervisorChanged();
-    partial void OnapproverChanging(int value);
-    partial void OnapproverChanged();
-    partial void OnminHoursPerWeekChanging(decimal value);
-    partial void OnminHoursPerWeekChanged();
-    partial void OnvacationLeaveChanging(int value);
-    partial void OnvacationLeaveChanged();
-    partial void OnsickDaysChanging(int value);
-    partial void OnsickDaysChanged();
-    partial void OnflexHoursChanging(decimal value);
-    partial void OnflexHoursChanged();
-    partial void OnisActiveChanging(int value);
-    partial void OnisActiveChanged();
+    partial void OnprojIdChanging(int value);
+    partial void OnprojIdChanged();
+    partial void OnwpIdChanging(string value);
+    partial void OnwpIdChanged();
+    partial void OnreportDateChanging(System.DateTime value);
+    partial void OnreportDateChanged();
+    partial void OncommentsChanging(string value);
+    partial void OncommentsChanged();
+    partial void OnworkAccomplishedChanging(string value);
+    partial void OnworkAccomplishedChanged();
+    partial void OnworkPlannedNextChanging(string value);
+    partial void OnworkPlannedNextChanged();
+    partial void OnproblemsEncounteredChanging(string value);
+    partial void OnproblemsEncounteredChanged();
+    partial void OnproblemsAnticipatedChanging(string value);
+    partial void OnproblemsAnticipatedChanged();
     #endregion
 		
-		public Employee()
+		public WorkPackageStatusReport()
 		{
-			this._EmployeeMembership = default(EntityRef<EmployeeMembership>);
-			this._EmployeeProjects = new EntitySet<EmployeeProject>(new Action<EmployeeProject>(this.attach_EmployeeProjects), new Action<EmployeeProject>(this.detach_EmployeeProjects));
-			this._HumanResourcesStaff = default(EntityRef<HumanResourcesStaff>);
-			this._Projects = new EntitySet<Project>(new Action<Project>(this.attach_Projects), new Action<Project>(this.detach_Projects));
-			this._TimeSheetHeaders = new EntitySet<TimeSheetHeader>(new Action<TimeSheetHeader>(this.attach_TimeSheetHeaders), new Action<TimeSheetHeader>(this.detach_TimeSheetHeaders));
-			this._TimeSheetHeaders1 = new EntitySet<TimeSheetHeader>(new Action<TimeSheetHeader>(this.attach_TimeSheetHeaders1), new Action<TimeSheetHeader>(this.detach_TimeSheetHeaders1));
-			this._Employees = new EntitySet<Employee>(new Action<Employee>(this.attach_Employees), new Action<Employee>(this.detach_Employees));
-			this._Employees1 = new EntitySet<Employee>(new Action<Employee>(this.attach_Employees1), new Action<Employee>(this.detach_Employees1));
-			this._Employee1 = default(EntityRef<Employee>);
-			this._Employee2 = default(EntityRef<Employee>);
+			this._EmployeeWorkPackageETCs = new EntitySet<EmployeeWorkPackageETC>(new Action<EmployeeWorkPackageETC>(this.attach_EmployeeWorkPackageETCs), new Action<EmployeeWorkPackageETC>(this.detach_EmployeeWorkPackageETCs));
+			this._WorkPackage = default(EntityRef<WorkPackage>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int empId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int projId
 		{
 			get
 			{
-				return this._empId;
+				return this._projId;
 			}
 			set
 			{
-				if ((this._empId != value))
+				if ((this._projId != value))
 				{
-					this.OnempIdChanging(value);
-					this.SendPropertyChanging();
-					this._empId = value;
-					this.SendPropertyChanged("empId");
-					this.OnempIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_firstName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
-		public string firstName
-		{
-			get
-			{
-				return this._firstName;
-			}
-			set
-			{
-				if ((this._firstName != value))
-				{
-					this.OnfirstNameChanging(value);
-					this.SendPropertyChanging();
-					this._firstName = value;
-					this.SendPropertyChanged("firstName");
-					this.OnfirstNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
-		public string lastName
-		{
-			get
-			{
-				return this._lastName;
-			}
-			set
-			{
-				if ((this._lastName != value))
-				{
-					this.OnlastNameChanging(value);
-					this.SendPropertyChanging();
-					this._lastName = value;
-					this.SendPropertyChanged("lastName");
-					this.OnlastNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_supervisor", DbType="Int NOT NULL")]
-		public int supervisor
-		{
-			get
-			{
-				return this._supervisor;
-			}
-			set
-			{
-				if ((this._supervisor != value))
-				{
-					if (this._Employee2.HasLoadedOrAssignedValue)
+					if (this._WorkPackage.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.OnsupervisorChanging(value);
+					this.OnprojIdChanging(value);
 					this.SendPropertyChanging();
-					this._supervisor = value;
-					this.SendPropertyChanged("supervisor");
-					this.OnsupervisorChanged();
+					this._projId = value;
+					this.SendPropertyChanged("projId");
+					this.OnprojIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_approver", DbType="Int NOT NULL")]
-		public int approver
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wpId", DbType="VarChar(30) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string wpId
 		{
 			get
 			{
-				return this._approver;
+				return this._wpId;
 			}
 			set
 			{
-				if ((this._approver != value))
+				if ((this._wpId != value))
 				{
-					if (this._Employee1.HasLoadedOrAssignedValue)
+					if (this._WorkPackage.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.OnapproverChanging(value);
+					this.OnwpIdChanging(value);
 					this.SendPropertyChanging();
-					this._approver = value;
-					this.SendPropertyChanged("approver");
-					this.OnapproverChanged();
+					this._wpId = value;
+					this.SendPropertyChanged("wpId");
+					this.OnwpIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_minHoursPerWeek", DbType="Decimal(3,1) NOT NULL")]
-		public decimal minHoursPerWeek
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reportDate", DbType="Date NOT NULL", IsPrimaryKey=true)]
+		public System.DateTime reportDate
 		{
 			get
 			{
-				return this._minHoursPerWeek;
+				return this._reportDate;
 			}
 			set
 			{
-				if ((this._minHoursPerWeek != value))
+				if ((this._reportDate != value))
 				{
-					this.OnminHoursPerWeekChanging(value);
+					this.OnreportDateChanging(value);
 					this.SendPropertyChanging();
-					this._minHoursPerWeek = value;
-					this.SendPropertyChanged("minHoursPerWeek");
-					this.OnminHoursPerWeekChanged();
+					this._reportDate = value;
+					this.SendPropertyChanged("reportDate");
+					this.OnreportDateChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_vacationLeave", DbType="Int NOT NULL")]
-		public int vacationLeave
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_comments", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string comments
 		{
 			get
 			{
-				return this._vacationLeave;
+				return this._comments;
 			}
 			set
 			{
-				if ((this._vacationLeave != value))
+				if ((this._comments != value))
 				{
-					this.OnvacationLeaveChanging(value);
+					this.OncommentsChanging(value);
 					this.SendPropertyChanging();
-					this._vacationLeave = value;
-					this.SendPropertyChanged("vacationLeave");
-					this.OnvacationLeaveChanged();
+					this._comments = value;
+					this.SendPropertyChanged("comments");
+					this.OncommentsChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sickDays", DbType="Int NOT NULL")]
-		public int sickDays
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_workAccomplished", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string workAccomplished
 		{
 			get
 			{
-				return this._sickDays;
+				return this._workAccomplished;
 			}
 			set
 			{
-				if ((this._sickDays != value))
+				if ((this._workAccomplished != value))
 				{
-					this.OnsickDaysChanging(value);
+					this.OnworkAccomplishedChanging(value);
 					this.SendPropertyChanging();
-					this._sickDays = value;
-					this.SendPropertyChanged("sickDays");
-					this.OnsickDaysChanged();
+					this._workAccomplished = value;
+					this.SendPropertyChanged("workAccomplished");
+					this.OnworkAccomplishedChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_flexHours", DbType="Decimal(3,1) NOT NULL")]
-		public decimal flexHours
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_workPlannedNext", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string workPlannedNext
 		{
 			get
 			{
-				return this._flexHours;
+				return this._workPlannedNext;
 			}
 			set
 			{
-				if ((this._flexHours != value))
+				if ((this._workPlannedNext != value))
 				{
-					this.OnflexHoursChanging(value);
+					this.OnworkPlannedNextChanging(value);
 					this.SendPropertyChanging();
-					this._flexHours = value;
-					this.SendPropertyChanged("flexHours");
-					this.OnflexHoursChanged();
+					this._workPlannedNext = value;
+					this.SendPropertyChanged("workPlannedNext");
+					this.OnworkPlannedNextChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_isActive", DbType="Int NOT NULL")]
-		public int isActive
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_problemsEncountered", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string problemsEncountered
 		{
 			get
 			{
-				return this._isActive;
+				return this._problemsEncountered;
 			}
 			set
 			{
-				if ((this._isActive != value))
+				if ((this._problemsEncountered != value))
 				{
-					this.OnisActiveChanging(value);
+					this.OnproblemsEncounteredChanging(value);
 					this.SendPropertyChanging();
-					this._isActive = value;
-					this.SendPropertyChanged("isActive");
-					this.OnisActiveChanged();
+					this._problemsEncountered = value;
+					this.SendPropertyChanged("problemsEncountered");
+					this.OnproblemsEncounteredChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeMembership", Storage="_EmployeeMembership", ThisKey="empId", OtherKey="empId", IsUnique=true, IsForeignKey=false)]
-		public EmployeeMembership EmployeeMembership
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_problemsAnticipated", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string problemsAnticipated
 		{
 			get
 			{
-				return this._EmployeeMembership.Entity;
+				return this._problemsAnticipated;
 			}
 			set
 			{
-				EmployeeMembership previousValue = this._EmployeeMembership.Entity;
+				if ((this._problemsAnticipated != value))
+				{
+					this.OnproblemsAnticipatedChanging(value);
+					this.SendPropertyChanging();
+					this._problemsAnticipated = value;
+					this.SendPropertyChanged("problemsAnticipated");
+					this.OnproblemsAnticipatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackageStatusReport_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackageETCs", ThisKey="projId,wpId,reportDate", OtherKey="projId,wpId,dateUpdated")]
+		public EntitySet<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
+		{
+			get
+			{
+				return this._EmployeeWorkPackageETCs;
+			}
+			set
+			{
+				this._EmployeeWorkPackageETCs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_WorkPackageStatusReport", Storage="_WorkPackage", ThisKey="projId,wpId", OtherKey="projId,wpId", IsForeignKey=true)]
+		public WorkPackage WorkPackage
+		{
+			get
+			{
+				return this._WorkPackage.Entity;
+			}
+			set
+			{
+				WorkPackage previousValue = this._WorkPackage.Entity;
 				if (((previousValue != value) 
-							|| (this._EmployeeMembership.HasLoadedOrAssignedValue == false)))
+							|| (this._WorkPackage.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._EmployeeMembership.Entity = null;
-						previousValue.Employee = null;
+						this._WorkPackage.Entity = null;
+						previousValue.WorkPackageStatusReports.Remove(this);
 					}
-					this._EmployeeMembership.Entity = value;
+					this._WorkPackage.Entity = value;
 					if ((value != null))
 					{
-						value.Employee = this;
-					}
-					this.SendPropertyChanged("EmployeeMembership");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeProject", Storage="_EmployeeProjects", ThisKey="empId", OtherKey="empId")]
-		public EntitySet<EmployeeProject> EmployeeProjects
-		{
-			get
-			{
-				return this._EmployeeProjects;
-			}
-			set
-			{
-				this._EmployeeProjects.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_HumanResourcesStaff", Storage="_HumanResourcesStaff", ThisKey="empId", OtherKey="empId", IsUnique=true, IsForeignKey=false)]
-		public HumanResourcesStaff HumanResourcesStaff
-		{
-			get
-			{
-				return this._HumanResourcesStaff.Entity;
-			}
-			set
-			{
-				HumanResourcesStaff previousValue = this._HumanResourcesStaff.Entity;
-				if (((previousValue != value) 
-							|| (this._HumanResourcesStaff.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._HumanResourcesStaff.Entity = null;
-						previousValue.Employee = null;
-					}
-					this._HumanResourcesStaff.Entity = value;
-					if ((value != null))
-					{
-						value.Employee = this;
-					}
-					this.SendPropertyChanged("HumanResourcesStaff");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Project", Storage="_Projects", ThisKey="empId", OtherKey="manager")]
-		public EntitySet<Project> Projects
-		{
-			get
-			{
-				return this._Projects;
-			}
-			set
-			{
-				this._Projects.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_TimeSheetHeader", Storage="_TimeSheetHeaders", ThisKey="empId", OtherKey="approvedBy")]
-		public EntitySet<TimeSheetHeader> TimeSheetHeaders
-		{
-			get
-			{
-				return this._TimeSheetHeaders;
-			}
-			set
-			{
-				this._TimeSheetHeaders.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_TimeSheetHeader1", Storage="_TimeSheetHeaders1", ThisKey="empId", OtherKey="empId")]
-		public EntitySet<TimeSheetHeader> TimeSheetHeaders1
-		{
-			get
-			{
-				return this._TimeSheetHeaders1;
-			}
-			set
-			{
-				this._TimeSheetHeaders1.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Employee", Storage="_Employees", ThisKey="empId", OtherKey="approver")]
-		public EntitySet<Employee> Employees
-		{
-			get
-			{
-				return this._Employees;
-			}
-			set
-			{
-				this._Employees.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Employee1", Storage="_Employees1", ThisKey="empId", OtherKey="supervisor")]
-		public EntitySet<Employee> Employees1
-		{
-			get
-			{
-				return this._Employees1;
-			}
-			set
-			{
-				this._Employees1.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Employee", Storage="_Employee1", ThisKey="approver", OtherKey="empId", IsForeignKey=true)]
-		public Employee Employee1
-		{
-			get
-			{
-				return this._Employee1.Entity;
-			}
-			set
-			{
-				Employee previousValue = this._Employee1.Entity;
-				if (((previousValue != value) 
-							|| (this._Employee1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Employee1.Entity = null;
-						previousValue.Employees.Remove(this);
-					}
-					this._Employee1.Entity = value;
-					if ((value != null))
-					{
-						value.Employees.Add(this);
-						this._approver = value.empId;
+						value.WorkPackageStatusReports.Add(this);
+						this._projId = value.projId;
+						this._wpId = value.wpId;
 					}
 					else
 					{
-						this._approver = default(int);
+						this._projId = default(int);
+						this._wpId = default(string);
 					}
-					this.SendPropertyChanged("Employee1");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Employee1", Storage="_Employee2", ThisKey="supervisor", OtherKey="empId", IsForeignKey=true)]
-		public Employee Employee2
-		{
-			get
-			{
-				return this._Employee2.Entity;
-			}
-			set
-			{
-				Employee previousValue = this._Employee2.Entity;
-				if (((previousValue != value) 
-							|| (this._Employee2.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Employee2.Entity = null;
-						previousValue.Employees1.Remove(this);
-					}
-					this._Employee2.Entity = value;
-					if ((value != null))
-					{
-						value.Employees1.Add(this);
-						this._supervisor = value.empId;
-					}
-					else
-					{
-						this._supervisor = default(int);
-					}
-					this.SendPropertyChanged("Employee2");
+					this.SendPropertyChanged("WorkPackage");
 				}
 			}
 		}
@@ -6079,76 +5759,16 @@ namespace FFLib
 			}
 		}
 		
-		private void attach_EmployeeProjects(EmployeeProject entity)
+		private void attach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
 		{
 			this.SendPropertyChanging();
-			entity.Employee = this;
+			entity.WorkPackageStatusReport = this;
 		}
 		
-		private void detach_EmployeeProjects(EmployeeProject entity)
+		private void detach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
 		{
 			this.SendPropertyChanging();
-			entity.Employee = null;
-		}
-		
-		private void attach_Projects(Project entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee = this;
-		}
-		
-		private void detach_Projects(Project entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee = null;
-		}
-		
-		private void attach_TimeSheetHeaders(TimeSheetHeader entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee = this;
-		}
-		
-		private void detach_TimeSheetHeaders(TimeSheetHeader entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee = null;
-		}
-		
-		private void attach_TimeSheetHeaders1(TimeSheetHeader entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee1 = this;
-		}
-		
-		private void detach_TimeSheetHeaders1(TimeSheetHeader entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee1 = null;
-		}
-		
-		private void attach_Employees(Employee entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee1 = this;
-		}
-		
-		private void detach_Employees(Employee entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee1 = null;
-		}
-		
-		private void attach_Employees1(Employee entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee2 = this;
-		}
-		
-		private void detach_Employees1(Employee entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee2 = null;
+			entity.WorkPackageStatusReport = null;
 		}
 	}
 }

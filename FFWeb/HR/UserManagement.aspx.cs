@@ -9,7 +9,7 @@ using FFLib;
 
 public partial class UserManagement : System.Web.UI.Page
 {
-    FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
+    FlyingFishDataContext ff = new FlyingFishDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
     }

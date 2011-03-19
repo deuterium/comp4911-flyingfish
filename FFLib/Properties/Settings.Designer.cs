@@ -55,5 +55,16 @@ namespace FFLib.Properties {
                 return ((string)(this["FlyingFishConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;AttachDbFilename=D:\\work\\FlyingFish\\FFWeb\\App_Data\\Flyin" +
+            "gFish.MDF;Integrated Security=True;User Instance=True")]
+        public string FlyingFishConnectionString1 {
+            get {
+                return ((string)(this["FlyingFishConnectionString1"]));
+            }
+        }
     }
 }

@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FlyingFish" Class="FlyingFishClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLEXPRESS;AttachDbFilename=D:\work\comp4911-flyingfish\FFWeb\App_Data\FlyingFish.MDF;Integrated Security=True;User Instance=True" SettingsObjectName="FFLib.Properties.Settings" SettingsPropertyName="FlyingFishConnectionString" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FlyingFish" Class="FlyingFishDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLEXPRESS;AttachDbFilename=D:\work\FlyingFish\FFWeb\App_Data\FlyingFish.MDF;Integrated Security=True;User Instance=True" SettingsObjectName="FFLib.Properties.Settings" SettingsPropertyName="FlyingFishConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.aspnet_Membership" Member="aspnet_Memberships">
     <Type Name="aspnet_Membership">
       <Column Name="ApplicationId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
@@ -27,16 +27,6 @@
       <Association Name="aspnet_User_aspnet_Membership" Member="aspnet_User" ThisKey="UserId" OtherKey="UserId" Type="aspnet_User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.aspnet_Profile" Member="aspnet_Profiles">
-    <Type Name="aspnet_Profile">
-      <Column Name="UserId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="PropertyNames" Type="System.String" DbType="NText NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="PropertyValuesString" Type="System.String" DbType="NText NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="PropertyValuesBinary" Type="System.Data.Linq.Binary" DbType="Image NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="LastUpdatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="aspnet_User_aspnet_Profile" Member="aspnet_User" ThisKey="UserId" OtherKey="UserId" Type="aspnet_User" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.aspnet_Roles" Member="aspnet_Roles">
     <Type Name="aspnet_Role">
       <Column Name="ApplicationId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
@@ -45,6 +35,14 @@
       <Column Name="LoweredRoleName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="Description" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
       <Association Name="aspnet_Role_aspnet_UsersInRole" Member="aspnet_UsersInRoles" ThisKey="RoleId" OtherKey="RoleId" Type="aspnet_UsersInRole" />
+    </Type>
+  </Table>
+  <Table Name="dbo.aspnet_UsersInRoles" Member="aspnet_UsersInRoles">
+    <Type Name="aspnet_UsersInRole">
+      <Column Name="UserId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RoleId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="aspnet_Role_aspnet_UsersInRole" Member="aspnet_Role" ThisKey="RoleId" OtherKey="RoleId" Type="aspnet_Role" IsForeignKey="true" />
+      <Association Name="aspnet_User_aspnet_UsersInRole" Member="aspnet_User" ThisKey="UserId" OtherKey="UserId" Type="aspnet_User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.aspnet_Users" Member="aspnet_Users">
@@ -57,16 +55,35 @@
       <Column Name="IsAnonymous" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="LastActivityDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="aspnet_User_aspnet_Membership" Member="aspnet_Membership" ThisKey="UserId" OtherKey="UserId" Type="aspnet_Membership" Cardinality="One" />
-      <Association Name="aspnet_User_aspnet_Profile" Member="aspnet_Profile" ThisKey="UserId" OtherKey="UserId" Type="aspnet_Profile" Cardinality="One" />
       <Association Name="aspnet_User_aspnet_UsersInRole" Member="aspnet_UsersInRoles" ThisKey="UserId" OtherKey="UserId" Type="aspnet_UsersInRole" />
     </Type>
   </Table>
-  <Table Name="dbo.aspnet_UsersInRoles" Member="aspnet_UsersInRoles">
-    <Type Name="aspnet_UsersInRole">
-      <Column Name="UserId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="RoleId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="aspnet_Role_aspnet_UsersInRole" Member="aspnet_Role" ThisKey="RoleId" OtherKey="RoleId" Type="aspnet_Role" IsForeignKey="true" />
-      <Association Name="aspnet_User_aspnet_UsersInRole" Member="aspnet_User" ThisKey="UserId" OtherKey="UserId" Type="aspnet_User" IsForeignKey="true" />
+  <Table Name="dbo.Employee" Member="Employees">
+    <Type Name="Employee">
+      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="firstName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="lastName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="supervisor" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="approver" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="minHoursPerWeek" Type="System.Decimal" DbType="Decimal(3,1) NOT NULL" CanBeNull="false" />
+      <Column Name="vacationLeave" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="sickDays" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="flexHours" Type="System.Decimal" DbType="Decimal(3,1) NOT NULL" CanBeNull="false" />
+      <Column Name="isActive" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Employee_EmployeeMembership" Member="EmployeeMembership" ThisKey="empId" OtherKey="empId" Type="EmployeeMembership" Cardinality="One" />
+      <Association Name="Employee_EmployeeProject" Member="EmployeeProjects" ThisKey="empId" OtherKey="empId" Type="EmployeeProject" />
+      <Association Name="Employee_HumanResourcesStaff" Member="HumanResourcesStaff" ThisKey="empId" OtherKey="empId" Type="HumanResourcesStaff" Cardinality="One" />
+      <Association Name="Employee_Project" Member="Projects" ThisKey="empId" OtherKey="manager" Type="Project" />
+      <Association Name="Employee_TimeSheetHeader" Member="TimeSheetHeaders" ThisKey="empId" OtherKey="approvedBy" Type="TimeSheetHeader" />
+      <Association Name="Employee_TimeSheetHeader1" Member="TimeSheetHeaders1" ThisKey="empId" OtherKey="empId" Type="TimeSheetHeader" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EmployeeMembership" Member="EmployeeMemberships">
+    <Type Name="EmployeeMembership">
+      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="userId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="Employee_EmployeeMembership" Member="Employee" ThisKey="empId" OtherKey="empId" Type="Employee" IsForeignKey="true" />
+      <Association Name="aspnet_Membership_EmployeeMembership" Member="aspnet_Membership" ThisKey="userId" OtherKey="UserId" Type="aspnet_Membership" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.DefaultTimeSheet" Member="DefaultTimeSheets">
@@ -74,28 +91,6 @@
       <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="tsDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
       <Association Name="TimeSheetHeader_DefaultTimeSheet" Member="TimeSheetHeader" ThisKey="empId,tsDate" OtherKey="empId,tsDate" Type="TimeSheetHeader" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.WorkPackageStatusReport" Member="WorkPackageStatusReports">
-    <Type Name="WorkPackageStatusReport">
-      <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="wpId" Type="System.String" DbType="VarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="reportDate" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="comments" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="workAccomplished" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="workPlannedNext" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="problemsEncountered" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="problemsAnticipated" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Association Name="WorkPackageStatusReport_EmployeeWorkPackageETC" Member="EmployeeWorkPackageETCs" ThisKey="projId,wpId,reportDate" OtherKey="projId,wpId,dateUpdated" Type="EmployeeWorkPackageETC" />
-      <Association Name="WorkPackage_WorkPackageStatusReport" Member="WorkPackage" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackage" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.EmployeeMembership" Member="EmployeeMemberships">
-    <Type Name="EmployeeMembership">
-      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="userId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-      <Association Name="aspnet_Membership_EmployeeMembership" Member="aspnet_Membership" ThisKey="userId" OtherKey="UserId" Type="aspnet_Membership" IsForeignKey="true" />
-      <Association Name="Employee_EmployeeMembership" Member="Employee" ThisKey="empId" OtherKey="empId" Type="Employee" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.EmployeePersonLevel" Member="EmployeePersonLevels">
@@ -112,8 +107,8 @@
       <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Association Name="EmployeeProject_EmployeeWorkPackage" Member="EmployeeWorkPackages" ThisKey="projId,empId" OtherKey="projId,empId" Type="EmployeeWorkPackage" />
-      <Association Name="Project_EmployeeProject" Member="Project" ThisKey="projId" OtherKey="projId" Type="Project" IsForeignKey="true" />
       <Association Name="Employee_EmployeeProject" Member="Employee" ThisKey="empId" OtherKey="empId" Type="Employee" IsForeignKey="true" />
+      <Association Name="Project_EmployeeProject" Member="Project" ThisKey="projId" OtherKey="projId" Type="Project" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.EmployeeWorkPackage" Member="EmployeeWorkPackages">
@@ -134,8 +129,8 @@
       <Column Name="wpId" Type="System.String" DbType="VarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="dateUpdated" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="ETC_days" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="WorkPackageStatusReport_EmployeeWorkPackageETC" Member="WorkPackageStatusReport" ThisKey="projId,wpId,dateUpdated" OtherKey="projId,wpId,reportDate" Type="WorkPackageStatusReport" IsForeignKey="true" />
       <Association Name="EmployeeWorkPackage_EmployeeWorkPackageETC" Member="EmployeeWorkPackage" ThisKey="empId,projId,wpId" OtherKey="empId,projId,wpId" Type="EmployeeWorkPackage" IsForeignKey="true" />
+      <Association Name="WorkPackageStatusReport_EmployeeWorkPackageETC" Member="WorkPackageStatusReport" ThisKey="projId,wpId,dateUpdated" OtherKey="projId,wpId,reportDate" Type="WorkPackageStatusReport" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.HumanResourcesStaff" Member="HumanResourcesStaffs">
@@ -203,11 +198,11 @@
       <Column Name="description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="unallocated_dollars" Type="System.Decimal" DbType="Decimal(11,2)" CanBeNull="true" />
       <Column Name="allocated_dollars" Type="System.Decimal" DbType="Decimal(11,2)" CanBeNull="true" />
-      <Association Name="WorkPackage_WorkPackageStatusReport" Member="WorkPackageStatusReports" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageStatusReport" />
       <Association Name="WorkPackage_EmployeeWorkPackage" Member="EmployeeWorkPackages" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="EmployeeWorkPackage" />
       <Association Name="WorkPackage_TimeSheetEntry" Member="TimeSheetEntries" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="TimeSheetEntry" />
       <Association Name="WorkPackage_WorkPackageBudgetPM" Member="WorkPackageBudgetPMs" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageBudgetPM" />
       <Association Name="WorkPackage_WorkPackageEstimateRE" Member="WorkPackageEstimateREs" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageEstimateRE" />
+      <Association Name="WorkPackage_WorkPackageStatusReport" Member="WorkPackageStatusReports" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageStatusReport" />
       <Association Name="Project_WorkPackage" Member="Project" ThisKey="projId" OtherKey="projId" Type="Project" IsForeignKey="true" />
     </Type>
   </Table>
@@ -243,28 +238,18 @@
       <Association Name="EmployeeWorkPackage_WorkPackageResponsibleEngineer" Member="EmployeeWorkPackage" ThisKey="responsibleEngineer,projId,wpId" OtherKey="empId,projId,wpId" Type="EmployeeWorkPackage" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Employee" Member="Employees">
-    <Type Name="Employee">
-      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="firstName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="lastName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="supervisor" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="approver" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="minHoursPerWeek" Type="System.Decimal" DbType="Decimal(3,1) NOT NULL" CanBeNull="false" />
-      <Column Name="vacationLeave" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="sickDays" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="flexHours" Type="System.Decimal" DbType="Decimal(3,1) NOT NULL" CanBeNull="false" />
-      <Column Name="isActive" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Employee_EmployeeMembership" Member="EmployeeMembership" ThisKey="empId" OtherKey="empId" Type="EmployeeMembership" Cardinality="One" />
-      <Association Name="Employee_EmployeeProject" Member="EmployeeProjects" ThisKey="empId" OtherKey="empId" Type="EmployeeProject" />
-      <Association Name="Employee_HumanResourcesStaff" Member="HumanResourcesStaff" ThisKey="empId" OtherKey="empId" Type="HumanResourcesStaff" Cardinality="One" />
-      <Association Name="Employee_Project" Member="Projects" ThisKey="empId" OtherKey="manager" Type="Project" />
-      <Association Name="Employee_TimeSheetHeader" Member="TimeSheetHeaders" ThisKey="empId" OtherKey="approvedBy" Type="TimeSheetHeader" />
-      <Association Name="Employee_TimeSheetHeader1" Member="TimeSheetHeaders1" ThisKey="empId" OtherKey="empId" Type="TimeSheetHeader" />
-      <Association Name="Employee_Employee" Member="Employees" ThisKey="empId" OtherKey="approver" Type="Employee" />
-      <Association Name="Employee_Employee1" Member="Employees1" ThisKey="empId" OtherKey="supervisor" Type="Employee" />
-      <Association Name="Employee_Employee" Member="Employee1" ThisKey="approver" OtherKey="empId" Type="Employee" IsForeignKey="true" />
-      <Association Name="Employee_Employee1" Member="Employee2" ThisKey="supervisor" OtherKey="empId" Type="Employee" IsForeignKey="true" />
+  <Table Name="dbo.WorkPackageStatusReport" Member="WorkPackageStatusReports">
+    <Type Name="WorkPackageStatusReport">
+      <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="wpId" Type="System.String" DbType="VarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="reportDate" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="comments" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="workAccomplished" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="workPlannedNext" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="problemsEncountered" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="problemsAnticipated" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Association Name="WorkPackageStatusReport_EmployeeWorkPackageETC" Member="EmployeeWorkPackageETCs" ThisKey="projId,wpId,reportDate" OtherKey="projId,wpId,dateUpdated" Type="EmployeeWorkPackageETC" />
+      <Association Name="WorkPackage_WorkPackageStatusReport" Member="WorkPackage" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackage" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
