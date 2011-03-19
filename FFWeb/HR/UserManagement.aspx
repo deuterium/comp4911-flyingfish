@@ -172,7 +172,7 @@
                 <SideBarStyle BackColor="#507CD1" Font-Size="0.9em" VerticalAlign="Top" />
                 <StepStyle Font-Size="0.8em" />
             </asp:CreateUserWizard>
-            <asp:LinqDataSource ID="RoleSource" runat="server" ContextTypeName="FFLib.FlyingFishDataContext"
+            <asp:LinqDataSource ID="RoleSource" runat="server" ContextTypeName="FFLib.FlyingFishClassesDataContext"
                 EntityTypeName="" Select="new (RoleId, RoleName)" TableName="aspnet_Roles">
             </asp:LinqDataSource>
         </div>

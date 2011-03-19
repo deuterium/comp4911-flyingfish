@@ -41,10 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FlyingFish.designer.cs">
+    <Compile Include="FlyingFishClasses.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>FlyingFish.dbml</DependentUpon>
+      <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
     </Compile>
     <Compile Include="ManagedEmployee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,9 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="FlyingFish.dbml">
+    <None Include="FlyingFishClasses.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>FlyingFish.designer.cs</LastGenOutput>
+      <LastGenOutput>FlyingFishClasses.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">
@@ -70,8 +70,8 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="FlyingFish.dbml.layout">
-      <DependentUpon>FlyingFish.dbml</DependentUpon>
+    <None Include="FlyingFishClasses.dbml.layout">
+      <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
