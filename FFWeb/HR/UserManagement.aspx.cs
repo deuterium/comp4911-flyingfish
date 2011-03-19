@@ -55,6 +55,7 @@ public partial class UserManagement : System.Web.UI.Page
         if (ff.Employees.Where(te => te.empId == Convert.ToInt32(tmpEmpID)).ToArray().Length > 0)
         {
             //throw new Exception("Employee Number already exists.");
+            //OMG WHY DOES THIS NOT UPDATE!!!!!
             ((Literal)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ErrorMessage")).Text
                 = "Employee Number already exists.";
             e.Cancel = true;
@@ -64,5 +65,9 @@ public partial class UserManagement : System.Web.UI.Page
             ((Literal)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ErrorMessage")).Text = "";
             e.Cancel = false;
         }
+    }
+    protected void cuwCreateUser_ContinueButtonClick(object sender, EventArgs e)
+    {
+        cuwCreateUser.ActiveStepIndex = 0;
     }
 }

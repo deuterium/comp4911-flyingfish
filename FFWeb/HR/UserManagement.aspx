@@ -16,7 +16,10 @@
             <asp:CreateUserWizard ID="cuwCreateUser" runat="server" BackColor="#EFF3FB" BorderColor="#B5C7DE"
                 BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.8em"
                 CreateUserButtonText="Create New User" OnCreatedUser="cuwCreateUser_CreatedUser"
-                LoginCreatedUser="False" OnCreatingUser="cuwCreateUser_CreatingUser" ContinueDestinationPageUrl="~/HR/UserManagement.aspx">
+                LoginCreatedUser="False" OnCreatingUser="cuwCreateUser_CreatingUser" 
+                oncontinuebuttonclick="cuwCreateUser_ContinueButtonClick" 
+                CompleteSuccessText="The account has been successfully created." 
+                ContinueButtonText="Create another User" EnableViewState="False">
                 <ContinueButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
                     BorderWidth="1px" Font-Names="Verdana" ForeColor="#284E98" />
                 <CreateUserButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
