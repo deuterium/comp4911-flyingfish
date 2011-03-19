@@ -9,6 +9,7 @@ using FFLib;
 
 public partial class UserManagement : System.Web.UI.Page
 {
+    FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
     }
@@ -26,35 +27,41 @@ public partial class UserManagement : System.Web.UI.Page
     }
     protected void cuwCreateUser_CreatedUser(object sender, EventArgs e)
     {
-        FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
         string tmpFirstName = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("FirstName")).Text;
         string tmpLastName = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("LastName")).Text;
         string tmpRole = ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("RoleList")).SelectedItem.Text;
         string tmpEmpID = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("EmployeeID")).Text;
         Roles.AddUserToRole(((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("UserName")).Text, tmpRole);
 
+        Employee emp = new Employee()
+        {
+            firstName = tmpFirstName,
+            lastName = tmpLastName,
+            empId = Convert.ToInt32(tmpEmpID),
+            supervisor = 1,
+            approver = 1,
+            minHoursPerWeek = 0,
+            vacationLeave = 0,
+            sickDays = 0,
+            flexHours = 0,
+            isActive = 1
+        };
+        ff.Employees.InsertOnSubmit(emp);
+        ff.SubmitChanges();
+    }
+    protected void cuwCreateUser_CreatingUser(object sender, LoginCancelEventArgs e)
+    {
+        string tmpEmpID = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("EmployeeID")).Text;
         if (ff.Employees.Where(te => te.empId == Convert.ToInt32(tmpEmpID)).ToArray().Length > 0)
         {
             ((Literal)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ErrorMessage")).Text
                 = "Employee Number alerady exists.";
+            e.Cancel = true;
         }
-        else {
+        else
+        {
             ((Literal)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ErrorMessage")).Text = "";
-            Employee emp = new Employee()
-            {
-                firstName = tmpFirstName,
-                lastName = tmpLastName,
-                empId = Convert.ToInt32(tmpEmpID),
-                supervisor = 1,
-                approver = 1,
-                minHoursPerWeek = 0,
-                vacationLeave = 0,
-                sickDays = 0,
-                flexHours = 0,
-                isActive = 1
-            };
-            ff.Employees.InsertOnSubmit(emp);
-            ff.SubmitChanges();
+            e.Cancel = false;
         }
     }
 }
