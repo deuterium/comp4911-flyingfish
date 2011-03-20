@@ -123,13 +123,28 @@ public partial class UserManagement : System.Web.UI.Page
     //Searches for employees containing the provided last name when button clicked
     protected void buttonSearch_Click(object sender, EventArgs e)
     {
-        gvManageUsers.DataSource = ff.Employees.Where(emp => emp.lastName.Contains(tbSearch.Text)).Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive });
-        gvManageUsers.DataBind();
+        if (tbSearch.Text == "" || ff.Employees.Where(emp => emp.lastName.Contains(tbSearch.Text)).Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive }).Count() == 0)
+        {
+            lblSearchError.Enabled = true;
+            lblSearchError.Text = "No Employees results";
+            lblSearchError.ForeColor = System.Drawing.Color.Red;
+            gvManageUsers.DataSource = null;
+            gvManageUsers.DataBind();
+        }
+        else 
+        {
+            lblSearchError.Enabled = false;
+            lblSearchError.Text = "";
+            gvManageUsers.DataSource = ff.Employees.Where(emp => emp.lastName.Contains(tbSearch.Text)).Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive });
+            gvManageUsers.DataBind();
+        }
     }
 
     //Displays all employees when button clicked
     protected void buttonAllUsers_Click(object sender, EventArgs e)
     {
+        lblSearchError.Enabled = false;
+        lblSearchError.Text = "";
         getAllUsers();
     }
 }

@@ -185,6 +185,7 @@
             &nbsp;<asp:Button ID="buttonAllUsers" runat="server" Text="Show All Users" 
                 onclick="buttonAllUsers_Click" />
             <hr />
+            <asp:Label ID="lblSearchError" runat="server" Enabled="False"></asp:Label>
             <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True"
             OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
             </asp:GridView>
