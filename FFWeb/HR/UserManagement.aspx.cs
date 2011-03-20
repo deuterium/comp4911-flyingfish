@@ -23,6 +23,7 @@ public partial class UserManagement : System.Web.UI.Page
     {
         if (DivNewUser.Visible) DivNewUser.Visible = false;
         DivManageUsers.Visible = true;
+        getAllUsers();
 
     }
     protected void cuwCreateUser_CreatedUser(object sender, EventArgs e)
@@ -47,6 +48,14 @@ public partial class UserManagement : System.Web.UI.Page
             isActive = 1
         };
         ff.Employees.InsertOnSubmit(emp);
+
+        ff.EmployeeMemberships.InsertOnSubmit(new EmployeeMembership
+        {
+            empId = Convert.ToInt32(tmpEmpID),
+            userId = ff.aspnet_Users
+                .Where(u => u.UserName == ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("UserName")).Text)
+                .ToArray()[0].UserId
+        });
         ff.SubmitChanges();
     }
     protected void cuwCreateUser_CreatingUser(object sender, LoginCancelEventArgs e)
@@ -55,7 +64,7 @@ public partial class UserManagement : System.Web.UI.Page
         if (ff.Employees.Where(te => te.empId == Convert.ToInt32(tmpEmpID)).ToArray().Length > 0)
         {
             //throw new Exception("Employee Number already exists.");
-            //OMG WHY DOES THIS NOT UPDATE!!!!!
+            //OMG WHY DOES THIS LITERAL NOT UPDATE!!!!! if i make a label or another literal it updates fine.
             ((Literal)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ErrorMessage")).Text
                 = "Employee Number already exists.";
             e.Cancel = true;
@@ -69,5 +78,18 @@ public partial class UserManagement : System.Web.UI.Page
     protected void cuwCreateUser_ContinueButtonClick(object sender, EventArgs e)
     {
         cuwCreateUser.ActiveStepIndex = 0;
+    }
+    protected void getAllUsers()
+    {
+        ////gvManageUsers.DataSource = ff.Employees.Select(e => e.empId).ToList();
+        //List<ManagedEmployee> employees = new List<ManagedEmployee>();
+        //var employeeQry = from e in ff.Employees
+        //                  select e.empId;
+        ////foreach (var e in employeeQry) 
+        ////{ 
+        ////    var userQry = from u in ff.aspnet_Users
+        ////                  where u.UserName = ()
+        ////}
+        //gvManageUsers.DataBind();
     }
 }

@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FlyingFishClasses.cs">
+      <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
+    </Compile>
     <Compile Include="FlyingFishClasses.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
