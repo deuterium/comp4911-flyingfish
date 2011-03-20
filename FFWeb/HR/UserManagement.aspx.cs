@@ -94,4 +94,8 @@ public partial class UserManagement : System.Web.UI.Page
         gvManageUsers.DataSource = employees;
         gvManageUsers.DataBind();
     }
+    protected void gvManageUsers_SelectedIndexChanged(Object sender, EventArgs e) 
+    {
+        labelSelected.Text = "empid: " + gvManageUsers.SelectedRow.Cells[3].Text;
+    }
 }

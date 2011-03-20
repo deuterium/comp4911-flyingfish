@@ -178,8 +178,11 @@
         </div>
         <div id="DivManageUsers" runat="server" visible="false">
             <br />
-            <asp:GridView ID="gvManageUsers" runat="server">
+            <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True"
+            OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
             </asp:GridView>
+            <br />
+            <asp:Label ID="labelSelected" runat="server" Text="Label"></asp:Label>
         </div>
     </div>
 </asp:Content>
