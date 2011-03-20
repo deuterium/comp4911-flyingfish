@@ -23,7 +23,6 @@
       <Column Name="FailedPasswordAnswerAttemptCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="FailedPasswordAnswerAttemptWindowStart" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="Comment" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
-      <Association Name="aspnet_Membership_EmployeeMembership" Member="EmployeeMemberships" ThisKey="UserId" OtherKey="userId" Type="EmployeeMembership" />
       <Association Name="aspnet_User_aspnet_Membership" Member="aspnet_User" ThisKey="UserId" OtherKey="UserId" Type="aspnet_User" IsForeignKey="true" />
     </Type>
   </Table>
@@ -56,6 +55,7 @@
       <Column Name="LastActivityDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="aspnet_User_aspnet_Membership" Member="aspnet_Membership" ThisKey="UserId" OtherKey="UserId" Type="aspnet_Membership" Cardinality="One" />
       <Association Name="aspnet_User_aspnet_UsersInRole" Member="aspnet_UsersInRoles" ThisKey="UserId" OtherKey="UserId" Type="aspnet_UsersInRole" />
+      <Association Name="aspnet_User_EmployeeMembership" Member="EmployeeMemberships" ThisKey="UserId" OtherKey="userId" Type="EmployeeMembership" />
     </Type>
   </Table>
   <Table Name="dbo.DefaultTimeSheet" Member="DefaultTimeSheets">
@@ -91,20 +91,12 @@
       <Column Name="sickDays" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="flexHours" Type="System.Decimal" DbType="Decimal(3,1) NOT NULL" CanBeNull="false" />
       <Column Name="isActive" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Employee_EmployeeMembership" Member="EmployeeMembership" ThisKey="empId" OtherKey="empId" Type="EmployeeMembership" Cardinality="One" />
       <Association Name="Employee_EmployeeProject" Member="EmployeeProjects" ThisKey="empId" OtherKey="empId" Type="EmployeeProject" />
       <Association Name="Employee_HumanResourcesStaff" Member="HumanResourcesStaff" ThisKey="empId" OtherKey="empId" Type="HumanResourcesStaff" Cardinality="One" />
       <Association Name="Employee_Project" Member="Projects" ThisKey="empId" OtherKey="manager" Type="Project" />
       <Association Name="Employee_TimeSheetHeader" Member="TimeSheetHeaders" ThisKey="empId" OtherKey="approvedBy" Type="TimeSheetHeader" />
       <Association Name="Employee_TimeSheetHeader1" Member="TimeSheetHeaders1" ThisKey="empId" OtherKey="empId" Type="TimeSheetHeader" />
-    </Type>
-  </Table>
-  <Table Name="dbo.EmployeeMembership" Member="EmployeeMemberships">
-    <Type Name="EmployeeMembership">
-      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="userId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-      <Association Name="Employee_EmployeeMembership" Member="Employee" ThisKey="empId" OtherKey="empId" Type="Employee" IsForeignKey="true" />
-      <Association Name="aspnet_Membership_EmployeeMembership" Member="aspnet_Membership" ThisKey="userId" OtherKey="UserId" Type="aspnet_Membership" IsForeignKey="true" />
+      <Association Name="Employee_EmployeeMembership" Member="EmployeeMembership" ThisKey="empId" OtherKey="empId" Type="EmployeeMembership" Cardinality="One" />
     </Type>
   </Table>
   <Table Name="dbo.EmployeePersonLevel" Member="EmployeePersonLevels">
@@ -250,6 +242,14 @@
       <Column Name="wpId" Type="System.String" DbType="VarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="responsibleEngineer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="EmployeeWorkPackage_WorkPackageResponsibleEngineer" Member="EmployeeWorkPackage" ThisKey="responsibleEngineer,projId,wpId" OtherKey="empId,projId,wpId" Type="EmployeeWorkPackage" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EmployeeMembership" Member="EmployeeMemberships">
+    <Type Name="EmployeeMembership">
+      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="userId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="Employee_EmployeeMembership" Member="Employee" ThisKey="empId" OtherKey="empId" Type="Employee" IsForeignKey="true" />
+      <Association Name="aspnet_User_EmployeeMembership" Member="aspnet_User" ThisKey="userId" OtherKey="UserId" Type="aspnet_User" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

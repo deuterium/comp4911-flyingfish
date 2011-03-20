@@ -51,9 +51,6 @@ namespace FFLib
     partial void InsertEmployee(Employee instance);
     partial void UpdateEmployee(Employee instance);
     partial void DeleteEmployee(Employee instance);
-    partial void InsertEmployeeMembership(EmployeeMembership instance);
-    partial void UpdateEmployeeMembership(EmployeeMembership instance);
-    partial void DeleteEmployeeMembership(EmployeeMembership instance);
     partial void InsertEmployeePersonLevel(EmployeePersonLevel instance);
     partial void UpdateEmployeePersonLevel(EmployeePersonLevel instance);
     partial void DeleteEmployeePersonLevel(EmployeePersonLevel instance);
@@ -93,6 +90,9 @@ namespace FFLib
     partial void InsertWorkPackageResponsibleEngineer(WorkPackageResponsibleEngineer instance);
     partial void UpdateWorkPackageResponsibleEngineer(WorkPackageResponsibleEngineer instance);
     partial void DeleteWorkPackageResponsibleEngineer(WorkPackageResponsibleEngineer instance);
+    partial void InsertEmployeeMembership(EmployeeMembership instance);
+    partial void UpdateEmployeeMembership(EmployeeMembership instance);
+    partial void DeleteEmployeeMembership(EmployeeMembership instance);
     #endregion
 		
 		public FlyingFishClassesDataContext() : 
@@ -178,14 +178,6 @@ namespace FFLib
 			get
 			{
 				return this.GetTable<Employee>();
-			}
-		}
-		
-		public System.Data.Linq.Table<EmployeeMembership> EmployeeMemberships
-		{
-			get
-			{
-				return this.GetTable<EmployeeMembership>();
 			}
 		}
 		
@@ -292,6 +284,14 @@ namespace FFLib
 				return this.GetTable<WorkPackageResponsibleEngineer>();
 			}
 		}
+		
+		public System.Data.Linq.Table<EmployeeMembership> EmployeeMemberships
+		{
+			get
+			{
+				return this.GetTable<EmployeeMembership>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.aspnet_Membership")]
@@ -341,8 +341,6 @@ namespace FFLib
 		private System.DateTime _FailedPasswordAnswerAttemptWindowStart;
 		
 		private string _Comment;
-		
-		private EntitySet<EmployeeMembership> _EmployeeMemberships;
 		
 		private EntityRef<aspnet_User> _aspnet_User;
 		
@@ -396,7 +394,6 @@ namespace FFLib
 		
 		public aspnet_Membership()
 		{
-			this._EmployeeMemberships = new EntitySet<EmployeeMembership>(new Action<EmployeeMembership>(this.attach_EmployeeMemberships), new Action<EmployeeMembership>(this.detach_EmployeeMemberships));
 			this._aspnet_User = default(EntityRef<aspnet_User>);
 			OnCreated();
 		}
@@ -825,19 +822,6 @@ namespace FFLib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Membership_EmployeeMembership", Storage="_EmployeeMemberships", ThisKey="UserId", OtherKey="userId")]
-		public EntitySet<EmployeeMembership> EmployeeMemberships
-		{
-			get
-			{
-				return this._EmployeeMemberships;
-			}
-			set
-			{
-				this._EmployeeMemberships.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_aspnet_Membership", Storage="_aspnet_User", ThisKey="UserId", OtherKey="UserId", IsForeignKey=true)]
 		public aspnet_User aspnet_User
 		{
@@ -890,18 +874,6 @@ namespace FFLib
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_EmployeeMemberships(EmployeeMembership entity)
-		{
-			this.SendPropertyChanging();
-			entity.aspnet_Membership = this;
-		}
-		
-		private void detach_EmployeeMemberships(EmployeeMembership entity)
-		{
-			this.SendPropertyChanging();
-			entity.aspnet_Membership = null;
 		}
 	}
 	
@@ -1283,6 +1255,8 @@ namespace FFLib
 		
 		private EntitySet<aspnet_UsersInRole> _aspnet_UsersInRoles;
 		
+		private EntitySet<EmployeeMembership> _EmployeeMemberships;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1307,6 +1281,7 @@ namespace FFLib
 		{
 			this._aspnet_Membership = default(EntityRef<aspnet_Membership>);
 			this._aspnet_UsersInRoles = new EntitySet<aspnet_UsersInRole>(new Action<aspnet_UsersInRole>(this.attach_aspnet_UsersInRoles), new Action<aspnet_UsersInRole>(this.detach_aspnet_UsersInRoles));
+			this._EmployeeMemberships = new EntitySet<EmployeeMembership>(new Action<EmployeeMembership>(this.attach_EmployeeMemberships), new Action<EmployeeMembership>(this.detach_EmployeeMemberships));
 			OnCreated();
 		}
 		
@@ -1492,6 +1467,19 @@ namespace FFLib
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_EmployeeMembership", Storage="_EmployeeMemberships", ThisKey="UserId", OtherKey="userId")]
+		public EntitySet<EmployeeMembership> EmployeeMemberships
+		{
+			get
+			{
+				return this._EmployeeMemberships;
+			}
+			set
+			{
+				this._EmployeeMemberships.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -1519,6 +1507,18 @@ namespace FFLib
 		}
 		
 		private void detach_aspnet_UsersInRoles(aspnet_UsersInRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.aspnet_User = null;
+		}
+		
+		private void attach_EmployeeMemberships(EmployeeMembership entity)
+		{
+			this.SendPropertyChanging();
+			entity.aspnet_User = this;
+		}
+		
+		private void detach_EmployeeMemberships(EmployeeMembership entity)
 		{
 			this.SendPropertyChanging();
 			entity.aspnet_User = null;
@@ -1989,8 +1989,6 @@ namespace FFLib
 		
 		private int _isActive;
 		
-		private EntityRef<EmployeeMembership> _EmployeeMembership;
-		
 		private EntitySet<EmployeeProject> _EmployeeProjects;
 		
 		private EntityRef<HumanResourcesStaff> _HumanResourcesStaff;
@@ -2000,6 +1998,8 @@ namespace FFLib
 		private EntitySet<TimeSheetHeader> _TimeSheetHeaders;
 		
 		private EntitySet<TimeSheetHeader> _TimeSheetHeaders1;
+		
+		private EntityRef<EmployeeMembership> _EmployeeMembership;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2029,12 +2029,12 @@ namespace FFLib
 		
 		public Employee()
 		{
-			this._EmployeeMembership = default(EntityRef<EmployeeMembership>);
 			this._EmployeeProjects = new EntitySet<EmployeeProject>(new Action<EmployeeProject>(this.attach_EmployeeProjects), new Action<EmployeeProject>(this.detach_EmployeeProjects));
 			this._HumanResourcesStaff = default(EntityRef<HumanResourcesStaff>);
 			this._Projects = new EntitySet<Project>(new Action<Project>(this.attach_Projects), new Action<Project>(this.detach_Projects));
 			this._TimeSheetHeaders = new EntitySet<TimeSheetHeader>(new Action<TimeSheetHeader>(this.attach_TimeSheetHeaders), new Action<TimeSheetHeader>(this.detach_TimeSheetHeaders));
 			this._TimeSheetHeaders1 = new EntitySet<TimeSheetHeader>(new Action<TimeSheetHeader>(this.attach_TimeSheetHeaders1), new Action<TimeSheetHeader>(this.detach_TimeSheetHeaders1));
+			this._EmployeeMembership = default(EntityRef<EmployeeMembership>);
 			OnCreated();
 		}
 		
@@ -2238,35 +2238,6 @@ namespace FFLib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeMembership", Storage="_EmployeeMembership", ThisKey="empId", OtherKey="empId", IsUnique=true, IsForeignKey=false)]
-		public EmployeeMembership EmployeeMembership
-		{
-			get
-			{
-				return this._EmployeeMembership.Entity;
-			}
-			set
-			{
-				EmployeeMembership previousValue = this._EmployeeMembership.Entity;
-				if (((previousValue != value) 
-							|| (this._EmployeeMembership.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._EmployeeMembership.Entity = null;
-						previousValue.Employee = null;
-					}
-					this._EmployeeMembership.Entity = value;
-					if ((value != null))
-					{
-						value.Employee = this;
-					}
-					this.SendPropertyChanged("EmployeeMembership");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeProject", Storage="_EmployeeProjects", ThisKey="empId", OtherKey="empId")]
 		public EntitySet<EmployeeProject> EmployeeProjects
 		{
@@ -2348,6 +2319,35 @@ namespace FFLib
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeMembership", Storage="_EmployeeMembership", ThisKey="empId", OtherKey="empId", IsUnique=true, IsForeignKey=false)]
+		public EmployeeMembership EmployeeMembership
+		{
+			get
+			{
+				return this._EmployeeMembership.Entity;
+			}
+			set
+			{
+				EmployeeMembership previousValue = this._EmployeeMembership.Entity;
+				if (((previousValue != value) 
+							|| (this._EmployeeMembership.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EmployeeMembership.Entity = null;
+						previousValue.Employee = null;
+					}
+					this._EmployeeMembership.Entity = value;
+					if ((value != null))
+					{
+						value.Employee = this;
+					}
+					this.SendPropertyChanged("EmployeeMembership");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2414,174 +2414,6 @@ namespace FFLib
 		{
 			this.SendPropertyChanging();
 			entity.Employee1 = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeMembership")]
-	public partial class EmployeeMembership : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _empId;
-		
-		private System.Guid _userId;
-		
-		private EntityRef<Employee> _Employee;
-		
-		private EntityRef<aspnet_Membership> _aspnet_Membership;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnempIdChanging(int value);
-    partial void OnempIdChanged();
-    partial void OnuserIdChanging(System.Guid value);
-    partial void OnuserIdChanged();
-    #endregion
-		
-		public EmployeeMembership()
-		{
-			this._Employee = default(EntityRef<Employee>);
-			this._aspnet_Membership = default(EntityRef<aspnet_Membership>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int empId
-		{
-			get
-			{
-				return this._empId;
-			}
-			set
-			{
-				if ((this._empId != value))
-				{
-					if (this._Employee.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnempIdChanging(value);
-					this.SendPropertyChanging();
-					this._empId = value;
-					this.SendPropertyChanged("empId");
-					this.OnempIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userId", DbType="UniqueIdentifier NOT NULL")]
-		public System.Guid userId
-		{
-			get
-			{
-				return this._userId;
-			}
-			set
-			{
-				if ((this._userId != value))
-				{
-					if (this._aspnet_Membership.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnuserIdChanging(value);
-					this.SendPropertyChanging();
-					this._userId = value;
-					this.SendPropertyChanged("userId");
-					this.OnuserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeMembership", Storage="_Employee", ThisKey="empId", OtherKey="empId", IsForeignKey=true)]
-		public Employee Employee
-		{
-			get
-			{
-				return this._Employee.Entity;
-			}
-			set
-			{
-				Employee previousValue = this._Employee.Entity;
-				if (((previousValue != value) 
-							|| (this._Employee.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Employee.Entity = null;
-						previousValue.EmployeeMembership = null;
-					}
-					this._Employee.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeMembership = this;
-						this._empId = value.empId;
-					}
-					else
-					{
-						this._empId = default(int);
-					}
-					this.SendPropertyChanged("Employee");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Membership_EmployeeMembership", Storage="_aspnet_Membership", ThisKey="userId", OtherKey="UserId", IsForeignKey=true)]
-		public aspnet_Membership aspnet_Membership
-		{
-			get
-			{
-				return this._aspnet_Membership.Entity;
-			}
-			set
-			{
-				aspnet_Membership previousValue = this._aspnet_Membership.Entity;
-				if (((previousValue != value) 
-							|| (this._aspnet_Membership.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._aspnet_Membership.Entity = null;
-						previousValue.EmployeeMemberships.Remove(this);
-					}
-					this._aspnet_Membership.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeMemberships.Add(this);
-						this._userId = value.UserId;
-					}
-					else
-					{
-						this._userId = default(System.Guid);
-					}
-					this.SendPropertyChanged("aspnet_Membership");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
 		}
 	}
 	
@@ -5747,6 +5579,174 @@ namespace FFLib
 						this._wpId = default(string);
 					}
 					this.SendPropertyChanged("EmployeeWorkPackage");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeMembership")]
+	public partial class EmployeeMembership : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _empId;
+		
+		private System.Guid _userId;
+		
+		private EntityRef<Employee> _Employee;
+		
+		private EntityRef<aspnet_User> _aspnet_User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnempIdChanging(int value);
+    partial void OnempIdChanged();
+    partial void OnuserIdChanging(System.Guid value);
+    partial void OnuserIdChanged();
+    #endregion
+		
+		public EmployeeMembership()
+		{
+			this._Employee = default(EntityRef<Employee>);
+			this._aspnet_User = default(EntityRef<aspnet_User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int empId
+		{
+			get
+			{
+				return this._empId;
+			}
+			set
+			{
+				if ((this._empId != value))
+				{
+					if (this._Employee.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnempIdChanging(value);
+					this.SendPropertyChanging();
+					this._empId = value;
+					this.SendPropertyChanged("empId");
+					this.OnempIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userId", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid userId
+		{
+			get
+			{
+				return this._userId;
+			}
+			set
+			{
+				if ((this._userId != value))
+				{
+					if (this._aspnet_User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnuserIdChanging(value);
+					this.SendPropertyChanging();
+					this._userId = value;
+					this.SendPropertyChanged("userId");
+					this.OnuserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeMembership", Storage="_Employee", ThisKey="empId", OtherKey="empId", IsForeignKey=true)]
+		public Employee Employee
+		{
+			get
+			{
+				return this._Employee.Entity;
+			}
+			set
+			{
+				Employee previousValue = this._Employee.Entity;
+				if (((previousValue != value) 
+							|| (this._Employee.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Employee.Entity = null;
+						previousValue.EmployeeMembership = null;
+					}
+					this._Employee.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeMembership = this;
+						this._empId = value.empId;
+					}
+					else
+					{
+						this._empId = default(int);
+					}
+					this.SendPropertyChanged("Employee");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_EmployeeMembership", Storage="_aspnet_User", ThisKey="userId", OtherKey="UserId", IsForeignKey=true)]
+		public aspnet_User aspnet_User
+		{
+			get
+			{
+				return this._aspnet_User.Entity;
+			}
+			set
+			{
+				aspnet_User previousValue = this._aspnet_User.Entity;
+				if (((previousValue != value) 
+							|| (this._aspnet_User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._aspnet_User.Entity = null;
+						previousValue.EmployeeMemberships.Remove(this);
+					}
+					this._aspnet_User.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeMemberships.Add(this);
+						this._userId = value.UserId;
+					}
+					else
+					{
+						this._userId = default(System.Guid);
+					}
+					this.SendPropertyChanged("aspnet_User");
 				}
 			}
 		}

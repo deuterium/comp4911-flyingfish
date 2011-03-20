@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FFLib
 {
-    class ManagedEmployee
+    public class ManagedEmployee
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
