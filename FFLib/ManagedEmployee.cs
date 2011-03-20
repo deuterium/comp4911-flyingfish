@@ -7,13 +7,17 @@ namespace FFLib
 {
     public class ManagedEmployee
     {
+        FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
         public ManagedEmployee(aspnet_User u, Employee e)
         {
+            AspUser = u;
+            EmployeeUser = e;
+
             FirstName = e.firstName;
             LastName = e.lastName;
             EmployeeId = e.empId;
             Username = u.UserName;
-            //email should go here but its in aspnet_Membeship
+            Email = ff.aspnet_Memberships.Where(m => m.UserId == AspUser.UserId).FirstOrDefault().Email;
             Supervisor = e.supervisor;
             Approver = e.approver;
             MinHoursPerWeek = (Double)e.minHoursPerWeek;
@@ -36,7 +40,7 @@ namespace FFLib
         public int IsActive { get; set; }
 
         public aspnet_User AspUser { get; set; }
-        public Employee Employee { get; set; }
+        public Employee EmployeeUser { get; set; }
 
     }
 }
