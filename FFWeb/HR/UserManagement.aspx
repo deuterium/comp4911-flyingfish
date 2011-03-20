@@ -182,7 +182,8 @@
             OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
             </asp:GridView>
             <br />
-            <asp:Label ID="labelSelected" runat="server" Text="Label"></asp:Label>
+            <asp:DetailsView ID="dvUser" runat="server" Height="50px" Width="125px">
+            </asp:DetailsView>
         </div>
     </div>
 </asp:Content>

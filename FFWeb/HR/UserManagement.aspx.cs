@@ -85,17 +85,23 @@ public partial class UserManagement : System.Web.UI.Page
         var UsersQry = from a in ff.EmployeeMemberships
                        select a;
 
-        foreach (EmployeeMembership e in UsersQry)
-        {
-            employees.Add(new ManagedEmployee(ff.aspnet_Users.Where(u => u.UserId == e.userId).FirstOrDefault()
-                , ff.Employees.Where(emp => emp.empId == e.empId).FirstOrDefault()));
-        }
+        //foreach (EmployeeMembership e in UsersQry)
+        //{
+        //    employees.Add(new ManagedEmployee(ff.aspnet_Users.Where(u => u.UserId == e.userId).FirstOrDefault()
+        //        , ff.Employees.Where(emp => emp.empId == e.empId).FirstOrDefault()));
+        //}
 
-        gvManageUsers.DataSource = employees;
+        //gvManageUsers.DataSource = employees;
+
+        gvManageUsers.DataSource = ff.Employees.Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive });
         gvManageUsers.DataBind();
     }
-    protected void gvManageUsers_SelectedIndexChanged(Object sender, EventArgs e) 
+    protected void gvManageUsers_SelectedIndexChanged(Object sender, EventArgs e)
     {
-        labelSelected.Text = "empid: " + gvManageUsers.SelectedRow.Cells[3].Text;
+        dvUser.DataSource = ff.EmployeeMemberships.Where(emp => emp.empId == Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text)).Select(emp => emp.Employee);
+        //new ManagedEmployee(ff.aspnet_Users.Where(u => u.UserId 
+        //== ff.EmployeeMemberships.Where(emp => emp.empId == Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text)).Select(emp => emp.userId).First()).FirstOrDefault()
+        //, ff.Employees.Where(emp => emp.empId == Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text)).FirstOrDefault());
+        dvUser.DataBind();
     }
 }
