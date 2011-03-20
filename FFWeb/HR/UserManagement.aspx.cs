@@ -81,15 +81,17 @@ public partial class UserManagement : System.Web.UI.Page
     }
     protected void getAllUsers()
     {
-        ////gvManageUsers.DataSource = ff.Employees.Select(e => e.empId).ToList();
-        //List<ManagedEmployee> employees = new List<ManagedEmployee>();
-        //var employeeQry = from e in ff.Employees
-        //                  select e.empId;
-        ////foreach (var e in employeeQry) 
-        ////{ 
-        ////    var userQry = from u in ff.aspnet_Users
-        ////                  where u.UserName = ()
-        ////}
-        //gvManageUsers.DataBind();
+        List<ManagedEmployee> employees = new List<ManagedEmployee>();
+        var UsersQry = from a in ff.EmployeeMemberships
+                       select a;
+
+        foreach (EmployeeMembership e in UsersQry)
+        {
+            employees.Add(new ManagedEmployee(ff.aspnet_Users.Where(u => u.UserId == e.userId).FirstOrDefault()
+                , ff.Employees.Where(emp => emp.empId == e.empId).FirstOrDefault()));
+        }
+
+        gvManageUsers.DataSource = employees;
+        gvManageUsers.DataBind();
     }
 }
