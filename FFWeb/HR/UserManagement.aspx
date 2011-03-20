@@ -178,6 +178,13 @@
         </div>
         <div id="DivManageUsers" runat="server" visible="false">
             <br />
+            Search for an Employee (Last Name): 
+            <asp:TextBox ID="tbSearch" runat="server"></asp:TextBox> 
+            <asp:Button ID="buttonSearch" runat="server" Text="Search" 
+                onclick="buttonSearch_Click" />
+            &nbsp;<asp:Button ID="buttonAllUsers" runat="server" Text="Show All Users" 
+                onclick="buttonAllUsers_Click" />
+            <hr />
             <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True"
             OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
             </asp:GridView>

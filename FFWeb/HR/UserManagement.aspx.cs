@@ -9,16 +9,23 @@ using FFLib;
 
 public partial class UserManagement : System.Web.UI.Page
 {
+    //DatabaseContext
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
+
+    //PageLoad Method
     protected void Page_Load(object sender, EventArgs e)
     {
     }
+    
+    //Shows the create user div when link is clicked
     protected void lbCreateUser_Click(object sender, EventArgs e)
     {
         if (DivManageUsers.Visible) DivManageUsers.Visible = false;
         DivNewUser.Visible = true;
 
     }
+
+    //Shows the manage users div when link is clicked
     protected void ManageUserLabel_Click(object sender, EventArgs e)
     {
         if (DivNewUser.Visible) DivNewUser.Visible = false;
@@ -26,6 +33,8 @@ public partial class UserManagement : System.Web.UI.Page
         getAllUsers();
 
     }
+
+    //Adds the newly created user to the Employee table and links them together in EmployeeMembership
     protected void cuwCreateUser_CreatedUser(object sender, EventArgs e)
     {
         string tmpFirstName = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("FirstName")).Text;
@@ -47,8 +56,10 @@ public partial class UserManagement : System.Web.UI.Page
             flexHours = 0,
             isActive = 1
         };
+        //Employee table updated
         ff.Employees.InsertOnSubmit(emp);
 
+        //EmployeeMembership updated (link created here)
         ff.EmployeeMemberships.InsertOnSubmit(new EmployeeMembership
         {
             empId = Convert.ToInt32(tmpEmpID),
@@ -58,6 +69,8 @@ public partial class UserManagement : System.Web.UI.Page
         });
         ff.SubmitChanges();
     }
+
+    //Checks to see an en employee is already created with an EmpID
     protected void cuwCreateUser_CreatingUser(object sender, LoginCancelEventArgs e)
     {
         string tmpEmpID = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("EmployeeID")).Text;
@@ -75,33 +88,48 @@ public partial class UserManagement : System.Web.UI.Page
             e.Cancel = false;
         }
     }
+
+    //Restarts the created user wizard when the button is clicked
     protected void cuwCreateUser_ContinueButtonClick(object sender, EventArgs e)
     {
         cuwCreateUser.ActiveStepIndex = 0;
     }
+
+    //Binds all employees to the gridview
     protected void getAllUsers()
     {
-        List<ManagedEmployee> employees = new List<ManagedEmployee>();
-        var UsersQry = from a in ff.EmployeeMemberships
-                       select a;
-
+        //Old code, not complete, may be useful in feature
+        //List<ManagedEmployee> employees = new List<ManagedEmployee>();
+        //var UsersQry = from a in ff.EmployeeMemberships
+        //               select a;
         //foreach (EmployeeMembership e in UsersQry)
         //{
         //    employees.Add(new ManagedEmployee(ff.aspnet_Users.Where(u => u.UserId == e.userId).FirstOrDefault()
         //        , ff.Employees.Where(emp => emp.empId == e.empId).FirstOrDefault()));
         //}
-
         //gvManageUsers.DataSource = employees;
 
         gvManageUsers.DataSource = ff.Employees.Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive });
         gvManageUsers.DataBind();
     }
+
+    //Brings up the editing area for when a user is selected from the gridview
     protected void gvManageUsers_SelectedIndexChanged(Object sender, EventArgs e)
     {
         dvUser.DataSource = ff.EmployeeMemberships.Where(emp => emp.empId == Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text)).Select(emp => emp.Employee);
-        //new ManagedEmployee(ff.aspnet_Users.Where(u => u.UserId 
-        //== ff.EmployeeMemberships.Where(emp => emp.empId == Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text)).Select(emp => emp.userId).First()).FirstOrDefault()
-        //, ff.Employees.Where(emp => emp.empId == Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text)).FirstOrDefault());
         dvUser.DataBind();
+    }
+
+    //Searches for employees containing the provided last name when button clicked
+    protected void buttonSearch_Click(object sender, EventArgs e)
+    {
+        gvManageUsers.DataSource = ff.Employees.Where(emp => emp.lastName.Contains(tbSearch.Text)).Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive });
+        gvManageUsers.DataBind();
+    }
+
+    //Displays all employees when button clicked
+    protected void buttonAllUsers_Click(object sender, EventArgs e)
+    {
+        getAllUsers();
     }
 }
