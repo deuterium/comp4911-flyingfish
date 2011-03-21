@@ -95,12 +95,6 @@ namespace FFLib
     partial void DeleteEmployeeMembership(EmployeeMembership instance);
     #endregion
 		
-		public FlyingFishClassesDataContext() : 
-				base(global::FFLib.Properties.Settings.Default.FlyingFishConnectionString2, mappingSource)
-		{
-			OnCreated();
-		}
-		
 		public FlyingFishClassesDataContext(string connection) : 
 				base(connection, mappingSource)
 		{

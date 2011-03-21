@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FlyingFish" Class="FlyingFishClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=142.232.17.225;Initial Catalog=FlyingFish;Persist Security Info=True;User ID=comp4911" SettingsObjectName="FFLib.Properties.Settings" SettingsPropertyName="FlyingFishConnectionString2" Provider="System.Data.SqlClient" />
   <Table Name="dbo.aspnet_Membership" Member="aspnet_Memberships">
     <Type Name="aspnet_Membership">
       <Column Name="ApplicationId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />

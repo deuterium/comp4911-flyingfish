@@ -24,9 +24,6 @@
                     <asp:RequiredFieldValidator ID="rfvID" runat="server" 
                         ControlToValidate="tbwpID" ErrorMessage="Work Package ID is required." 
                         ForeColor="Red">*</asp:RequiredFieldValidator>
-                    <!--<asp:CompareValidator ID="cvID" runat="server" ControlToValidate="tbwpID" 
-                        ErrorMessage="ID must be an integer." ForeColor="Red" Operator="DataTypeCheck" 
-                        Type="Integer">*</asp:CompareValidator>-->
                 </td>
             </tr>
             <tr>
@@ -55,7 +52,8 @@
                         ForeColor="Red">*</asp:RequiredFieldValidator>
                     <asp:CompareValidator ID="cvAllocated" runat="server" 
                         ControlToValidate="tbAllocated" 
-                        ErrorMessage="Allocated budget must be an integer." ForeColor="Red">*</asp:CompareValidator>
+                        ErrorMessage="Allocated budget must be an integer." ForeColor="Red" 
+                        Operator="DataTypeCheck" Type="Integer">*</asp:CompareValidator>
                 </td>
             </tr>
             <tr>
@@ -69,7 +67,8 @@
                         ErrorMessage="Unallocated budget is required." ForeColor="Red">*</asp:RequiredFieldValidator>
                     <asp:CompareValidator ID="cvUnallocated" runat="server" 
                         ControlToValidate="tbUnallocated" 
-                        ErrorMessage="Unallocated budget must be an integer." ForeColor="Red">*</asp:CompareValidator>
+                        ErrorMessage="Unallocated budget must be an integer." ForeColor="Red" 
+                        Operator="DataTypeCheck" Type="Integer">*</asp:CompareValidator>
                 </td>
             </tr>
             <tr>

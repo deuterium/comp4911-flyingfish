@@ -39,6 +39,7 @@ public partial class RE_WorkPackage : System.Web.UI.Page
     }
     protected void btnCreate_Click(object sender, EventArgs e)
     {
-        Response.Redirect("~/RE/WorkPackage.aspx");
+        Session["wpID"] = tbwpID.Text;
+        Response.Redirect("~/RE/ManageWorkPackage.aspx");
     }
 }
