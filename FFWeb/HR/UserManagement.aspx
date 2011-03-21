@@ -38,7 +38,8 @@
                 CreateUserButtonText="Create New User" OnCreatedUser="cuwCreateUser_CreatedUser"
                 LoginCreatedUser="False" OnCreatingUser="cuwCreateUser_CreatingUser" OnContinueButtonClick="cuwCreateUser_ContinueButtonClick"
                 CompleteSuccessText="The account has been successfully created." ContinueButtonText="Create another User"
-                EnableViewState="False" ActiveStepIndex="1" DuplicateUserNameErrorMessage="Username is already in use.">
+                EnableViewState="False" 
+                DuplicateUserNameErrorMessage="Username is already in use.">
                 <ContinueButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
                     BorderWidth="1px" Font-Names="Verdana" ForeColor="#284E98" />
                 <CreateUserButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"

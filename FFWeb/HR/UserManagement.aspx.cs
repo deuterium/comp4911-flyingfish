@@ -16,7 +16,8 @@ public partial class UserManagement : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
     }
-    
+
+    #region Menu Items
     //Shows the create user div when link is clicked
     protected void lbCreateUser_Click(object sender, EventArgs e)
     {
@@ -41,7 +42,9 @@ public partial class UserManagement : System.Web.UI.Page
         getAllUsers();
 
     }
+    #endregion
 
+    #region Create New User
     //Adds the newly created user to the Employee table and links them together in EmployeeMembership
     protected void cuwCreateUser_CreatedUser(object sender, EventArgs e)
     {
@@ -102,7 +105,9 @@ public partial class UserManagement : System.Web.UI.Page
     {
         cuwCreateUser.ActiveStepIndex = 0;
     }
+    #endregion
 
+    #region Manage Users
     //Binds all employees to the gridview
     protected void getAllUsers()
     {
@@ -141,7 +146,7 @@ public partial class UserManagement : System.Web.UI.Page
             gvManageUsers.DataSource = null;
             gvManageUsers.DataBind();
         }
-        else 
+        else
         {
             lblSearchError.Enabled = false;
             lblSearchError.Text = "";
@@ -157,4 +162,5 @@ public partial class UserManagement : System.Web.UI.Page
         lblSearchError.Text = "";
         getAllUsers();
     }
+    #endregion
 }
