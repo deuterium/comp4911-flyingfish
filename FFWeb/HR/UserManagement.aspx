@@ -7,9 +7,11 @@
     <div id="DivUserManagement">
         <div id="DivUserManagementMenu" runat="server">
             <br />
-            <asp:LinkButton ID="CreateUserLabel" runat="server" OnClick="lbCreateUser_Click">Create New User</asp:LinkButton>
+            <asp:LinkButton ID="CreateUserLabel" runat="server" OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
             &nbsp;
-            <asp:LinkButton ID="ManageUserLabel" runat="server" OnClick="ManageUserLabel_Click">Manage Existing Users</asp:LinkButton>
+            <asp:LinkButton ID="ManageUserLabel" runat="server" OnClick="ManageUserLabel_Click">Manage Existing Employee</asp:LinkButton>
+            &nbsp;
+            <asp:LinkButton ID="AssignUserLabel" runat="server">Assign Employee to Project</asp:LinkButton>
         </div>
         <div id="DivUserMain" runat="server">
             <br />
@@ -35,9 +37,9 @@
             <br />
             <asp:CreateUserWizard ID="cuwCreateUser" runat="server" BackColor="#EFF3FB" BorderColor="#B5C7DE"
                 BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.8em"
-                CreateUserButtonText="Create New User" OnCreatedUser="cuwCreateUser_CreatedUser"
+                CreateUserButtonText="Create New Employee" OnCreatedUser="cuwCreateUser_CreatedUser"
                 LoginCreatedUser="False" OnCreatingUser="cuwCreateUser_CreatingUser" OnContinueButtonClick="cuwCreateUser_ContinueButtonClick"
-                CompleteSuccessText="The account has been successfully created." ContinueButtonText="Create another User"
+                CompleteSuccessText="The account has been successfully created." ContinueButtonText="Create another Employee"
                 EnableViewState="False" 
                 DuplicateUserNameErrorMessage="Username is already in use.">
                 <ContinueButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
@@ -51,7 +53,7 @@
                             <table>
                                 <tr>
                                     <td align="center" colspan="2">
-                                        Enter new Employee Infomation to create User
+                                        Enter new employee infomation to create new user account
                                     </td>
                                 </tr>
                                 <tr>
@@ -209,9 +211,95 @@
             </asp:GridView>
             <br />
             <div id="DivUserDetails" runat="server" visible="false">
-                <table>
-                
+                <table id="tableUserDetails">
+                    <tr>
+                        <td>
+                            Employee ID Number:
+                        </td>
+                        <td>
+                            <asp:Label ID="lblEmpId" runat="server" Width="125" />
+                        </td>
+                        <td>
+                            Username:
+                        </td>
+                        <td>
+                            <asp:Label ID="lblUsername" runat="server" Width="125" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            First Name:
+                        </td>
+                        <td>
+                            <asp:TextBox ID="tbFirstName" runat="server" Width="125" />
+                        </td>
+                        <td>
+                            Last Name:
+                        </td>
+                        <td>
+                            <asp:TextBox ID="tbLastName" runat="server" Width="100" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Supervisor:
+                        </td>
+                        <td>
+                            <asp:DropDownList ID="DropDownList1" Width="125" runat="server">
+                            </asp:DropDownList>
+                        </td>
+                        <td>
+                            Timesheet Approver:
+                        </td>
+                        <td>
+                            <asp:DropDownList ID="DropDownList2" Width="125" runat="server">
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Vacation Leave: 
+                        </td>
+                        <td>
+                            <asp:TextBox ID="tbVacation" Width="125" runat="server" />
+                        </td>
+                        <td>
+                            Sick Days:  
+                        </td>
+                        <td>
+                            <asp:TextBox ID="tbSickDays" Width="125" runat="server" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Min. Hours per Week:
+                        </td>
+                        <td>
+                            <asp:TextBox ID="tbMinHours" Width="125" runat="server" />
+                        </td>
+                        <td>
+                            Flex Hours: 
+                        </td>
+                        <td>
+                            <asp:TextBox ID="tbFlexHours" Width="125" runat="server" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Email Address:
+                        </td>
+                        <td>
+                            <asp:TextBox ID="tbEmail" Width="125" runat="server" />
+                        </td>
+                        <td>
+                            Active User: 
+                        </td>
+                        <td>
+                            <asp:CheckBox id="cbActiveUser" Text="" runat="server" />
+                        </td>
+                    </tr>
                 </table>
+                <asp:Button ID="buttonDetailsSubmit" Text="Submit Changes" runat="server" />
             </div>
         </div>
     </div>

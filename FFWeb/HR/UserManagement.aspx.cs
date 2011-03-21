@@ -18,7 +18,7 @@ public partial class UserManagement : System.Web.UI.Page
     }
 
     #region Menu Items
-    //Shows the create user div when link is clicked
+    //Shows the create employee div when link is clicked
     protected void lbCreateUser_Click(object sender, EventArgs e)
     {
         if (DivManageUsers.Visible || DivUserMain.Visible)
@@ -30,7 +30,7 @@ public partial class UserManagement : System.Web.UI.Page
 
     }
 
-    //Shows the manage users div when link is clicked
+    //Shows the manage employee div when link is clicked
     protected void ManageUserLabel_Click(object sender, EventArgs e)
     {
         if (DivNewUser.Visible || DivUserMain.Visible)
@@ -42,9 +42,15 @@ public partial class UserManagement : System.Web.UI.Page
         getAllUsers();
 
     }
+
+    //Shows the assign employee div when link is clicked
+    protected void AssignUserLabel_Click(object sender, EventArgs e)
+    {
+
+    }
     #endregion
 
-    #region Create New User
+    #region Create New Employee
     //Adds the newly created user to the Employee table and links them together in EmployeeMembership
     protected void cuwCreateUser_CreatedUser(object sender, EventArgs e)
     {
@@ -107,7 +113,7 @@ public partial class UserManagement : System.Web.UI.Page
     }
     #endregion
 
-    #region Manage Users
+    #region Manage Employees
     //Binds all employees to the gridview
     protected void getAllUsers()
     {
@@ -162,5 +168,9 @@ public partial class UserManagement : System.Web.UI.Page
         lblSearchError.Text = "";
         getAllUsers();
     }
+    #endregion
+
+    #region Assign Employee to Project
+
     #endregion
 }
