@@ -150,7 +150,7 @@
         <classShapeMoniker Id="86601f8a-5f67-4ffc-bb59-a91376634ebe" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(1.5 : 7.69399251302083); (1.5 : 15.8181469726563); (7 : 15.8181469726563)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(1.5 : 7.69399251302083); (1.5 : 15.8181469726563); (3.85416666666667 : 15.8181469726563 : JumpStart); (4.02083333333333 : 15.8181469726563 : JumpEnd); (7 : 15.8181469726563)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/FlyingFishClassesDataContext/EmployeeProject/EmployeeProject_EmployeeWorkPackage" />
       <nodes>
         <classShapeMoniker Id="86601f8a-5f67-4ffc-bb59-a91376634ebe" />
@@ -262,7 +262,7 @@
         <classShapeMoniker Id="4419b010-a0f0-4ddd-adc8-29157fb8749f" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(4.515625 : 17.125); (4.515625 : 12.4960034179688); (11.375 : 12.4960034179688)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(4.515625 : 17.125); (4.515625 : 12.4960034179688); (5.01041666666667 : 12.4960034179688 : JumpStart); (5.17708333333333 : 12.4960034179688 : JumpEnd); (11.375 : 12.4960034179688)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/FlyingFishClassesDataContext/WorkPackage/WorkPackage_WorkPackageBudgetPM" />
       <nodes>
         <classShapeMoniker Id="b5d421ef-1f67-45a6-ada6-0ef870e99319" />
@@ -276,7 +276,7 @@
         <classShapeMoniker Id="dea88538-64a8-4389-9fec-40840d2b3a9c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 18.5612980802409); (17.75 : 18.5612980802409); (17.75 : 10.9631982421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.5 : 18.5612980802409); (14.9166666666667 : 18.5612980802409 : JumpStart); (15.0833333333333 : 18.5612980802409 : JumpEnd); (17.75 : 18.5612980802409); (17.75 : 10.9631982421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/FlyingFishClassesDataContext/WorkPackage/WorkPackage_WorkPackageEstimateRE" />
       <nodes>
         <classShapeMoniker Id="b5d421ef-1f67-45a6-ada6-0ef870e99319" />

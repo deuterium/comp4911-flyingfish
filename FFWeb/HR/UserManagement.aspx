@@ -11,10 +11,13 @@
             &nbsp;
             <asp:LinkButton ID="ManageUserLabel" runat="server" OnClick="ManageUserLabel_Click">Manage Existing Employee</asp:LinkButton>
             &nbsp;
-            <asp:LinkButton ID="AssignUserLabel" runat="server">Assign Employee to Project</asp:LinkButton>
+            <asp:LinkButton ID="AssignUserLabel" runat="server" 
+                onclick="AssignUserLabel_Click">Assign Employee to Project</asp:LinkButton>
         </div>
         <div id="DivUserMain" runat="server">
             <br />
+            <img src="../images/cat.png" align="left" alt="Paws" />
+            <br />
             Welcome to the user Management page. Here will be some blabber on what you can do
             here and etc.<br />
             Welcome to the user Management page. Here will be some blabber on what you can do
@@ -25,13 +28,13 @@
             here and etc.<br />
             <br />
             Welcome to the user Management page. Here will be some blabber on what you can do
-            here and etc.<br />
+            here and etc. <br />
             Welcome to the user Management page. Here will be some blabber on what you can do
             here and etc.<br />
             Welcome to the user Management page. Here will be some blabber on what you can do
             here and etc.<br />
             Welcome to the user Management page. Here will be some blabber on what you can do
-            here and etc.<br />
+            here and etc.
         </div>
         <div id="DivNewUser" runat="server" visible="false">
             <br />
@@ -212,6 +215,9 @@
             <br />
             <div id="DivUserDetails" runat="server" visible="false">
                 <table id="tableUserDetails">
+                <tr>
+                <td colspan="4"><b>Edit Employee Information</b></td>
+                </tr>
                     <tr>
                         <td>
                             Employee ID Number:
@@ -237,7 +243,7 @@
                             Last Name:
                         </td>
                         <td>
-                            <asp:TextBox ID="tbLastName" runat="server" Width="100" />
+                            <asp:TextBox ID="tbLastName" runat="server" Width="125" />
                         </td>
                     </tr>
                     <tr>
@@ -295,12 +301,16 @@
                             Active User: 
                         </td>
                         <td>
-                            <asp:CheckBox id="cbActiveUser" Text="" runat="server" />
+                            <asp:CheckBox id="cbActiveUser" Text="" runat="server" checked="false"/>
                         </td>
                     </tr>
                 </table>
                 <asp:Button ID="buttonDetailsSubmit" Text="Submit Changes" runat="server" />
             </div>
         </div>
+    </div>
+    <div id="DivAssignUsers" runat="server" visible="false">
+        <br />
+        <img src="../images/paws.gif" alt="paws" />
     </div>
 </asp:Content>
