@@ -11,15 +11,34 @@
             &nbsp;
             <asp:LinkButton ID="ManageUserLabel" runat="server" OnClick="ManageUserLabel_Click">Manage Existing Users</asp:LinkButton>
         </div>
+        <div id="DivUserMain" runat="server">
+            <br />
+            Welcome to the user Management page. Here will be some blabber on what you can do
+            here and etc.<br />
+            Welcome to the user Management page. Here will be some blabber on what you can do
+            here and etc.<br />
+            Welcome to the user Management page. Here will be some blabber on what you can do
+            here and etc.<br />
+            Welcome to the user Management page. Here will be some blabber on what you can do
+            here and etc.<br />
+            <br />
+            Welcome to the user Management page. Here will be some blabber on what you can do
+            here and etc.<br />
+            Welcome to the user Management page. Here will be some blabber on what you can do
+            here and etc.<br />
+            Welcome to the user Management page. Here will be some blabber on what you can do
+            here and etc.<br />
+            Welcome to the user Management page. Here will be some blabber on what you can do
+            here and etc.<br />
+        </div>
         <div id="DivNewUser" runat="server" visible="false">
             <br />
             <asp:CreateUserWizard ID="cuwCreateUser" runat="server" BackColor="#EFF3FB" BorderColor="#B5C7DE"
                 BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.8em"
                 CreateUserButtonText="Create New User" OnCreatedUser="cuwCreateUser_CreatedUser"
-                LoginCreatedUser="False" OnCreatingUser="cuwCreateUser_CreatingUser" 
-                oncontinuebuttonclick="cuwCreateUser_ContinueButtonClick" 
-                CompleteSuccessText="The account has been successfully created." 
-                ContinueButtonText="Create another User" EnableViewState="False">
+                LoginCreatedUser="False" OnCreatingUser="cuwCreateUser_CreatingUser" OnContinueButtonClick="cuwCreateUser_ContinueButtonClick"
+                CompleteSuccessText="The account has been successfully created." ContinueButtonText="Create another User"
+                EnableViewState="False" ActiveStepIndex="1" DuplicateUserNameErrorMessage="Username is already in use.">
                 <ContinueButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
                     BorderWidth="1px" Font-Names="Verdana" ForeColor="#284E98" />
                 <CreateUserButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
@@ -155,6 +174,7 @@
                                 </tr>
                                 <tr>
                                     <td align="center" colspan="2" style="color: Red;">
+                                        <asp:Label ID="lblUserWizardError" Enabled="false" Text="" runat="server" />
                                         <asp:Literal ID="ErrorMessage" runat="server" EnableViewState="False"></asp:Literal>
                                     </td>
                                 </tr>
@@ -178,16 +198,13 @@
         </div>
         <div id="DivManageUsers" runat="server" visible="false">
             <br />
-            Search for an Employee (Last Name): 
-            <asp:TextBox ID="tbSearch" runat="server"></asp:TextBox> 
-            <asp:Button ID="buttonSearch" runat="server" Text="Search" 
-                onclick="buttonSearch_Click" />
-            &nbsp;<asp:Button ID="buttonAllUsers" runat="server" Text="Show All Users" 
-                onclick="buttonAllUsers_Click" />
+            Search for an Employee (Last Name):
+            <asp:TextBox ID="tbSearch" runat="server"></asp:TextBox>
+            <asp:Button ID="buttonSearch" runat="server" Text="Search" OnClick="buttonSearch_Click" />
+            &nbsp;<asp:Button ID="buttonAllUsers" runat="server" Text="Show All Users" OnClick="buttonAllUsers_Click" />
             <hr />
             <asp:Label ID="lblSearchError" runat="server" Enabled="False"></asp:Label>
-            <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True"
-            OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
+            <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
             </asp:GridView>
             <br />
             <asp:DetailsView ID="dvUser" runat="server" Height="50px" Width="125px">

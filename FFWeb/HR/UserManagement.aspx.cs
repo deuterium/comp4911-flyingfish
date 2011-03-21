@@ -20,7 +20,11 @@ public partial class UserManagement : System.Web.UI.Page
     //Shows the create user div when link is clicked
     protected void lbCreateUser_Click(object sender, EventArgs e)
     {
-        if (DivManageUsers.Visible) DivManageUsers.Visible = false;
+        if (DivManageUsers.Visible || DivUserMain.Visible)
+        {
+            DivManageUsers.Visible = false;
+            DivUserMain.Visible = false;
+        }
         DivNewUser.Visible = true;
 
     }
@@ -28,7 +32,11 @@ public partial class UserManagement : System.Web.UI.Page
     //Shows the manage users div when link is clicked
     protected void ManageUserLabel_Click(object sender, EventArgs e)
     {
-        if (DivNewUser.Visible) DivNewUser.Visible = false;
+        if (DivNewUser.Visible || DivUserMain.Visible)
+        {
+            DivNewUser.Visible = false;
+            DivUserMain.Visible = false;
+        }
         DivManageUsers.Visible = true;
         getAllUsers();
 
@@ -76,15 +84,15 @@ public partial class UserManagement : System.Web.UI.Page
         string tmpEmpID = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("EmployeeID")).Text;
         if (ff.Employees.Where(te => te.empId == Convert.ToInt32(tmpEmpID)).ToArray().Length > 0)
         {
-            //throw new Exception("Employee Number already exists.");
-            //OMG WHY DOES THIS LITERAL NOT UPDATE!!!!! if i make a label or another literal it updates fine.
-            ((Literal)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ErrorMessage")).Text
+            ((Label)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("lblUserWizardError")).Enabled = true;
+            ((Label)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("lblUserWizardError")).Text
                 = "Employee Number already exists.";
             e.Cancel = true;
         }
         else
         {
-            ((Literal)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ErrorMessage")).Text = "";
+            ((Label)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("lblUserWizardError")).Text = "";
+            ((Label)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("lblUserWizardError")).Enabled = false;
             e.Cancel = false;
         }
     }
@@ -123,10 +131,12 @@ public partial class UserManagement : System.Web.UI.Page
     //Searches for employees containing the provided last name when button clicked
     protected void buttonSearch_Click(object sender, EventArgs e)
     {
-        if (tbSearch.Text == "" || ff.Employees.Where(emp => emp.lastName.Contains(tbSearch.Text)).Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive }).Count() == 0)
+        if (tbSearch.Text == "" || ff.Employees.Where(emp => emp.lastName.Contains(tbSearch.Text))
+                .Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive })
+                .Count() == 0)
         {
             lblSearchError.Enabled = true;
-            lblSearchError.Text = "No Employees results";
+            lblSearchError.Text = "No Employee results";
             lblSearchError.ForeColor = System.Drawing.Color.Red;
             gvManageUsers.DataSource = null;
             gvManageUsers.DataBind();
