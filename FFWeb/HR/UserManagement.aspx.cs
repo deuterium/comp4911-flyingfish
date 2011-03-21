@@ -129,8 +129,8 @@ public partial class UserManagement : System.Web.UI.Page
     //Brings up the editing area for when a user is selected from the gridview
     protected void gvManageUsers_SelectedIndexChanged(Object sender, EventArgs e)
     {
-        dvUser.DataSource = ff.EmployeeMemberships.Where(emp => emp.empId == Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text)).Select(emp => emp.Employee);
-        dvUser.DataBind();
+        //dvUser.DataSource = ff.EmployeeMemberships.Where(emp => emp.empId == Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text)).Select(emp => emp.Employee);
+        //dvUser.DataBind();
     }
 
     //Searches for employees containing the provided last name when button clicked

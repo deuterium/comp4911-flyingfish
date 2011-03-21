@@ -208,8 +208,11 @@
             <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
             </asp:GridView>
             <br />
-            <asp:DetailsView ID="dvUser" runat="server" Height="50px" Width="125px">
-            </asp:DetailsView>
+            <div id="DivUserDetails" runat="server" visible="false">
+                <table>
+                
+                </table>
+            </div>
         </div>
     </div>
 </asp:Content>

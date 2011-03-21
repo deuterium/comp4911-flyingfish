@@ -48,17 +48,6 @@ namespace FFLib.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;AttachDbFilename=D:\\work\\comp4911-flyingfish\\FFWeb\\App_D" +
-            "ata\\FlyingFish.MDF;Integrated Security=True;User Instance=True")]
-        public string FlyingFishConnectionString {
-            get {
-                return ((string)(this["FlyingFishConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;AttachDbFilename=D:\\work\\FlyingFish\\FFWeb\\App_Data\\Flyin" +
             "gFish.MDF;Integrated Security=True;User Instance=True")]
         public string FlyingFishConnectionString1 {
@@ -75,6 +64,28 @@ namespace FFLib.Properties {
         public string FlyingFishConnectionString2 {
             get {
                 return ((string)(this["FlyingFishConnectionString2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=142.232.17.225;Initial Catalog=FlyingFish;Persist Security Info=True;" +
+            "User ID=comp4911;Password=comp4911")]
+        public string FlyingFishConnectionString {
+            get {
+                return ((string)(this["FlyingFishConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=142.232.17.225;Initial Catalog=FlyingFish;User ID=comp4911;Password=c" +
+            "omp4911")]
+        public string FlyingFishConnectionString3 {
+            get {
+                return ((string)(this["FlyingFishConnectionString3"]));
             }
         }
     }
