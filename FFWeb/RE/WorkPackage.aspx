@@ -93,7 +93,7 @@
         <asp:Label ID="lblSuccessMsg" runat="server" 
             Text="Work Package is successfully created." ForeColor="Lime"></asp:Label>
         <br />
-        <asp:Button ID="btnCreate" runat="server" Text="Create Another Work Package" 
+        <asp:Button ID="btnCreate" runat="server" Text="Manage Work Package" 
             onclick="btnCreate_Click" />
     </div>
     </form>

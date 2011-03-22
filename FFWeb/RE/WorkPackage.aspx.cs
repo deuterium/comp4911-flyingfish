@@ -18,7 +18,7 @@ public partial class RE_WorkPackage : System.Web.UI.Page
     protected void btnCreateWorkPackage_Click(object sender, EventArgs e)
     {
         WorkPackage wp = new WorkPackage();
-        if (ff.WorkPackages.Where(te => te.wpId == tbwpID.Text).ToArray().Length > 0) //LOGIC ERROR in database, wpID shud be int not string
+        if (ff.WorkPackages.Where(te => te.wpId == tbwpID.Text).ToArray().Length > 0) 
         {
             lblError.Text = "Work Package already exists";
         }
@@ -29,7 +29,7 @@ public partial class RE_WorkPackage : System.Web.UI.Page
             wp.allocated_dollars = Convert.ToInt32(tbAllocated.Text);
             wp.unallocated_dollars = Convert.ToInt32(tbUnallocated.Text);
             wp.description = tbDescription.Text;
-            wp.projId = 1; //project ID will be grabbed from the project used to create the work package later on using the foriegn key
+            wp.projId = Convert.ToInt32(Session["projID"]);
             ff.WorkPackages.InsertOnSubmit(wp);
             ff.SubmitChanges();
 
