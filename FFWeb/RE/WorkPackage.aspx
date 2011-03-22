@@ -1,13 +1,6 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="WorkPackage.aspx.cs" Inherits="RE_WorkPackage" %>
+﻿<%@ Page Language="C#" Title="New WorkPackage" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="WorkPackage.aspx.cs" Inherits="RE_WorkPackage" %>
+<asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
     <div id="divCreateWorkPackage" runat="server">
         <table>
             <tr>
@@ -96,6 +89,4 @@
         <asp:Button ID="btnCreate" runat="server" Text="Create Another Work Package" 
             onclick="btnCreate_Click" />
     </div>
-    </form>
-</body>
-</html>
+</asp:Content>

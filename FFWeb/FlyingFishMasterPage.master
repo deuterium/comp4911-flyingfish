@@ -5,24 +5,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+    <link href="~/Style.css" rel="stylesheet" type="text/css" />
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
-<body>
+<body class="">
     <form id="form" runat="server">
-    <div>
-        <div style="float: left; clear: both;">
-        <asp:LoginName ID="LoginName" runat="server" />
-        <asp:LoginStatus ID="lsLoginStatus" runat="server" />
+    <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" 
+        ShowStartingNode="False" />
+
+    <div class="page">
+        
+        <div class="header">
+
+            <div class="status">
+                <asp:LoginName ID="LoginName" runat="server" />
+                <asp:LoginStatus ID="LoginStatus" runat="server" Width="60px" />
+            </div>
+
+            <asp:Menu ID="Menu1" runat="server" Orientation="Horizontal" 
+                DataSourceID="SiteMapDataSource1" SkipLinkText="" 
+                StaticEnableDefaultPopOutImage="False">
+            </asp:Menu>
+
+            
+
         </div>
-        <div style="float: left; clear: both;">
-            <hr width="600"/>
+
+        <div  class="content">
+            <asp:ContentPlaceHolder ID="content" runat="server">
+            </asp:ContentPlaceHolder>
         </div>
-        <br />
-        <div>
-        <asp:ContentPlaceHolder ID="content" runat="server">
-        </asp:ContentPlaceHolder>
-        </div>
+
+        <div class="footer"></div>
     </div>
     </form>
 </body>

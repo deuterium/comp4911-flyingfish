@@ -1,8 +1,6 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true"
+﻿<%@ Page Title="User Management" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true"
     CodeFile="UserManagement.aspx.cs" Inherits="UserManagement" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <div id="DivUserManagement">
         <div id="DivUserManagementMenu" runat="server">
@@ -15,8 +13,6 @@
                 onclick="AssignUserLabel_Click">Assign Employee to Project</asp:LinkButton>
         </div>
         <div id="DivUserMain" runat="server">
-            <br />
-            <img src="../images/cat.png" align="left" alt="Paws" />
             <br />
             Welcome to the user Management page. Here will be some blabber on what you can do
             here and etc.<br />
