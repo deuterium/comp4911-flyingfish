@@ -59,6 +59,22 @@ public partial class UserManagement : System.Web.UI.Page
     #endregion
 
     #region Create New Employee
+
+    protected void SupervisorList_PreRender(object sender, EventArgs e)
+    {
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataSource =
+        ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
+            .Select(u => new
+            {
+                empID = u.empId,
+                approver = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
+            });
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataValueField = "empId";
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataTextField = "approver";
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataBind();
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).Rows = 6;
+    }
+
     //Adds the newly created user to the Employee table and links them together in EmployeeMembership
     protected void cuwCreateUser_CreatedUser(object sender, EventArgs e)
     {
@@ -268,4 +284,5 @@ public partial class UserManagement : System.Web.UI.Page
     #region Assign Employee to Project
 
     #endregion
+    
 }
