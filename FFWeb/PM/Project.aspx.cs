@@ -30,6 +30,8 @@ public partial class PM_Project : System.Web.UI.Page
             proj.manager = 1; //it will be the manager that is logged in but for now default is 1
             ff.Projects.InsertOnSubmit(proj);
             ff.SubmitChanges();
+
+            Session["projID"] = proj.projId;
             
             divCreateSuccess.Visible = true;
             divCreateProject.Visible = false;
@@ -37,6 +39,10 @@ public partial class PM_Project : System.Web.UI.Page
     }
     protected void btnCreate_Click(object sender, EventArgs e)
     {
-        Response.Redirect("~/PM/Project.aspx");
+        Response.Redirect("~/PM/ManageProject.aspx");
+    }
+    protected void btnViewProjects_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PM/ProjectList.aspx");
     }
 }

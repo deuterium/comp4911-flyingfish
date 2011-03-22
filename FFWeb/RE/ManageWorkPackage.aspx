@@ -65,5 +65,6 @@
                 <asp:ButtonField ButtonType="Button" Text="Add" CommandName="btnAdd" />
             </Columns>
         </asp:GridView>
+        <asp:Label ID="lblError" runat="server" Text="Error"></asp:Label>
     </div>
 </asp:Content>

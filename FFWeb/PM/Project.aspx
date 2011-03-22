@@ -51,7 +51,9 @@
         <asp:Label ID="lblSuccessMsg" runat="server" 
             Text="Project is successfully created." ForeColor="Lime"></asp:Label>
         <br />
-        <asp:Button ID="btnCreate" runat="server" Text="Create Another Project" 
-            onclick="btnCreate_Click" />
+        <asp:Button ID="btnCreate" runat="server" Text="Manage Project" 
+            onclick="btnCreate_Click" style="height: 26px" />
+        <asp:Button ID="btnViewProjects" runat="server" Text="View Projects" 
+            onclick="btnViewProjects_Click" />
     </div>
 </asp:Content>
