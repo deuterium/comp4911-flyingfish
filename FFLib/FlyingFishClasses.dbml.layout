@@ -33,7 +33,7 @@
         <elementListCompartment Id="598147de-5d69-4ee4-9868-d3c9de5300af" absoluteBounds="3.1399999999999997, 1.085, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(3.125 : 1.70274983723958); (2.5 : 1.70274983723958)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(3.125 : 1.70274983723958); (2.5 : 1.70274983723958)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/FlyingFishClassesDataContext/aspnet_User/aspnet_User_aspnet_Membership" />
       <nodes>
         <classShapeMoniker Id="db344f3b-9854-4919-ae41-5fd7f8352bcf" />
@@ -150,7 +150,7 @@
         <classShapeMoniker Id="86601f8a-5f67-4ffc-bb59-a91376634ebe" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(1.5 : 7.69399251302083); (1.5 : 15.8181469726563); (3.85416666666667 : 15.8181469726563 : JumpStart); (4.02083333333333 : 15.8181469726563 : JumpEnd); (7 : 15.8181469726563)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(2.5 : 7.17943391357421); (6.77604291666667 : 7.17943391357421 : JumpStart); (6.94270958333333 : 7.17943391357421 : JumpEnd); (7.09375 : 7.17943391357421); (7.09375 : 15.125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/FlyingFishClassesDataContext/EmployeeProject/EmployeeProject_EmployeeWorkPackage" />
       <nodes>
         <classShapeMoniker Id="86601f8a-5f67-4ffc-bb59-a91376634ebe" />
@@ -241,7 +241,7 @@
         <classShapeMoniker Id="69ff2d24-c3f0-43eb-8fc5-51484e2f0b58" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.09375 : 17.125); (5.09375 : 11.095400390625); (7.375 : 11.095400390625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.09375 : 17.125); (5.09375 : 11.095400390625); (7.01041666666667 : 11.095400390625 : JumpStart); (7.17708333333333 : 11.095400390625 : JumpEnd); (7.375 : 11.095400390625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/FlyingFishClassesDataContext/WorkPackage/WorkPackage_TimeSheetEntry" />
       <nodes>
         <classShapeMoniker Id="b5d421ef-1f67-45a6-ada6-0ef870e99319" />
@@ -262,7 +262,7 @@
         <classShapeMoniker Id="4419b010-a0f0-4ddd-adc8-29157fb8749f" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(4.515625 : 17.125); (4.515625 : 12.4960034179688); (5.01041666666667 : 12.4960034179688 : JumpStart); (5.17708333333333 : 12.4960034179688 : JumpEnd); (11.375 : 12.4960034179688)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(4.515625 : 17.125); (4.515625 : 12.4960034179688); (5.01041666666667 : 12.4960034179688 : JumpStart); (5.17708333333333 : 12.4960034179688 : JumpEnd); (7.01041666666667 : 12.4960034179688 : JumpStart); (7.17708333333333 : 12.4960034179688 : JumpEnd); (11.375 : 12.4960034179688)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/FlyingFishClassesDataContext/WorkPackage/WorkPackage_WorkPackageBudgetPM" />
       <nodes>
         <classShapeMoniker Id="b5d421ef-1f67-45a6-ada6-0ef870e99319" />
@@ -276,7 +276,7 @@
         <classShapeMoniker Id="dea88538-64a8-4389-9fec-40840d2b3a9c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 18.5612980802409); (14.9166666666667 : 18.5612980802409 : JumpStart); (15.0833333333333 : 18.5612980802409 : JumpEnd); (17.75 : 18.5612980802409); (17.75 : 10.9631982421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.5 : 18.5612980802409); (17.75 : 18.5612980802409); (17.75 : 10.9631982421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/FlyingFishClassesDataContext/WorkPackage/WorkPackage_WorkPackageEstimateRE" />
       <nodes>
         <classShapeMoniker Id="b5d421ef-1f67-45a6-ada6-0ef870e99319" />
@@ -310,5 +310,11 @@
         <classShapeMoniker Id="56969671-8d79-4b6d-8943-06f343e3f976" />
       </nodes>
     </associationConnector>
+    <classShape Id="7060edf9-48c3-476a-8019-c3db34974bb4" absoluteBounds="0.5, 16.5, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/FlyingFishClassesDataContext/vw_EmployeeInRolewFirstLastNameEmpIDUserID" />
+      <nestedChildShapes>
+        <elementListCompartment Id="370a3f43-9043-458a-8e13-fa220d321649" absoluteBounds="0.51500000000000012, 16.96, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

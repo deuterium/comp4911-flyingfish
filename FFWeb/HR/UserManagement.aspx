@@ -223,13 +223,13 @@
                             Employee ID Number:
                         </td>
                         <td>
-                            <asp:Label ID="lblEmpId" runat="server" Width="125" />
+                            <asp:Label ID="lblEmpId" runat="server" />
                         </td>
                         <td>
                             Username:
                         </td>
                         <td>
-                            <asp:Label ID="lblUsername" runat="server" Width="125" />
+                            <asp:Label ID="lblUsername" runat="server" />
                         </td>
                     </tr>
                     <tr>
@@ -251,14 +251,14 @@
                             Supervisor:
                         </td>
                         <td>
-                            <asp:DropDownList ID="DropDownList1" Width="125" runat="server">
+                            <asp:DropDownList ID="ddlSupervisors" Width="125" runat="server">
                             </asp:DropDownList>
                         </td>
                         <td>
                             Timesheet Approver:
                         </td>
                         <td>
-                            <asp:DropDownList ID="DropDownList2" Width="125" runat="server">
+                            <asp:DropDownList ID="ddlApprovers" Width="125" runat="server">
                             </asp:DropDownList>
                         </td>
                     </tr>
@@ -295,7 +295,7 @@
                             Email Address:
                         </td>
                         <td>
-                            <asp:TextBox ID="tbEmail" Width="125" runat="server" />
+                            <asp:Label ID="lblEmail" runat="server" />
                         </td>
                         <td>
                             Active User: 
@@ -305,7 +305,11 @@
                         </td>
                     </tr>
                 </table>
-                <asp:Button ID="buttonDetailsSubmit" Text="Submit Changes" runat="server" />
+                <asp:Button ID="buttonDetailsCancel" runat="server" Text="Cancel Editing" 
+                    onclick="buttonDetailsCancel_Click" />
+                &nbsp;<asp:Button ID="buttonDetailsSubmit" Text="Submit Changes" runat="server" 
+                    onclick="buttonDetailsSubmit_Click" />
+            &nbsp;<asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
             </div>
         </div>
     </div>
