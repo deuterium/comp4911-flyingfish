@@ -2,5 +2,5 @@
     CodeFile="AssignUser.aspx.cs" Inherits="AssignUser" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
-    <img src="../images/paws.gif" alt="paws" />
+    placeholder
 </asp:Content>
