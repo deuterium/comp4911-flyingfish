@@ -1,0 +1,96 @@
+﻿html
+{
+    height: 100%;
+    min-height: 100%;
+}
+
+body
+{
+    background-color: Black;
+    font-family: "Segoe UI", "Arial", Sans-Serif;
+    /* fallback (Opera) */
+    background: #0099FF;
+    /* Mozilla: */
+    background: -moz-linear-gradient(top, #0099FF, #CCFFFF) fixed;
+    /* Chrome, Safari:*/
+    background: -webkit-gradient(linear,
+                left top, left bottom, from(#0099FF), to(#CCFFFF)) fixed;
+    /* IE */
+    filter: progid:DXImageTransform.Microsoft.Gradient(
+                StartColorStr='#0099FF', EndColorStr='#CCFFFF', GradientType=0);
+}
+
+.page 
+{
+    width: 1000px;
+    min-height: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    background-color: White;
+    
+    /* border */
+    border: 3px solid Gray;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.content
+{
+    padding: 20px
+}
+
+.footer
+{
+    
+}
+
+.header
+{
+    height: 40px;
+    margin: 10px;
+}
+
+.status
+{
+    width: 180px;
+    float: right;
+    vertical-align: middle;
+}
+
+.gradientV{
+    /* fallback (Opera) */
+    background: #0099FF;
+    /* Mozilla: */
+    background: -moz-linear-gradient(top, #0099FF, #CCFFFF);
+    /* Chrome, Safari:*/
+    background: -webkit-gradient(linear,
+                left top, left bottom, from(#0099FF), to(#CCFFFF));
+    /* IE */
+    filter: progid:DXImageTransform.Microsoft.Gradient(
+                StartColorStr='#0099FF', EndColorStr='#CCFFFF', GradientType=0);
+}
+
+a:link, a:visited, a:active
+{
+    text-align: center;
+    display: block;
+    height: 30px;
+    width: 180px;
+    background-color: #FFFFFF;
+    color: #0099FF;
+    font-weight: bolder;
+    text-decoration: none;
+}
+
+a:hover
+{
+    color: Black;
+    text-decoration: none;
+}
+    
+.clear
+{
+    clear: left;
+}

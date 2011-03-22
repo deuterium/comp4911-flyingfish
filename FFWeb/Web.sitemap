@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode url="" title=""  description="">
+      <siteMapNode url="~/Default.aspx" title="Home"  description="Home Page" />
+      <siteMapNode url="~/PM/Project.aspx" title="Project Management"  description="Project Management" />
+      <siteMapNode url="~/RE/ResponsibleEngineer.aspx" title="Responsible Engineer"  description="Responsible Engineer">
+        <siteMapNode url="~/RE/ManageWorkPackage.aspx" title="Manage WorkPackage"  description="Manage WorkPackage" />
+        <siteMapNode url="~/RE/WorkPackage.aspx" title="New WorkPackage"  description="New WorkPackage" />
+      </siteMapNode>
+      <siteMapNode url="~/HR/UserManagement.aspx" title="User Management"  description="User Management">
+        <siteMapNode url="~/HR/ManageUser.aspx" title="Manage User"  description="Manage User" />
+        <siteMapNode url="~/HR/CreateUser.aspx" title="Create User"  description="Create User" />
+        <siteMapNode url="~/HR/AssignUser.aspx" title="Assign User"  description="Assign User" />
+      </siteMapNode>
+    </siteMapNode>
+</siteMap>
