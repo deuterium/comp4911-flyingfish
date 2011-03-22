@@ -144,6 +144,7 @@ public partial class UserManagement : System.Web.UI.Page
     protected void buttonSearch_Click(object sender, EventArgs e)
     {
         DivUserDetails.Visible = false;
+        lblUserEditError.Text = "";
         if (tbSearch.Text == "" || ff.Employees.Where(emp => emp.lastName.Contains(tbSearch.Text))
                 .Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive })
                 .Count() == 0)
@@ -168,6 +169,7 @@ public partial class UserManagement : System.Web.UI.Page
     {
         DivUserDetails.Visible = false;
         lblSearchError.Enabled = false;
+        lblUserEditError.Text = "";
         lblSearchError.Text = "";
         getAllUsers();
     }
@@ -176,31 +178,91 @@ public partial class UserManagement : System.Web.UI.Page
     protected void gvManageUsers_SelectedIndexChanged(Object sender, EventArgs e)
     {
         DivUserDetails.Visible = true;
+        fillSupervisorApproverDropDowns();
         int empID = Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text);
-        //ManagedEmployee me;
-        var em = from emp in ff.Employees
-                 where emp.empId == empID
-                 select emp;
+        Employee ManagedEmployee = ff.Employees.Where(em => em.empId == empID).First();
         System.Guid userID = ff.EmployeeMemberships.Where(emp => emp.empId == empID).Select(emp => emp.userId).First();
-        tbFirstName.Text = em.First().firstName;
-        tbLastName.Text = em.First().lastName;
-        lblEmpId.Text = em.First().empId.ToString();
+        tbFirstName.Text = ManagedEmployee.firstName;
+        tbLastName.Text = ManagedEmployee.lastName;
+        lblEmpId.Text = ManagedEmployee.empId.ToString();
         lblUsername.Text = ff.aspnet_Users.Where(use => use.UserId == userID).Select(use => use.UserName).First();
-        tbEmail.Text = ff.aspnet_Memberships.Where(use => use.UserId == userID).Select(use => use.Email).First();
-        //ddl > Supervisor = em.First().supervisor;
-        //ddl > Approver = em.First().approver;
-        tbMinHours.Text = em.First().minHoursPerWeek.ToString();
-        tbVacation.Text = em.First().vacationLeave.ToString();
-        tbSickDays.Text = em.First().sickDays.ToString();
-        tbFlexHours.Text = em.First().flexHours.ToString();
-        if (em.First().isActive == 1) cbActiveUser.Checked = true;
+        lblEmail.Text = ff.aspnet_Memberships.Where(use => use.UserId == userID).Select(use => use.Email).First();
+        ddlSupervisors.SelectedValue = ManagedEmployee.supervisor.ToString();
+        ddlApprovers.SelectedValue = ManagedEmployee.approver.ToString();
+        tbMinHours.Text = ManagedEmployee.minHoursPerWeek.ToString();
+        tbVacation.Text = ManagedEmployee.vacationLeave.ToString();
+        tbSickDays.Text = ManagedEmployee.sickDays.ToString();
+        tbFlexHours.Text = ManagedEmployee.flexHours.ToString();
+        if (ManagedEmployee.isActive == 1) cbActiveUser.Checked = true;
     }
 
     //Returns a list of all Supervisors ..... List<String> is placeholder for correct type
-    protected List<String> getAllSupervisors() { return null; }
+    protected void fillSupervisorApproverDropDowns()
+    {
+        //Fills Approvers DDL with all users in role TimesheetApprover
+        ddlApprovers.DataSource = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
+            .Where(r => r.RoleName == "TimesheetApprover")
+            .Select(u => new
+            {
+                empID = u.empId,
+                tsa = ((((u.empId + ": ") + u.firstName) + " ") + u.lastName)
+            });
+        ddlApprovers.DataTextField = "tsa";
+        ddlApprovers.DataValueField = "empId";
+        ddlApprovers.DataBind();
 
-    //Returns a list of all Approvers ..... List<String> is placeholder for correct type
-    protected List<String> getAllApprovers() { return null; }
+        //Fills Supervisors DDL with all users in ??? can supervisors be anyone?
+        ddlSupervisors.DataSource = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
+            .Select(u => new
+            {
+                empID = u.empId,
+                tsa = ((((u.empId + ": ") + u.firstName) + " ") + u.lastName)
+            });
+        ddlSupervisors.DataTextField = "tsa";
+        ddlSupervisors.DataValueField = "empId";
+        ddlSupervisors.DataBind();
+    }
+
+    //Cancels Editing of an Employee and hides the editing div
+    protected void buttonDetailsCancel_Click(object sender, EventArgs e)
+    {
+        lblUserEditError.Text = "";
+        DivUserDetails.Visible = false;
+    }
+
+    //Fills changed information into object and submits changes to DB
+    protected void buttonDetailsSubmit_Click(object sender, EventArgs e)
+    {
+        Employee ManagedEmployee = ff.Employees.Where(em => em.empId == Convert.ToInt32(lblEmpId.Text)).First();
+        ManagedEmployee.firstName = tbFirstName.Text;
+        ManagedEmployee.lastName = tbLastName.Text;
+        ManagedEmployee.supervisor = Convert.ToInt32(ddlSupervisors.SelectedValue);
+        ManagedEmployee.approver = Convert.ToInt32(ddlApprovers.SelectedValue);
+        ManagedEmployee.minHoursPerWeek = Convert.ToDecimal(tbMinHours.Text);
+        ManagedEmployee.vacationLeave = Convert.ToInt32(tbVacation.Text);
+        ManagedEmployee.sickDays = Convert.ToInt32(tbSickDays.Text);
+        ManagedEmployee.flexHours = Convert.ToDecimal(tbFlexHours.Text);
+        if (cbActiveUser.Checked)
+        {
+            ManagedEmployee.isActive = 1;
+        }
+        else
+        {
+            ManagedEmployee.isActive = 0;
+        }
+
+        try
+        {
+            ff.SubmitChanges();
+        }
+        catch (Exception ex)
+        {
+            lblUserEditError.Text = ex.Message;
+            lblUserEditError.ForeColor = System.Drawing.Color.Red;
+        }
+        lblUserEditError.Text = "User Has been updated. Show all users to see changes.";
+        lblUserEditError.ForeColor = System.Drawing.Color.ForestGreen;
+    }
     #endregion
 
     #region Assign Employee to Project
