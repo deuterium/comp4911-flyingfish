@@ -3,8 +3,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
-You can generate status reports weekly.
-Generate timesheet status report.
-Generate workpackage status report.
+explain the different types of reports
 </asp:Content>
 

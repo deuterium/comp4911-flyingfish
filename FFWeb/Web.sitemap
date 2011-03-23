@@ -2,14 +2,16 @@
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
     <siteMapNode url="" title=""  description="">
       <siteMapNode url="~/Default.aspx" title="Home"  description="Home Page" />
-      <siteMapNode url="~/PM/ProjectList.aspx" title="Project Management"  description="Project Management">
+      <siteMapNode url="~/PM/ProjectMainPage.aspx" title="Project Management"  description="Project Management">
         <siteMapNode url="~/PM/Project.aspx" title="Create Project" description="Create Project" />
+        <siteMapNode url="~/PM/ProjectList.aspx" title="Project List" description="Project List" />
       </siteMapNode>
       <siteMapNode url="~/Reports/ReportsMainPage.aspx" title="Reports" description="Reports">
         <siteMapNode url="~/Reports/WorkPackageStatusReport.aspx" title="Work Package Status Report" description="Work Package Status Report" />
         <siteMapNode url="~/Reports/TimeSheetStatusReport.aspx" title="Timesheet Status Report" description="Timesheet Status Report" />
       </siteMapNode>
-      <siteMapNode url="~/Timesheet/TimesheetEntry.aspx" title="Timesheets" description="Timesheets">
+      <siteMapNode url="~/Timesheet/TimesheetMainPage.aspx" title="Timesheets" description="Timesheets">
+        <siteMapNode url="~/Timesheet/TimesheetEntry.aspx" title="Timesheet Entry" description="Timesheet Entry" />
         <siteMapNode url="~/Timesheet/PrintTimesheet.aspx" title="Print Timesheet" description="Print Timesheet" />
         <siteMapNode url="~/Timesheet/ApproveTimesheet.aspx" title="Approve Timesheet" description="Approve Timesheet" />
       </siteMapNode>
