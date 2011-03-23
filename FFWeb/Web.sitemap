@@ -2,10 +2,16 @@
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
     <siteMapNode url="" title=""  description="">
       <siteMapNode url="~/Default.aspx" title="Home"  description="Home Page" />
-      <siteMapNode url="~/PM/Project.aspx" title="Project Management"  description="Project Management" />
-      <siteMapNode url="~/RE/ResponsibleEngineer.aspx" title="Responsible Engineer"  description="Responsible Engineer">
-        <siteMapNode url="~/RE/ManageWorkPackage.aspx" title="Manage WorkPackage"  description="Manage WorkPackage" />
-        <siteMapNode url="~/RE/WorkPackage.aspx" title="New WorkPackage"  description="New WorkPackage" />
+      <siteMapNode url="~/PM/ProjectList.aspx" title="Project Management"  description="Project Management">
+        <siteMapNode url="~/PM/Project.aspx" title="Create Project" description="Create Project" />
+      </siteMapNode>
+      <siteMapNode url="~/Reports/ReportsMainPage.aspx" title="Reports" description="Reports">
+        <siteMapNode url="~/Reports/WorkPackageStatusReport.aspx" title="Work Package Status Report" description="Work Package Status Report" />
+        <siteMapNode url="~/Reports/TimeSheetStatusReport.aspx" title="Timesheet Status Report" description="Timesheet Status Report" />
+      </siteMapNode>
+      <siteMapNode url="~/Timesheet/TimesheetEntry.aspx" title="Timesheets" description="Timesheets">
+        <siteMapNode url="~/Timesheet/PrintTimesheet.aspx" title="Print Timesheet" description="Print Timesheet" />
+        <siteMapNode url="~/Timesheet/ApproveTimesheet.aspx" title="Approve Timesheet" description="Approve Timesheet" />
       </siteMapNode>
       <siteMapNode url="~/HR/UserManagement.aspx" title="User Management"  description="User Management">
         <siteMapNode url="~/HR/ManageUser.aspx" title="Manage User"  description="Manage User" />
