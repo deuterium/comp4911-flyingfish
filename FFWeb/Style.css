@@ -18,6 +18,7 @@ body
     /* IE */
     filter: progid:DXImageTransform.Microsoft.Gradient(
                 StartColorStr='#0099FF', EndColorStr='#CCFFFF', GradientType=0);
+    padding-bottom: 20px;
 }
 
 .page 
@@ -93,4 +94,10 @@ a:hover
 .clear
 {
     clear: left;
+}
+
+.cent
+{
+    margin-left:auto;
+    margin-right:auto;
 }

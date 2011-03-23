@@ -24,7 +24,7 @@ public partial class PM_ProjectList : System.Web.UI.Page
         {
             int row = Convert.ToInt32(e.CommandArgument);
             GridViewRow selectedRow = gvProjects.Rows[row];
-            Session["projID"] = Convert.ToInt32(selectedRow.Cells[1].Text);
+            Session["projID"] = Convert.ToInt32(selectedRow.Cells[0].Text);
             Response.Redirect("~/PM/ManageProject.aspx");
         }
     }
