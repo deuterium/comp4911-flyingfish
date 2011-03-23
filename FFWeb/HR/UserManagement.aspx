@@ -287,16 +287,16 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="style1">
                             Email Address:
                         </td>
-                        <td>
+                        <td class="style1">
                             <asp:Label ID="lblEmail" runat="server" />
                         </td>
-                        <td>
+                        <td class="style1">
                             Active User: 
                         </td>
-                        <td>
+                        <td class="style1">
                             <asp:CheckBox id="cbActiveUser" Text="" runat="server" checked="false"/>
                         </td>
                     </tr>
@@ -314,3 +314,12 @@
         <img src="../images/paws.gif" alt="paws" />
     </div>
 </asp:Content>
+<asp:Content ID="Content3" runat="server" contentplaceholderid="head">
+    <style type="text/css">
+        .style1
+        {
+            height: 26px;
+        }
+    </style>
+</asp:Content>
+

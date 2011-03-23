@@ -31,7 +31,8 @@
                                 SortExpression="allocated_dollars" />
                             <asp:BoundField DataField="projId" HeaderText="Project ID" 
                                 SortExpression="projId" Visible="False" />
-                            <asp:ButtonField Text="View" CommandName="btnView" ButtonType="Button" />
+                            <asp:ButtonField Text="View Workpackages" CommandName="btnView" 
+                                ButtonType="Button" />
                         </Columns>
                         <FooterStyle BackColor="White" ForeColor="#000066" />
                         <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
@@ -45,5 +46,6 @@
                     </asp:GridView>
 
                     <asp:LinkButton ID="lbCreateWP" runat="server" onclick="lbCreateWP_Click">Create a Work Package</asp:LinkButton>
-</asp:Content>
+        <asp:LinkButton ID="lbProjectList" runat="server" onclick="lbProjectList_Click">View Project List</asp:LinkButton>
+        </asp:Content>
 
