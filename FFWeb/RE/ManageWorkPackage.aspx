@@ -1,6 +1,10 @@
 ﻿<%@ Page Language="C#" Title="Manage Work Package" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="ManageWorkPackage.aspx.cs" Inherits="RE_ManageWorkPackage" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
     <div id="divCreateWorkPackage" runat="server">
         <table>
             <tr>
@@ -24,13 +28,12 @@
                     <asp:Label ID="lblAlloc" runat="server" Text="Allocated Budget: "></asp:Label>
                 </td>
                 <td>
-                    <div id="divtbAlloc1" runat="server"><asp:TextBox ID="tbAlloc" runat="server" 
-                            ReadOnly="True"></asp:TextBox>
-                        <asp:Button ID="btnAllocChange" runat="server" Text="Change" 
-                            onclick="btnAllocChange_Click" />
-                       
+                    <div id="divtbAlloc1" runat="server">
+                        <asp:TextBox ID="tbAlloc" runat="server" ReadOnly="True"></asp:TextBox>
+                        <asp:SliderExtender ID="seAlloc" runat="server" TargetControlID="tbAlloc" 
+                            BoundControlID="tbAlloc2" Decimals="2" BehaviorID="tbAlloc2" />
+                        <asp:TextBox ID="tbAlloc2" runat="server" style="margin-bottom: 0px"></asp:TextBox>
                     </div>
-                    <div id="divtbAlloc2" runat="server" visible="false"> <asp:TextBox ID="tbAlloc2" runat="server" style="margin-bottom: 0px"></asp:TextBox></div>
                     
                 </td>
             </tr>
@@ -40,13 +43,14 @@
                 </td>
                 <td>
                     <div id="divtbUnalloc1" runat="server"><asp:TextBox ID="tbUnalloc" runat="server" ReadOnly="True"></asp:TextBox>
-                        <asp:Button ID="btnUnallocChange" runat="server" Text="Change" 
-                            onclick="btnUnallocChange_Click" />
-                        
                     </div>
-                    <div id="divtbUnalloc2" runat="server" visible="false"><asp:TextBox ID="tbUnalloc2" runat="server"></asp:TextBox></div>
+                    <asp:SliderExtender ID="se2" runat="server" TargetControlID="tbUnalloc" 
+                        BoundControlID="tbUnalloc2" Decimals="2">
+                    </asp:SliderExtender>
+                    <asp:TextBox ID="tbUnalloc2" runat="server"></asp:TextBox>
                 </td>
             </tr>
+
             <tr>
                 <td align="right">
                     <asp:Label ID="lblDescription" runat="server" Text="Description: "></asp:Label>
@@ -55,8 +59,6 @@
                     <div id="divDesc1" runat="server">
                             <asp:TextBox ID="tbDescription" Width="125" runat="server" 
                         TextMode="MultiLine" />
-                        <asp:Button ID="btnDescChange" runat="server" Text="Change" 
-                            onclick="btnDescChange_Click" />
                     </div>
                     <div id="divDesc2" runat="server" visible="false">
                         <asp:TextBox ID="tbDesc2" runat="server" TextMode="MultiLine"></asp:TextBox>
@@ -72,7 +74,7 @@
                     <asp:GridView ID="gvEmployees" runat="server">
                     </asp:GridView>
     <asp:Button ID="btnSave" runat="server" Text="Save Changes" 
-            onclick="btnSave_Click" />
+            onclick="btnSave_Click" PostBackUrl="~/RE/ManageWorkPackage.aspx" />
                 </td>
             </tr>
             </table>
