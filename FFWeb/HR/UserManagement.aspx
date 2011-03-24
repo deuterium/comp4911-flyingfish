@@ -181,8 +181,7 @@
                                                     <asp:Label ID="SupervisorLabel" runat="server">Supervisor:</asp:Label>
                                                 </td>
                                                 <td>
-                                                    <asp:ListBox ID="SupervisorList" runat="server" OnPreRender="SupervisorList_PreRender"
-                                                        Rows="5"></asp:ListBox>
+                                                    <asp:DropDownList ID="SupervisorList" runat="server" OnPreRender="SupervisorList_PreRender" />
                                                     <%--<asp:DropDownList ID="SupervisorList" runat="server" 
                                             onprerender="SupervisorList_PreRender">
                                         </asp:DropDownList>--%>

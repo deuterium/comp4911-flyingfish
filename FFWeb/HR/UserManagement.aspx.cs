@@ -59,20 +59,20 @@ public partial class UserManagement : System.Web.UI.Page
     #endregion
 
     #region Create New Employee
-
+    //Populates the Supervisor list before the page is rendered
     protected void SupervisorList_PreRender(object sender, EventArgs e)
     {
-        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataSource =
+        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataSource =
         ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
             .Select(u => new
             {
                 empID = u.empId,
                 approver = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
             });
-        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataValueField = "empId";
-        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataTextField = "approver";
-        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataBind();
-        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).Rows = 6;
+        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataValueField = "empId";
+        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataTextField = "approver";
+        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataBind();
+        //((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).Rows = 6;
     }
 
     //Adds the newly created user to the Employee table and links them together in EmployeeMembership
@@ -80,9 +80,15 @@ public partial class UserManagement : System.Web.UI.Page
     {
         string tmpFirstName = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("FirstName")).Text;
         string tmpLastName = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("LastName")).Text;
-        string tmpRole = ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("RoleList")).SelectedItem.Text;
+        //string tmpSupervisor = ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).SelectedValue;
         string tmpEmpID = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("EmployeeID")).Text;
-        Roles.AddUserToRole(((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("UserName")).Text, tmpRole);
+        CheckBoxList tempCheck = (CheckBoxList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("RoleList");
+        for(int i = 0; i < tempCheck.Items.Count; i++)
+        {
+            if (tempCheck.Items[i].Selected)
+            { Roles.AddUserToRole(((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("UserName")).Text
+                , tempCheck.Items[i].Text); }
+        }
 
         Employee emp = new Employee()
         {
