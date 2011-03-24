@@ -9,36 +9,37 @@
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
-<body class="">
+<body>
     <form id="form" runat="server">
-    <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" 
-        ShowStartingNode="False" />
+    <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" ShowStartingNode="False" />
+
+    <div class="divmastertop">
+        <div class="divcentertop">
+        </div>
+    </div>
+
+    <div class="divmastermenubar">
+        <div class="divmastermenu">
+            <asp:Menu ID="Menu1" runat="server" Orientation="Horizontal" DataSourceID="SiteMapDataSource1" 
+                SkipLinkText="" StaticEnableDefaultPopOutImage="False" />
+        </div>
+    </div>
 
     <div class="page">
-        
         <div class="header">
-
             <div class="status">
                 <asp:LoginName ID="LoginName" runat="server" />
-                <asp:LoginStatus ID="LoginStatus" runat="server" Width="60px" />
+                <asp:LoginStatus BackColor="Transparent" ID="LoginStatus" runat="server" Width="60px" />
             </div>
-
-            <asp:Menu ID="Menu1" runat="server" Orientation="Horizontal" 
-                DataSourceID="SiteMapDataSource1" SkipLinkText="" 
-                StaticEnableDefaultPopOutImage="False">
-            </asp:Menu>
-
-            
-
         </div>
-
         <div  class="content">
             <asp:ContentPlaceHolder ID="content" runat="server">
             </asp:ContentPlaceHolder>
         </div>
-
-        <div class="footer"></div>
+        <div class="footer">
+        </div>
     </div>
+
     </form>
 </body>
 </html>
