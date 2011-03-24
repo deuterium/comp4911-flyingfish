@@ -60,9 +60,6 @@
                             <asp:TextBox ID="tbDescription" Width="125" runat="server" 
                         TextMode="MultiLine" />
                     </div>
-                    <div id="divDesc2" runat="server" visible="false">
-                        <asp:TextBox ID="tbDesc2" runat="server" TextMode="MultiLine"></asp:TextBox>
-                    </div>
                         
                 </td>
             </tr>

@@ -24,15 +24,12 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 )
                 select new { wp.allocated_dollars, wp.unallocated_dollars, wp.name, wp.description };
         string alloc = qry.First().allocated_dollars.ToString();
-      
-        //tbAlloc2.Text = alloc;
         string unalloc = qry.First().unallocated_dollars.ToString();
         tbAlloc.Text = alloc;
         tbUnalloc.Text = unalloc;
-        //tbUnalloc2.Text = unalloc;
         lblWPName2.Text = qry.Single().name.ToString();
         string desc = qry.Single().description.ToString();
-        //tbDescription.Text = desc;
+        updateDesc(desc);
         updategvEmployees();
         lblError.Text = "";
     }
@@ -54,6 +51,10 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     {
     }
 
+    protected void updateDesc(String desc)
+    {
+        tbDescription.Text = desc;
+    }
     #region Assign Employee gridview add button event handler
     protected void gvUnassignedEmployees_RowCommand(object sender, GridViewCommandEventArgs e)
     {
