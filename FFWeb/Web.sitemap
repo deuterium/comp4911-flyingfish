@@ -7,9 +7,9 @@
         <siteMapNode url="~/PM/ProjectList.aspx" title="Project List" description="Project List" />
       </siteMapNode>
       <siteMapNode url="~/Reports/ReportsMainPage.aspx" title="Reports" description="Reports">
-        <siteMapNode url="~/Reports/WorkPackageStatusReport.aspx" title="Work Package Status Report" description="Work Package Status Report" />
-        <siteMapNode url="~/Reports/TimeSheetStatusReport.aspx" title="Timesheet Status Report" description="Timesheet Status Report" />
-        <siteMapNode url="~/Reports/Reports.aspx" title="Timesheet Summary Report" description="Timesheet Summary Report"></siteMapNode>
+        <siteMapNode url="~/Reports/WorkPackageStatusReport.aspx" title="Work Package Status" description="Work Package Status Report" />
+        <siteMapNode url="~/Reports/TimeSheetStatusReport.aspx" title="Timesheet Status" description="Timesheet Status Report" />
+        <siteMapNode url="~/Reports/Reports.aspx" title="Timesheet Summary" description="Timesheet Summary Report"></siteMapNode>
       </siteMapNode>
       <siteMapNode url="~/Timesheet/TimesheetMainPage.aspx" title="Timesheets" description="Timesheets">
         <siteMapNode url="~/Timesheet/TimesheetEntry.aspx" title="Timesheet Entry" description="Timesheet Entry" />

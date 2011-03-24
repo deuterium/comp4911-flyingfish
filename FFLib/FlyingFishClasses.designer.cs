@@ -69,9 +69,6 @@ namespace FFLib
     partial void InsertPersonLevel(PersonLevel instance);
     partial void UpdatePersonLevel(PersonLevel instance);
     partial void DeletePersonLevel(PersonLevel instance);
-    partial void InsertProject(Project instance);
-    partial void UpdateProject(Project instance);
-    partial void DeleteProject(Project instance);
     partial void InsertTimeSheetEntry(TimeSheetEntry instance);
     partial void UpdateTimeSheetEntry(TimeSheetEntry instance);
     partial void DeleteTimeSheetEntry(TimeSheetEntry instance);
@@ -93,6 +90,9 @@ namespace FFLib
     partial void InsertEmployeeMembership(EmployeeMembership instance);
     partial void UpdateEmployeeMembership(EmployeeMembership instance);
     partial void DeleteEmployeeMembership(EmployeeMembership instance);
+    partial void InsertProject(Project instance);
+    partial void UpdateProject(Project instance);
+    partial void DeleteProject(Project instance);
     #endregion
 		
 		public FlyingFishClassesDataContext() : 
@@ -229,14 +229,6 @@ namespace FFLib
 			}
 		}
 		
-		public System.Data.Linq.Table<Project> Projects
-		{
-			get
-			{
-				return this.GetTable<Project>();
-			}
-		}
-		
 		public System.Data.Linq.Table<TimeSheetEntry> TimeSheetEntries
 		{
 			get
@@ -298,6 +290,14 @@ namespace FFLib
 			get
 			{
 				return this.GetTable<vw_EmployeeInRolewFirstLastNameEmpIDUserID>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Project> Projects
+		{
+			get
+			{
+				return this.GetTable<Project>();
 			}
 		}
 	}
@@ -2001,13 +2001,13 @@ namespace FFLib
 		
 		private EntityRef<HumanResourcesStaff> _HumanResourcesStaff;
 		
-		private EntitySet<Project> _Projects;
-		
 		private EntitySet<TimeSheetHeader> _TimeSheetHeaders;
 		
 		private EntitySet<TimeSheetHeader> _TimeSheetHeaders1;
 		
 		private EntityRef<EmployeeMembership> _EmployeeMembership;
+		
+		private EntitySet<Project> _Projects;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2039,10 +2039,10 @@ namespace FFLib
 		{
 			this._EmployeeProjects = new EntitySet<EmployeeProject>(new Action<EmployeeProject>(this.attach_EmployeeProjects), new Action<EmployeeProject>(this.detach_EmployeeProjects));
 			this._HumanResourcesStaff = default(EntityRef<HumanResourcesStaff>);
-			this._Projects = new EntitySet<Project>(new Action<Project>(this.attach_Projects), new Action<Project>(this.detach_Projects));
 			this._TimeSheetHeaders = new EntitySet<TimeSheetHeader>(new Action<TimeSheetHeader>(this.attach_TimeSheetHeaders), new Action<TimeSheetHeader>(this.detach_TimeSheetHeaders));
 			this._TimeSheetHeaders1 = new EntitySet<TimeSheetHeader>(new Action<TimeSheetHeader>(this.attach_TimeSheetHeaders1), new Action<TimeSheetHeader>(this.detach_TimeSheetHeaders1));
 			this._EmployeeMembership = default(EntityRef<EmployeeMembership>);
+			this._Projects = new EntitySet<Project>(new Action<Project>(this.attach_Projects), new Action<Project>(this.detach_Projects));
 			OnCreated();
 		}
 		
@@ -2288,19 +2288,6 @@ namespace FFLib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Project", Storage="_Projects", ThisKey="empId", OtherKey="manager")]
-		public EntitySet<Project> Projects
-		{
-			get
-			{
-				return this._Projects;
-			}
-			set
-			{
-				this._Projects.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_TimeSheetHeader", Storage="_TimeSheetHeaders", ThisKey="empId", OtherKey="approvedBy")]
 		public EntitySet<TimeSheetHeader> TimeSheetHeaders
 		{
@@ -2356,6 +2343,19 @@ namespace FFLib
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Project", Storage="_Projects", ThisKey="empId", OtherKey="manager")]
+		public EntitySet<Project> Projects
+		{
+			get
+			{
+				return this._Projects;
+			}
+			set
+			{
+				this._Projects.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2388,18 +2388,6 @@ namespace FFLib
 			entity.Employee = null;
 		}
 		
-		private void attach_Projects(Project entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee = this;
-		}
-		
-		private void detach_Projects(Project entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee = null;
-		}
-		
 		private void attach_TimeSheetHeaders(TimeSheetHeader entity)
 		{
 			this.SendPropertyChanging();
@@ -2422,6 +2410,18 @@ namespace FFLib
 		{
 			this.SendPropertyChanging();
 			entity.Employee1 = null;
+		}
+		
+		private void attach_Projects(Project entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = this;
+		}
+		
+		private void detach_Projects(Project entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = null;
 		}
 	}
 	
@@ -3608,213 +3608,6 @@ namespace FFLib
 		{
 			this.SendPropertyChanging();
 			entity.PersonLevel = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Project")]
-	public partial class Project : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _projId;
-		
-		private string _projName;
-		
-		private System.Nullable<int> _manager;
-		
-		private EntitySet<EmployeeProject> _EmployeeProjects;
-		
-		private EntitySet<WorkPackage> _WorkPackages;
-		
-		private EntityRef<Employee> _Employee;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnprojIdChanging(int value);
-    partial void OnprojIdChanged();
-    partial void OnprojNameChanging(string value);
-    partial void OnprojNameChanged();
-    partial void OnmanagerChanging(System.Nullable<int> value);
-    partial void OnmanagerChanged();
-    #endregion
-		
-		public Project()
-		{
-			this._EmployeeProjects = new EntitySet<EmployeeProject>(new Action<EmployeeProject>(this.attach_EmployeeProjects), new Action<EmployeeProject>(this.detach_EmployeeProjects));
-			this._WorkPackages = new EntitySet<WorkPackage>(new Action<WorkPackage>(this.attach_WorkPackages), new Action<WorkPackage>(this.detach_WorkPackages));
-			this._Employee = default(EntityRef<Employee>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int projId
-		{
-			get
-			{
-				return this._projId;
-			}
-			set
-			{
-				if ((this._projId != value))
-				{
-					this.OnprojIdChanging(value);
-					this.SendPropertyChanging();
-					this._projId = value;
-					this.SendPropertyChanged("projId");
-					this.OnprojIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
-		public string projName
-		{
-			get
-			{
-				return this._projName;
-			}
-			set
-			{
-				if ((this._projName != value))
-				{
-					this.OnprojNameChanging(value);
-					this.SendPropertyChanging();
-					this._projName = value;
-					this.SendPropertyChanged("projName");
-					this.OnprojNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_manager", DbType="Int")]
-		public System.Nullable<int> manager
-		{
-			get
-			{
-				return this._manager;
-			}
-			set
-			{
-				if ((this._manager != value))
-				{
-					if (this._Employee.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnmanagerChanging(value);
-					this.SendPropertyChanging();
-					this._manager = value;
-					this.SendPropertyChanged("manager");
-					this.OnmanagerChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_EmployeeProject", Storage="_EmployeeProjects", ThisKey="projId", OtherKey="projId")]
-		public EntitySet<EmployeeProject> EmployeeProjects
-		{
-			get
-			{
-				return this._EmployeeProjects;
-			}
-			set
-			{
-				this._EmployeeProjects.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_WorkPackage", Storage="_WorkPackages", ThisKey="projId", OtherKey="projId")]
-		public EntitySet<WorkPackage> WorkPackages
-		{
-			get
-			{
-				return this._WorkPackages;
-			}
-			set
-			{
-				this._WorkPackages.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Project", Storage="_Employee", ThisKey="manager", OtherKey="empId", IsForeignKey=true)]
-		public Employee Employee
-		{
-			get
-			{
-				return this._Employee.Entity;
-			}
-			set
-			{
-				Employee previousValue = this._Employee.Entity;
-				if (((previousValue != value) 
-							|| (this._Employee.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Employee.Entity = null;
-						previousValue.Projects.Remove(this);
-					}
-					this._Employee.Entity = value;
-					if ((value != null))
-					{
-						value.Projects.Add(this);
-						this._manager = value.empId;
-					}
-					else
-					{
-						this._manager = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Employee");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_EmployeeProjects(EmployeeProject entity)
-		{
-			this.SendPropertyChanging();
-			entity.Project = this;
-		}
-		
-		private void detach_EmployeeProjects(EmployeeProject entity)
-		{
-			this.SendPropertyChanging();
-			entity.Project = null;
-		}
-		
-		private void attach_WorkPackages(WorkPackage entity)
-		{
-			this.SendPropertyChanging();
-			entity.Project = this;
-		}
-		
-		private void detach_WorkPackages(WorkPackage entity)
-		{
-			this.SendPropertyChanging();
-			entity.Project = null;
 		}
 	}
 	
@@ -5912,6 +5705,261 @@ namespace FFLib
 					this._UserId = value;
 				}
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Project")]
+	public partial class Project : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _projId;
+		
+		private string _projName;
+		
+		private System.Nullable<int> _manager;
+		
+		private System.Nullable<decimal> _allocated_dollars;
+		
+		private System.Nullable<decimal> _unallocated_dollars;
+		
+		private EntitySet<EmployeeProject> _EmployeeProjects;
+		
+		private EntitySet<WorkPackage> _WorkPackages;
+		
+		private EntityRef<Employee> _Employee;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnprojIdChanging(int value);
+    partial void OnprojIdChanged();
+    partial void OnprojNameChanging(string value);
+    partial void OnprojNameChanged();
+    partial void OnmanagerChanging(System.Nullable<int> value);
+    partial void OnmanagerChanged();
+    partial void Onallocated_dollarsChanging(System.Nullable<decimal> value);
+    partial void Onallocated_dollarsChanged();
+    partial void Onunallocated_dollarsChanging(System.Nullable<decimal> value);
+    partial void Onunallocated_dollarsChanged();
+    #endregion
+		
+		public Project()
+		{
+			this._EmployeeProjects = new EntitySet<EmployeeProject>(new Action<EmployeeProject>(this.attach_EmployeeProjects), new Action<EmployeeProject>(this.detach_EmployeeProjects));
+			this._WorkPackages = new EntitySet<WorkPackage>(new Action<WorkPackage>(this.attach_WorkPackages), new Action<WorkPackage>(this.detach_WorkPackages));
+			this._Employee = default(EntityRef<Employee>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int projId
+		{
+			get
+			{
+				return this._projId;
+			}
+			set
+			{
+				if ((this._projId != value))
+				{
+					this.OnprojIdChanging(value);
+					this.SendPropertyChanging();
+					this._projId = value;
+					this.SendPropertyChanged("projId");
+					this.OnprojIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string projName
+		{
+			get
+			{
+				return this._projName;
+			}
+			set
+			{
+				if ((this._projName != value))
+				{
+					this.OnprojNameChanging(value);
+					this.SendPropertyChanging();
+					this._projName = value;
+					this.SendPropertyChanged("projName");
+					this.OnprojNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_manager", DbType="Int")]
+		public System.Nullable<int> manager
+		{
+			get
+			{
+				return this._manager;
+			}
+			set
+			{
+				if ((this._manager != value))
+				{
+					if (this._Employee.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnmanagerChanging(value);
+					this.SendPropertyChanging();
+					this._manager = value;
+					this.SendPropertyChanged("manager");
+					this.OnmanagerChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_allocated_dollars", DbType="Decimal(11,2)")]
+		public System.Nullable<decimal> allocated_dollars
+		{
+			get
+			{
+				return this._allocated_dollars;
+			}
+			set
+			{
+				if ((this._allocated_dollars != value))
+				{
+					this.Onallocated_dollarsChanging(value);
+					this.SendPropertyChanging();
+					this._allocated_dollars = value;
+					this.SendPropertyChanged("allocated_dollars");
+					this.Onallocated_dollarsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_unallocated_dollars", DbType="Decimal(11,2)")]
+		public System.Nullable<decimal> unallocated_dollars
+		{
+			get
+			{
+				return this._unallocated_dollars;
+			}
+			set
+			{
+				if ((this._unallocated_dollars != value))
+				{
+					this.Onunallocated_dollarsChanging(value);
+					this.SendPropertyChanging();
+					this._unallocated_dollars = value;
+					this.SendPropertyChanged("unallocated_dollars");
+					this.Onunallocated_dollarsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_EmployeeProject", Storage="_EmployeeProjects", ThisKey="projId", OtherKey="projId")]
+		public EntitySet<EmployeeProject> EmployeeProjects
+		{
+			get
+			{
+				return this._EmployeeProjects;
+			}
+			set
+			{
+				this._EmployeeProjects.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Project_WorkPackage", Storage="_WorkPackages", ThisKey="projId", OtherKey="projId")]
+		public EntitySet<WorkPackage> WorkPackages
+		{
+			get
+			{
+				return this._WorkPackages;
+			}
+			set
+			{
+				this._WorkPackages.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Project", Storage="_Employee", ThisKey="manager", OtherKey="empId", IsForeignKey=true)]
+		public Employee Employee
+		{
+			get
+			{
+				return this._Employee.Entity;
+			}
+			set
+			{
+				Employee previousValue = this._Employee.Entity;
+				if (((previousValue != value) 
+							|| (this._Employee.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Employee.Entity = null;
+						previousValue.Projects.Remove(this);
+					}
+					this._Employee.Entity = value;
+					if ((value != null))
+					{
+						value.Projects.Add(this);
+						this._manager = value.empId;
+					}
+					else
+					{
+						this._manager = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Employee");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_EmployeeProjects(EmployeeProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = this;
+		}
+		
+		private void detach_EmployeeProjects(EmployeeProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = null;
+		}
+		
+		private void attach_WorkPackages(WorkPackage entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = this;
+		}
+		
+		private void detach_WorkPackages(WorkPackage entity)
+		{
+			this.SendPropertyChanging();
+			entity.Project = null;
 		}
 	}
 }

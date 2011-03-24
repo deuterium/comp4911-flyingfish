@@ -93,10 +93,10 @@
       <Column Name="isActive" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="Employee_EmployeeProject" Member="EmployeeProjects" ThisKey="empId" OtherKey="empId" Type="EmployeeProject" />
       <Association Name="Employee_HumanResourcesStaff" Member="HumanResourcesStaff" ThisKey="empId" OtherKey="empId" Type="HumanResourcesStaff" Cardinality="One" />
-      <Association Name="Employee_Project" Member="Projects" ThisKey="empId" OtherKey="manager" Type="Project" />
       <Association Name="Employee_TimeSheetHeader" Member="TimeSheetHeaders" ThisKey="empId" OtherKey="approvedBy" Type="TimeSheetHeader" />
       <Association Name="Employee_TimeSheetHeader1" Member="TimeSheetHeaders1" ThisKey="empId" OtherKey="empId" Type="TimeSheetHeader" />
       <Association Name="Employee_EmployeeMembership" Member="EmployeeMembership" ThisKey="empId" OtherKey="empId" Type="EmployeeMembership" Cardinality="One" />
+      <Association Name="Employee_Project" Member="Projects" ThisKey="empId" OtherKey="manager" Type="Project" />
     </Type>
   </Table>
   <Table Name="dbo.EmployeePersonLevel" Member="EmployeePersonLevels">
@@ -153,16 +153,6 @@
       <Association Name="PersonLevel_EmployeePersonLevel" Member="EmployeePersonLevels" ThisKey="pLevel,fiscalYear" OtherKey="pLevel,fiscalYear" Type="EmployeePersonLevel" />
       <Association Name="PersonLevel_WorkPackageBudgetPM" Member="WorkPackageBudgetPMs" ThisKey="pLevel,fiscalYear" OtherKey="pLevel,fiscalYear" Type="WorkPackageBudgetPM" />
       <Association Name="PersonLevel_WorkPackageEstimateRE" Member="WorkPackageEstimateREs" ThisKey="pLevel,fiscalYear" OtherKey="pLevel,fiscalYear" Type="WorkPackageEstimateRE" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Project" Member="Projects">
-    <Type Name="Project">
-      <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="projName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="manager" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Project_EmployeeProject" Member="EmployeeProjects" ThisKey="projId" OtherKey="projId" Type="EmployeeProject" />
-      <Association Name="Project_WorkPackage" Member="WorkPackages" ThisKey="projId" OtherKey="projId" Type="WorkPackage" />
-      <Association Name="Employee_Project" Member="Employee" ThisKey="manager" OtherKey="empId" Type="Employee" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TimeSheetEntry" Member="TimeSheetEntries">
@@ -261,6 +251,18 @@
       <Column Name="firstName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="lastName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="UserId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Project" Member="Projects">
+    <Type Name="Project">
+      <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="projName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="manager" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="allocated_dollars" Type="System.Decimal" DbType="Decimal(11,2)" CanBeNull="true" />
+      <Column Name="unallocated_dollars" Type="System.Decimal" DbType="Decimal(11,2)" CanBeNull="true" />
+      <Association Name="Project_EmployeeProject" Member="EmployeeProjects" ThisKey="projId" OtherKey="projId" Type="EmployeeProject" />
+      <Association Name="Project_WorkPackage" Member="WorkPackages" ThisKey="projId" OtherKey="projId" Type="WorkPackage" />
+      <Association Name="Employee_Project" Member="Employee" ThisKey="manager" OtherKey="empId" Type="Employee" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
