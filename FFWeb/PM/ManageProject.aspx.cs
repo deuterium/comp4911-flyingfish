@@ -40,8 +40,12 @@ public partial class PM_ManageProject : System.Web.UI.Page
         {
             int row = Convert.ToInt32(e.CommandArgument);
             GridViewRow selectedRow = gvWorkPackages.Rows[row];
-            Session["wpID"] = selectedRow.Cells[2].Text;
+            Session["wpID"] = selectedRow.Cells[0].Text;
             Response.Redirect("~/RE/ManageWorkPackage.aspx");
         }
+    }
+    protected void lbProjectList_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PM/ProjectList.aspx");
     }
 }
