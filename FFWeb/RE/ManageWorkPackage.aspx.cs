@@ -9,7 +9,6 @@ using System.Configuration;
 
 public partial class RE_ManageWorkPackage : System.Web.UI.Page
 {
-    bool allocClick, unallocClick, descClick = false;
     string connectionString = ConfigurationManager.ConnectionStrings["ffconn"].ToString();
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
 
@@ -24,11 +23,16 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     wp.wpId == lblWPID2.Text
                 )
                 select new { wp.allocated_dollars, wp.unallocated_dollars, wp.name, wp.description };
-
-        tbAlloc.Text = qry.First().allocated_dollars.ToString();
-        tbUnalloc.Text = qry.First().unallocated_dollars.ToString();
+        string alloc = qry.First().allocated_dollars.ToString();
+      
+        //tbAlloc2.Text = alloc;
+        string unalloc = qry.First().unallocated_dollars.ToString();
+        tbAlloc.Text = alloc;
+        tbUnalloc.Text = unalloc;
+        //tbUnalloc2.Text = unalloc;
         lblWPName2.Text = qry.Single().name.ToString();
-        tbDescription.Text = qry.Single().description.ToString();
+        string desc = qry.Single().description.ToString();
+        //tbDescription.Text = desc;
         updategvEmployees();
         lblError.Text = "";
     }
@@ -108,38 +112,16 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Save Changes
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        /*var obj =
-            (from wp in ff.WorkPackages
-             where (wp.wpId == lblWPID2.Text && wp.projId == Convert.ToInt32(Session["projID"]))
-             select wp).First();*/
-        //WorkPackage obj = ff.WorkPackages.Where(wp => wp.wpId == Session["wpID"].ToString()).First();
         WorkPackage obj = ff.WorkPackages.Where(wp => wp.wpId == Session["wpID"].ToString()).First();
-        if(unallocClick)
-            obj.unallocated_dollars = Convert.ToDecimal(tbUnalloc2.Text);
-        if(allocClick)
-            obj.allocated_dollars = Convert.ToDecimal(tbAlloc2.Text);
-        if(descClick)
-            obj.description = tbDescription.Text;
+        obj.unallocated_dollars = Convert.ToDecimal(tbUnalloc2.Text);
+        obj.allocated_dollars = Convert.ToDecimal(tbAlloc2.Text);
+        obj.description = tbDescription.Text;
         ff.SubmitChanges();
         Response.Redirect("~/RE/ManageWorkPackage.aspx");
     }
     #endregion
 
     #region Click events
-    protected void btnAllocChange_Click(object sender, EventArgs e)
-    {
-        allocClick = true;
-        tbAlloc2.Text = tbAlloc2.Text;
-        divtbAlloc1.Visible = false;
-        divtbAlloc2.Visible = true;
-    }
-    protected void btnUnallocChange_Click(object sender, EventArgs e)
-    {
-        unallocClick = true;
-        tbUnalloc2.Text = tbUnalloc.Text;
-        divtbUnalloc1.Visible = false;
-        divtbUnalloc2.Visible = true;
-    }
     protected void lbBacktoProject_Click(object sender, EventArgs e)
     {
         var obj =
@@ -148,13 +130,6 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
             select id.projId;
         Session["projID"] = obj.First().ToString();
         Response.Redirect("~/PM/ManageProject.aspx");
-    }
-    protected void btnDescChange_Click(object sender, EventArgs e)
-    {
-        descClick = true;
-        tbDesc2.Text = tbDescription.Text;
-        divDesc1.Visible = false;
-        divDesc2.Visible = true;
     }
     #endregion
 }
