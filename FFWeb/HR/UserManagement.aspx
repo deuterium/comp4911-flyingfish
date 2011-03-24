@@ -181,10 +181,7 @@
                                                     <asp:Label ID="SupervisorLabel" runat="server">Supervisor:</asp:Label>
                                                 </td>
                                                 <td>
-                                                    <asp:DropDownList ID="SupervisorList" runat="server" OnPreRender="SupervisorList_PreRender" />
-                                                    <%--<asp:DropDownList ID="SupervisorList" runat="server" 
-                                            onprerender="SupervisorList_PreRender">
-                                        </asp:DropDownList>--%>
+                                                    <asp:ListBox ID="SupervisorList" runat="server" oninit="SupervisorList_Load" />
                                                 </td>
                                             </tr>
                                             <tr>
@@ -195,9 +192,6 @@
                                                     <asp:CheckBoxList ID="RoleList" runat="server" DataSourceID="RoleSource" DataTextField="RoleName"
                                                         DataValueField="RoleId">
                                                     </asp:CheckBoxList>
-                                                    <%--<asp:DropDownList ID="RoleList" runat="server" DataSourceID="RoleSource" DataTextField="RoleName"
-                                            DataValueField="RoleId">
-                                        </asp:DropDownList>--%>
                                                 </td>
                                             </tr>
                                         </table>

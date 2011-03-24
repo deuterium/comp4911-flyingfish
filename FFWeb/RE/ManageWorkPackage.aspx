@@ -34,7 +34,6 @@
                             BoundControlID="tbAlloc2" Decimals="2" BehaviorID="tbAlloc2" />
                         <asp:TextBox ID="tbAlloc2" runat="server" style="margin-bottom: 0px"></asp:TextBox>
                     </div>
-                    
                 </td>
             </tr>
             <tr>

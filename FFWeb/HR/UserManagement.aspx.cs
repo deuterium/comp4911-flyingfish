@@ -59,20 +59,20 @@ public partial class UserManagement : System.Web.UI.Page
     #endregion
 
     #region Create New Employee
-    //Populates the Supervisor list before the page is rendered
-    protected void SupervisorList_PreRender(object sender, EventArgs e)
+    //Populates the Supervisor list when the page is loaded
+    protected void SupervisorList_Load(object sender, EventArgs e)
     {
-        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataSource =
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataSource =
         ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
             .Select(u => new
             {
                 empID = u.empId,
                 approver = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
             });
-        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataValueField = "empId";
-        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataTextField = "approver";
-        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataBind();
-        //((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).Rows = 6;
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataValueField = "empId";
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataTextField = "approver";
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataBind();
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).Rows = 6;
     }
 
     //Adds the newly created user to the Employee table and links them together in EmployeeMembership
@@ -80,7 +80,7 @@ public partial class UserManagement : System.Web.UI.Page
     {
         string tmpFirstName = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("FirstName")).Text;
         string tmpLastName = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("LastName")).Text;
-        //string tmpSupervisor = ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).SelectedValue;
+        string tmpSupervisor = ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).SelectedValue;
         string tmpEmpID = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("EmployeeID")).Text;
         CheckBoxList tempCheck = (CheckBoxList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("RoleList");
         for(int i = 0; i < tempCheck.Items.Count; i++)
@@ -95,7 +95,7 @@ public partial class UserManagement : System.Web.UI.Page
             firstName = tmpFirstName,
             lastName = tmpLastName,
             empId = Convert.ToInt32(tmpEmpID),
-            supervisor = 1,
+            supervisor = Convert.ToInt32(tmpSupervisor),
             approver = 456,
             minHoursPerWeek = 0,
             vacationLeave = 0,
@@ -290,5 +290,5 @@ public partial class UserManagement : System.Web.UI.Page
     #region Assign Employee to Project
 
     #endregion
-    
+
 }
