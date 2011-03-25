@@ -159,19 +159,6 @@
                                                         ValidationGroup="cuwCreateUser" ForeColor="Red">*</asp:RequiredFieldValidator>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td align="center" colspan="2">
-                                                    <asp:CompareValidator ID="PasswordCompare" runat="server" ControlToCompare="Password"
-                                                        ControlToValidate="ConfirmPassword" Display="Dynamic" ErrorMessage="The Password and Confirmation Password must match."
-                                                        ValidationGroup="cuwCreateUser"></asp:CompareValidator>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center" colspan="2" style="color: Red;">
-                                                    <asp:Label ID="lblUserWizardError" Enabled="false" Text="" runat="server" />
-                                                    <asp:Literal ID="ErrorMessage" runat="server" EnableViewState="False"></asp:Literal>
-                                                </td>
-                                            </tr>
                                         </table>
                                     </td>
                                     <td>
@@ -181,7 +168,19 @@
                                                     <asp:Label ID="SupervisorLabel" runat="server">Supervisor:</asp:Label>
                                                 </td>
                                                 <td>
-                                                    <asp:ListBox ID="SupervisorList" runat="server" OnInit="SupervisorList_Load" />
+                                                    <asp:ListBox ID="SupervisorList" runat="server" OnInit="SupervisorApproverList_Load" />
+                                                    <asp:RequiredFieldValidator ID="SupervisorRequired" runat="server" ErrorMessage="A suprvisor is required."
+                                                        ValidationGroup="cuwCreateUser" ControlToValidate="SupervisorList" ForeColor="Red">*</asp:RequiredFieldValidator>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left">
+                                                    <asp:Label ID="ApproverLabel" runat="server">Approver:</asp:Label>
+                                                </td>
+                                                <td>
+                                                    <asp:ListBox ID="ApproverList" runat="server" OnInit="SupervisorApproverList_Load" />
+                                                    <asp:RequiredFieldValidator ID="ApproverRequired" runat="server" ErrorMessage="A timesheet approver is required."
+                                                        ValidationGroup="cuwCreateUser" ControlToValidate="ApproverList" ForeColor="Red">*</asp:RequiredFieldValidator>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -195,6 +194,19 @@
                                                 </td>
                                             </tr>
                                         </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="2">
+                                        <asp:CompareValidator ID="PasswordCompare" runat="server" ControlToCompare="Password"
+                                            ControlToValidate="ConfirmPassword" Display="Dynamic" ErrorMessage="The Password and Confirmation Password must match."
+                                            ValidationGroup="cuwCreateUser"></asp:CompareValidator>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="2" style="color: Red;">
+                                        <asp:Label ID="lblUserWizardError" Enabled="false" Text="" runat="server" />
+                                        <asp:Literal ID="ErrorMessage" runat="server" EnableViewState="False"></asp:Literal>
                                     </td>
                                 </tr>
                             </table>
@@ -331,8 +343,7 @@
                                         Roles:
                                     </td>
                                     <td>
-                                        <asp:CheckBoxList id="cblUserRoles" runat="server" DataSourceID="RoleSource" 
-                                            DataTextField="RoleName" DataValueField="RoleId" />
+                                        <asp:CheckBoxList ID="cblUserRoles" runat="server" />
                                     </td>
                                 </tr>
                             </table>

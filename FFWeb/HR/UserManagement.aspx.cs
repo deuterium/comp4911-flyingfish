@@ -60,20 +60,26 @@ public partial class UserManagement : System.Web.UI.Page
 
     #region Create New Employee
     //Populates the Supervisor list when the page is loaded
-    protected void SupervisorList_Load(object sender, EventArgs e)
+    protected void SupervisorApproverList_Load(object sender, EventArgs e)
     {
-        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataSource =
-        ff.vw_AllValid_UserName_EmpIDs
+        var validUsers = ff.vw_AllValid_UserName_EmpIDs
             .Select(u => new
             {
                 empID = u.empId,
                 approver = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
             })
             .OrderBy(u=>u.approver);
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataSource = validUsers;
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataValueField = "empId";
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataTextField = "approver";
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataBind();
-        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).Rows = 6;
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).Rows = 3;
+
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).DataSource = validUsers;
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).DataValueField = "empId";
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).DataTextField = "approver";
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).DataBind();
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).Rows = 3;
     }
 
     //Adds the newly created user to the Employee table and links them together in EmployeeMembership
@@ -154,6 +160,7 @@ public partial class UserManagement : System.Web.UI.Page
         gvManageUsers.DataBind();
     }
 
+    #region Button_Click Methods
     //Searches for employees containing the provided last name when button clicked
     protected void buttonSearch_Click(object sender, EventArgs e)
     {
@@ -190,76 +197,6 @@ public partial class UserManagement : System.Web.UI.Page
         lblSearchError.Text = "";
         getAllUsers();
     }
-
-    //Brings up the editing area for when a user is selected from the gridview
-    protected void gvManageUsers_SelectedIndexChanged(Object sender, EventArgs e)
-    {
-        lblUserEditError.Text = "";
-        DivUserDetails.Visible = true;
-        DivUserGridView.Visible = false;
-        fillSupervisorApproverListBoxes();
-
-        #region User Information minus Roles
-        int empID = Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text);
-        Employee ManagedEmployee = ff.Employees.Where(em => em.empId == empID).First();
-        System.Guid userID = ff.EmployeeMemberships.Where(emp => emp.empId == empID).Select(emp => emp.userId).First();
-        tbFirstName.Text = ManagedEmployee.firstName;
-        tbLastName.Text = ManagedEmployee.lastName;
-        lblEmpId.Text = ManagedEmployee.empId.ToString();
-        lblUsername.Text = ff.aspnet_Users.Where(use => use.UserId == userID).Select(use => use.UserName).First();
-        lblEmail.Text = ff.aspnet_Memberships.Where(use => use.UserId == userID).Select(use => use.Email).First();
-        lbSupervisors.SelectedValue = ManagedEmployee.supervisor.ToString();
-        lbApprovers.SelectedValue = ManagedEmployee.approver.ToString();
-        tbMinHours.Text = ManagedEmployee.minHoursPerWeek.ToString();
-        tbVacation.Text = ManagedEmployee.vacationLeave.ToString();
-        tbSickDays.Text = ManagedEmployee.sickDays.ToString();
-        tbFlexHours.Text = ManagedEmployee.flexHours.ToString();
-        if (ManagedEmployee.isActive == 1) cbActiveUser.Checked = true;
-        #endregion
-
-        #region Individual User Roles
-        string[] userRoleNames = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs.Where(emp => emp.empId == empID).Select(r => r.RoleName).ToArray();
-        for (int i = 0; i < userRoleNames.Length; i++)
-        {
-            for(int j = 0; j < cblUserRoles.Items.Count; j++)
-            {
-                if (userRoleNames[i] == cblUserRoles.Items[j].Text)
-                {
-                    cblUserRoles.Items[j].Selected = true;
-                }
-            }
-        }
-
-        #endregion
-    }
-
-    //Returns a list of all Supervisors ..... List<String> is placeholder for correct type
-    protected void fillSupervisorApproverListBoxes()
-    {
-        //Fills Approvers DDL with all users in role TimesheetApprover
-        lbApprovers.DataSource = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
-            .Where(r => r.RoleName == "TimesheetApprover")
-            .Select(u => new
-            {
-                empID = u.empId,
-                tsa = ((((u.empId + ": ") + u.firstName) + " ") + u.lastName)
-            });
-        lbApprovers.DataTextField = "tsa";
-        lbApprovers.DataValueField = "empId";
-        lbApprovers.DataBind();
-
-        //Fills Supervisors DDL with all users in ??? can supervisors be anyone?
-        lbSupervisors.DataSource = ff.vw_AllValid_UserName_EmpIDs
-            .Select(u => new
-            {
-                empID = u.empId,
-                tsa = ((((u.empId + ": ") + u.firstName) + " ") + u.lastName)
-            });
-        lbSupervisors.DataTextField = "tsa";
-        lbSupervisors.DataValueField = "empId";
-        lbSupervisors.DataBind();
-    }
-
     //Cancels Editing of an Employee and hides the editing div
     protected void buttonDetailsCancel_Click(object sender, EventArgs e)
     {
@@ -333,8 +270,79 @@ public partial class UserManagement : System.Web.UI.Page
     }
     #endregion
 
+    //Brings up the editing area for when a user is selected from the gridview
+    protected void gvManageUsers_SelectedIndexChanged(Object sender, EventArgs e)
+    {
+        lblUserEditError.Text = "";
+        DivUserDetails.Visible = true;
+        DivUserGridView.Visible = false;
+        fillSupervisorApproverListBoxes();
+        #region User Information minus Roles
+        int empID = Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text);
+        Employee ManagedEmployee = ff.Employees.Where(em => em.empId == empID).First();
+        System.Guid userID = ff.EmployeeMemberships.Where(emp => emp.empId == empID).Select(emp => emp.userId).First();
+        tbFirstName.Text = ManagedEmployee.firstName;
+        tbLastName.Text = ManagedEmployee.lastName;
+        lblEmpId.Text = ManagedEmployee.empId.ToString();
+        lblUsername.Text = ff.aspnet_Users.Where(use => use.UserId == userID).Select(use => use.UserName).First();
+        lblEmail.Text = ff.aspnet_Memberships.Where(use => use.UserId == userID).Select(use => use.Email).First();
+        lbSupervisors.SelectedValue = ManagedEmployee.supervisor.ToString();
+        lbApprovers.SelectedValue = ManagedEmployee.approver.ToString();
+        tbMinHours.Text = ManagedEmployee.minHoursPerWeek.ToString();
+        tbVacation.Text = ManagedEmployee.vacationLeave.ToString();
+        tbSickDays.Text = ManagedEmployee.sickDays.ToString();
+        tbFlexHours.Text = ManagedEmployee.flexHours.ToString();
+        if (ManagedEmployee.isActive == 1) cbActiveUser.Checked = true;
+        #endregion
+
+        #region Individual User Roles
+        cblUserRoles.DataSource = ff.aspnet_Roles.Select(r => new { RoleId = r.RoleId, RoleName = r.RoleName });
+        cblUserRoles.DataTextField = "RoleName";
+        cblUserRoles.DataValueField = "RoleId";
+        cblUserRoles.DataBind();
+        string[] userRoleNames = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs.Where(emp => emp.empId == empID).Select(r => r.RoleName).ToArray();
+        for (int i = 0; i < userRoleNames.Length; i++)
+        {
+            for(int j = 0; j < cblUserRoles.Items.Count; j++)
+            {
+                if (userRoleNames[i] == cblUserRoles.Items[j].Text)
+                {
+                    cblUserRoles.Items[j].Selected = true;
+                }
+            }
+        }
+        #endregion
+    }
+
+    //Returns a list of all Supervisors ..... List<String> is placeholder for correct type
+    protected void fillSupervisorApproverListBoxes()
+    {
+        //Fills Approvers DDL with all users in role TimesheetApprover
+        lbApprovers.DataSource = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
+            .Where(r => r.RoleName == "TimesheetApprover")
+            .Select(u => new
+            {
+                empID = u.empId,
+                tsa = ((((u.empId + ": ") + u.firstName) + " ") + u.lastName)
+            });
+        lbApprovers.DataTextField = "tsa";
+        lbApprovers.DataValueField = "empId";
+        lbApprovers.DataBind();
+
+        //Fills Supervisors DDL with all users in ??? can supervisors be anyone?
+        lbSupervisors.DataSource = ff.vw_AllValid_UserName_EmpIDs
+            .Select(u => new
+            {
+                empID = u.empId,
+                tsa = ((((u.empId + ": ") + u.firstName) + " ") + u.lastName)
+            });
+        lbSupervisors.DataTextField = "tsa";
+        lbSupervisors.DataValueField = "empId";
+        lbSupervisors.DataBind();
+    }
+    #endregion
+
     #region Assign Employee to Project
 
     #endregion
-
 }
