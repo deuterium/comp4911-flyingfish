@@ -82,12 +82,21 @@ public partial class UserManagement : System.Web.UI.Page
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).Rows = 3;
     }
 
+    //Sets approver to match supervisor when supervisor is changed
+    protected void SupervisorList_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).SelectedIndex
+            = ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).SelectedIndex;
+        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).SelectedItem.Selected = true;
+    }
+
     //Adds the newly created user to the Employee table and links them together in EmployeeMembership
     protected void cuwCreateUser_CreatedUser(object sender, EventArgs e)
     {
         string tmpFirstName = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("FirstName")).Text;
         string tmpLastName = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("LastName")).Text;
         string tmpSupervisor = ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).SelectedValue;
+        string tmpApprover = ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).SelectedValue;
         string tmpEmpID = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("EmployeeID")).Text;
         CheckBoxList tempCheck = (CheckBoxList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("RoleList");
         for(int i = 0; i < tempCheck.Items.Count; i++)
@@ -103,7 +112,7 @@ public partial class UserManagement : System.Web.UI.Page
             lastName = tmpLastName,
             empId = Convert.ToInt32(tmpEmpID),
             supervisor = Convert.ToInt32(tmpSupervisor),
-            approver = Convert.ToInt32(tmpSupervisor),
+            approver = Convert.ToInt32(tmpApprover),
             minHoursPerWeek = 0,
             vacationLeave = 0,
             sickDays = 0,
@@ -122,6 +131,13 @@ public partial class UserManagement : System.Web.UI.Page
                 .ToArray()[0].UserId
         });
         ff.SubmitChanges();
+
+        //Adds selected Approver to the TSApprover Role if they are not in it already
+        string approverUsername = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs.Where(em => em.empId == Convert.ToInt32(tmpApprover)).Select(u => u.UserName).First();
+        if (!Roles.IsUserInRole(approverUsername, "TimesheetApprover"))
+        {
+            Roles.AddUserToRole(approverUsername, "TimesheetApprover");
+        }
     }
 
     //Checks to see an en employee is already created with an EmpID

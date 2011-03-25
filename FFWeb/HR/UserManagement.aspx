@@ -1,7 +1,10 @@
 ﻿<%@ Page Title="User Management" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master"
     AutoEventWireup="true" CodeFile="UserManagement.aspx.cs" Inherits="UserManagement" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
+    <asp:ToolkitScriptManager ID="ToolkitScriptManager" runat="server">
+    </asp:ToolkitScriptManager>
     <div id="DivUserManagement">
         <div id="DivUserManagementMenu" runat="server">
             <br />
@@ -168,7 +171,8 @@
                                                     <asp:Label ID="SupervisorLabel" runat="server">Supervisor:</asp:Label>
                                                 </td>
                                                 <td>
-                                                    <asp:ListBox ID="SupervisorList" runat="server" OnInit="SupervisorApproverList_Load" />
+                                                    <asp:ListBox ID="SupervisorList" runat="server" OnInit="SupervisorApproverList_Load"
+                                                        OnSelectedIndexChanged="SupervisorList_SelectedIndexChanged" AutoPostBack="True" />
                                                     <asp:RequiredFieldValidator ID="SupervisorRequired" runat="server" ErrorMessage="A suprvisor is required."
                                                         ValidationGroup="cuwCreateUser" ControlToValidate="SupervisorList" ForeColor="Red">*</asp:RequiredFieldValidator>
                                                 </td>
@@ -178,9 +182,16 @@
                                                     <asp:Label ID="ApproverLabel" runat="server">Approver:</asp:Label>
                                                 </td>
                                                 <td>
-                                                    <asp:ListBox ID="ApproverList" runat="server" OnInit="SupervisorApproverList_Load" />
-                                                    <asp:RequiredFieldValidator ID="ApproverRequired" runat="server" ErrorMessage="A timesheet approver is required."
-                                                        ValidationGroup="cuwCreateUser" ControlToValidate="ApproverList" ForeColor="Red">*</asp:RequiredFieldValidator>
+                                                    <asp:UpdatePanel ID="ApproverUpdatePanel" runat="server">
+                                                        <ContentTemplate>
+                                                            <asp:ListBox ID="ApproverList" runat="server" OnInit="SupervisorApproverList_Load" />
+                                                            <asp:RequiredFieldValidator ID="ApproverRequired" runat="server" ErrorMessage="A timesheet approver is required."
+                                                                ValidationGroup="cuwCreateUser" ControlToValidate="ApproverList" ForeColor="Red">*</asp:RequiredFieldValidator>
+                                                        </ContentTemplate>
+                                                        <Triggers>
+                                                            <asp:AsyncPostBackTrigger ControlID="SupervisorList" EventName="SelectedIndexChanged" />
+                                                        </Triggers>
+                                                    </asp:UpdatePanel>
                                                 </td>
                                             </tr>
                                             <tr>
