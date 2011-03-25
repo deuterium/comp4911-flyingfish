@@ -1,7 +1,10 @@
 ﻿<%@ Page Title="User Management" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master"
     AutoEventWireup="true" CodeFile="UserManagement.aspx.cs" Inherits="UserManagement" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
+    <asp:ToolkitScriptManager ID="ToolkitScriptManager" runat="server">
+    </asp:ToolkitScriptManager>
     <div id="DivUserManagement">
         <div id="DivUserManagementMenu" runat="server">
             <br />
@@ -159,19 +162,6 @@
                                                         ValidationGroup="cuwCreateUser" ForeColor="Red">*</asp:RequiredFieldValidator>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td align="center" colspan="2">
-                                                    <asp:CompareValidator ID="PasswordCompare" runat="server" ControlToCompare="Password"
-                                                        ControlToValidate="ConfirmPassword" Display="Dynamic" ErrorMessage="The Password and Confirmation Password must match."
-                                                        ValidationGroup="cuwCreateUser"></asp:CompareValidator>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center" colspan="2" style="color: Red;">
-                                                    <asp:Label ID="lblUserWizardError" Enabled="false" Text="" runat="server" />
-                                                    <asp:Literal ID="ErrorMessage" runat="server" EnableViewState="False"></asp:Literal>
-                                                </td>
-                                            </tr>
                                         </table>
                                     </td>
                                     <td>
@@ -181,11 +171,27 @@
                                                     <asp:Label ID="SupervisorLabel" runat="server">Supervisor:</asp:Label>
                                                 </td>
                                                 <td>
-                                                    <asp:ListBox ID="SupervisorList" runat="server" OnPreRender="SupervisorList_PreRender"
-                                                        Rows="5"></asp:ListBox>
-                                                    <%--<asp:DropDownList ID="SupervisorList" runat="server" 
-                                            onprerender="SupervisorList_PreRender">
-                                        </asp:DropDownList>--%>
+                                                    <asp:ListBox ID="SupervisorList" runat="server" OnInit="SupervisorApproverList_Load"
+                                                        OnSelectedIndexChanged="SupervisorList_SelectedIndexChanged" AutoPostBack="True" />
+                                                    <asp:RequiredFieldValidator ID="SupervisorRequired" runat="server" ErrorMessage="A suprvisor is required."
+                                                        ValidationGroup="cuwCreateUser" ControlToValidate="SupervisorList" ForeColor="Red">*</asp:RequiredFieldValidator>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left">
+                                                    <asp:Label ID="ApproverLabel" runat="server">Approver:</asp:Label>
+                                                </td>
+                                                <td>
+                                                    <asp:UpdatePanel ID="ApproverUpdatePanel" runat="server">
+                                                        <ContentTemplate>
+                                                            <asp:ListBox ID="ApproverList" runat="server" OnInit="SupervisorApproverList_Load" />
+                                                            <asp:RequiredFieldValidator ID="ApproverRequired" runat="server" ErrorMessage="A timesheet approver is required."
+                                                                ValidationGroup="cuwCreateUser" ControlToValidate="ApproverList" ForeColor="Red">*</asp:RequiredFieldValidator>
+                                                        </ContentTemplate>
+                                                        <Triggers>
+                                                            <asp:AsyncPostBackTrigger ControlID="SupervisorList" EventName="SelectedIndexChanged" />
+                                                        </Triggers>
+                                                    </asp:UpdatePanel>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -196,12 +202,22 @@
                                                     <asp:CheckBoxList ID="RoleList" runat="server" DataSourceID="RoleSource" DataTextField="RoleName"
                                                         DataValueField="RoleId">
                                                     </asp:CheckBoxList>
-                                                    <%--<asp:DropDownList ID="RoleList" runat="server" DataSourceID="RoleSource" DataTextField="RoleName"
-                                            DataValueField="RoleId">
-                                        </asp:DropDownList>--%>
                                                 </td>
                                             </tr>
                                         </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="2">
+                                        <asp:CompareValidator ID="PasswordCompare" runat="server" ControlToCompare="Password"
+                                            ControlToValidate="ConfirmPassword" Display="Dynamic" ErrorMessage="The Password and Confirmation Password must match."
+                                            ValidationGroup="cuwCreateUser"></asp:CompareValidator>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="2" style="color: Red;">
+                                        <asp:Label ID="lblUserWizardError" Enabled="false" Text="" runat="server" />
+                                        <asp:Literal ID="ErrorMessage" runat="server" EnableViewState="False"></asp:Literal>
                                     </td>
                                 </tr>
                             </table>
@@ -230,100 +246,118 @@
             &nbsp;<asp:Button ID="buttonAllUsers" runat="server" Text="Show All Users" OnClick="buttonAllUsers_Click" />
             <hr />
             <asp:Label ID="lblSearchError" runat="server" Enabled="False"></asp:Label>
-            <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
-            </asp:GridView>
+            <div id="DivUserGridView" runat="server">
+                <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
+                </asp:GridView>
+            </div>
             <br />
             <div id="DivUserDetails" runat="server" visible="false">
-                <table id="tableUserDetails">
-                    <tr>
-                        <td colspan="4">
-                            <b>Edit Employee Information</b>
-                        </td>
-                    </tr>
+                <table>
                     <tr>
                         <td>
-                            Employee ID Number:
+                            <table id="tableUserDetails">
+                                <tr>
+                                    <td colspan="4">
+                                        <b>Edit Employee Information</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Employee ID Number:
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblEmpId" runat="server" />
+                                    </td>
+                                    <td>
+                                        Username:
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblUsername" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        First Name:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbFirstName" runat="server" Width="125" />
+                                    </td>
+                                    <td>
+                                        Last Name:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbLastName" runat="server" Width="125" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Supervisor:
+                                    </td>
+                                    <td>
+                                        <asp:ListBox ID="lbSupervisors" Width="125" runat="server" />
+                                    </td>
+                                    <td>
+                                        Timesheet Approver:
+                                    </td>
+                                    <td>
+                                        <asp:ListBox ID="lbApprovers" Width="125" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Vacation Leave:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbVacation" Width="125" runat="server" />
+                                    </td>
+                                    <td>
+                                        Sick Days:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbSickDays" Width="125" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Min. Hours per Week:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbMinHours" Width="125" runat="server" />
+                                    </td>
+                                    <td>
+                                        Flex Hours:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbFlexHours" Width="125" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Email Address:
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblEmail" runat="server" />
+                                    </td>
+                                    <td>
+                                        Active User:
+                                    </td>
+                                    <td>
+                                        <asp:CheckBox ID="cbActiveUser" Text="" runat="server" Checked="false" />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
-                            <asp:Label ID="lblEmpId" runat="server" />
-                        </td>
-                        <td>
-                            Username:
-                        </td>
-                        <td>
-                            <asp:Label ID="lblUsername" runat="server" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            First Name:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbFirstName" runat="server" Width="125" />
-                        </td>
-                        <td>
-                            Last Name:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbLastName" runat="server" Width="125" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Supervisor:
-                        </td>
-                        <td>
-                            <asp:DropDownList ID="ddlSupervisors" Width="125" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                        <td>
-                            Timesheet Approver:
-                        </td>
-                        <td>
-                            <asp:DropDownList ID="ddlApprovers" Width="125" runat="server">
-                            </asp:DropDownList>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Vacation Leave:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbVacation" Width="125" runat="server" />
-                        </td>
-                        <td>
-                            Sick Days:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbSickDays" Width="125" runat="server" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Min. Hours per Week:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbMinHours" Width="125" runat="server" />
-                        </td>
-                        <td>
-                            Flex Hours:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbFlexHours" Width="125" runat="server" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Email Address:
-                        </td>
-                        <td>
-                            <asp:Label ID="lblEmail" runat="server" />
-                        </td>
-                        <td>
-                            Active User:
-                        </td>
-                        <td>
-                            <asp:CheckBox ID="cbActiveUser" Text="" runat="server" Checked="false" />
+                            <table>
+                                <tr>
+                                    <td>
+                                        Roles:
+                                    </td>
+                                    <td>
+                                        <asp:CheckBoxList ID="cblUserRoles" runat="server" />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </table>

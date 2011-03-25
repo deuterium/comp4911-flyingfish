@@ -265,4 +265,12 @@
       <Association Name="Employee_Project" Member="Employee" ThisKey="manager" OtherKey="empId" Type="Employee" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.vw_AllValid_UserName_EmpID" Member="vw_AllValid_UserName_EmpIDs">
+    <Type Name="vw_AllValid_UserName_EmpID">
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="firstName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="lastName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
 </Database>
