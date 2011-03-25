@@ -63,7 +63,7 @@ public partial class UserManagement : System.Web.UI.Page
     protected void SupervisorList_Load(object sender, EventArgs e)
     {
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataSource =
-        ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
+        ff.vw_AllValid_UserName_EmpIDs
             .Select(u => new
             {
                 empID = u.empId,

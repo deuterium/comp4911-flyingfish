@@ -300,6 +300,14 @@ namespace FFLib
 				return this.GetTable<Project>();
 			}
 		}
+		
+		public System.Data.Linq.Table<vw_AllValid_UserName_EmpID> vw_AllValid_UserName_EmpIDs
+		{
+			get
+			{
+				return this.GetTable<vw_AllValid_UserName_EmpID>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.aspnet_Membership")]
@@ -5960,6 +5968,87 @@ namespace FFLib
 		{
 			this.SendPropertyChanging();
 			entity.Project = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.vw_AllValid_UserName_EmpID")]
+	public partial class vw_AllValid_UserName_EmpID
+	{
+		
+		private string _UserName;
+		
+		private int _empId;
+		
+		private string _firstName;
+		
+		private string _lastName;
+		
+		public vw_AllValid_UserName_EmpID()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string UserName
+		{
+			get
+			{
+				return this._UserName;
+			}
+			set
+			{
+				if ((this._UserName != value))
+				{
+					this._UserName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL")]
+		public int empId
+		{
+			get
+			{
+				return this._empId;
+			}
+			set
+			{
+				if ((this._empId != value))
+				{
+					this._empId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_firstName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string firstName
+		{
+			get
+			{
+				return this._firstName;
+			}
+			set
+			{
+				if ((this._firstName != value))
+				{
+					this._firstName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string lastName
+		{
+			get
+			{
+				return this._lastName;
+			}
+			set
+			{
+				if ((this._lastName != value))
+				{
+					this._lastName = value;
+				}
+			}
 		}
 	}
 }
