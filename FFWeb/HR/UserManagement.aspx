@@ -181,7 +181,7 @@
                                                     <asp:Label ID="SupervisorLabel" runat="server">Supervisor:</asp:Label>
                                                 </td>
                                                 <td>
-                                                    <asp:ListBox ID="SupervisorList" runat="server" oninit="SupervisorList_Load" />
+                                                    <asp:ListBox ID="SupervisorList" runat="server" OnInit="SupervisorList_Load" />
                                                 </td>
                                             </tr>
                                             <tr>
@@ -223,98 +223,119 @@
             &nbsp;<asp:Button ID="buttonAllUsers" runat="server" Text="Show All Users" OnClick="buttonAllUsers_Click" />
             <hr />
             <asp:Label ID="lblSearchError" runat="server" Enabled="False"></asp:Label>
-            <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
-            </asp:GridView>
+            <div id="DivUserGridView" runat="server">
+                <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
+                </asp:GridView>
+            </div>
             <br />
             <div id="DivUserDetails" runat="server" visible="false">
-                <table id="tableUserDetails">
-                    <tr>
-                        <td colspan="4">
-                            <b>Edit Employee Information</b>
-                        </td>
-                    </tr>
+                <table>
                     <tr>
                         <td>
-                            Employee ID Number:
+                            <table id="tableUserDetails">
+                                <tr>
+                                    <td colspan="4">
+                                        <b>Edit Employee Information</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Employee ID Number:
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblEmpId" runat="server" />
+                                    </td>
+                                    <td>
+                                        Username:
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblUsername" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        First Name:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbFirstName" runat="server" Width="125" />
+                                    </td>
+                                    <td>
+                                        Last Name:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbLastName" runat="server" Width="125" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Supervisor:
+                                    </td>
+                                    <td>
+                                        <asp:ListBox ID="lbSupervisors" Width="125" runat="server" />
+                                    </td>
+                                    <td>
+                                        Timesheet Approver:
+                                    </td>
+                                    <td>
+                                        <asp:ListBox ID="lbApprovers" Width="125" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Vacation Leave:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbVacation" Width="125" runat="server" />
+                                    </td>
+                                    <td>
+                                        Sick Days:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbSickDays" Width="125" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Min. Hours per Week:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbMinHours" Width="125" runat="server" />
+                                    </td>
+                                    <td>
+                                        Flex Hours:
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="tbFlexHours" Width="125" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Email Address:
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblEmail" runat="server" />
+                                    </td>
+                                    <td>
+                                        Active User:
+                                    </td>
+                                    <td>
+                                        <asp:CheckBox ID="cbActiveUser" Text="" runat="server" Checked="false" />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
-                            <asp:Label ID="lblEmpId" runat="server" />
-                        </td>
-                        <td>
-                            Username:
-                        </td>
-                        <td>
-                            <asp:Label ID="lblUsername" runat="server" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            First Name:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbFirstName" runat="server" Width="125" />
-                        </td>
-                        <td>
-                            Last Name:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbLastName" runat="server" Width="125" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Supervisor:
-                        </td>
-                        <td>
-                            <asp:ListBox ID="lbSupervisors" Width="125" runat="server" />
-                        </td>
-                        <td>
-                            Timesheet Approver:
-                        </td>
-                        <td>
-                            <asp:ListBox ID="lbApprovers" Width="125" runat="server" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Vacation Leave:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbVacation" Width="125" runat="server" />
-                        </td>
-                        <td>
-                            Sick Days:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbSickDays" Width="125" runat="server" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Min. Hours per Week:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbMinHours" Width="125" runat="server" />
-                        </td>
-                        <td>
-                            Flex Hours:
-                        </td>
-                        <td>
-                            <asp:TextBox ID="tbFlexHours" Width="125" runat="server" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Email Address:
-                        </td>
-                        <td>
-                            <asp:Label ID="lblEmail" runat="server" />
-                        </td>
-                        <td>
-                            Active User:
-                        </td>
-                        <td>
-                            <asp:CheckBox ID="cbActiveUser" Text="" runat="server" Checked="false" />
+                            <table>
+                                <tr>
+                                    <td>
+                                        Roles:
+                                    </td>
+                                    <td>
+                                        <asp:CheckBoxList id="cblUserRoles" runat="server" DataSourceID="RoleSource" 
+                                            DataTextField="RoleName" DataValueField="RoleId" />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </table>

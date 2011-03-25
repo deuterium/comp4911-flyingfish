@@ -199,8 +199,12 @@ public partial class UserManagement : System.Web.UI.Page
     //Brings up the editing area for when a user is selected from the gridview
     protected void gvManageUsers_SelectedIndexChanged(Object sender, EventArgs e)
     {
+        lblUserEditError.Text = "";
         DivUserDetails.Visible = true;
-        fillSupervisorApproverDropDowns();
+        DivUserGridView.Visible = false;
+        fillSupervisorApproverListBoxes();
+
+        #region User Information minus Roles
         int empID = Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text);
         Employee ManagedEmployee = ff.Employees.Where(em => em.empId == empID).First();
         System.Guid userID = ff.EmployeeMemberships.Where(emp => emp.empId == empID).Select(emp => emp.userId).First();
@@ -216,10 +220,26 @@ public partial class UserManagement : System.Web.UI.Page
         tbSickDays.Text = ManagedEmployee.sickDays.ToString();
         tbFlexHours.Text = ManagedEmployee.flexHours.ToString();
         if (ManagedEmployee.isActive == 1) cbActiveUser.Checked = true;
+        #endregion
+
+        #region Individual User Roles
+        string[] userRoleNames = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs.Where(emp => emp.empId == empID).Select(r => r.RoleName).ToArray();
+        for (int i = 0; i < userRoleNames.Length; i++)
+        {
+            for(int j = 0; j < cblUserRoles.Items.Count; j++)
+            {
+                if (userRoleNames[i] == cblUserRoles.Items[j].Text)
+                {
+                    cblUserRoles.Items[j].Selected = true;
+                }
+            }
+        }
+
+        #endregion
     }
 
     //Returns a list of all Supervisors ..... List<String> is placeholder for correct type
-    protected void fillSupervisorApproverDropDowns()
+    protected void fillSupervisorApproverListBoxes()
     {
         //Fills Approvers DDL with all users in role TimesheetApprover
         lbApprovers.DataSource = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
@@ -250,12 +270,12 @@ public partial class UserManagement : System.Web.UI.Page
     {
         lblUserEditError.Text = "";
         DivUserDetails.Visible = false;
+        DivUserGridView.Visible = true;
     }
 
     //Fills changed information into object and submits changes to DB
     protected void buttonDetailsSubmit_Click(object sender, EventArgs e)
     {
-        
         Employee ManagedEmployee = ff.Employees.Where(em => em.empId == Convert.ToInt32(lblEmpId.Text)).First();
         ManagedEmployee.firstName = tbFirstName.Text;
         ManagedEmployee.lastName = tbLastName.Text;
