@@ -209,8 +209,8 @@ public partial class UserManagement : System.Web.UI.Page
         lblEmpId.Text = ManagedEmployee.empId.ToString();
         lblUsername.Text = ff.aspnet_Users.Where(use => use.UserId == userID).Select(use => use.UserName).First();
         lblEmail.Text = ff.aspnet_Memberships.Where(use => use.UserId == userID).Select(use => use.Email).First();
-        ddlSupervisors.SelectedValue = ManagedEmployee.supervisor.ToString();
-        ddlApprovers.SelectedValue = ManagedEmployee.approver.ToString();
+        lbSupervisors.SelectedValue = ManagedEmployee.supervisor.ToString();
+        lbApprovers.SelectedValue = ManagedEmployee.approver.ToString();
         tbMinHours.Text = ManagedEmployee.minHoursPerWeek.ToString();
         tbVacation.Text = ManagedEmployee.vacationLeave.ToString();
         tbSickDays.Text = ManagedEmployee.sickDays.ToString();
@@ -222,27 +222,27 @@ public partial class UserManagement : System.Web.UI.Page
     protected void fillSupervisorApproverDropDowns()
     {
         //Fills Approvers DDL with all users in role TimesheetApprover
-        ddlApprovers.DataSource = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
+        lbApprovers.DataSource = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
             .Where(r => r.RoleName == "TimesheetApprover")
             .Select(u => new
             {
                 empID = u.empId,
                 tsa = ((((u.empId + ": ") + u.firstName) + " ") + u.lastName)
             });
-        ddlApprovers.DataTextField = "tsa";
-        ddlApprovers.DataValueField = "empId";
-        ddlApprovers.DataBind();
+        lbApprovers.DataTextField = "tsa";
+        lbApprovers.DataValueField = "empId";
+        lbApprovers.DataBind();
 
         //Fills Supervisors DDL with all users in ??? can supervisors be anyone?
-        ddlSupervisors.DataSource = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
+        lbSupervisors.DataSource = ff.vw_AllValid_UserName_EmpIDs
             .Select(u => new
             {
                 empID = u.empId,
                 tsa = ((((u.empId + ": ") + u.firstName) + " ") + u.lastName)
             });
-        ddlSupervisors.DataTextField = "tsa";
-        ddlSupervisors.DataValueField = "empId";
-        ddlSupervisors.DataBind();
+        lbSupervisors.DataTextField = "tsa";
+        lbSupervisors.DataValueField = "empId";
+        lbSupervisors.DataBind();
     }
 
     //Cancels Editing of an Employee and hides the editing div
@@ -255,11 +255,12 @@ public partial class UserManagement : System.Web.UI.Page
     //Fills changed information into object and submits changes to DB
     protected void buttonDetailsSubmit_Click(object sender, EventArgs e)
     {
+        
         Employee ManagedEmployee = ff.Employees.Where(em => em.empId == Convert.ToInt32(lblEmpId.Text)).First();
         ManagedEmployee.firstName = tbFirstName.Text;
         ManagedEmployee.lastName = tbLastName.Text;
-        ManagedEmployee.supervisor = Convert.ToInt32(ddlSupervisors.SelectedValue);
-        ManagedEmployee.approver = Convert.ToInt32(ddlApprovers.SelectedValue);
+        ManagedEmployee.supervisor = Convert.ToInt32(lbSupervisors.SelectedValue);
+        ManagedEmployee.approver = Convert.ToInt32(lbApprovers.SelectedValue);
         ManagedEmployee.minHoursPerWeek = Convert.ToDecimal(tbMinHours.Text);
         ManagedEmployee.vacationLeave = Convert.ToInt32(tbVacation.Text);
         ManagedEmployee.sickDays = Convert.ToInt32(tbSickDays.Text);

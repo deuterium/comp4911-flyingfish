@@ -266,15 +266,13 @@
                             Supervisor:
                         </td>
                         <td>
-                            <asp:DropDownList ID="ddlSupervisors" Width="125" runat="server">
-                            </asp:DropDownList>
+                            <asp:ListBox ID="lbSupervisors" Width="125" runat="server" />
                         </td>
                         <td>
                             Timesheet Approver:
                         </td>
                         <td>
-                            <asp:DropDownList ID="ddlApprovers" Width="125" runat="server">
-                            </asp:DropDownList>
+                            <asp:ListBox ID="lbApprovers" Width="125" runat="server" />
                         </td>
                     </tr>
                     <tr>
