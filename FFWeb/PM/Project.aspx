@@ -38,6 +38,22 @@
             </td>
         </tr>
         <tr>
+            <td align="right">
+                <asp:Label ID="lblAlloc" runat="server" Text="Allocated Budget: "></asp:Label>
+            </td>
+            <td>
+                <asp:TextBox ID="tbAlloc" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <asp:Label ID="lblUnalloc" runat="server" Text="Unallocated Budget: "></asp:Label>
+            </td>
+            <td>
+                <asp:TextBox ID="tbUnalloc" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2" align="center">
                 <asp:Button ID="btnCreateProject" runat="server" Text="Create Project" 
                     onclick="btnCreateProject_Click" />

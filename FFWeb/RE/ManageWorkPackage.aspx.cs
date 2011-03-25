@@ -11,27 +11,43 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
 {
     string connectionString = ConfigurationManager.ConnectionStrings["ffconn"].ToString();
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
-
+    static double allocOriginal;
+    static double unallocOriginal;
+    static decimal totalBudget;
     #region Page_Load
     protected void Page_Load(object sender, EventArgs e)
     {
         lblWPID2.Text = Session["wpID"].ToString();
-
         var qry =
                 from wp in ff.WorkPackages
                 where (
                     wp.wpId == lblWPID2.Text
                 )
-                select new { wp.allocated_dollars, wp.unallocated_dollars, wp.name, wp.description };
+                select new { wp.allocated_dollars, wp.unallocated_dollars, wp.name, wp.description, wp.projId};
         string alloc = qry.First().allocated_dollars.ToString();
         string unalloc = qry.First().unallocated_dollars.ToString();
-        tbAlloc.Text = alloc;
         tbUnalloc.Text = unalloc;
+        tbAlloc.Text = alloc;
+        if ((Convert.ToDecimal(tbUnalloc.Text) > getBudget(qry.First().projId)) &&
+            Convert.ToDecimal(tbUnalloc.Text) > Convert.ToDecimal(tbAlloc.Text))
+        {
+            totalBudget = Convert.ToDecimal(tbUnalloc.Text) + Convert.ToDecimal(tbAlloc.Text);
+            seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbUnalloc.Text);
+        } else if((Convert.ToDecimal(tbAlloc.Text) > getBudget(qry.First().projId)) &&
+            Convert.ToDecimal(tbUnalloc.Text) < Convert.ToDecimal(tbAlloc.Text))
+        {
+            totalBudget = Convert.ToDecimal(tbUnalloc.Text) + Convert.ToDecimal(tbAlloc.Text);
+            seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbAlloc.Text);
+        } else
+            seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(getBudget(qry.First().projId));
         lblWPName2.Text = qry.Single().name.ToString();
         string desc = qry.Single().description.ToString();
         updateDesc(desc);
         updategvEmployees();
-        lblError.Text = "";
+
+        allocOriginal = Convert.ToDouble(tbAlloc.Text);
+        unallocOriginal = Convert.ToDouble(tbUnalloc.Text);
+
     }
     #endregion
 
@@ -113,12 +129,28 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Save Changes
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        WorkPackage obj = ff.WorkPackages.Where(wp => wp.wpId == Session["wpID"].ToString()).First();
-        obj.unallocated_dollars = Convert.ToDecimal(tbUnalloc2.Text);
-        obj.allocated_dollars = Convert.ToDecimal(tbAlloc2.Text);
-        obj.description = tbDescription.Text;
-        ff.SubmitChanges();
-        Response.Redirect("~/RE/ManageWorkPackage.aspx");
+        var qry =
+                from wp in ff.WorkPackages
+                where (
+                    wp.wpId == Session["wpID"].ToString()
+                )
+                select new { wp.projId };
+        if ((Convert.ToDecimal(tbUnalloc2.Text) + Convert.ToDecimal(tbAlloc2.Text)) > (totalBudget + getBudget(qry.First().projId)))
+            lblBudgetError.Text = "Please change the values of Allocated Budget and Unallocated Budget to have a sum below " + (totalBudget + getBudget(qry.First().projId));
+        else
+        {
+            lblBudgetError.Text = "";
+            WorkPackage obj = ff.WorkPackages.Where(wp => wp.wpId == Session["wpID"].ToString()).First();
+            obj.unallocated_dollars = Convert.ToDecimal(tbUnalloc2.Text);
+            obj.allocated_dollars = Convert.ToDecimal(tbAlloc2.Text);
+            obj.description = tbDescription.Text;
+            ff.SubmitChanges();
+            updateProject(Convert.ToInt32(qry.First().projId), Convert.ToDecimal(tbUnalloc2.Text), Convert.ToDecimal(tbAlloc2.Text));
+            //success msg
+            tbAlloc.Text = tbAlloc2.Text;
+            tbUnalloc.Text = tbUnalloc2.Text;
+            Response.Redirect("~/RE/ManageWorkPackage.aspx");
+        }
     }
     #endregion
 
@@ -133,4 +165,43 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         Response.Redirect("~/PM/ManageProject.aspx");
     }
     #endregion
+
+    protected decimal getBudget(int id)
+    {
+        var budget =
+            from b in ff.Projects
+            where b.projId == id
+            select b;
+        return Convert.ToDecimal(budget.First().unallocated_dollars);
+    }
+
+    protected void updateProject(int projID, decimal allocBudget, decimal unallocBudget)
+    {
+        Project proj = ff.Projects.Where(p => p.projId == projID).First();
+        if (allocBudget > Convert.ToDecimal(allocOriginal)) {
+            proj.unallocated_dollars = proj.unallocated_dollars - (allocBudget - Convert.ToDecimal(allocOriginal));
+            proj.allocated_dollars = proj.allocated_dollars + (allocBudget - Convert.ToDecimal(allocOriginal));
+            lblError.Text = "1";
+        }
+        else if (allocBudget < Convert.ToDecimal(allocOriginal))
+        {
+            proj.unallocated_dollars = proj.unallocated_dollars + (Convert.ToDecimal(allocOriginal) - allocBudget);
+            proj.allocated_dollars = proj.allocated_dollars - (Convert.ToDecimal(allocOriginal) - allocBudget);
+            lblError.Text = "2";
+        }
+        if(unallocBudget > Convert.ToDecimal(unallocOriginal))
+        {
+            proj.unallocated_dollars = proj.unallocated_dollars - (unallocBudget - Convert.ToDecimal(unallocOriginal));
+            proj.allocated_dollars = proj.allocated_dollars + (unallocBudget - Convert.ToDecimal(unallocOriginal));
+            lblError.Text = "3";
+        }
+        else if (unallocBudget < Convert.ToDecimal(unallocOriginal))
+        {
+            proj.unallocated_dollars = proj.unallocated_dollars + (Convert.ToDecimal(unallocOriginal)-unallocBudget);
+            proj.allocated_dollars = proj.allocated_dollars - (Convert.ToDecimal(unallocOriginal) - unallocBudget);
+            lblError.Text = "4";
+        }
+
+        ff.SubmitChanges();
+    }
 }

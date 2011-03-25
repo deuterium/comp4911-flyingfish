@@ -3,8 +3,11 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
-    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    <asp:ScriptManager ID="sm" runat="server">
     </asp:ScriptManager>
+    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+    <ContentTemplate>
+
     <div id="divCreateWorkPackage" runat="server">
         <table>
             <tr>
@@ -44,13 +47,12 @@
                 <td>
                     <div id="divtbUnalloc1" runat="server"><asp:TextBox ID="tbUnalloc" runat="server" ReadOnly="True"></asp:TextBox>
                     </div>
-                    <asp:SliderExtender ID="se2" runat="server" TargetControlID="tbUnalloc" 
+                    <asp:SliderExtender ID="seUnalloc" runat="server" TargetControlID="tbUnalloc" 
                         BoundControlID="tbUnalloc2" Decimals="2">
                     </asp:SliderExtender>
                     <asp:TextBox ID="tbUnalloc2" runat="server"></asp:TextBox>
                 </td>
             </tr>
-
             <tr>
                 <td align="right">
                     <asp:Label ID="lblDescription" runat="server" Text="Description: "></asp:Label>
@@ -70,9 +72,20 @@
                 <td>
                     <asp:GridView ID="gvEmployees" runat="server">
                     </asp:GridView>
-    <asp:Button ID="btnSave" runat="server" Text="Save Changes" 
-            onclick="btnSave_Click" PostBackUrl="~/RE/ManageWorkPackage.aspx" />
+                    <asp:Button ID="btnSave" runat="server" Text="Save Changes" 
+                            onclick="btnSave_Click" PostBackUrl="~/RE/ManageWorkPackage.aspx" />
+                            <br />
+
+
                 </td>
+            <tr>
+                <td>
+                    <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                </td>
+                <td>
+                    <asp:Label ID="lblBudgetError" runat="server" Text=""></asp:Label>
+                </td>
+            </tr>
             </tr>
             </table>
             <asp:LinkButton ID="lbAssignEmp" runat="server" onclick="lbAssignEmp_Click">Assign a Employee</asp:LinkButton>
@@ -92,5 +105,8 @@
             </Columns>
         </asp:GridView>
         
-    </div><asp:Label ID="lblError" runat="server" Text="Error"></asp:Label>
+    </div>
+    
+    </ContentTemplate>
+    </asp:UpdatePanel>
     </asp:Content>

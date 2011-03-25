@@ -18,3 +18,7 @@ C:\Users\Mike Anderson\Desktop\RM\comp4911-flyingfish\FFLib\bin\Debug\FFLib.pdb
 C:\Users\Mike Anderson\Desktop\RM\comp4911-flyingfish\FFLib\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Mike Anderson\Desktop\RM\comp4911-flyingfish\FFLib\obj\Debug\FFLib.dll
 C:\Users\Mike Anderson\Desktop\RM\comp4911-flyingfish\FFLib\obj\Debug\FFLib.pdb
+C:\comp4911-flyingfish\FFLib\bin\Debug\FFLib.dll.config
+C:\comp4911-flyingfish\FFLib\bin\Debug\FFLib.dll
+C:\comp4911-flyingfish\FFLib\bin\Debug\FFLib.pdb
+C:\comp4911-flyingfish\FFLib\obj\Debug\FFLib.pdb

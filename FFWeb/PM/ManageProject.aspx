@@ -3,14 +3,43 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
+<asp:ScriptManager ID="sm1" runat="server">
+                </asp:ScriptManager>
         <br />
+            <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+            <ContentTemplate>
             <div align="center">
+                
+                
                     <asp:Label ID="lblProjID" runat="server" Text="Project ID: " Font-Bold="true" Font-Size="Large" />
                     <asp:Label ID="lblProjID2" runat="server" Text="" Font-Bold="true" Font-Size="Large" />
                     <br />
                     <asp:Label ID="lblProjName" runat="server" Text="Project Name: " Font-Bold="true" Font-Size="Large" />
                     <asp:Label ID="lblProjName2" runat="server" Text="" Font-Bold="true" Font-Size="Large" />
+                    <br />
+                    <div id="divOriginalAlloc" runat="server">
+                        <asp:Label ID="lblAllocMsg" runat="server" Text="Allocated Budget: " />
+                        <asp:Label ID="lblAlloc2" runat="server" Text=""></asp:Label>
+                        <br />
+                        <asp:Label ID="lblUnallocMsg" runat="server" Text="Unallocated Budget: " />
+                        <asp:Label ID="lblUnalloc2" runat="server" Text="" />
+                        <br />
+                        <asp:Button ID="btnChangeAlloc" runat="server" Text="Edit Budget" 
+                            onclick="btnChangeAlloc_Click" />
+                    </div>
+                    <div id="divChangeAlloc" runat="server" visible="false">
+                        <asp:Label ID="lblAllocMsg2" runat="server" Text="Allocated Budget: " />
+                        <asp:TextBox ID="tbAlloc" runat="server" />
+                        <br />
+                        <asp:Label ID="lblUnallocMsg2" runat="server" Text="Unallocated Budget: " />
+                        <asp:TextBox ID="tbUnalloc" runat="server" />
+                        <br />
+                        <asp:Button ID="btnSaveAlloc" runat="server" Text="Save Changes" 
+                            onclick="btnSaveAlloc_Click" />
+                    </div>
             </div>
+            </ContentTemplate>
+            </asp:UpdatePanel>
                     <br /><br />
                     <asp:Label ID="lblMessage" runat="server" Text="List of work packages:" Font-Bold="true" Font-Size="Large" />
                     <br /><br /><br />
