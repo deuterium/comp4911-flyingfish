@@ -96,7 +96,7 @@ public partial class UserManagement : System.Web.UI.Page
             lastName = tmpLastName,
             empId = Convert.ToInt32(tmpEmpID),
             supervisor = Convert.ToInt32(tmpSupervisor),
-            approver = 456,
+            approver = Convert.ToInt32(tmpSupervisor),
             minHoursPerWeek = 0,
             vacationLeave = 0,
             sickDays = 0,
