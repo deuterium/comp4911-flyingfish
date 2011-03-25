@@ -75,6 +75,7 @@
   <ItemGroup>
     <None Include="FlyingFishClasses.dbml.layout">
       <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
