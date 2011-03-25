@@ -68,7 +68,8 @@ public partial class UserManagement : System.Web.UI.Page
             {
                 empID = u.empId,
                 approver = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
-            });
+            })
+            .OrderBy(u=>u.approver);
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataValueField = "empId";
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataTextField = "approver";
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataBind();
@@ -147,29 +148,22 @@ public partial class UserManagement : System.Web.UI.Page
     //Binds all employees to the gridview
     protected void getAllUsers()
     {
-        //Old code, not complete, may be useful in feature
-        //List<ManagedEmployee> employees = new List<ManagedEmployee>();
-        //var UsersQry = from a in ff.EmployeeMemberships
-        //               select a;
-        //foreach (EmployeeMembership e in UsersQry)
-        //{
-        //    employees.Add(new ManagedEmployee(ff.aspnet_Users.Where(u => u.UserId == e.userId).FirstOrDefault()
-        //        , ff.Employees.Where(emp => emp.empId == e.empId).FirstOrDefault()));
-        //}
-        //gvManageUsers.DataSource = employees;
-
-        gvManageUsers.DataSource = ff.Employees.Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive });
+        gvManageUsers.DataSource = ff.Employees
+            .Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive })
+            .OrderBy(emp => emp.empId);
         gvManageUsers.DataBind();
     }
 
     //Searches for employees containing the provided last name when button clicked
     protected void buttonSearch_Click(object sender, EventArgs e)
     {
+        DivUserGridView.Visible = true;
         DivUserDetails.Visible = false;
         lblUserEditError.Text = "";
-        if (tbSearch.Text == "" || ff.Employees.Where(emp => emp.lastName.Contains(tbSearch.Text))
-                .Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive })
-                .Count() == 0)
+        var searchQry = ff.Employees
+                .Where(emp => emp.lastName.Contains(tbSearch.Text))
+                .Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive });
+        if (tbSearch.Text == "" || searchQry.Count() == 0)
         {
             lblSearchError.Enabled = true;
             lblSearchError.Text = "No Employee results";
@@ -181,7 +175,7 @@ public partial class UserManagement : System.Web.UI.Page
         {
             lblSearchError.Enabled = false;
             lblSearchError.Text = "";
-            gvManageUsers.DataSource = ff.Employees.Where(emp => emp.lastName.Contains(tbSearch.Text)).Select(emp => new { emp.empId, emp.firstName, emp.lastName, emp.vacationLeave, emp.sickDays, emp.flexHours, emp.isActive });
+            gvManageUsers.DataSource = searchQry;
             gvManageUsers.DataBind();
         }
     }
@@ -191,6 +185,7 @@ public partial class UserManagement : System.Web.UI.Page
     {
         DivUserDetails.Visible = false;
         lblSearchError.Enabled = false;
+        DivUserGridView.Visible = true;
         lblUserEditError.Text = "";
         lblSearchError.Text = "";
         getAllUsers();
@@ -293,7 +288,37 @@ public partial class UserManagement : System.Web.UI.Page
         {
             ManagedEmployee.isActive = 0;
         }
-
+        #region Add/Remove Roles
+        List<string> rolesToAdd = new List<string>();
+        List<string> rolesToRemove = new List<string>();
+        foreach (ListItem r in cblUserRoles.Items)
+        {
+            if (r.Selected)
+            {
+                rolesToAdd.Add(r.Text);
+            }
+            else
+            {
+                rolesToRemove.Add(r.Text);
+            }
+        }
+        foreach (string r in rolesToAdd)
+        {
+            try
+            {
+                Roles.AddUserToRole(lblUsername.Text, r);
+            }
+            catch (Exception ex) { }
+        }
+        foreach (string r in rolesToRemove)
+        {
+            try
+            {
+                Roles.RemoveUserFromRole(lblUsername.Text, r);
+            }
+            catch (Exception ex) { }
+        }
+        #endregion
         try
         {
             ff.SubmitChanges();
