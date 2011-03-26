@@ -29,10 +29,10 @@
         </div>
     </div>
 
-    <div class="page">
+    <div class="page"><%--
         <div class="header">
-            
-        </div>
+            USELESSSSSSSSSSSSSSSSSSSSSSSSSSS    
+        </div>--%>
         <div  class="content">
             <asp:ContentPlaceHolder ID="content" runat="server">
             </asp:ContentPlaceHolder>
