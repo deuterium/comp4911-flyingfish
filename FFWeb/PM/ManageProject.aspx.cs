@@ -66,10 +66,10 @@ public partial class PM_ManageProject : System.Web.UI.Page
     protected void btnSaveAlloc_Click(object sender, EventArgs e)
     {
         Project proj = ff.Projects.Where(p => p.projId == Convert.ToInt32(Session["projID"].ToString())).First();
-        proj.allocated_dollars = Convert.ToDecimal(tbAlloc.Text);
+        //proj.allocated_dollars = Convert.ToDecimal(tbAlloc.Text);
         proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
         ff.SubmitChanges();
-        lblAlloc2.Text = proj.allocated_dollars.ToString();
+        //lblAlloc2.Text = proj.allocated_dollars.ToString();
         lblUnalloc2.Text = proj.unallocated_dollars.ToString();
         divOriginalAlloc.Visible = true;
         Response.Redirect("~/PM/ManageProject.aspx");
