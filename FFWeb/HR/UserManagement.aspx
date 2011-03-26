@@ -281,12 +281,18 @@
                                     </td>
                                     <td>
                                         <asp:TextBox ID="tbFirstName" runat="server" Width="125" />
+                                        <asp:RequiredFieldValidator ID="FirstNameRequired" runat="server" 
+                                            ErrorMessage="First name is required." ControlToValidate="tbFirstName" 
+                                            Text="*" Display="Dynamic" ValidationGroup="vgEditUser" ForeColor="Red" />
                                     </td>
                                     <td>
                                         Last Name:
                                     </td>
                                     <td>
                                         <asp:TextBox ID="tbLastName" runat="server" Width="125" />
+                                        <asp:RequiredFieldValidator ID="LastNameRequired" runat="server" 
+                                            ErrorMessage="Last name is required." ControlToValidate="tbLastName" 
+                                            Text="*" Display="Dynamic" ValidationGroup="vgEditUser" ForeColor="Red" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -295,12 +301,19 @@
                                     </td>
                                     <td>
                                         <asp:ListBox ID="lbSupervisors" Width="125" runat="server" />
+                                        <asp:RequiredFieldValidator ID="SupervisorRequired" runat="server" 
+                                            ErrorMessage="A supervisor is required." ControlToValidate="lbSupervisors" 
+                                            Text="*" Display="Dynamic" ValidationGroup="vgEditUser" ForeColor="Red" />
+                                        
                                     </td>
                                     <td>
                                         Timesheet Approver:
                                     </td>
                                     <td>
                                         <asp:ListBox ID="lbApprovers" Width="125" runat="server" />
+                                        <asp:RequiredFieldValidator ID="ApproverEditRequired" runat="server" 
+                                            ErrorMessage="An approver is required." ControlToValidate="lbApprovers" 
+                                            Text="*" Display="Dynamic" ValidationGroup="vgEditUser" ForeColor="Red" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -309,12 +322,26 @@
                                     </td>
                                     <td>
                                         <asp:TextBox ID="tbVacation" Width="125" runat="server" />
+                                        <asp:RequiredFieldValidator ID="VacationRequired" runat="server" 
+                                            ErrorMessage="Vacation hours are required." ControlToValidate="tbVacation" 
+                                            Text="*" Display="Dynamic" ValidationGroup="vgEditUser" ForeColor="Red" />
+                                        <asp:CompareValidator ID="VacationTypeCheck" runat="server" 
+                                            ErrorMessage="Vacation time must be a number of days." 
+                                            ControlToValidate="tbVacation" Display="Dynamic" ForeColor="Red" 
+                                            Operator="DataTypeCheck" ValidationGroup="vgEditUser" Type="Double" >*</asp:CompareValidator>
                                     </td>
                                     <td>
                                         Sick Days:
                                     </td>
                                     <td>
                                         <asp:TextBox ID="tbSickDays" Width="125" runat="server" />
+                                        <asp:RequiredFieldValidator ID="SickDaysRequired" runat="server" 
+                                            ErrorMessage="Sick Days are required." ControlToValidate="tbSickDays" 
+                                            Text="*" Display="Dynamic" ValidationGroup="vgEditUser" ForeColor="Red" />
+                                        <asp:CompareValidator ID="SickDaysTypeCheck" runat="server" 
+                                            ErrorMessage="Sick Days must be a number of days." 
+                                            ControlToValidate="tbSickDays" Display="Dynamic" ForeColor="Red" 
+                                            Operator="DataTypeCheck" ValidationGroup="vgEditUser" Type="Double" >*</asp:CompareValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -323,12 +350,26 @@
                                     </td>
                                     <td>
                                         <asp:TextBox ID="tbMinHours" Width="125" runat="server" />
+                                        <asp:RequiredFieldValidator ID="MinHoursRequired" runat="server" 
+                                            ErrorMessage="Min. Hours are required." ControlToValidate="tbMinHours" 
+                                            Text="*" Display="Dynamic" ValidationGroup="vgEditUser" ForeColor="Red" />
+                                        <asp:CompareValidator ID="MinHoursTypeCheck" runat="server" 
+                                            ErrorMessage="Min. hours must be a number of hours." 
+                                            ControlToValidate="tbMinHours" Display="Dynamic" ForeColor="Red" 
+                                            Operator="DataTypeCheck" ValidationGroup="vgEditUser" Type="Double" >*</asp:CompareValidator>
                                     </td>
                                     <td>
                                         Flex Hours:
                                     </td>
                                     <td>
                                         <asp:TextBox ID="tbFlexHours" Width="125" runat="server" />
+                                        <asp:RequiredFieldValidator ID="FlexHoursRequired" runat="server" 
+                                            ErrorMessage="Flex Hours are required." ControlToValidate="tbFlexHours" 
+                                            Text="*" Display="Dynamic" ValidationGroup="vgEditUser" ForeColor="Red" />
+                                        <asp:CompareValidator ID="FlexHoursTypeCheck" runat="server" 
+                                            ErrorMessage="Flex hours must be a number of hours." 
+                                            ControlToValidate="tbFlexHours" Display="Dynamic" ForeColor="Red" 
+                                            Operator="DataTypeCheck" ValidationGroup="vgEditUser" Type="Double" >*</asp:CompareValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -362,8 +403,12 @@
                     </tr>
                 </table>
                 <asp:Button ID="buttonDetailsCancel" runat="server" Text="Cancel Editing" OnClick="buttonDetailsCancel_Click" />
-                &nbsp;<asp:Button ID="buttonDetailsSubmit" Text="Submit Changes" runat="server" OnClick="buttonDetailsSubmit_Click" />
-                &nbsp;<asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
+                &nbsp;<asp:Button ID="buttonDetailsSubmit" Text="Submit Changes" ValidationGroup="vgEditUser"
+                    runat="server" OnClick="buttonDetailsSubmit_Click" />
+                <br />
+                <asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
+                <asp:ValidationSummary ID="vsEditUser" runat="server" 
+                    ValidationGroup="vgEditUser" DisplayMode="List" ForeColor="Red"/>
             </div>
         </div>
     </div>
