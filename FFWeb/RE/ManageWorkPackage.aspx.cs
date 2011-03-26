@@ -13,7 +13,6 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     static double allocOriginal;
     static double unallocOriginal;
-    static decimal totalBudget;
     #region Page_Load
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -24,27 +23,29 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     wp.wpId == lblWPID2.Text
                 )
                 select new { wp.allocated_dollars, wp.unallocated_dollars, wp.name, wp.description, wp.projId};
-        string alloc = qry.First().allocated_dollars.ToString();
-        string unalloc = qry.First().unallocated_dollars.ToString();
+        string alloc = qry.First().allocated_dollars.ToString() == "" ? "0" : qry.First().allocated_dollars.ToString();
+        string unalloc = qry.First().unallocated_dollars.ToString() == "" ? "0" : qry.First().unallocated_dollars.ToString();
         tbUnalloc.Text = unalloc;
         tbAlloc.Text = alloc;
+
         if ((Convert.ToDecimal(tbUnalloc.Text) > getBudget(qry.First().projId)) &&
             Convert.ToDecimal(tbUnalloc.Text) > Convert.ToDecimal(tbAlloc.Text))
         {
-            totalBudget = Convert.ToDecimal(tbUnalloc.Text) + Convert.ToDecimal(tbAlloc.Text);
-            seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbUnalloc.Text);
+            getTotalBudget(qry.First().projId);
+            //seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbUnalloc.Text);
         } else if((Convert.ToDecimal(tbAlloc.Text) > getBudget(qry.First().projId)) &&
             Convert.ToDecimal(tbUnalloc.Text) < Convert.ToDecimal(tbAlloc.Text))
         {
-            totalBudget = Convert.ToDecimal(tbUnalloc.Text) + Convert.ToDecimal(tbAlloc.Text);
-            seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbAlloc.Text);
-        } else
-            seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(getBudget(qry.First().projId));
+            getTotalBudget(qry.First().projId);
+            //seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbAlloc.Text);
+        }// else
+        seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(getTotalBudget(qry.First().projId));
         lblWPName2.Text = qry.Single().name.ToString();
         string desc = qry.Single().description.ToString();
         updateDesc(desc);
         updategvEmployees();
-
+        divAssignEmp.Visible = false;
+        //divAssignRE.Visible = false;
         allocOriginal = Convert.ToDouble(tbAlloc.Text);
         unallocOriginal = Convert.ToDouble(tbUnalloc.Text);
 
@@ -135,8 +136,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     wp.wpId == Session["wpID"].ToString()
                 )
                 select new { wp.projId };
-        if ((Convert.ToDecimal(tbUnalloc2.Text) + Convert.ToDecimal(tbAlloc2.Text)) > (totalBudget + getBudget(qry.First().projId)))
-            lblBudgetError.Text = "Please change the values of Allocated Budget and Unallocated Budget to have a sum below " + (totalBudget + getBudget(qry.First().projId));
+        if ((Convert.ToDecimal(tbUnalloc2.Text) + Convert.ToDecimal(tbAlloc2.Text)) > getTotalBudget(qry.First().projId))
+            lblBudgetError.Text = "Please change the values of Allocated Budget and Unallocated Budget to have a sum below " + getTotalBudget(qry.First().projId);
         else
         {
             lblBudgetError.Text = "";
@@ -144,9 +145,9 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
             obj.unallocated_dollars = Convert.ToDecimal(tbUnalloc2.Text);
             obj.allocated_dollars = Convert.ToDecimal(tbAlloc2.Text);
             obj.description = tbDescription.Text;
+            
             ff.SubmitChanges();
             updateProject(Convert.ToInt32(qry.First().projId), Convert.ToDecimal(tbUnalloc2.Text), Convert.ToDecimal(tbAlloc2.Text));
-            //success msg
             tbAlloc.Text = tbAlloc2.Text;
             tbUnalloc.Text = tbUnalloc2.Text;
             Response.Redirect("~/RE/ManageWorkPackage.aspx");
@@ -165,6 +166,11 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         Response.Redirect("~/PM/ManageProject.aspx");
     }
     #endregion
+
+    protected decimal getTotalBudget(int id)
+    {
+        return Convert.ToDecimal(tbUnalloc.Text) + Convert.ToDecimal(tbAlloc.Text) + getBudget(id);
+    }
 
     protected decimal getBudget(int id)
     {
@@ -204,4 +210,5 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
 
         ff.SubmitChanges();
     }
+
 }

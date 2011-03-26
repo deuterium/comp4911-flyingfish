@@ -103,9 +103,7 @@
                 <asp:ButtonField ButtonType="Button" Text="Add" CommandName="btnAdd" />
             </Columns>
         </asp:GridView>
-        
     </div>
-    
     </ContentTemplate>
     </asp:UpdatePanel>
     </asp:Content>

@@ -37,14 +37,14 @@
                     ForeColor="Red" ValidationExpression="^[a-zA-Z\s]+$">*</asp:RegularExpressionValidator>
             </td>
         </tr>
-        <tr>
+       <!-- <tr>
             <td align="right">
                 <asp:Label ID="lblAlloc" runat="server" Text="Allocated Budget: "></asp:Label>
             </td>
             <td>
                 <asp:TextBox ID="tbAlloc" runat="server"></asp:TextBox>
             </td>
-        </tr>
+        </tr>-->
         <tr>
             <td align="right">
                 <asp:Label ID="lblUnalloc" runat="server" Text="Unallocated Budget: "></asp:Label>

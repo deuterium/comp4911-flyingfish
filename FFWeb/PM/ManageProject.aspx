@@ -17,10 +17,11 @@
                     <asp:Label ID="lblProjName" runat="server" Text="Project Name: " Font-Bold="true" Font-Size="Large" />
                     <asp:Label ID="lblProjName2" runat="server" Text="" Font-Bold="true" Font-Size="Large" />
                     <br />
-                    <div id="divOriginalAlloc" runat="server">
+                    
                         <asp:Label ID="lblAllocMsg" runat="server" Text="Allocated Budget: " />
                         <asp:Label ID="lblAlloc2" runat="server" Text=""></asp:Label>
                         <br />
+                    <div id="divOriginalAlloc" runat="server">
                         <asp:Label ID="lblUnallocMsg" runat="server" Text="Unallocated Budget: " />
                         <asp:Label ID="lblUnalloc2" runat="server" Text="" />
                         <br />
@@ -28,9 +29,9 @@
                             onclick="btnChangeAlloc_Click" />
                     </div>
                     <div id="divChangeAlloc" runat="server" visible="false">
-                        <asp:Label ID="lblAllocMsg2" runat="server" Text="Allocated Budget: " />
+                        <!--<asp:Label ID="lblAllocMsg2" runat="server" Text="Allocated Budget: " />
                         <asp:TextBox ID="tbAlloc" runat="server" />
-                        <br />
+                        <br />-->
                         <asp:Label ID="lblUnallocMsg2" runat="server" Text="Unallocated Budget: " />
                         <asp:TextBox ID="tbUnalloc" runat="server" />
                         <br />
