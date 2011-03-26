@@ -82,14 +82,6 @@ public partial class UserManagement : System.Web.UI.Page
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).Rows = 3;
     }
 
-    //Sets approver to match supervisor when supervisor is changed
-    protected void SupervisorList_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).SelectedIndex
-            = ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).SelectedIndex;
-        ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).SelectedItem.Selected = true;
-    }
-
     //Adds the newly created user to the Employee table and links them together in EmployeeMembership
     protected void cuwCreateUser_CreatedUser(object sender, EventArgs e)
     {
