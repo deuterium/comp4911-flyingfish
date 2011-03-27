@@ -6,9 +6,8 @@
     <div id="DivUserManagement">
         <asp:ToolkitScriptManager ID="ToolkitScriptManager" runat="server">
         </asp:ToolkitScriptManager>
-        <asp:Timer ID="ErrorTimer" runat="server" ontick="ErrorTimer_Tick" 
-            Interval="4000">
-                </asp:Timer>
+        <asp:Timer ID="ErrorTimer" runat="server" OnTick="ErrorTimer_Tick" Interval="4000">
+        </asp:Timer>
         <div id="DivUserManagementMenu" runat="server">
             <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="CreateUserLabel"
                 runat="server" OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
@@ -290,9 +289,16 @@
             <hr />
             <asp:Label ID="lblSearchError" runat="server" Enabled="False"></asp:Label>
             <div id="DivUserGridView" runat="server">
-                <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged"
-                    HorizontalAlign="Center">
-                </asp:GridView>
+                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                    <ContentTemplate>
+                        <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged"
+                            HorizontalAlign="Center" AllowPaging="True" OnPageIndexChanging="gvManageUsers_PageIndexChanging">
+                        </asp:GridView>
+                    </ContentTemplate>
+                    <Triggers>
+                        <asp:AsyncPostBackTrigger ControlID="gvManageUsers" EventName="PageIndexChanging" />
+                    </Triggers>
+                </asp:UpdatePanel>
             </div>
             <br />
             <div id="DivUserDetails" runat="server" visible="false">
@@ -464,14 +470,13 @@
                     runat="server" OnClick="buttonDetailsSubmit_Click" />
                 <br />
                 <asp:UpdatePanel ID="EditUpdatePanel" runat="server">
-                <ContentTemplate>
-                    <asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
-                </ContentTemplate>
-                <Triggers>
-                    <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick" />
-                </Triggers>
+                    <ContentTemplate>
+                        <asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
+                    </ContentTemplate>
+                    <Triggers>
+                        <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick" />
+                    </Triggers>
                 </asp:UpdatePanel>
-                
                 <asp:ValidationSummary ID="vsEditUser" runat="server" ValidationGroup="vgEditUser"
                     DisplayMode="List" ForeColor="Red" />
             </div>
@@ -509,12 +514,12 @@
             </tr>
         </table>
         <asp:UpdatePanel ID="UpdatePanel_AssignUser" runat="server">
-        <ContentTemplate>
-            <asp:Label ID="AssignLabel" runat="server" Text=""></asp:Label>
-        </ContentTemplate>
-        <Triggers>
-            <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick"/>
-        </Triggers>
-        </asp:UpdatePanel>        
+            <ContentTemplate>
+                <asp:Label ID="AssignLabel" runat="server" Text=""></asp:Label>
+            </ContentTemplate>
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick" />
+            </Triggers>
+        </asp:UpdatePanel>
     </div>
 </asp:Content>

@@ -175,6 +175,14 @@ public partial class UserManagement : System.Web.UI.Page
         gvManageUsers.DataBind();
     }
 
+    //Used to page navigation on the manage users gridview
+    protected void gvManageUsers_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        getAllUsers();
+        gvManageUsers.PageIndex = e.NewPageIndex;
+        gvManageUsers.DataBind();
+    }
+
     #region Button_Click Methods
     //Searches for employees containing the provided last name when button clicked
     protected void buttonSearch_Click(object sender, EventArgs e)
