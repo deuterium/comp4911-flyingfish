@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.Security;
+using System.Web.UI.WebControls;
 using FFLib;
 
 public partial class UserManagement : System.Web.UI.Page
@@ -253,7 +251,7 @@ public partial class UserManagement : System.Web.UI.Page
             {
                 Roles.AddUserToRole(lblUsername.Text, r);
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { ex.ToString(); }
         }
         foreach (string r in rolesToRemove)
         {
@@ -261,7 +259,7 @@ public partial class UserManagement : System.Web.UI.Page
             {
                 Roles.RemoveUserFromRole(lblUsername.Text, r);
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { ex.ToString(); }
         }
         #endregion
         try

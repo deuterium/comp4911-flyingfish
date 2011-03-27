@@ -5,9 +5,12 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <div id="DivUserManagement">
         <div id="DivUserManagementMenu" runat="server">
-            <asp:LinkButton class="InPageNav" width="33%" ID="CreateUserLabel" runat="server" OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
-            <asp:LinkButton class="InPageNav" width="33%" ID="ManageUserLabel" runat="server" OnClick="ManageUserLabel_Click">Manage Existing Employee</asp:LinkButton>
-            <asp:LinkButton class="InPageNav" width="33%" ID="AssignUserLabel" runat="server" OnClick="AssignUserLabel_Click">Assign Employee to Project</asp:LinkButton>
+            <asp:LinkButton class="InPageNav" Width="33%" ID="CreateUserLabel" runat="server"
+                OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
+            <asp:LinkButton class="InPageNav" Width="33%" ID="ManageUserLabel" runat="server"
+                OnClick="ManageUserLabel_Click">Manage Existing Employee</asp:LinkButton>
+            <asp:LinkButton class="InPageNav" Width="33%" ID="AssignUserLabel" runat="server"
+                OnClick="AssignUserLabel_Click">Assign Employee to Project</asp:LinkButton>
         </div>
         <div id="DivUserMain" runat="server">
             <br />
@@ -63,7 +66,10 @@
                                                     <asp:TextBox ID="FirstName" runat="server" Width="146"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="FirstNameRequired" runat="server" ControlToValidate="FirstName"
                                                         ErrorMessage="First Name is required." ToolTip="First Name is required." ValidationGroup="cuwCreateUser"
-                                                        ForeColor="Red">*</asp:RequiredFieldValidator>
+                                                        ForeColor="Red" Display="Dynamic">*</asp:RequiredFieldValidator>
+                                                    <asp:RegularExpressionValidator ID="FirstNameFormatValidator" runat="server" ErrorMessage="First name must only contain alphabet characters."
+                                                        ControlToValidate="FirstName" Display="Dynamic" ForeColor="Red" ValidationExpression="[a-zA-Z]{1,}"
+                                                        ValidationGroup="cuwCreateUser">*</asp:RegularExpressionValidator>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -75,6 +81,9 @@
                                                     <asp:RequiredFieldValidator ID="LastNameRequired" runat="server" ControlToValidate="LastName"
                                                         ErrorMessage="Last Name is required." ToolTip="LastName is required." ValidationGroup="cuwCreateUser"
                                                         ForeColor="Red">*</asp:RequiredFieldValidator>
+                                                    <asp:RegularExpressionValidator ID="LastNameFormatValidator" runat="server" ErrorMessage="Last name must only contain alphabet characters."
+                                                        ControlToValidate="LastName" Display="Dynamic" ForeColor="Red" ValidationExpression="[a-zA-Z]{1,}"
+                                                        ValidationGroup="cuwCreateUser">*</asp:RegularExpressionValidator>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -111,6 +120,9 @@
                                                     <asp:RequiredFieldValidator ID="EmailRequired" runat="server" ControlToValidate="Email"
                                                         ErrorMessage="Email is required." ToolTip="Email is required." ValidationGroup="cuwCreateUser"
                                                         ForeColor="Red">*</asp:RequiredFieldValidator>
+                                                    <asp:RegularExpressionValidator ID="EmailFormatValidator" runat="server" ErrorMessage="Please enter a correctly formatted email address."
+                                                        Text="*" Display="Dynamic" ControlToValidate="Email" ForeColor="Red" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
+                                                        ValidationGroup="cuwCreateUser" />
                                                 </td>
                                             </tr>
                                             <tr>
@@ -193,24 +205,62 @@
                                             </tr>
                                         </table>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" colspan="2">
-                                        <asp:CompareValidator ID="PasswordCompare" runat="server" ControlToCompare="Password"
-                                            ControlToValidate="ConfirmPassword" Display="Dynamic" ErrorMessage="The Password and Confirmation Password must match."
-                                            ValidationGroup="cuwCreateUser"></asp:CompareValidator>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" colspan="2" style="color: Red;">
-                                        <asp:Label ID="lblUserWizardError" Enabled="false" Text="" runat="server" />
-                                        <asp:Literal ID="ErrorMessage" runat="server" EnableViewState="False"></asp:Literal>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td align="center">
+                                                    <asp:CompareValidator ID="PasswordCompare" runat="server" ControlToCompare="Password"
+                                                        ControlToValidate="ConfirmPassword" Display="Dynamic" ErrorMessage="The Password and Confirmation Password must match."
+                                                        ValidationGroup="cuwCreateUser" ForeColor="Red"></asp:CompareValidator>
+                                                    <asp:ValidationSummary ID="CreateUserValidationSummary" runat="server" ValidationGroup="cuwCreateUser"
+                                                        DisplayMode="List" ForeColor="Red" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center" style="color: Red;">
+                                                    <asp:Label ID="lblUserWizardError" Enabled="false" Text="" runat="server" />
+                                                    <asp:Literal ID="ErrorMessage" runat="server" EnableViewState="False"></asp:Literal>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                             </table>
                         </ContentTemplate>
+                        <CustomNavigationTemplate>
+                            <table border="0" cellspacing="5" style="width: 100%; height: 100%;">
+                                <tr align="right">
+                                    <td align="left" colspan="0">
+                                        <asp:Button ID="StepNextButton" runat="server" BackColor="White" BorderColor="#507CD1"
+                                            BorderStyle="Solid" BorderWidth="1px" CommandName="MoveNext" Font-Names="Verdana"
+                                            ForeColor="#284E98" Text="Create New Employee" ValidationGroup="cuwCreateUser" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </CustomNavigationTemplate>
                     </asp:CreateUserWizardStep>
                     <asp:CompleteWizardStep ID="wsEmployeeComplete" runat="server">
+                        <ContentTemplate>
+                            <table style="font-family: Verdana; font-size: 100%;">
+                                <tr>
+                                    <td align="center" style="color: White; background-color: #507CD1; font-weight: bold;">
+                                        Complete
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        The account has been successfully created.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <asp:Button ID="ContinueButton" runat="server" BackColor="White" BorderColor="#507CD1"
+                                            BorderStyle="Solid" BorderWidth="1px" CausesValidation="False" CommandName="Continue"
+                                            Font-Names="Verdana" ForeColor="#284E98" Text="Create another Employee" ValidationGroup="cuwCreateUser" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </ContentTemplate>
                     </asp:CompleteWizardStep>
                 </WizardSteps>
                 <HeaderStyle BackColor="#284E98" BorderColor="#EFF3FB" BorderStyle="Solid" BorderWidth="2px"
@@ -271,6 +321,9 @@
                                         <asp:RequiredFieldValidator ID="FirstNameRequired" runat="server" ErrorMessage="First name is required."
                                             ControlToValidate="tbFirstName" Text="*" Display="Dynamic" ValidationGroup="vgEditUser"
                                             ForeColor="Red" />
+                                        <asp:RegularExpressionValidator ID="EditFirstNameFormatValidator" runat="server"
+                                            ErrorMessage="First name must only contain alphabet characters." ControlToValidate="tbFirstName"
+                                            Display="Dynamic" ForeColor="Red" ValidationExpression="[a-zA-Z]{1,}" ValidationGroup="vgEditUser">*</asp:RegularExpressionValidator>
                                     </td>
                                     <td>
                                         Last Name:
@@ -280,6 +333,9 @@
                                         <asp:RequiredFieldValidator ID="LastNameRequired" runat="server" ErrorMessage="Last name is required."
                                             ControlToValidate="tbLastName" Text="*" Display="Dynamic" ValidationGroup="vgEditUser"
                                             ForeColor="Red" />
+                                        <asp:RegularExpressionValidator ID="EditlastNameFormatValidator" runat="server" ErrorMessage="First name must only contain alphabet characters."
+                                            ControlToValidate="tbLastName" Display="Dynamic" ForeColor="Red" ValidationExpression="[a-zA-Z]{1,}"
+                                            ValidationGroup="vgEditUser">*</asp:RegularExpressionValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -314,6 +370,9 @@
                                         <asp:CompareValidator ID="VacationTypeCheck" runat="server" ErrorMessage="Vacation time must be a number of days."
                                             ControlToValidate="tbVacation" Display="Dynamic" ForeColor="Red" Operator="DataTypeCheck"
                                             ValidationGroup="vgEditUser" Type="Double">*</asp:CompareValidator>
+                                        <asp:RangeValidator ID="VacationNegativeCheck" runat="server" ErrorMessage="Vacation leave cannot be negative."
+                                            ControlToValidate="tbVacation" Display="Dynamic" ForeColor="Red" ValidationGroup="vgEditUser"
+                                            MinimumValue="0" MaximumValue="99999">*</asp:RangeValidator>
                                     </td>
                                     <td>
                                         Sick Days:
@@ -326,6 +385,9 @@
                                         <asp:CompareValidator ID="SickDaysTypeCheck" runat="server" ErrorMessage="Sick Days must be a number of days."
                                             ControlToValidate="tbSickDays" Display="Dynamic" ForeColor="Red" Operator="DataTypeCheck"
                                             ValidationGroup="vgEditUser" Type="Double">*</asp:CompareValidator>
+                                        <asp:RangeValidator ID="SickDaysNegativeCheck" runat="server" ErrorMessage="Sick Days cannot be negative."
+                                            ControlToValidate="tbSickDays" Display="Dynamic" ForeColor="Red" ValidationGroup="vgEditUser"
+                                            MinimumValue="0" MaximumValue="99999">*</asp:RangeValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -340,6 +402,9 @@
                                         <asp:CompareValidator ID="MinHoursTypeCheck" runat="server" ErrorMessage="Min. hours must be a number of hours."
                                             ControlToValidate="tbMinHours" Display="Dynamic" ForeColor="Red" Operator="DataTypeCheck"
                                             ValidationGroup="vgEditUser" Type="Double">*</asp:CompareValidator>
+                                        <asp:RangeValidator ID="MinHoursNegativeCheck" runat="server" ErrorMessage="Min hours cannot be negative."
+                                            ControlToValidate="tbMinHours" Display="Dynamic" ForeColor="Red" ValidationGroup="vgEditUser"
+                                            MinimumValue="0" MaximumValue="99999">*</asp:RangeValidator>
                                     </td>
                                     <td>
                                         Flex Hours:
@@ -352,6 +417,9 @@
                                         <asp:CompareValidator ID="FlexHoursTypeCheck" runat="server" ErrorMessage="Flex hours must be a number of hours."
                                             ControlToValidate="tbFlexHours" Display="Dynamic" ForeColor="Red" Operator="DataTypeCheck"
                                             ValidationGroup="vgEditUser" Type="Double">*</asp:CompareValidator>
+                                        <asp:RangeValidator ID="FlexHoursNegativeCheck" runat="server" ErrorMessage="Flex hours cannot be negative."
+                                            ControlToValidate="tbFlexHours" Display="Dynamic" ForeColor="Red" ValidationGroup="vgEditUser"
+                                            MinimumValue="0" MaximumValue="99999">*</asp:RangeValidator>
                                     </td>
                                 </tr>
                                 <tr>
@@ -398,4 +466,12 @@
         <br />
         <img src="../images/paws.gif" alt="paws" />
     </div>
+</asp:Content>
+<asp:Content ID="Content3" runat="server" ContentPlaceHolderID="head">
+    <style type="text/css">
+        .style1
+        {
+            width: 142px;
+        }
+    </style>
 </asp:Content>
