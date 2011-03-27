@@ -15,6 +15,13 @@ public partial class UserManagement : System.Web.UI.Page
     {
     }
 
+    //Timer for certain errors to clear
+    protected void ErrorTimer_Tick(object sender, EventArgs e)
+    {
+        AssignLabel.Text = "";
+        lblUserEditError.Text = "";
+    }
+
     #region Menu Items
     //Shows the create employee div when link is clicked
     protected void lbCreateUser_Click(object sender, EventArgs e)
@@ -54,6 +61,7 @@ public partial class UserManagement : System.Web.UI.Page
         }
         DivAssignUsers.Visible = true;
         popluateUnassignedEmployeesAndProjects();
+        AssignLabel.Text = "";
     }
     #endregion
 
@@ -373,6 +381,29 @@ public partial class UserManagement : System.Web.UI.Page
         ddlProjectsToAssignTo.DataBind();
     }
 
-    //METHOD
+    //Adds select employee to selected project and repopulates the list
+    protected void buttonAddToProject_Click(object sender, EventArgs e)
+    {
+        EmployeeProject ep = new EmployeeProject();
+        ep.empId = Convert.ToInt32(lbUnassignedUsers.SelectedValue);
+        ep.projId = Convert.ToInt32(ddlProjectsToAssignTo.SelectedValue);
+
+        ff.EmployeeProjects.InsertOnSubmit(ep);
+
+        try
+        {
+            ff.SubmitChanges();
+        }
+        catch (Exception ex)
+        {
+            AssignLabel.Text = ex.StackTrace;
+            AssignLabel.ForeColor = System.Drawing.Color.Red;
+        }
+        //refreshes lb and ddl
+        popluateUnassignedEmployeesAndProjects();
+
+        AssignLabel.Text = "Employee has been assigned to Project";
+        AssignLabel.ForeColor = System.Drawing.Color.Green;
+    }
     #endregion
 }

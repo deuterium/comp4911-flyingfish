@@ -4,13 +4,18 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <div id="DivUserManagement">
+        <asp:ToolkitScriptManager ID="ToolkitScriptManager" runat="server">
+        </asp:ToolkitScriptManager>
+        <asp:Timer ID="ErrorTimer" runat="server" ontick="ErrorTimer_Tick" 
+            Interval="4000">
+                </asp:Timer>
         <div id="DivUserManagementMenu" runat="server">
-            <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%"  ID="CreateUserLabel" 
-            runat="server" OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
-            <asp:LinkButton CssClass="DivUserManagementMenu"  Width="33%" ID="ManageUserLabel" 
-            runat="server" OnClick="ManageUserLabel_Click">Manage Existing Employee</asp:LinkButton>
-            <asp:LinkButton CssClass="DivUserManagementMenu"  Width="33%" ID="AssignUserLabel" 
-            runat="server" OnClick="AssignUserLabel_Click">Assign Employee to Project</asp:LinkButton>
+            <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="CreateUserLabel"
+                runat="server" OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
+            <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="ManageUserLabel"
+                runat="server" OnClick="ManageUserLabel_Click">Manage Existing Employee</asp:LinkButton>
+            <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="AssignUserLabel"
+                runat="server" OnClick="AssignUserLabel_Click">Assign Employee to Project</asp:LinkButton>
         </div>
         <div id="DivUserMain" runat="server">
             <br />
@@ -40,8 +45,8 @@
                 CreateUserButtonText="Create New Employee" OnCreatedUser="cuwCreateUser_CreatedUser"
                 LoginCreatedUser="False" OnCreatingUser="cuwCreateUser_CreatingUser" OnContinueButtonClick="cuwCreateUser_ContinueButtonClick"
                 CompleteSuccessText="The account has been successfully created." ContinueButtonText="Create another Employee"
-                EnableViewState="False" 
-                DuplicateUserNameErrorMessage="Username is already in use." Width="750px">
+                EnableViewState="False" DuplicateUserNameErrorMessage="Username is already in use."
+                Width="750px">
                 <ContinueButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
                     BorderWidth="1px" Font-Names="Verdana" ForeColor="#284E98" />
                 <CreateUserButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
@@ -285,8 +290,8 @@
             <hr />
             <asp:Label ID="lblSearchError" runat="server" Enabled="False"></asp:Label>
             <div id="DivUserGridView" runat="server">
-                <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" 
-                OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged" HorizontalAlign="Center">
+                <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged"
+                    HorizontalAlign="Center">
                 </asp:GridView>
             </div>
             <br />
@@ -458,7 +463,15 @@
                 &nbsp;<asp:Button ID="buttonDetailsSubmit" Text="Submit Changes" ValidationGroup="vgEditUser"
                     runat="server" OnClick="buttonDetailsSubmit_Click" />
                 <br />
-                <asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
+                <asp:UpdatePanel ID="EditUpdatePanel" runat="server">
+                <ContentTemplate>
+                    <asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
+                </ContentTemplate>
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick" />
+                </Triggers>
+                </asp:UpdatePanel>
+                
                 <asp:ValidationSummary ID="vsEditUser" runat="server" ValidationGroup="vgEditUser"
                     DisplayMode="List" ForeColor="Red" />
             </div>
@@ -466,15 +479,17 @@
     </div>
     <div id="DivAssignUsers" runat="server" visible="false">
         <br />
-        This page is for assigning unassigned Employees to a project. Please select an employee in the list of unassigned employees, then pick the project you want to add them to.
-        Once you have confirmed it is the correct Employee and project, click the <i>Add to Project</i> button.
+        This page is for assigning unassigned Employees to a project. Please select an employee
+        in the list of unassigned employees, then pick the project you want to add them
+        to. Once you have confirmed it is the correct Employee and project, click the <i>Add
+            to Project</i> button.
         <table>
             <tr>
-            <td>
-                Unassigned Employees:
-            </td>
                 <td>
-                    <asp:ListBox ID="lbUnassignedUsers" runat="server" />
+                    Unassigned Employees:
+                </td>
+                <td>
+                    <asp:ListBox ID="lbUnassignedUsers" runat="server" AutoPostBack="True" />
                 </td>
                 <td>
                     Project to assign to:
@@ -485,13 +500,21 @@
             </tr>
             <tr>
                 <td colspan="4" align="right">
-                    <asp:RequiredFieldValidator ID="SelectUserRequired" runat="server" 
-                        ErrorMessage="Please select an Employee." ControlToValidate="lbUnassignedUsers" 
-                        Display="Dynamic" ForeColor="Red" ValidationGroup="vgAssignUser"></asp:RequiredFieldValidator> &nbsp;
-                    <asp:Button ID="buttonAddToProject" Text="Add to Project" runat="server" 
+                    <asp:RequiredFieldValidator ID="SelectUserRequired" runat="server" ErrorMessage="Please select an Employee."
+                        ControlToValidate="lbUnassignedUsers" Display="Dynamic" ForeColor="Red" ValidationGroup="vgAssignUser"></asp:RequiredFieldValidator>
+                    &nbsp;
+                    <asp:Button ID="buttonAddToProject" Text="Add to Project" runat="server" OnClick="buttonAddToProject_Click"
                         ValidationGroup="vgAssignUser" />
                 </td>
             </tr>
         </table>
+        <asp:UpdatePanel ID="UpdatePanel_AssignUser" runat="server">
+        <ContentTemplate>
+            <asp:Label ID="AssignLabel" runat="server" Text=""></asp:Label>
+        </ContentTemplate>
+        <Triggers>
+            <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick"/>
+        </Triggers>
+        </asp:UpdatePanel>        
     </div>
 </asp:Content>
