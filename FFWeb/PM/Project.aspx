@@ -20,6 +20,9 @@
                 <asp:CompareValidator ID="cvID" runat="server" 
                     ErrorMessage="ID must be an integer." ForeColor="Red" Operator="DataTypeCheck" 
                     Type="Integer" ControlToValidate="tbProjectID">*</asp:CompareValidator>
+                <asp:RangeValidator ID="rvID" ControlToValidate="tbProjectID" runat="server" 
+                    ErrorMessage="ID must be a positive value." ForeColor="Red" MinimumValue="1" 
+                    MaximumValue="9999999999999999">*</asp:RangeValidator>
             </td>
         </tr>
         <tr>
