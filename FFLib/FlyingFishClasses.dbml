@@ -273,4 +273,20 @@
       <Column Name="lastName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Table Name="dbo.vwUnassignedEmployees" Member="vwUnassignedEmployees">
+    <Type Name="vwUnassignedEmployee">
+      <Column Name="projId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="empId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Expr1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="firstName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="lastName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="supervisor" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="approver" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="minHoursPerWeek" Type="System.Decimal" DbType="Decimal(3,1) NOT NULL" CanBeNull="false" />
+      <Column Name="vacationLeave" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="sickDays" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="flexHours" Type="System.Decimal" DbType="Decimal(3,1) NOT NULL" CanBeNull="false" />
+      <Column Name="isActive" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
 </Database>

@@ -466,14 +466,32 @@
     </div>
     <div id="DivAssignUsers" runat="server" visible="false">
         <br />
-        <img src="../images/paws.gif" alt="paws" />
+        This page is for assigning unassigned Employees to a project. Please select an employee in the list of unassigned employees, then pick the project you want to add them to.
+        Once you have confirmed it is the correct Employee and project, click the <i>Add to Project</i> button.
+        <table>
+            <tr>
+            <td>
+                Unassigned Employees:
+            </td>
+                <td>
+                    <asp:ListBox ID="lbUnassignedUsers" runat="server" />
+                </td>
+                <td>
+                    Project to assign to:
+                </td>
+                <td>
+                    <asp:DropDownList ID="ddlProjectsToAssignTo" runat="server" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="right">
+                    <asp:RequiredFieldValidator ID="SelectUserRequired" runat="server" 
+                        ErrorMessage="Please select an Employee." ControlToValidate="lbUnassignedUsers" 
+                        Display="Dynamic" ForeColor="Red" ValidationGroup="vgAssignUser"></asp:RequiredFieldValidator> &nbsp;
+                    <asp:Button ID="buttonAddToProject" Text="Add to Project" runat="server" 
+                        ValidationGroup="vgAssignUser" />
+                </td>
+            </tr>
+        </table>
     </div>
-</asp:Content>
-<asp:Content ID="Content3" runat="server" ContentPlaceHolderID="head">
-    <style type="text/css">
-        .style1
-        {
-            width: 142px;
-        }
-    </style>
 </asp:Content>

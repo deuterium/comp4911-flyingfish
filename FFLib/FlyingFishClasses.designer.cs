@@ -308,6 +308,14 @@ namespace FFLib
 				return this.GetTable<vw_AllValid_UserName_EmpID>();
 			}
 		}
+		
+		public System.Data.Linq.Table<vwUnassignedEmployee> vwUnassignedEmployees
+		{
+			get
+			{
+				return this.GetTable<vwUnassignedEmployee>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.aspnet_Membership")]
@@ -6047,6 +6055,231 @@ namespace FFLib
 				if ((this._lastName != value))
 				{
 					this._lastName = value;
+				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.vwUnassignedEmployees")]
+	public partial class vwUnassignedEmployee
+	{
+		
+		private System.Nullable<int> _projId;
+		
+		private System.Nullable<int> _empId;
+		
+		private int _Expr1;
+		
+		private string _firstName;
+		
+		private string _lastName;
+		
+		private int _supervisor;
+		
+		private int _approver;
+		
+		private decimal _minHoursPerWeek;
+		
+		private int _vacationLeave;
+		
+		private int _sickDays;
+		
+		private decimal _flexHours;
+		
+		private int _isActive;
+		
+		public vwUnassignedEmployee()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int")]
+		public System.Nullable<int> projId
+		{
+			get
+			{
+				return this._projId;
+			}
+			set
+			{
+				if ((this._projId != value))
+				{
+					this._projId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int")]
+		public System.Nullable<int> empId
+		{
+			get
+			{
+				return this._empId;
+			}
+			set
+			{
+				if ((this._empId != value))
+				{
+					this._empId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Expr1", DbType="Int NOT NULL")]
+		public int Expr1
+		{
+			get
+			{
+				return this._Expr1;
+			}
+			set
+			{
+				if ((this._Expr1 != value))
+				{
+					this._Expr1 = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_firstName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string firstName
+		{
+			get
+			{
+				return this._firstName;
+			}
+			set
+			{
+				if ((this._firstName != value))
+				{
+					this._firstName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string lastName
+		{
+			get
+			{
+				return this._lastName;
+			}
+			set
+			{
+				if ((this._lastName != value))
+				{
+					this._lastName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_supervisor", DbType="Int NOT NULL")]
+		public int supervisor
+		{
+			get
+			{
+				return this._supervisor;
+			}
+			set
+			{
+				if ((this._supervisor != value))
+				{
+					this._supervisor = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_approver", DbType="Int NOT NULL")]
+		public int approver
+		{
+			get
+			{
+				return this._approver;
+			}
+			set
+			{
+				if ((this._approver != value))
+				{
+					this._approver = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_minHoursPerWeek", DbType="Decimal(3,1) NOT NULL")]
+		public decimal minHoursPerWeek
+		{
+			get
+			{
+				return this._minHoursPerWeek;
+			}
+			set
+			{
+				if ((this._minHoursPerWeek != value))
+				{
+					this._minHoursPerWeek = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_vacationLeave", DbType="Int NOT NULL")]
+		public int vacationLeave
+		{
+			get
+			{
+				return this._vacationLeave;
+			}
+			set
+			{
+				if ((this._vacationLeave != value))
+				{
+					this._vacationLeave = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sickDays", DbType="Int NOT NULL")]
+		public int sickDays
+		{
+			get
+			{
+				return this._sickDays;
+			}
+			set
+			{
+				if ((this._sickDays != value))
+				{
+					this._sickDays = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_flexHours", DbType="Decimal(3,1) NOT NULL")]
+		public decimal flexHours
+		{
+			get
+			{
+				return this._flexHours;
+			}
+			set
+			{
+				if ((this._flexHours != value))
+				{
+					this._flexHours = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_isActive", DbType="Int NOT NULL")]
+		public int isActive
+		{
+			get
+			{
+				return this._isActive;
+			}
+			set
+			{
+				if ((this._isActive != value))
+				{
+					this._isActive = value;
 				}
 			}
 		}
