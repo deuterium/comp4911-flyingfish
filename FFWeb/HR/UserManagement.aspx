@@ -5,11 +5,11 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <div id="DivUserManagement">
         <div id="DivUserManagementMenu" runat="server">
-            <asp:LinkButton class="InPageNav" Width="33%" ID="CreateUserLabel" runat="server"
+            <asp:LinkButton Cssclass="InPageNav" Width="33%" ID="CreateUserLabel" runat="server"
                 OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
-            <asp:LinkButton class="InPageNav" Width="33%" ID="ManageUserLabel" runat="server"
+            <asp:LinkButton Cssclass="InPageNav" Width="33%" ID="ManageUserLabel" runat="server"
                 OnClick="ManageUserLabel_Click">Manage Existing Employee</asp:LinkButton>
-            <asp:LinkButton class="InPageNav" Width="33%" ID="AssignUserLabel" runat="server"
+            <asp:LinkButton Cssclass="InPageNav" Width="33%" ID="AssignUserLabel" runat="server"
                 OnClick="AssignUserLabel_Click">Assign Employee to Project</asp:LinkButton>
         </div>
         <div id="DivUserMain" runat="server">
