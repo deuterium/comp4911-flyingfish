@@ -13,9 +13,9 @@
     <form id="form" runat="server">
     <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" ShowStartingNode="False" />
 
-    <div class="divmastertop">
-        <div class="divcentertop">
-        </div>
+    <div class="divcentertop">
+        <asp:Image ID="imgBanner" ImageUrl="~/images/FlyingFish_Banner.png" 
+            AlternateText="Banner" ImageAlign="Middle" runat="server" />
     </div>
 
     <div class="divmastermenubar">
@@ -29,10 +29,7 @@
         </div>
     </div>
 
-    <div class="page"><%--
-        <div class="header">
-            USELESSSSSSSSSSSSSSSSSSSSSSSSSSS    
-        </div>--%>
+    <div class="page">
         <div  class="content">
             <asp:ContentPlaceHolder ID="content" runat="server">
             </asp:ContentPlaceHolder>

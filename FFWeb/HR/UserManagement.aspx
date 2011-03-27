@@ -5,12 +5,12 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <div id="DivUserManagement">
         <div id="DivUserManagementMenu" runat="server">
-            <asp:LinkButton Cssclass="InPageNav" Width="33%" ID="CreateUserLabel" runat="server"
-                OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
-            <asp:LinkButton Cssclass="InPageNav" Width="33%" ID="ManageUserLabel" runat="server"
-                OnClick="ManageUserLabel_Click">Manage Existing Employee</asp:LinkButton>
-            <asp:LinkButton Cssclass="InPageNav" Width="33%" ID="AssignUserLabel" runat="server"
-                OnClick="AssignUserLabel_Click">Assign Employee to Project</asp:LinkButton>
+            <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%"  ID="CreateUserLabel" 
+            runat="server" OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
+            <asp:LinkButton CssClass="DivUserManagementMenu"  Width="33%" ID="ManageUserLabel" 
+            runat="server" OnClick="ManageUserLabel_Click">Manage Existing Employee</asp:LinkButton>
+            <asp:LinkButton CssClass="DivUserManagementMenu"  Width="33%" ID="AssignUserLabel" 
+            runat="server" OnClick="AssignUserLabel_Click">Assign Employee to Project</asp:LinkButton>
         </div>
         <div id="DivUserMain" runat="server">
             <br />
@@ -33,14 +33,15 @@
             Welcome to the user Management page. Here will be some blabber on what you can do
             here and etc.
         </div>
-        <div id="DivNewUser" runat="server" visible="false">
+        <div id="DivNewUser" class="DivNewUser" runat="server" visible="false">
             <br />
             <asp:CreateUserWizard ID="cuwCreateUser" runat="server" BackColor="#EFF3FB" BorderColor="#B5C7DE"
                 BorderStyle="Solid" BorderWidth="1px" Font-Names="Verdana" Font-Size="0.8em"
                 CreateUserButtonText="Create New Employee" OnCreatedUser="cuwCreateUser_CreatedUser"
                 LoginCreatedUser="False" OnCreatingUser="cuwCreateUser_CreatingUser" OnContinueButtonClick="cuwCreateUser_ContinueButtonClick"
                 CompleteSuccessText="The account has been successfully created." ContinueButtonText="Create another Employee"
-                EnableViewState="False" DuplicateUserNameErrorMessage="Username is already in use.">
+                EnableViewState="False" 
+                DuplicateUserNameErrorMessage="Username is already in use." Width="565px">
                 <ContinueButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
                     BorderWidth="1px" Font-Names="Verdana" ForeColor="#284E98" />
                 <CreateUserButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
@@ -284,7 +285,8 @@
             <hr />
             <asp:Label ID="lblSearchError" runat="server" Enabled="False"></asp:Label>
             <div id="DivUserGridView" runat="server">
-                <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged">
+                <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" 
+                OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged" HorizontalAlign="Center">
                 </asp:GridView>
             </div>
             <br />

@@ -56,21 +56,35 @@ body
 
 /* Menu Styling */
 
-a:link, a:visited, a:active
+.divmastermenu a:link, .divmastermenu a:visited, .divmastermenu a:active
 {
     text-align: center;
     display: block;
     height: 30px;
     width: 180px;
-    background-color: #2F4F4F;
-    color: #0099FF;
+    background-color: #0065A6;
+    color: #73C8FF;
+    font-weight: bolder;
+    text-decoration: none;
+}
+
+.divmastermenu a:hover
+{
+    color: #73C8FF;
+    background-color: #009BFF;
+    text-decoration: none;
+}
+
+a:link, a:visited, a:active
+{
+    color: #73C8FF;
     font-weight: bolder;
     text-decoration: none;
 }
 
 a:hover
 {
-    color: Black;
+    color: #009BFF;
     text-decoration: none;
 }
 
@@ -84,16 +98,14 @@ a:hover
 
 .divcentertop
 {
-    background-color:#006699;
-    width:1000px;
+    width: 900px;
     margin-left:auto;
     margin-right:auto;
-    height:100px;
 }
 
 .divmastermenubar
 {
-    background-color: #2F4F4F;
+    background-color: #0065A6;
     height:30px;
     border: 3px solid Gray;
     -webkit-border-radius: 5px;
@@ -125,6 +137,18 @@ a:hover
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
+}
+
+.DivUserManagementMenu
+{
+    text-align: center;
+}
+
+.DivNewUser
+{
+    width: 566px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .content
