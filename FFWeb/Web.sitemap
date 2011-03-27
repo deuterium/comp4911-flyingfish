@@ -17,9 +17,6 @@
         <siteMapNode url="~/Timesheet/ApproveTimesheet.aspx" title="Approve Timesheet" description="Approve Timesheet" />
       </siteMapNode>
       <siteMapNode url="~/HR/UserManagement.aspx" title="User Management"  description="User Management">
-        <siteMapNode url="~/HR/ManageUser.aspx" title="Manage User"  description="Manage User" />
-        <siteMapNode url="~/HR/CreateUser.aspx" title="Create User"  description="Create User" />
-        <siteMapNode url="~/HR/AssignUser.aspx" title="Assign User"  description="Assign User" />
       </siteMapNode>
     </siteMapNode>
 </siteMap>
