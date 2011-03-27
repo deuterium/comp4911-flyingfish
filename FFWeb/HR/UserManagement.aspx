@@ -494,7 +494,7 @@
                     Unassigned Employees:
                 </td>
                 <td>
-                    <asp:ListBox ID="lbUnassignedUsers" runat="server" AutoPostBack="True" />
+                    <asp:ListBox ID="lbUnassignedUsers" runat="server" />
                 </td>
                 <td>
                     Project to assign to:
