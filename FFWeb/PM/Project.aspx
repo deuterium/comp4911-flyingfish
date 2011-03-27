@@ -54,6 +54,8 @@
             </td>
             <td>
                 <asp:TextBox ID="tbUnalloc" runat="server"></asp:TextBox>
+                <asp:RangeValidator ID="rvUnalloc" ControlToValidate="tbUnalloc" runat="server" ForeColor="Red" 
+                ErrorMessage="Unallocated Budget cannot be a negative value." MinimumValue="0" MaximumValue="999999999999999">*</asp:RangeValidator>
             </td>
         </tr>
         <tr>
