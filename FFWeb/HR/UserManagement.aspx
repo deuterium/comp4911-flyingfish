@@ -6,7 +6,7 @@
     <div id="DivUserManagement">
         <asp:ToolkitScriptManager ID="ToolkitScriptManager" runat="server">
         </asp:ToolkitScriptManager>
-        <asp:Timer ID="ErrorTimer" runat="server" OnTick="ErrorTimer_Tick" Interval="4000">
+        <asp:Timer ID="ErrorTimer" runat="server" OnTick="ErrorTimer_Tick" Interval="3000">
         </asp:Timer>
         <div id="DivUserManagementMenu" runat="server">
             <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="CreateUserLabel"
@@ -45,7 +45,7 @@
                 LoginCreatedUser="False" OnCreatingUser="cuwCreateUser_CreatingUser" OnContinueButtonClick="cuwCreateUser_ContinueButtonClick"
                 CompleteSuccessText="The account has been successfully created." ContinueButtonText="Create another Employee"
                 EnableViewState="False" DuplicateUserNameErrorMessage="Username is already in use."
-                Width="750px">
+                Width="750px" ActiveStepIndex="1">
                 <ContinueButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
                     BorderWidth="1px" Font-Names="Verdana" ForeColor="#284E98" />
                 <CreateUserButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
@@ -289,7 +289,9 @@
             <hr />
             <asp:Label ID="lblSearchError" runat="server" Enabled="False"></asp:Label>
             <div id="DivUserGridView" runat="server">
-                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged"
+                    HorizontalAlign="Center" AllowPaging="True" OnPageIndexChanging="gvManageUsers_PageIndexChanging" PageSize="15" />
+                <%--<asp:UpdatePanel ID="GridViewUpdatePanel" runat="server" Visible="false">
                     <ContentTemplate>
                         <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged"
                             HorizontalAlign="Center" AllowPaging="True" OnPageIndexChanging="gvManageUsers_PageIndexChanging">
@@ -298,9 +300,8 @@
                     <Triggers>
                         <asp:AsyncPostBackTrigger ControlID="gvManageUsers" EventName="PageIndexChanging" />
                     </Triggers>
-                </asp:UpdatePanel>
+                </asp:UpdatePanel>--%>
             </div>
-            <br />
             <div id="DivUserDetails" runat="server" visible="false">
                 <table>
                     <tr>
