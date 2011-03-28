@@ -19,6 +19,105 @@ body
     filter: progid:DXImageTransform.Microsoft.Gradient(
                 StartColorStr='#0099FF', EndColorStr='#CCFFFF', GradientType=0);
     padding-bottom: 20px;
+    margin: 0;
+}
+
+
+
+.status
+{
+    float: right;
+    width: 160px;
+}
+
+.gradientV{
+    /* fallback (Opera) */
+    background: #0099FF;
+    /* Mozilla: */
+    background: -moz-linear-gradient(top, #0099FF, #CCFFFF);
+    /* Chrome, Safari:*/
+    background: -webkit-gradient(linear,
+                left top, left bottom, from(#0099FF), to(#CCFFFF));
+    /* IE */
+    filter: progid:DXImageTransform.Microsoft.Gradient(
+                StartColorStr='#0099FF', EndColorStr='#CCFFFF', GradientType=0);
+}
+
+.cent
+{
+    margin-left:auto;
+    margin-right:auto;
+}
+    
+.clear
+{
+    clear: left;
+}
+
+/* Menu Styling */
+
+.divmastermenu a:link, .divmastermenu a:visited, .divmastermenu a:active
+{
+    text-align: center;
+    display: block;
+    height: 30px;
+    width: 180px;
+    background-color: #0065A6;
+    color: #73C8FF;
+    font-weight: bolder;
+    text-decoration: none;
+}
+
+.divmastermenu a:hover
+{
+    color: #73C8FF;
+    background-color: #009BFF;
+    text-decoration: none;
+}
+
+a:link, a:visited, a:active
+{
+    color: #73C8FF;
+    font-weight: bolder;
+    text-decoration: none;
+}
+
+a:hover
+{
+    color: #009BFF;
+    text-decoration: none;
+}
+
+/* Master Page Styles */
+
+.divmastertop
+{
+    background-color:transparent;
+    height:100px;
+}
+
+.divcentertop
+{
+    width: 900px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.divmastermenubar
+{
+    background-color: #0065A6;
+    height:30px;
+    border: 3px solid Gray;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.divmastermenu
+{
+    width: 1100px;
+    margin-left:auto;
+    margin-right:auto;
 }
 
 .page 
@@ -27,14 +126,29 @@ body
     min-height: 600px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
     background-color: White;
     
     /* border */
-    border: 3px solid Gray;
+    border-top: 3px solid White;
+    border-bottom: 3px solid Gray;
+    border-left: 3px solid Gray;
+    border-right: 3px solid Gray;
+    
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
+}
+
+.DivUserManagementMenu
+{
+    text-align: center;
+}
+
+.DivNewUser
+{
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .content
@@ -53,51 +167,25 @@ body
     margin: 10px;
 }
 
-.status
+/* Reports.aspx */
+
+.divline
 {
-    width: 180px;
-    float: right;
-    vertical-align: middle;
+    margin-top:10px;
+    border-top:3px solid Grey;
 }
 
-.gradientV{
-    /* fallback (Opera) */
-    background: #0099FF;
-    /* Mozilla: */
-    background: -moz-linear-gradient(top, #0099FF, #CCFFFF);
-    /* Chrome, Safari:*/
-    background: -webkit-gradient(linear,
-                left top, left bottom, from(#0099FF), to(#CCFFFF));
-    /* IE */
-    filter: progid:DXImageTransform.Microsoft.Gradient(
-                StartColorStr='#0099FF', EndColorStr='#CCFFFF', GradientType=0);
+/* Project.aspx */
+
+#lblSuccessMsg
+{
+    color:Blue;
+    text-align:center;
 }
 
-a:link, a:visited, a:active
-{
-    text-align: center;
-    display: block;
-    height: 30px;
-    width: 180px;
-    background-color: #FFFFFF;
-    color: #0099FF;
-    font-weight: bolder;
-    text-decoration: none;
-}
+/* UserManagement.aspx */
 
-a:hover
+.lblcreatenewemp
 {
-    color: Black;
-    text-decoration: none;
-}
-    
-.clear
-{
-    clear: left;
-}
-
-.cent
-{
-    margin-left:auto;
-    margin-right:auto;
+    padding:5px;
 }

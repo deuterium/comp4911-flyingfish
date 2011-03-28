@@ -9,28 +9,46 @@ using System.Configuration;
 
 public partial class RE_ManageWorkPackage : System.Web.UI.Page
 {
-    bool allocClick, unallocClick, descClick = false;
     string connectionString = ConfigurationManager.ConnectionStrings["ffconn"].ToString();
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
-
+    static double allocOriginal;
+    static double unallocOriginal;
     #region Page_Load
     protected void Page_Load(object sender, EventArgs e)
     {
         lblWPID2.Text = Session["wpID"].ToString();
-
         var qry =
                 from wp in ff.WorkPackages
                 where (
                     wp.wpId == lblWPID2.Text
                 )
-                select new { wp.allocated_dollars, wp.unallocated_dollars, wp.name, wp.description };
+                select new { wp.allocated_dollars, wp.unallocated_dollars, wp.name, wp.description, wp.projId};
+        string alloc = qry.First().allocated_dollars.ToString() == "" ? "0" : qry.First().allocated_dollars.ToString();
+        string unalloc = qry.First().unallocated_dollars.ToString() == "" ? "0" : qry.First().unallocated_dollars.ToString();
+        tbUnalloc.Text = unalloc;
+        tbAlloc.Text = alloc;
 
-        tbAlloc.Text = qry.First().allocated_dollars.ToString();
-        tbUnalloc.Text = qry.First().unallocated_dollars.ToString();
+        if ((Convert.ToDecimal(tbUnalloc.Text) > getBudget(qry.First().projId)) &&
+            Convert.ToDecimal(tbUnalloc.Text) > Convert.ToDecimal(tbAlloc.Text))
+        {
+            getTotalBudget(qry.First().projId);
+            //seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbUnalloc.Text);
+        } else if((Convert.ToDecimal(tbAlloc.Text) > getBudget(qry.First().projId)) &&
+            Convert.ToDecimal(tbUnalloc.Text) < Convert.ToDecimal(tbAlloc.Text))
+        {
+            getTotalBudget(qry.First().projId);
+            //seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbAlloc.Text);
+        }// else
+        seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(getTotalBudget(qry.First().projId));
         lblWPName2.Text = qry.Single().name.ToString();
-        tbDescription.Text = qry.Single().description.ToString();
+        string desc = qry.Single().description.ToString();
+        updateDesc(desc);
         updategvEmployees();
-        lblError.Text = "";
+        divAssignEmp.Visible = false;
+        //divAssignRE.Visible = false;
+        allocOriginal = Convert.ToDouble(tbAlloc.Text);
+        unallocOriginal = Convert.ToDouble(tbUnalloc.Text);
+
     }
     #endregion
 
@@ -50,6 +68,10 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     {
     }
 
+    protected void updateDesc(String desc)
+    {
+        tbDescription.Text = desc;
+    }
     #region Assign Employee gridview add button event handler
     protected void gvUnassignedEmployees_RowCommand(object sender, GridViewCommandEventArgs e)
     {
@@ -108,38 +130,32 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Save Changes
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        /*var obj =
-            (from wp in ff.WorkPackages
-             where (wp.wpId == lblWPID2.Text && wp.projId == Convert.ToInt32(Session["projID"]))
-             select wp).First();*/
-        //WorkPackage obj = ff.WorkPackages.Where(wp => wp.wpId == Session["wpID"].ToString()).First();
-        WorkPackage obj = ff.WorkPackages.Where(wp => wp.wpId == Session["wpID"].ToString()).First();
-        if(unallocClick)
+        var qry =
+                from wp in ff.WorkPackages
+                where (
+                    wp.wpId == Session["wpID"].ToString()
+                )
+                select new { wp.projId };
+        if ((Convert.ToDecimal(tbUnalloc2.Text) + Convert.ToDecimal(tbAlloc2.Text)) > getTotalBudget(qry.First().projId))
+            lblBudgetError.Text = "Please change the values of Allocated Budget and Unallocated Budget to have a sum below " + getTotalBudget(qry.First().projId);
+        else
+        {
+            lblBudgetError.Text = "";
+            WorkPackage obj = ff.WorkPackages.Where(wp => wp.wpId == Session["wpID"].ToString()).First();
             obj.unallocated_dollars = Convert.ToDecimal(tbUnalloc2.Text);
-        if(allocClick)
             obj.allocated_dollars = Convert.ToDecimal(tbAlloc2.Text);
-        if(descClick)
             obj.description = tbDescription.Text;
-        ff.SubmitChanges();
-        Response.Redirect("~/RE/ManageWorkPackage.aspx");
+            
+            ff.SubmitChanges();
+            updateProject(Convert.ToInt32(qry.First().projId), Convert.ToDecimal(tbUnalloc2.Text), Convert.ToDecimal(tbAlloc2.Text));
+            tbAlloc.Text = tbAlloc2.Text;
+            tbUnalloc.Text = tbUnalloc2.Text;
+            Response.Redirect("~/RE/ManageWorkPackage.aspx");
+        }
     }
     #endregion
 
     #region Click events
-    protected void btnAllocChange_Click(object sender, EventArgs e)
-    {
-        allocClick = true;
-        tbAlloc2.Text = tbAlloc2.Text;
-        divtbAlloc1.Visible = false;
-        divtbAlloc2.Visible = true;
-    }
-    protected void btnUnallocChange_Click(object sender, EventArgs e)
-    {
-        unallocClick = true;
-        tbUnalloc2.Text = tbUnalloc.Text;
-        divtbUnalloc1.Visible = false;
-        divtbUnalloc2.Visible = true;
-    }
     protected void lbBacktoProject_Click(object sender, EventArgs e)
     {
         var obj =
@@ -149,12 +165,50 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         Session["projID"] = obj.First().ToString();
         Response.Redirect("~/PM/ManageProject.aspx");
     }
-    protected void btnDescChange_Click(object sender, EventArgs e)
+    #endregion
+
+    protected decimal getTotalBudget(int id)
     {
-        descClick = true;
-        tbDesc2.Text = tbDescription.Text;
-        divDesc1.Visible = false;
-        divDesc2.Visible = true;
+        return Convert.ToDecimal(tbUnalloc.Text) + Convert.ToDecimal(tbAlloc.Text) + getBudget(id);
     }
-    #region
+
+    protected decimal getBudget(int id)
+    {
+        var budget =
+            from b in ff.Projects
+            where b.projId == id
+            select b;
+        return Convert.ToDecimal(budget.First().unallocated_dollars);
+    }
+
+    protected void updateProject(int projID, decimal allocBudget, decimal unallocBudget)
+    {
+        Project proj = ff.Projects.Where(p => p.projId == projID).First();
+        if (allocBudget > Convert.ToDecimal(allocOriginal)) {
+            proj.unallocated_dollars = proj.unallocated_dollars - (allocBudget - Convert.ToDecimal(allocOriginal));
+            proj.allocated_dollars = proj.allocated_dollars + (allocBudget - Convert.ToDecimal(allocOriginal));
+            lblError.Text = "1";
+        }
+        else if (allocBudget < Convert.ToDecimal(allocOriginal))
+        {
+            proj.unallocated_dollars = proj.unallocated_dollars + (Convert.ToDecimal(allocOriginal) - allocBudget);
+            proj.allocated_dollars = proj.allocated_dollars - (Convert.ToDecimal(allocOriginal) - allocBudget);
+            lblError.Text = "2";
+        }
+        if(unallocBudget > Convert.ToDecimal(unallocOriginal))
+        {
+            proj.unallocated_dollars = proj.unallocated_dollars - (unallocBudget - Convert.ToDecimal(unallocOriginal));
+            proj.allocated_dollars = proj.allocated_dollars + (unallocBudget - Convert.ToDecimal(unallocOriginal));
+            lblError.Text = "3";
+        }
+        else if (unallocBudget < Convert.ToDecimal(unallocOriginal))
+        {
+            proj.unallocated_dollars = proj.unallocated_dollars + (Convert.ToDecimal(unallocOriginal)-unallocBudget);
+            proj.allocated_dollars = proj.allocated_dollars - (Convert.ToDecimal(unallocOriginal) - unallocBudget);
+            lblError.Text = "4";
+        }
+
+        ff.SubmitChanges();
+    }
+
 }

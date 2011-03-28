@@ -20,8 +20,6 @@
             <td>
                 <asp:TextBox ID="tbStartDate" runat="server"></asp:TextBox>
             </td>
-        </tr>
-        <tr>
             <td>
                 End Date:
             </td>
@@ -32,6 +30,9 @@
     </table>
     <asp:Button ID="btnReport" runat="server" Text="Generate Report" 
         onclick="btnReport_Click" />
+
+    <div class="divline"></div>
+
     <asp:GridView ID="gvReport" runat="server">
     </asp:GridView>
 
