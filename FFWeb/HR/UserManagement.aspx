@@ -12,7 +12,7 @@
             <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="CreateUserLabel"
                 runat="server" OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
             <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="ManageUserLabel"
-                runat="server" OnClick="ManageUserLabel_Click">Manage Existing Employee</asp:LinkButton>
+                runat="server" OnClick="ManageUserLabel_Click">Edit Employee Information</asp:LinkButton>
             <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="AssignUserLabel"
                 runat="server" OnClick="AssignUserLabel_Click">Assign Employee to Project</asp:LinkButton>
         </div>
@@ -170,6 +170,13 @@
                                                         ValidationGroup="cuwCreateUser" ForeColor="Red">*</asp:RequiredFieldValidator>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <asp:CompareValidator ID="PasswordCompare" runat="server" ControlToCompare="Password"
+                                                        ControlToValidate="ConfirmPassword" Display="Dynamic" ErrorMessage="The Password and Confirmation Password must match."
+                                                        ValidationGroup="cuwCreateUser" ForeColor="Red"></asp:CompareValidator>
+                                                </td>
+                                            </tr>
                                         </table>
                                     </td>
                                     <td>
@@ -210,9 +217,7 @@
                                         <table>
                                             <tr>
                                                 <td align="center">
-                                                    <asp:CompareValidator ID="PasswordCompare" runat="server" ControlToCompare="Password"
-                                                        ControlToValidate="ConfirmPassword" Display="Dynamic" ErrorMessage="The Password and Confirmation Password must match."
-                                                        ValidationGroup="cuwCreateUser" ForeColor="Red"></asp:CompareValidator>
+                                                    
                                                     <asp:ValidationSummary ID="CreateUserValidationSummary" runat="server" ValidationGroup="cuwCreateUser"
                                                         DisplayMode="List" ForeColor="Red" />
                                                 </td>
