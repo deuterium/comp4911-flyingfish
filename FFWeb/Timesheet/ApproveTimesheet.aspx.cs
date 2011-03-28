@@ -45,8 +45,16 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
         
     }
      * */
-    protected void Button1_Click(object sender, EventArgs e)
-    {
 
+    protected void btnSubmit_Click(object sender, EventArgs e)
+    {
+        if (DropDownList1.SelectedValue == "Approve")
+        {
+
+        }
+        else
+        {
+
+        }
     }
 }

@@ -18,4 +18,5 @@
     
     <asp:Button ID="btnGetTimesheet" runat="server" Text="Get Timesheet" 
         onclick="btnGetTimesheet_Click" />
+    <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
 </asp:Content>

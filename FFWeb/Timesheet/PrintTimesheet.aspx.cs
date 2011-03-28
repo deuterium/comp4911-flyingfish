@@ -59,6 +59,8 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
 
         gvPrintTimesheet.DataSource = qry;
         gvPrintTimesheet.DataBind();
+
+        Label1.Text = now + " " + pre;
     }
 
     public void qryTimesheet()
@@ -80,9 +82,11 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         }
 
        
-        System.DateTime pre = qryDate.AddDays(-7);
+        System.DateTime pre = actualQryDate.AddDays(7);
+        Label1.Text = actualQryDate + " " + pre;
         var qry = from o in ff.TimeSheetEntries
-                  where o.empId == 1 && o.tsDate < qryDate && o.tsDate > pre
+                  // code to determine the role or id
+                  where o.tsDate > actualQryDate && o.tsDate < pre
                   select new
                   {
                       Project = o.projId,
