@@ -2,12 +2,11 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
     <div id="divCreateProject" runat="server" visible="true">
+
+    <asp:Label ID="lblMsg" runat="server" Text="Fill in the following fields below to create a project." />
+    <br /><br />
+
     <table>
-        <tr>
-            <td colspan="2">
-                <asp:Label ID="lblMsg" runat="server" Text="Fill in the following information below to create a project." />
-            </td>
-        </tr>
         <tr>
             <td align="right">
                 <asp:Label ID="lblProjectID" runat="server" Text="Project ID: "></asp:Label>
@@ -24,8 +23,6 @@
                     ErrorMessage="ID must be a positive value." ForeColor="Red" MinimumValue="1" 
                     MaximumValue="9999999999999999">*</asp:RangeValidator>
             </td>
-        </tr>
-        <tr>
             <td align="right">
                 <asp:Label ID="lblProjectName" runat="server" Text="Project Name: "></asp:Label>
             </td>
@@ -39,7 +36,6 @@
                     ErrorMessage="Project name must only contain letters from A-Z." 
                     ForeColor="Red" ValidationExpression="^[a-zA-Z\s]+$">*</asp:RegularExpressionValidator>
             </td>
-        </tr>
        <!-- <tr>
             <td align="right">
                 <asp:Label ID="lblAlloc" runat="server" Text="Allocated Budget: "></asp:Label>
@@ -58,23 +54,26 @@
                 ErrorMessage="Unallocated Budget cannot be a negative value." MinimumValue="0" MaximumValue="999999999999999">*</asp:RangeValidator>
             </td>
         </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <asp:Button ID="btnCreateProject" runat="server" Text="Create Project" 
-                    onclick="btnCreateProject_Click" />
-            </td>
-        </tr>
     </table>
-        <asp:Label ID="lblError" runat="server" Text="" ForeColor="Red"></asp:Label>
-    <asp:ValidationSummary ID="vsCreateProject" runat="server" ForeColor="Red" />
+
+    <br />
+
+    <asp:Button ID="btnCreateProject" runat="server" Text="Create Project" onclick="btnCreateProject_Click" />
+
+        <div>
+            <br />
+            <asp:Label ID="lblError" runat="server" Text="" ForeColor="Red" />
+            <asp:ValidationSummary ID="vsCreateProject" runat="server" ForeColor="Red" />
+        </div>
     </div>
+
+
+
     <div id="divCreateSuccess" runat="server" visible="false">
-        <asp:Label ID="lblSuccessMsg" runat="server" 
-            Text="Project is successfully created." ForeColor="Lime"></asp:Label>
-        <br />
-        <asp:Button ID="btnCreate" runat="server" Text="Manage Project" 
-            onclick="btnCreate_Click" style="height: 26px" />
-        <asp:Button ID="btnViewProjects" runat="server" Text="View Projects" 
-            onclick="btnViewProjects_Click" />
+        <asp:Label ID="lblSuccessMsg" runat="server" Text="Project is successfully created." ForeColor="Blue" />
+        <br /><br />
+        <asp:Button ID="btnCreate" runat="server" Text="Manage Project" onclick="btnCreate_Click" style="height: 26px" />
+        <asp:Button ID="btnViewProjects" runat="server" Text="View Projects" onclick="btnViewProjects_Click" />
     </div>
+
 </asp:Content>

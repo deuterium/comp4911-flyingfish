@@ -326,8 +326,12 @@
                     </Triggers>
                 </asp:UpdatePanel>--%>
             </div>
+<<<<<<< HEAD
+=======
 
+            <br />
 
+>>>>>>> origin/HEAD
             <div id="DivUserDetails" runat="server" visible="false">
                 <table>
                     <tr>

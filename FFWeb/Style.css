@@ -166,3 +166,26 @@ a:hover
     height: 40px;
     margin: 10px;
 }
+
+/* Reports.aspx */
+
+.divline
+{
+    margin-top:10px;
+    border-top:3px solid Grey;
+}
+
+/* Project.aspx */
+
+#lblSuccessMsg
+{
+    color:Blue;
+    text-align:center;
+}
+
+/* UserManagement.aspx */
+
+.lblcreatenewemp
+{
+    padding:5px;
+}
