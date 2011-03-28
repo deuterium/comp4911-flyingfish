@@ -379,14 +379,14 @@ public partial class UserManagement : System.Web.UI.Page
         lbUnassignedUsers.DataValueField = "EmpID";
         lbUnassignedUsers.DataBind();
 
-        ddlProjectsToAssignTo.DataSource = ff.Projects.Select(p => new
+        lbAllProjects.DataSource = ff.Projects.Select(p => new
         {
             ProjID = p.projId,
             ProjectName = (p.projName + " (") + p.projId + ")"
         });
-        ddlProjectsToAssignTo.DataValueField = "ProjId";
-        ddlProjectsToAssignTo.DataTextField = "ProjectName";
-        ddlProjectsToAssignTo.DataBind();
+        lbAllProjects.DataValueField = "ProjId";
+        lbAllProjects.DataTextField = "ProjectName";
+        lbAllProjects.DataBind();
     }
 
     //Adds select employee to selected project and repopulates the list
@@ -394,7 +394,7 @@ public partial class UserManagement : System.Web.UI.Page
     {
         EmployeeProject ep = new EmployeeProject();
         ep.empId = Convert.ToInt32(lbUnassignedUsers.SelectedValue);
-        ep.projId = Convert.ToInt32(ddlProjectsToAssignTo.SelectedValue);
+        ep.projId = Convert.ToInt32(lbAllProjects.SelectedValue);
 
         ff.EmployeeProjects.InsertOnSubmit(ep);
 

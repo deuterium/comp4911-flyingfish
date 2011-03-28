@@ -45,7 +45,7 @@
                 LoginCreatedUser="False" OnCreatingUser="cuwCreateUser_CreatingUser" OnContinueButtonClick="cuwCreateUser_ContinueButtonClick"
                 CompleteSuccessText="The account has been successfully created." ContinueButtonText="Create another Employee"
                 EnableViewState="False" DuplicateUserNameErrorMessage="Username is already in use."
-                Width="750px" ActiveStepIndex="1">
+                Width="750px">
                 <ContinueButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
                     BorderWidth="1px" Font-Names="Verdana" ForeColor="#284E98" />
                 <CreateUserButtonStyle BackColor="White" BorderColor="#507CD1" BorderStyle="Solid"
@@ -276,58 +276,43 @@
                 EntityTypeName="" Select="new (RoleId, RoleName)" TableName="aspnet_Roles">
             </asp:LinqDataSource>
         </div>
-
         <div id="DivManageUsers" runat="server" visible="false">
-            <br /><br />
+            <br />
             <asp:Label runat="server" Text="Search for an Employee (Last Name): " />
             <asp:TextBox ID="tbSearch" runat="server"></asp:TextBox>
             <asp:Button ID="buttonSearch" runat="server" Text="Search" OnClick="buttonSearch_Click" />
             &nbsp;<asp:Button ID="buttonAllUsers" runat="server" Text="Show All Users" OnClick="buttonAllUsers_Click" />
-
-            <br /><br />
-
-            <div class="divline"></div>
-
-            <asp:Label ID="lblSearchError" runat="server" Enabled="False"></asp:Label>
-            
-            <br /><br />
-
-            <div id="DivUserGridView" runat="server">
-                <asp:GridView ID="gvManageUsers" runat="server" AutoGenerateSelectButton="True" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged"
-                    HorizontalAlign="Center" AllowPaging="True" OnPageIndexChanging="gvManageUsers_PageIndexChanging" PageSize="15" />
-                <%--<asp:UpdatePanel ID="GridViewUpdatePanel" runat="server" Visible="false">
-                    <ContentTemplate>
-                        <asp:GridView ID="gvManageUsers" runat="server" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged"
-                            HorizontalAlign="Center" AllowPaging="True" OnPageIndexChanging="gvManageUsers_PageIndexChanging" 
-                            AutoGenerateColumns="False" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3">
-                            <Columns>
-                                <asp:BoundField DataField="empId" HeaderText="Employee ID" SortExpression="empId" />
-                                <asp:BoundField DataField="firstName" HeaderText="First Name" SortExpression="firstName" />
-                                <asp:BoundField DataField="lastName" HeaderText="Last Name" SortExpression="lastName" />
-                                <asp:BoundField DataField="vacationLeave" HeaderText="Vacation Leave" SortExpression="vacationLeave" />
-                                <asp:BoundField DataField="sickDays" HeaderText="Sick Days" SortExpression="sickDays" />
-                                <asp:BoundField DataField="flexHours" HeaderText="Flex Hours" SortExpression="flexHours" />
-                                <asp:BoundField DataField="isActive" HeaderText="Active" SortExpression="isActive" />
-                                <asp:CommandField ShowSelectButton="True" />
-                            </Columns>
-                            <FooterStyle BackColor="White" ForeColor="#000066" />
-                            <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
-                            <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />
-                            <RowStyle ForeColor="#000066" />
-                            <SelectedRowStyle BackColor="#669999" Font-Bold="True" ForeColor="White" />
-                            <SortedAscendingCellStyle BackColor="#F1F1F1" />
-                            <SortedAscendingHeaderStyle BackColor="#007DBB" />
-                            <SortedDescendingCellStyle BackColor="#CAC9C9" />
-                            <SortedDescendingHeaderStyle BackColor="#00547E" />
-                        </asp:GridView>
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="gvManageUsers" EventName="PageIndexChanging" />
-                    </Triggers>
-                </asp:UpdatePanel>--%>
+            <br />
+            <div class="divline">
             </div>
-
-
+            <asp:Label ID="lblSearchError" runat="server" Enabled="False"></asp:Label>
+            <br />
+            <div id="DivUserGridView" runat="server">
+                <asp:GridView ID="gvManageUsers" runat="server" OnSelectedIndexChanged="gvManageUsers_SelectedIndexChanged"
+                    HorizontalAlign="Center" AllowPaging="True" OnPageIndexChanging="gvManageUsers_PageIndexChanging"
+                    AutoGenerateColumns="False" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None"
+                    BorderWidth="1px" CellPadding="3" PageSize="15">
+                    <Columns>
+                        <asp:CommandField ShowSelectButton="True" />
+                        <asp:BoundField DataField="empId" HeaderText="Employee ID" SortExpression="empId" />
+                        <asp:BoundField DataField="firstName" HeaderText="First Name" SortExpression="firstName" />
+                        <asp:BoundField DataField="lastName" HeaderText="Last Name" SortExpression="lastName" />
+                        <asp:BoundField DataField="vacationLeave" HeaderText="Vacation Leave" SortExpression="vacationLeave" />
+                        <asp:BoundField DataField="sickDays" HeaderText="Sick Days" SortExpression="sickDays" />
+                        <asp:BoundField DataField="flexHours" HeaderText="Flex Hours" SortExpression="flexHours" />
+                        <asp:BoundField DataField="isActive" HeaderText="Active" SortExpression="isActive" />
+                    </Columns>
+                    <FooterStyle BackColor="White" ForeColor="#000066" />
+                    <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
+                    <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />
+                    <RowStyle ForeColor="#000066" />
+                    <SelectedRowStyle BackColor="#669999" Font-Bold="True" ForeColor="White" />
+                    <SortedAscendingCellStyle BackColor="#F1F1F1" />
+                    <SortedAscendingHeaderStyle BackColor="#007DBB" />
+                    <SortedDescendingCellStyle BackColor="#CAC9C9" />
+                    <SortedDescendingHeaderStyle BackColor="#00547E" />
+                </asp:GridView>
+            </div>
             <div id="DivUserDetails" runat="server" visible="false">
                 <table>
                     <tr>
@@ -510,52 +495,49 @@
         </div>
     </div>
     <div id="DivAssignUsers" runat="server" visible="false">
-        <br /><br />
+        <br />
         This page is for assigning unassigned Employees to a project. Please select an employee
         in the list of unassigned employees, then pick the project you want to add them
         to. Once you have confirmed it is the correct Employee and project, click the <i>Add
             to Project</i> button.
-
-        <br /><br />
+        <br />
+        <br />
         <table>
             <tr>
                 <td>
                     Unassigned Employees:
                 </td>
                 <td>
-                    <asp:ListBox ID="lbUnassignedUsers" runat="server" />
+                    <asp:ListBox ID="lbUnassignedUsers" runat="server" Rows="6" />
                 </td>
-            </tr>
-            <tr>
-                <td>
-                </td>
-                <td>
-                </td>
-            </tr>
-            <tr>
                 <td>
                     Project to assign to:
                 </td>
                 <td>
-                    <asp:DropDownList ID="ddlProjectsToAssignTo" runat="server" />
+                    <asp:ListBox ID="lbAllProjects" runat="server"  Rows="6" />
                 </td>
             </tr>
             <tr>
                 <td colspan="4" align="right">
                     <asp:RequiredFieldValidator ID="SelectUserRequired" runat="server" ErrorMessage="Please select an Employee."
                         ControlToValidate="lbUnassignedUsers" Display="Dynamic" ForeColor="Red" ValidationGroup="vgAssignUser" />
+                    &nbsp;
+                    <asp:Button ID="button1" Text="Add to Project" runat="server" OnClick="buttonAddToProject_Click"
+                        ValidationGroup="vgAssignUser" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="right">
+                    <asp:UpdatePanel ID="UpdatePanel_AssignUser" runat="server">
+                        <ContentTemplate>
+                            <asp:Label ID="AssignLabel" runat="server" Text=""></asp:Label>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick" />
+                        </Triggers>
+                    </asp:UpdatePanel>
                 </td>
             </tr>
         </table>
-        <br /><br />
-        <asp:Button ID="buttonAddToProject" Text="Add to Project" runat="server" OnClick="buttonAddToProject_Click" ValidationGroup="vgAssignUser" />
-        <asp:UpdatePanel ID="UpdatePanel_AssignUser" runat="server">
-            <ContentTemplate>
-                <asp:Label ID="AssignLabel" runat="server" Text=""></asp:Label>
-            </ContentTemplate>
-            <Triggers>
-                <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick" />
-            </Triggers>
-        </asp:UpdatePanel>
     </div>
 </asp:Content>
