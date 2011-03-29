@@ -40,7 +40,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
     {
         System.DateTime now = System.DateTime.Now.Date;
         System.DateTime pre = now.AddDays(-7);
-        var qry = from o in ff.TimeSheetEntries
+        var qry = from o in ff.TimesheetEntries
                   where o.empId == 1 && o.tsDate < now && o.tsDate > pre
                   select new
                   {
@@ -84,7 +84,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
        
         System.DateTime pre = actualQryDate.AddDays(7);
         Label1.Text = actualQryDate + " " + pre;
-        var qry = from o in ff.TimeSheetEntries
+        var qry = from o in ff.TimesheetEntries
                   // code to determine the role or id
                   where o.tsDate > actualQryDate && o.tsDate < pre
                   select new

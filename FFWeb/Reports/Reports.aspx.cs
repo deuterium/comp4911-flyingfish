@@ -40,8 +40,8 @@ public partial class Reports_Reports : System.Web.UI.Page
 
         var qry = (from o in ff.WorkPackages
                   join emp in ff.EmployeeWorkPackages on o.wpId equals emp.wpId
-                  join ts in ff.TimeSheetEntries on emp.wpId equals ts.wpId
-                  join th in ff.TimeSheetHeaders on ts.empId equals th.empId
+                  join ts in ff.TimesheetEntries on emp.wpId equals ts.wpId
+                  join th in ff.TimesheetHeaders on ts.empId equals th.empId
                   where th.status == "APPROVED"
                   //where o.projId == Convert.ToInt32(tbProjectID.Text)
                   

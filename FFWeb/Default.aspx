@@ -18,8 +18,7 @@ You can use FlyingFish to easily:
 </asp:BulletedList>
 All your data is safe thanks to:
 <asp:BulletedList id="bdlSecurityFeatures" runat="server">
-    <asp:ListItem>Secure login using HTTPS</asp:ListItem>
-    <asp:ListItem>Password encryption</asp:ListItem>
+    <asp:ListItem>Secure login and password encryption</asp:ListItem>
     <asp:ListItem>Electronic signatures on timesheets</asp:ListItem>
     <asp:ListItem>Roles to prevent unauthorized site access</asp:ListItem>
     <asp:ListItem>Unicode character encoding</asp:ListItem>
