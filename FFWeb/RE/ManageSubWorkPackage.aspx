@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" Title="Manage Work Package" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="ManageWorkPackage.aspx.cs" Inherits="RE_ManageWorkPackage" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="ManageSubWorkPackage.aspx.cs" Inherits="RE_ManageSubWorkPackage" %>
+
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
@@ -94,9 +95,7 @@
             onclick="lbBacktoProject_Click">Go to Project</asp:LinkButton>
 
         <asp:LinkButton ID="lbCreateSubWorkPackage" runat="server" 
-            onclick="lbCreateSubWorkPackage_Click">Create a sub-Work Package</asp:LinkButton>
-
-        <asp:LinkButton ID="lbParentwp" runat="server" onclick="lbParentwp_Click">Go to parent Work Package</asp:LinkButton>
+            onclick="lbCreateSubWorkPackage_Click">Create a Sub-WorkPackage</asp:LinkButton>
 
     </div>
     <div id="divAssignEmp" runat="server" visible="false">

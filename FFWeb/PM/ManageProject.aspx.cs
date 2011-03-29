@@ -59,6 +59,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
     }
     protected void btnChangeAlloc_Click(object sender, EventArgs e)
     {
+        tbUnalloc.Text = lblUnalloc2.Text;
         divOriginalAlloc.Visible = false;
         divChangeAlloc.Visible = true;
     }

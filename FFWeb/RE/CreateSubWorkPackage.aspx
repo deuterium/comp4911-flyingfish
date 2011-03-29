@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" Title="New WorkPackage" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="WorkPackage.aspx.cs" Inherits="RE_WorkPackage" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="CreateSubWorkPackage.aspx.cs" Inherits="RE_CreateSubWorkPackage" %>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
 
     <div id="divCreateWorkPackage" runat="server">
