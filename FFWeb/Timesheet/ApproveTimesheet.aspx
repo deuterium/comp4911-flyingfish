@@ -5,7 +5,9 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <asp:GridView ID="GridView1" runat="server" DataKeyNames="empId,tsDate" AutoGenerateColumns="False" 
-        DataSourceID="gvTimesheetHeader" AllowPaging="True" AllowSorting="True">
+        DataSourceID="gvTimesheetHeader" AllowPaging="True" AllowSorting="True" 
+        CellPadding="4" ForeColor="#333333" GridLines="None">
+        <AlternatingRowStyle BackColor="White" />
         <Columns>
             <asp:CommandField ShowSelectButton="True" />
             <asp:BoundField DataField="empId" HeaderText="empId" ReadOnly="True" 
@@ -17,6 +19,16 @@
             <asp:BoundField DataField="comments" HeaderText="comments" ReadOnly="True" 
                 SortExpression="comments" />
         </Columns>
+        <EditRowStyle BackColor="#2461BF" />
+        <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+        <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+        <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+        <RowStyle BackColor="#EFF3FB" />
+        <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+        <SortedAscendingCellStyle BackColor="#F5F7FB" />
+        <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+        <SortedDescendingCellStyle BackColor="#E9EBEF" />
+        <SortedDescendingHeaderStyle BackColor="#4870BE" />
     </asp:GridView>
     <asp:LinqDataSource ID="gvTimesheetHeader" runat="server" 
         ContextTypeName="FFLib.FlyingFishClassesDataContext" EntityTypeName="" 
@@ -24,7 +36,12 @@
         TableName="TimeSheetHeaders" OrderBy="status desc">
     </asp:LinqDataSource>
     <asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" 
-        DataSourceID="dvTimesheetHeader" Height="50px" Width="125px">
+        DataSourceID="dvTimesheetHeader" Height="50px" Width="125px" 
+        CellPadding="4" ForeColor="#333333" GridLines="None">
+        <AlternatingRowStyle BackColor="White" />
+        <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
+        <EditRowStyle BackColor="#2461BF" />
+        <FieldHeaderStyle BackColor="#DEE8F5" Font-Bold="True" />
         <Fields>
             <asp:BoundField DataField="empId" HeaderText="empId" ReadOnly="True" 
                 SortExpression="empId" />
@@ -51,6 +68,10 @@
             <asp:BoundField DataField="thu" HeaderText="thu" ReadOnly="True" 
                 SortExpression="thu" />
         </Fields>
+        <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+        <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+        <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+        <RowStyle BackColor="#EFF3FB" />
     </asp:DetailsView>
     <asp:LinqDataSource ID="dvTimesheetHeader" runat="server" 
         ContextTypeName="FFLib.FlyingFishClassesDataContext" EntityTypeName="" 
