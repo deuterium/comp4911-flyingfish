@@ -75,7 +75,7 @@ public partial class UserManagement : System.Web.UI.Page
                 empID = u.empId,
                 approver = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
             })
-            .OrderBy(u=>u.approver);
+            .OrderBy(u => u.approver);
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataSource = validUsers;
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataValueField = "empId";
         ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("SupervisorList")).DataTextField = "approver";
@@ -98,11 +98,13 @@ public partial class UserManagement : System.Web.UI.Page
         string tmpApprover = ((ListBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ApproverList")).SelectedValue;
         string tmpEmpID = ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("EmployeeID")).Text;
         CheckBoxList tempCheck = (CheckBoxList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("RoleList");
-        for(int i = 0; i < tempCheck.Items.Count; i++)
+        for (int i = 0; i < tempCheck.Items.Count; i++)
         {
             if (tempCheck.Items[i].Selected)
-            { Roles.AddUserToRole(((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("UserName")).Text
-                , tempCheck.Items[i].Text); }
+            {
+                Roles.AddUserToRole(((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("UserName")).Text
+                  , tempCheck.Items[i].Text);
+            }
         }
 
         Employee emp = new Employee()
@@ -288,6 +290,13 @@ public partial class UserManagement : System.Web.UI.Page
             lblUserEditError.Text = ex.Message;
             lblUserEditError.ForeColor = System.Drawing.Color.Red;
         }
+        string approverUsername = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
+            .Where(em => em.empId == Convert.ToInt32(lbApprovers.SelectedValue))
+            .Select(u => u.UserName).First();
+        if (!Roles.IsUserInRole(approverUsername, "TimesheetApprover"))
+        {
+            Roles.AddUserToRole(approverUsername, "TimesheetApprover");
+        }
         lblUserEditError.Text = "User Has been updated. Show all users to see changes.";
         lblUserEditError.ForeColor = System.Drawing.Color.ForestGreen;
     }
@@ -310,7 +319,36 @@ public partial class UserManagement : System.Web.UI.Page
         lblUsername.Text = ff.aspnet_Users.Where(use => use.UserId == userID).Select(use => use.UserName).First();
         lblEmail.Text = ff.aspnet_Memberships.Where(use => use.UserId == userID).Select(use => use.Email).First();
         lbSupervisors.SelectedValue = ManagedEmployee.supervisor.ToString();
-        lbApprovers.SelectedValue = ManagedEmployee.approver.ToString();
+        try
+        {
+            lbApprovers.SelectedValue = ManagedEmployee.approver.ToString();
+        }
+        catch (ArgumentOutOfRangeException ae)
+        {
+            var list = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
+            .Where(r => r.RoleName == "TimesheetApprover")
+            .Select(u => new
+            {
+                empID = u.empId,
+                tsa = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
+            }).ToList();
+
+            list.Add(ff.Employees
+                .Where(em => em.empId == Convert.ToInt32(ManagedEmployee.approver.ToString()))
+                .Select(u => new
+                {
+                    empID = u.empId,
+                    tsa = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
+                }).First());
+            lbApprovers.DataSource = list;
+            lbApprovers.DataTextField = "tsa";
+            lbApprovers.DataValueField = "empId";
+            lbApprovers.DataBind();
+            lbApprovers.SelectedValue = ManagedEmployee.approver.ToString();
+            lblUserEditError.Text = "This timesheet approver does not have the Approver Role anymore. Choosing them again will "
+                + "add them back to the Role.";
+            lblUserEditError.ForeColor = System.Drawing.Color.Blue;
+        }
         tbMinHours.Text = ManagedEmployee.minHoursPerWeek.ToString();
         tbVacation.Text = ManagedEmployee.vacationLeave.ToString();
         tbSickDays.Text = ManagedEmployee.sickDays.ToString();
@@ -326,7 +364,7 @@ public partial class UserManagement : System.Web.UI.Page
         string[] userRoleNames = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs.Where(emp => emp.empId == empID).Select(r => r.RoleName).ToArray();
         for (int i = 0; i < userRoleNames.Length; i++)
         {
-            for(int j = 0; j < cblUserRoles.Items.Count; j++)
+            for (int j = 0; j < cblUserRoles.Items.Count; j++)
             {
                 if (userRoleNames[i] == cblUserRoles.Items[j].Text)
                 {
@@ -346,8 +384,9 @@ public partial class UserManagement : System.Web.UI.Page
             .Select(u => new
             {
                 empID = u.empId,
-                tsa = ((((u.empId + ": ") + u.firstName) + " ") + u.lastName)
-            });
+                tsa = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
+            })
+            .OrderBy(u => u.tsa);
         lbApprovers.DataTextField = "tsa";
         lbApprovers.DataValueField = "empId";
         lbApprovers.DataBind();
@@ -357,8 +396,9 @@ public partial class UserManagement : System.Web.UI.Page
             .Select(u => new
             {
                 empID = u.empId,
-                tsa = ((((u.empId + ": ") + u.firstName) + " ") + u.lastName)
-            });
+                tsa = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
+            })
+            .OrderBy(u => u.tsa);
         lbSupervisors.DataTextField = "tsa";
         lbSupervisors.DataValueField = "empId";
         lbSupervisors.DataBind();
@@ -368,7 +408,8 @@ public partial class UserManagement : System.Web.UI.Page
     #region Assign Employee to Project
 
     //Populates DDL and LB with all unassigned emplpoyees and valid projects
-    protected void popluateUnassignedEmployeesAndProjects() {
+    protected void popluateUnassignedEmployeesAndProjects()
+    {
         lbUnassignedUsers.DataSource = ff.vwUnassignedEmployees.Select(u => new
         {
             EmpID = u.Expr1,
