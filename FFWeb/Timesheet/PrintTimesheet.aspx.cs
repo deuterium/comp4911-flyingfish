@@ -39,9 +39,9 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
     public void showPreviousWeekTimesheet()
     {
         System.DateTime now = System.DateTime.Now.Date;
-        System.DateTime pre = now.AddDays(-7);
+        System.DateTime pre = now.AddDays(-6);
         var qry = from o in ff.TimesheetEntries
-                  where o.empId == 1 && o.tsDate < now && o.tsDate > pre
+                  where o.empId == 1 && o.tsDate <= now && o.tsDate >= pre
                   select new
                   {
                       Project = o.projId,
@@ -69,7 +69,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         System.DateTime actualQryDate = qryDate;
         System.DayOfWeek dayOfWeek = qryDate.DayOfWeek;
 
-
+        // trying to get the sunday of the week picked by the user
         switch (dayOfWeek.ToString())
         {
             case "Monday": actualQryDate = qryDate.AddDays(-1); break;
@@ -82,11 +82,11 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         }
 
        
-        System.DateTime pre = actualQryDate.AddDays(7);
+        System.DateTime pre = actualQryDate.AddDays(6);
         Label1.Text = actualQryDate + " " + pre;
         var qry = from o in ff.TimesheetEntries
                   // code to determine the role or id
-                  where o.tsDate > actualQryDate && o.tsDate < pre
+                  where o.tsDate >= actualQryDate && o.tsDate <= pre  && o.empId == 1
                   select new
                   {
                       Project = o.projId,
