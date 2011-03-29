@@ -217,7 +217,6 @@
                                         <table>
                                             <tr>
                                                 <td align="center">
-                                                    
                                                     <asp:ValidationSummary ID="CreateUserValidationSummary" runat="server" ValidationGroup="cuwCreateUser"
                                                         DisplayMode="List" ForeColor="Red" />
                                                 </td>
@@ -318,8 +317,10 @@
                     <SortedDescendingHeaderStyle BackColor="#00547E" />
                 </asp:GridView>
             </div>
-            <div id="DivUserDetails" runat="server" visible="false">
-                <table>
+            <div id="DivUserDetails" runat="server" visible="false" style="">
+                <table style="background-color: #EFF3FB; border-color: #B5C7DE; border-width: 1px;
+                    border-style: Solid; font-family: Verdana; font-size: 0.8em; border-collapse: collapse;
+                    margin-left: auto; margin-right: auto;">
                     <tr>
                         <td>
                             <table id="tableUserDetails">
@@ -481,54 +482,79 @@
                             </table>
                         </td>
                     </tr>
+                    <tr>
+                        <td colspan="3">
+                            <asp:Button ID="buttonDetailsCancel" runat="server" Text="Cancel Editing" OnClick="buttonDetailsCancel_Click" />
+                            &nbsp;<asp:Button ID="buttonDetailsSubmit" Text="Submit Changes" ValidationGroup="vgEditUser"
+                                runat="server" OnClick="buttonDetailsSubmit_Click" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <asp:UpdatePanel ID="EditUpdatePanel" runat="server">
+                                <ContentTemplate>
+                                    <asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
+                                </ContentTemplate>
+                                <Triggers>
+                                    <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick" />
+                                </Triggers>
+                            </asp:UpdatePanel>
+                            <asp:ValidationSummary ID="vsEditUser" runat="server" ValidationGroup="vgEditUser"
+                                DisplayMode="List" ForeColor="Red" />
+                        </td>
+                    </tr>
                 </table>
-                <asp:Button ID="buttonDetailsCancel" runat="server" Text="Cancel Editing" OnClick="buttonDetailsCancel_Click" />
-                &nbsp;<asp:Button ID="buttonDetailsSubmit" Text="Submit Changes" ValidationGroup="vgEditUser"
-                    runat="server" OnClick="buttonDetailsSubmit_Click" />
-                <br />
-                <asp:UpdatePanel ID="EditUpdatePanel" runat="server">
-                    <ContentTemplate>
-                        <asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick" />
-                    </Triggers>
-                </asp:UpdatePanel>
-                <asp:ValidationSummary ID="vsEditUser" runat="server" ValidationGroup="vgEditUser"
-                    DisplayMode="List" ForeColor="Red" />
             </div>
         </div>
     </div>
     <div id="DivAssignUsers" runat="server" visible="false">
         <br />
-        This page is for assigning unassigned Employees to a project. Please select an employee
-        in the list of unassigned employees, then pick the project you want to add them
-        to. Once you have confirmed it is the correct Employee and project, click the <i>Add
-            to Project</i> button.
+        This page is for assigning unassigned Employees to a project. Please select the
+        project you wish to manage, then select one or more employees in the list of unassigned
+        employees. Once you have confirmed they are the correct Employees, use the <i>&quot;Assign
+            to Project&quot;</i> button to assign the selected Employee(s) to the Project.
+        The opposite can be done with the <i>&quot;Unassign from Project&quot;</i> button.
         <br />
         <br />
-        <table>
+        <table style="background-color: #EFF3FB; border-color: #B5C7DE; border-width: 1px;
+            border-style: Solid; font-family: Verdana; font-size: 0.8em; border-collapse: collapse;
+            margin-left: auto; margin-right: auto;">
+            <tr>
+                <td colspan="4">
+                    Select a project to manage:
+                    <asp:DropDownList ID="ddlAllProjects" runat="server" />
+                </td>
+            </tr>
             <tr>
                 <td>
                     Unassigned Employees:
                 </td>
-                <td>
-                    <asp:ListBox ID="lbUnassignedUsers" runat="server" Rows="6" />
+                <td width="50">
                 </td>
                 <td>
-                    Project to assign to:
-                </td>
-                <td>
-                    <asp:ListBox ID="lbAllProjects" runat="server"  Rows="6" />
+                    Employees in selected project:
                 </td>
             </tr>
             <tr>
-                <td colspan="4" align="right">
-                    <asp:RequiredFieldValidator ID="SelectUserRequired" runat="server" ErrorMessage="Please select an Employee."
-                        ControlToValidate="lbUnassignedUsers" Display="Dynamic" ForeColor="Red" ValidationGroup="vgAssignUser" />
-                    &nbsp;
-                    <asp:Button ID="button1" Text="Add to Project" runat="server" OnClick="buttonAddToProject_Click"
-                        ValidationGroup="vgAssignUser" />
+                <td>
+                    <asp:ListBox ID="lbUnassignedUsers" runat="server" Rows="6" Width="200" SelectionMode="Multiple" />
+                    <asp:RequiredFieldValidator ID="SelectAssignUserRequired" runat="server" ErrorMessage="Please select an Employee."
+                        ControlToValidate="lbUnassignedUsers" Display="Dynamic" ForeColor="Red" ValidationGroup="vgAssignUser">*</asp:RequiredFieldValidator>
+                </td>
+                <td width="50">
+                </td>
+                <td align="right">
+                    <asp:ListBox ID="lbAssignedEmployees" runat="server" Rows="6" Width="200" SelectionMode="Multiple" />
+                    <asp:RequiredFieldValidator ID="SelectUnassignUserRequired" runat="server" ErrorMessage="Please select an Employee."
+                        ControlToValidate="lbAssignedEmployees" Display="Dynamic" ForeColor="Red" ValidationGroup="vgUnassignUser">*</asp:RequiredFieldValidator>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <asp:Button ID="buttonAssignUser" Text="Assign to Project" runat="server" ValidationGroup="vgAssignUser" />
+                </td>
+                <td align="right">
+                    <asp:Button ID="buttonUnassignUser" Text="Unassign from Project" runat="server" ValidationGroup="vgUnassignUser" />
                 </td>
             </tr>
             <tr>
