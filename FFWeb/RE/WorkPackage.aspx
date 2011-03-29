@@ -96,7 +96,5 @@
         <asp:Button ID="btnManage" runat="server" Text="Manage Work Package" 
             onclick="btnManage_Click" />
     </div>
-
-
-
+    <asp:Label ID="lblException" runat="server" Text=""></asp:Label>
 </asp:Content>

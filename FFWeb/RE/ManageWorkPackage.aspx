@@ -58,8 +58,7 @@
                 </td>
                 <td>
                     <div id="divDesc1" runat="server">
-                            <asp:TextBox ID="tbDescription" Width="125" runat="server" 
-                        TextMode="MultiLine" />
+                            <asp:TextBox ID="tbDesc" runat="server" TextMode="MultiLine" />
                     </div>
                         
                 </td>
@@ -108,6 +107,7 @@
                 <asp:ButtonField ButtonType="Button" Text="Add" CommandName="btnAdd" />
             </Columns>
         </asp:GridView>
+        <asp:Label ID="lblException" runat="server"></asp:Label>
     </div>
     </ContentTemplate>
     </asp:UpdatePanel>

@@ -14,26 +14,41 @@ public partial class RE_WorkPackage : System.Web.UI.Page
     
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (Session["wpID"] == null)
-            lblProjID.Text = Convert.ToInt32(Session["projID"]) + ".";
-        else
-            lblProjID.Text = Session["wpID"].ToString() + ".";
+        try
+        {
+            if (Session["projID"] == null)
+                Response.Redirect("~/PM/ProjectList.aspx");
+            if (Session["wpID"] == null)
+                lblProjID.Text = Convert.ToInt32(Session["projID"]) + ".";
+            else
+                lblProjID.Text = Session["wpID"].ToString() + ".";
+        }
+        catch (Exception exception)
+        {
+            lblException.Text = exception.StackTrace;
+        }
     }
+
     protected void btnCreateWorkPackage_Click(object sender, EventArgs e)
     {
-        WorkPackage wp = new WorkPackage();
-        if (Session["wpID"] == null)
+        try
         {
-            if (ff.WorkPackages.Where(te => te.wpId == Convert.ToInt32(Session["projID"]) + "." + tbwpID.Text).ToArray().Length > 0)
+            WorkPackage wp = new WorkPackage();
+            if (ff.WorkPackages.Where(te => te.wpId == Convert.ToInt32(Session["projID"]) + "." + tbwpID.Text).ToArray().Length > 0 && Session["wpID"] == null)
+            {
+                lblError.Text = "Work Package already exists";
+            }
+            else if (ff.WorkPackages.Where(te => te.wpId == Session["wpID"].ToString() + "." + tbwpID.Text).ToArray().Length > 0 && Session["wpID"] != null)
             {
                 lblError.Text = "Work Package already exists";
             }
             else
             {
-                wp.wpId = Convert.ToInt32(Session["projID"]) + "." + tbwpID.Text;
+                if (Session["wpID"] == null)
+                    wp.wpId = Convert.ToInt32(Session["projID"]) + "." + tbwpID.Text;
+                else
+                    wp.wpId = Session["wpID"].ToString() + "." + tbwpID.Text;
                 wp.name = tbwpName.Text;
-                //wp.allocated_dollars = Convert.ToInt32(tbAllocated.Text);
-                //wp.unallocated_dollars = Convert.ToInt32(tbUnallocated.Text);
                 wp.description = tbDescription.Text;
                 wp.projId = Convert.ToInt32(Session["projID"]);
                 Session["wpID"] = wp.wpId;
@@ -44,28 +59,9 @@ public partial class RE_WorkPackage : System.Web.UI.Page
                 lblSuccessMsg.Text = "Work Package(" + wp.wpId + ") is created successfully.";
             }
         }
-        else
+        catch (Exception exception)
         {
-            if (ff.WorkPackages.Where(te => te.wpId == Session["wpID"].ToString() + "." + tbwpID.Text).ToArray().Length > 0)
-            {
-                lblError.Text = "Work Package already exists";
-            }
-            else
-            {
-                wp.wpId = Session["wpID"].ToString() + "." + tbwpID.Text;
-                wp.name = tbwpName.Text;
-                //wp.allocated_dollars = Convert.ToInt32(tbAllocated.Text);
-                //wp.unallocated_dollars = Convert.ToInt32(tbUnallocated.Text);
-                wp.description = tbDescription.Text;
-                wp.projId = Convert.ToInt32(Session["projID"]);
-                Session["subwpID"] = wp.wpId;
-                ff.WorkPackages.InsertOnSubmit(wp);
-                ff.SubmitChanges();
-
-                divCreateWorkPackage.Visible = false;
-                divCreateSuccess.Visible = true;
-                lblSuccessMsg.Text = "Work Package(" + wp.wpId + ") is created successfully.";
-            }
+            lblException.Text = exception.StackTrace;
         }
     }
     protected void btnManage_Click(object sender, EventArgs e)

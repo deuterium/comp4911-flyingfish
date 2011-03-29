@@ -11,32 +11,41 @@ public partial class PM_ManageProject : System.Web.UI.Page
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
-        divChangeAlloc.Visible = false;
-        lblProjID2.Text = Session["projID"].ToString();
+        try
+        {
+            if (Session["projID"] == null)
+                Response.Redirect("~/PM/ProjectList.aspx");
+            divChangeAlloc.Visible = false;
+            lblProjID2.Text = Session["projID"].ToString();
 
-        //Get project name
-        var proj =
-            from p in ff.Projects
-            where p.projId == Convert.ToInt32(Session["projID"])
-            select p;
-        lblProjName2.Text = proj.First().projName;
-        if (proj.First().allocated_dollars == null)
-            lblAlloc2.Text = "UNDEFINED";
-        else
-            lblAlloc2.Text = proj.First().allocated_dollars.ToString();
-        if (proj.First().unallocated_dollars == null)
-            lblUnalloc2.Text = "UNDEFINED";
-        else
-            lblUnalloc2.Text = proj.First().unallocated_dollars.ToString();
+            //Get project name
+            var proj =
+                from p in ff.Projects
+                where p.projId == Convert.ToInt32(Session["projID"])
+                select p;
+            lblProjName2.Text = proj.First().projName;
+            if (proj.First().allocated_dollars == null)
+                lblAlloc2.Text = "UNDEFINED";
+            else
+                lblAlloc2.Text = proj.First().allocated_dollars.ToString();
+            if (proj.First().unallocated_dollars == null)
+                lblUnalloc2.Text = "UNDEFINED";
+            else
+                lblUnalloc2.Text = proj.First().unallocated_dollars.ToString();
 
-        //Get all work packages
-        var qry =
-            from wp in ff.WorkPackages
-            where wp.projId == Convert.ToInt32(Session["projID"])
-            select wp;
+            //Get all work packages
+            var qry =
+                from wp in ff.WorkPackages
+                where wp.projId == Convert.ToInt32(Session["projID"])
+                select wp;
 
-        gvWorkPackages.DataSource = qry;
-        gvWorkPackages.DataBind();
+            gvWorkPackages.DataSource = qry;
+            gvWorkPackages.DataBind();
+        }
+        catch (Exception exception)
+        {
+            lblException.Text = exception.StackTrace;
+        }
     }
     protected void lbCreateWP_Click(object sender, EventArgs e)
     {
@@ -45,12 +54,19 @@ public partial class PM_ManageProject : System.Web.UI.Page
 
     protected void gvWorkPackages_RowCommand(object sender, GridViewCommandEventArgs e)
     {
-        if (e.CommandName == "btnView")
+        try
         {
-            int row = Convert.ToInt32(e.CommandArgument);
-            GridViewRow selectedRow = gvWorkPackages.Rows[row];
-            Session["wpID"] = selectedRow.Cells[0].Text;
-            Response.Redirect("~/RE/ManageWorkPackage.aspx");
+            if (e.CommandName == "btnView")
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvWorkPackages.Rows[row];
+                Session["wpID"] = selectedRow.Cells[0].Text;
+                Response.Redirect("~/RE/ManageWorkPackage.aspx");
+            }
+        }
+        catch (Exception exception)
+        {
+            lblException.Text = exception.StackTrace;
         }
     }
     protected void lbProjectList_Click(object sender, EventArgs e)
@@ -66,13 +82,18 @@ public partial class PM_ManageProject : System.Web.UI.Page
 
     protected void btnSaveAlloc_Click(object sender, EventArgs e)
     {
-        Project proj = ff.Projects.Where(p => p.projId == Convert.ToInt32(Session["projID"].ToString())).First();
-        //proj.allocated_dollars = Convert.ToDecimal(tbAlloc.Text);
-        proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
-        ff.SubmitChanges();
-        //lblAlloc2.Text = proj.allocated_dollars.ToString();
-        lblUnalloc2.Text = proj.unallocated_dollars.ToString();
-        divOriginalAlloc.Visible = true;
-        Response.Redirect("~/PM/ManageProject.aspx");
+        try
+        {
+            Project proj = ff.Projects.Where(p => p.projId == Convert.ToInt32(Session["projID"].ToString())).First();
+            proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
+            ff.SubmitChanges();
+            lblUnalloc2.Text = proj.unallocated_dollars.ToString();
+            divOriginalAlloc.Visible = true;
+            Response.Redirect("~/PM/ManageProject.aspx");
+        }
+        catch (Exception exception)
+        {
+            lblException.Text = exception.StackTrace;
+        }
     }
 }

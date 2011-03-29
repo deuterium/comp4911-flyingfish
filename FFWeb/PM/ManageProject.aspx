@@ -77,5 +77,7 @@
 
                     <asp:LinkButton ID="lbCreateWP" runat="server" onclick="lbCreateWP_Click">Create a Work Package</asp:LinkButton>
         <asp:LinkButton ID="lbProjectList" runat="server" onclick="lbProjectList_Click">View Project List</asp:LinkButton>
+        <br />
+        <asp:Label ID="lblException" runat="server" Text=""></asp:Label>
         </asp:Content>
 
