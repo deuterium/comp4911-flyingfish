@@ -13,10 +13,17 @@
                     <asp:Label ID="lblwpID" runat="server" Text="Work Package ID: " />
                 </td>
                 <td>
+                    <asp:Label ID="lblProjID" runat="server" Text="" ForeColor="#660066"></asp:Label>
                     <asp:TextBox ID="tbwpID" runat="server" />
                     <asp:RequiredFieldValidator ID="rfvID" runat="server" 
                         ControlToValidate="tbwpID" ErrorMessage="Work Package ID is required." 
                         ForeColor="Red">*</asp:RequiredFieldValidator>
+                    <asp:CompareValidator ID="cvID" runat="server" ControlToValidate="tbwpID" 
+                        ErrorMessage="Work Package ID must be an int." ForeColor="Red" 
+                        Type="Integer" Operator="DataTypeCheck">*</asp:CompareValidator>
+                    <asp:RangeValidator ID="rvID" runat="server" ControlToValidate="tbwpID" 
+                        ErrorMessage="Work Package ID must be a positive integer." ForeColor="Red" 
+                        MaximumValue="2147483647" MinimumValue="0" Type="Integer">*</asp:RangeValidator>
                 </td>
             </tr>
             <tr>
@@ -34,7 +41,7 @@
                     ForeColor="Red" ValidationExpression="^[a-zA-Z\s]+$">*</asp:RegularExpressionValidator>
                 </td>
             </tr>
-            <tr>
+            <!--<tr>
                 <td align="right">
                     <asp:Label ID="lblAllocated" runat="server" Text="Allocated Budget: " />
                 </td>
@@ -63,7 +70,7 @@
                         ErrorMessage="Unallocated budget must be an integer." ForeColor="Red" 
                         Operator="DataTypeCheck" Type="Integer">*</asp:CompareValidator>
                 </td>
-            </tr>
+            </tr>-->
             <tr>
                 <td align="right">
                     <asp:Label ID="lblDescription" runat="server" Text="Description: " />
@@ -86,10 +93,8 @@
         <asp:Label ID="lblSuccessMsg" runat="server" 
             Text="Work Package is successfully created." ForeColor="Lime"></asp:Label>
         <br />
-        <asp:Button ID="btnCreate" runat="server" Text="Manage Work Package" 
-            onclick="btnCreate_Click" />
+        <asp:Button ID="btnManage" runat="server" Text="Manage Work Package" 
+            onclick="btnManage_Click" />
     </div>
-
-
-
+    <asp:Label ID="lblException" runat="server" Text=""></asp:Label>
 </asp:Content>

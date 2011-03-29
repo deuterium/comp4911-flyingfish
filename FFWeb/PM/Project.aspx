@@ -76,4 +76,6 @@
         <asp:Button ID="btnViewProjects" runat="server" Text="View Projects" onclick="btnViewProjects_Click" />
     </div>
 
+    <asp:Label ID="lblException" runat="server"></asp:Label>
+
 </asp:Content>
