@@ -15,6 +15,8 @@ public partial class PM_ManageProject : System.Web.UI.Page
         {
             if (Session["projID"] == null)
                 Response.Redirect("~/PM/ProjectList.aspx");
+            if (Session["wpID"] != null)
+                Session["wpID"] = null;
             if(divChangeAlloc.Visible == false)
                 divOriginalAlloc.Visible = true;
             divChangeAlloc.Visible = false;

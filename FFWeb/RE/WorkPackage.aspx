@@ -23,7 +23,7 @@
                         Type="Integer" Operator="DataTypeCheck">*</asp:CompareValidator>
                     <asp:RangeValidator ID="rvID" runat="server" ControlToValidate="tbwpID" 
                         ErrorMessage="Work Package ID must be a positive integer." ForeColor="Red" 
-                        MaximumValue="2147483647" MinimumValue="0" Type="Integer">*</asp:RangeValidator>
+                        MaximumValue="2147483647" MinimumValue="1" Type="Integer">*</asp:RangeValidator>
                 </td>
             </tr>
             <tr>
@@ -57,6 +57,14 @@
                     <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
                     <asp:ValidationSummary ID="vsSummary" runat="server" ForeColor="Red" />
                     <br />
+                </td>
+            </tr>
+            <tr>
+                <td align="center" colspan="2">
+                    <asp:LinkButton ID="lbProjectList" runat="server" onclick="lbProjectList_Click" 
+                        CausesValidation="False">Go to Project List</asp:LinkButton>
+                    <asp:LinkButton ID="lbProject" runat="server" CausesValidation="False" 
+                        onclick="lbProject_Click">Go to Project</asp:LinkButton>
                 </td>
             </tr>
         </table>
