@@ -38,5 +38,6 @@
                     <SortedDescendingHeaderStyle BackColor="#00547E" />
                 </asp:GridView>        
     </div>
+    <asp:Label ID="lblException" runat="server"></asp:Label>
 </asp:Content>
 

@@ -35,9 +35,18 @@
                         <asp:Label ID="lblUnallocMsg2" runat="server" Text="Unallocated Budget: " />
                         <asp:TextBox ID="tbUnalloc" runat="server" />
                         <br />
+                        <asp:CompareValidator ID="cvUnallocated" runat="server" 
+                            ControlToValidate="tbUnalloc" ErrorMessage="Invalid Budget." ForeColor="Red" 
+                            Operator="DataTypeCheck" Type="Integer"></asp:CompareValidator>
+                        <br />
+                        <asp:RangeValidator ID="rvUnalloc" runat="server" ControlToValidate="tbUnalloc" 
+                            ErrorMessage="Budget must be a positive number." ForeColor="Red" 
+                            MaximumValue="2147483647" MinimumValue="0" Type="Integer"></asp:RangeValidator>
+                        <br />
                         <asp:Button ID="btnSaveAlloc" runat="server" Text="Save Changes" 
                             onclick="btnSaveAlloc_Click" />
                     </div>
+                    <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
             </div>
             </ContentTemplate>
             </asp:UpdatePanel>
@@ -74,8 +83,10 @@
                         <SortedDescendingCellStyle BackColor="#CAC9C9" />
                         <SortedDescendingHeaderStyle BackColor="#00547E" />
                     </asp:GridView>
-
-                    <asp:LinkButton ID="lbCreateWP" runat="server" onclick="lbCreateWP_Click">Create a Work Package</asp:LinkButton>
-        <asp:LinkButton ID="lbProjectList" runat="server" onclick="lbProjectList_Click">View Project List</asp:LinkButton>
+                    
+                    <asp:Button CssClass="buttongrad" ID="lbCreateWP" Text="Create a Work Package" runat="server" onclick="lbCreateWP_Click"></asp:Button>
+                    <asp:Button ID="lbProjectList" runat="server" Text="View Project List" onclick="lbProjectList_Click"></asp:Button>
+                    <br />
+                    <asp:Label ID="lblException" runat="server" Text=""></asp:Label>
         </asp:Content>
 

@@ -58,8 +58,7 @@
                 </td>
                 <td>
                     <div id="divDesc1" runat="server">
-                            <asp:TextBox ID="tbDescription" Width="125" runat="server" 
-                        TextMode="MultiLine" />
+                            <asp:TextBox ID="tbDesc" runat="server" TextMode="MultiLine" />
                     </div>
                         
                 </td>
@@ -93,6 +92,11 @@
         <asp:LinkButton ID="lbBacktoProject" runat="server" 
             onclick="lbBacktoProject_Click">Go to Project</asp:LinkButton>
 
+        <asp:LinkButton ID="lbCreateSubWorkPackage" runat="server" 
+            onclick="lbCreateSubWorkPackage_Click">Create a sub-Work Package</asp:LinkButton>
+
+        <asp:LinkButton ID="lbParentwp" runat="server" onclick="lbParentwp_Click">Go to parent Work Package</asp:LinkButton>
+
     </div>
     <div id="divAssignEmp" runat="server" visible="false">
         <asp:Label ID="lblAEmp" runat="server" Text="Choose an employee to add to work package:"></asp:Label>
@@ -103,7 +107,8 @@
                 <asp:ButtonField ButtonType="Button" Text="Add" CommandName="btnAdd" />
             </Columns>
         </asp:GridView>
+        <asp:Label ID="lblException" runat="server"></asp:Label>
     </div>
     </ContentTemplate>
     </asp:UpdatePanel>
-    </asp:Content>
+</asp:Content>

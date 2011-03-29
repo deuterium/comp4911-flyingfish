@@ -9,7 +9,7 @@ body
     background-color: Black;
     font-family: "Segoe UI", "Arial", Sans-Serif;
     /* fallback (Opera) */
-    background: #0099FF;
+    background: #CCFFFF;
     /* Mozilla: */
     background: -moz-linear-gradient(top, #0099FF, #CCFFFF) fixed;
     /* Chrome, Safari:*/
@@ -188,4 +188,13 @@ a:hover
 .lblcreatenewemp
 {
     padding:5px;
+}
+
+/* ManageProject.aspx */
+
+.buttongrad
+{
+   color:#FF0033;
+   background-color:#0066FF;
+   filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#ff339900',EndColorStr='#ff0033FF');
 }

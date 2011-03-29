@@ -17,27 +17,34 @@ public partial class PM_Project : System.Web.UI.Page
     }
     protected void btnCreateProject_Click(object sender, EventArgs e)
     {
-        Project proj = new Project();
-        
-        if (ff.Projects.Where(te => te.projId == Convert.ToInt32(tbProjectID.Text)).ToArray().Length > 0)
+        try
         {
-            lblError.Text = "Project already exists.";
-        }
-        else
-        {
-            proj.projId = Convert.ToInt32(tbProjectID.Text);
-            proj.projName = tbProjectName.Text;
-            proj.manager = 1; //it will be the manager that is logged in but for now default is 1
-            //proj.allocated_dollars = Convert.ToDecimal(tbAlloc.Text);
-            proj.allocated_dollars = 0;
-            proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
-            ff.Projects.InsertOnSubmit(proj);
-            ff.SubmitChanges();
+            Project proj = new Project();
 
-            Session["projID"] = proj.projId;
-            
-            divCreateSuccess.Visible = true;
-            divCreateProject.Visible = false;
+            if (ff.Projects.Where(te => te.projId == Convert.ToInt32(tbProjectID.Text)).ToArray().Length > 0)
+            {
+                lblError.Text = "Project already exists.";
+            }
+            else
+            {
+                proj.projId = Convert.ToInt32(tbProjectID.Text);
+                proj.projName = tbProjectName.Text;
+                proj.manager = 1; //it will be the manager that is logged in but for now default is 1
+                //proj.allocated_dollars = Convert.ToDecimal(tbAlloc.Text);
+                proj.allocated_dollars = 0;
+                proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
+                ff.Projects.InsertOnSubmit(proj);
+                ff.SubmitChanges();
+
+                Session["projID"] = proj.projId;
+
+                divCreateSuccess.Visible = true;
+                divCreateProject.Visible = false;
+            }
+        }
+        catch (Exception exception)
+        {
+            lblException.Text = exception.StackTrace;
         }
     }
     protected void btnCreate_Click(object sender, EventArgs e)
