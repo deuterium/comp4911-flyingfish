@@ -6,8 +6,6 @@
     <div id="DivUserManagement">
         <asp:ToolkitScriptManager ID="ToolkitScriptManager" runat="server">
         </asp:ToolkitScriptManager>
-        <asp:Timer ID="ErrorTimer" runat="server" OnTick="ErrorTimer_Tick" Interval="3000">
-        </asp:Timer>
         <div id="DivUserManagementMenu" runat="server">
             <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="CreateUserLabel"
                 runat="server" OnClick="lbCreateUser_Click">Create New Employee</asp:LinkButton>
@@ -491,14 +489,7 @@
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <asp:UpdatePanel ID="EditUpdatePanel" runat="server">
-                                <ContentTemplate>
-                                    <asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
-                                </ContentTemplate>
-                                <Triggers>
-                                    <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick" />
-                                </Triggers>
-                            </asp:UpdatePanel>
+                            <asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
                             <asp:ValidationSummary ID="vsEditUser" runat="server" ValidationGroup="vgEditUser"
                                 DisplayMode="List" ForeColor="Red" />
                         </td>
@@ -523,6 +514,7 @@
                 <td colspan="4">
                     Select a project to manage:
                     <asp:DropDownList ID="ddlAllProjects" runat="server" />
+                    &nbsp;<asp:Button ID="buttonSelectProject" runat="server" Text="Select Project" OnClick="buttonSelectProject_Click" />
                 </td>
             </tr>
             <tr>
@@ -537,16 +529,30 @@
             </tr>
             <tr>
                 <td>
-                    <asp:ListBox ID="lbUnassignedUsers" runat="server" Rows="6" Width="200" SelectionMode="Multiple" />
-                    <asp:RequiredFieldValidator ID="SelectAssignUserRequired" runat="server" ErrorMessage="Please select an Employee."
-                        ControlToValidate="lbUnassignedUsers" Display="Dynamic" ForeColor="Red" ValidationGroup="vgAssignUser">*</asp:RequiredFieldValidator>
+                    <asp:UpdatePanel ID="UnassignedUsersUpdatePanel" runat="server">
+                        <ContentTemplate>
+                            <asp:ListBox ID="lbUnassignedUsers" runat="server" Rows="6" Width="200" SelectionMode="Multiple" />
+                            <asp:RequiredFieldValidator ID="SelectAssignUserRequired" runat="server" ErrorMessage="Please select an Employee."
+                                ControlToValidate="lbUnassignedUsers" Display="Dynamic" ForeColor="Red" ValidationGroup="vgAssignUser">*</asp:RequiredFieldValidator>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:AsyncPostBackTrigger ControlID="buttonSelectProject" EventName="Click" />
+                        </Triggers>
+                    </asp:UpdatePanel>
                 </td>
                 <td width="50">
                 </td>
                 <td align="right">
-                    <asp:ListBox ID="lbAssignedEmployees" runat="server" Rows="6" Width="200" SelectionMode="Multiple" />
-                    <asp:RequiredFieldValidator ID="SelectUnassignUserRequired" runat="server" ErrorMessage="Please select an Employee."
-                        ControlToValidate="lbAssignedEmployees" Display="Dynamic" ForeColor="Red" ValidationGroup="vgUnassignUser">*</asp:RequiredFieldValidator>
+                    <asp:UpdatePanel ID="AssignedUsersUpdatePanel" runat="server">
+                        <ContentTemplate>
+                            <asp:ListBox ID="lbAssignedEmployees" runat="server" Rows="6" Width="200" SelectionMode="Multiple" />
+                            <asp:RequiredFieldValidator ID="SelectUnassignUserRequired" runat="server" ErrorMessage="Please select an Employee."
+                                ControlToValidate="lbAssignedEmployees" Display="Dynamic" ForeColor="Red" ValidationGroup="vgUnassignUser">*</asp:RequiredFieldValidator>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:AsyncPostBackTrigger ControlID="buttonSelectProject" EventName="Click" />
+                        </Triggers>
+                    </asp:UpdatePanel>
                 </td>
             </tr>
             <tr>
@@ -559,14 +565,7 @@
             </tr>
             <tr>
                 <td colspan="4" align="right">
-                    <asp:UpdatePanel ID="UpdatePanel_AssignUser" runat="server">
-                        <ContentTemplate>
-                            <asp:Label ID="AssignLabel" runat="server" Text=""></asp:Label>
-                        </ContentTemplate>
-                        <Triggers>
-                            <asp:AsyncPostBackTrigger ControlID="ErrorTimer" EventName="Tick" />
-                        </Triggers>
-                    </asp:UpdatePanel>
+                    <asp:Label ID="AssignLabel" runat="server" Text=""></asp:Label>
                 </td>
             </tr>
         </table>

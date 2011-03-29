@@ -15,13 +15,6 @@ public partial class UserManagement : System.Web.UI.Page
     {
     }
 
-    //Timer for certain errors to clear
-    protected void ErrorTimer_Tick(object sender, EventArgs e)
-    {
-        AssignLabel.Text = "";
-        lblUserEditError.Text = "";
-    }
-
     #region Menu Items
     //Shows the create employee div when link is clicked
     protected void lbCreateUser_Click(object sender, EventArgs e)
@@ -384,15 +377,15 @@ public partial class UserManagement : System.Web.UI.Page
         ddlAllProjects.DataBind();
     }
 
-        //lbUnassignedUsers.DataSource = ff.vwUnassignedEmployees.Select(u => new
-        //{
-        //    EmpID = u.Expr1,
-        //    EmployeeName = ((((u.firstName + " ") + u.lastName) + " (") + u.Expr1 + ")")
-        //})
-        //.OrderBy(u => u.EmployeeName);
-        //lbUnassignedUsers.DataTextField = "EmployeeName";
-        //lbUnassignedUsers.DataValueField = "EmpID";
-        //lbUnassignedUsers.DataBind();
+    //lbUnassignedUsers.DataSource = ff.vwUnassignedEmployees.Select(u => new
+    //{
+    //    EmpID = u.Expr1,
+    //    EmployeeName = ((((u.firstName + " ") + u.lastName) + " (") + u.Expr1 + ")")
+    //})
+    //.OrderBy(u => u.EmployeeName);
+    //lbUnassignedUsers.DataTextField = "EmployeeName";
+    //lbUnassignedUsers.DataValueField = "EmpID";
+    //lbUnassignedUsers.DataBind();
 
     //Adds select employee to selected project and repopulates the list
     protected void buttonAddToProject_Click(object sender, EventArgs e)
@@ -419,4 +412,15 @@ public partial class UserManagement : System.Web.UI.Page
         //AssignLabel.ForeColor = System.Drawing.Color.Green;
     }
     #endregion
+    protected void buttonSelectProject_Click(object sender, EventArgs e)
+    {
+        //fills assigned users in a proj
+        lbAssignedEmployees.DataSource = ff.EmployeeProjects
+            .Join(ff.Employees, em => em.empId, c => c.empId, (em, c) => new { em = em, c = c })
+            .Where(x => (x.em.projId == Convert.ToInt32(ddlAllProjects.SelectedValue)))
+            .Select(y => new { EmpID = y.em.empId, EmployeeName = (((((y.c.firstName + " ") + y.c.lastName) + " (") + y.em.empId) + ")") });
+        lbAssignedEmployees.DataTextField = "EmployeeName";
+        lbAssignedEmployees.DataValueField = "EmpID";
+        lbAssignedEmployees.DataBind();
+    }
 }
