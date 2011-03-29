@@ -41,7 +41,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         System.DateTime now = System.DateTime.Now.Date;
         System.DateTime pre = now.AddDays(-6);
         var qry = from o in ff.TimesheetEntries
-                  where o.empId == 1 && o.tsDate <= now && o.tsDate >= pre
+                  where o.empId == Convert.ToInt32(Session["CurEmpId"]) && o.tsDate <= now && o.tsDate >= pre
                   select new
                   {
                       Project = o.projId,
@@ -86,7 +86,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         Label1.Text = actualQryDate + " " + pre;
         var qry = from o in ff.TimesheetEntries
                   // code to determine the role or id
-                  where o.tsDate >= actualQryDate && o.tsDate <= pre  && o.empId == 1
+                  where o.tsDate >= actualQryDate && o.tsDate <= pre && o.empId == Convert.ToInt32(Session["CurEmpId"])
                   select new
                   {
                       Project = o.projId,

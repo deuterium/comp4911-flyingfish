@@ -3,15 +3,25 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
+<style type="text/css">
 
+input 
+{
+    width: 20px;
+}
+
+
+</style>
     <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" 
         DataKeyNames="empId,tsDate,projId,wpId" DataSourceID="LinqDataSource1">
         <Columns>
-            <asp:BoundField DataField="projId" HeaderText="projId" ReadOnly="True" 
-                SortExpression="projId" />
-            <asp:BoundField DataField="wpId" HeaderText="wpId" ReadOnly="True" 
-                SortExpression="wpId" />
-            <asp:BoundField DataField="sat" HeaderText="sat" SortExpression="sat" />
+            <asp:BoundField DataField="projId" HeaderText="projId" SortExpression="projId" 
+                ReadOnly="True" />
+            <asp:BoundField DataField="wpId" HeaderText="wpId" SortExpression="wpId" 
+                ReadOnly="True" />
+            <asp:BoundField DataField="sat" HeaderText="sat" SortExpression="sat" >
+            <ItemStyle Width="20px" />
+            </asp:BoundField>
             <asp:BoundField DataField="sun" HeaderText="sun" SortExpression="sun" />
             <asp:BoundField DataField="mon" HeaderText="mon" SortExpression="mon" />
             <asp:BoundField DataField="tue" HeaderText="tue" SortExpression="tue" />
@@ -28,8 +38,9 @@
         EnableInsert="True" EnableUpdate="True" EntityTypeName="" 
         TableName="TimesheetEntries" Where="empId == @empId">
         <WhereParameters>
-            <asp:Parameter DefaultValue="1" Name="empId" Type="Int32" />
+            <asp:SessionParameter Name="empId" SessionField="CurEmpId" Type="Int32" />
         </WhereParameters>
     </asp:LinqDataSource>
+    <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
 </asp:Content>
 

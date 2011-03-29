@@ -10,14 +10,16 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-     //FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
+        FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
 
-     //var qry = from o in ff.EmployeeMemberships
-     //          where Convert.ToString(o.userId) == User.Identity.Name
-     //          select o;
-     
-     //Session["CurEmpId"] = qry.First().empId.ToString();
-     //  Label1.Text = Convert.ToString(Session["CurEmpId"]);
+       
+        var qry = (from o in ff.EmployeeMemberships
+                  join emp in ff.aspnet_Users on o.userId equals emp.UserId
+                  where emp.UserName == User.Identity.Name
+                  select o.empId).Single();
+
+        Session["CurEmpId"] = qry.ToString();
+        //Label1.Text += "\t" + Convert.ToString(Session["CurEmpId"]);
 
 
     }
