@@ -15,13 +15,6 @@ public partial class UserManagement : System.Web.UI.Page
     {
     }
 
-    //Timer for certain errors to clear
-    protected void ErrorTimer_Tick(object sender, EventArgs e)
-    {
-        AssignLabel.Text = "";
-        lblUserEditError.Text = "";
-    }
-
     #region Menu Items
     //Shows the create employee div when link is clicked
     protected void lbCreateUser_Click(object sender, EventArgs e)
@@ -319,36 +312,7 @@ public partial class UserManagement : System.Web.UI.Page
         lblUsername.Text = ff.aspnet_Users.Where(use => use.UserId == userID).Select(use => use.UserName).First();
         lblEmail.Text = ff.aspnet_Memberships.Where(use => use.UserId == userID).Select(use => use.Email).First();
         lbSupervisors.SelectedValue = ManagedEmployee.supervisor.ToString();
-        try
-        {
-            lbApprovers.SelectedValue = ManagedEmployee.approver.ToString();
-        }
-        catch (ArgumentOutOfRangeException ae)
-        {
-            var list = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
-            .Where(r => r.RoleName == "TimesheetApprover")
-            .Select(u => new
-            {
-                empID = u.empId,
-                tsa = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
-            }).ToList();
-
-            list.Add(ff.Employees
-                .Where(em => em.empId == Convert.ToInt32(ManagedEmployee.approver.ToString()))
-                .Select(u => new
-                {
-                    empID = u.empId,
-                    tsa = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
-                }).First());
-            lbApprovers.DataSource = list;
-            lbApprovers.DataTextField = "tsa";
-            lbApprovers.DataValueField = "empId";
-            lbApprovers.DataBind();
-            lbApprovers.SelectedValue = ManagedEmployee.approver.ToString();
-            lblUserEditError.Text = "This timesheet approver does not have the Approver Role anymore. Choosing them again will "
-                + "add them back to the Role.";
-            lblUserEditError.ForeColor = System.Drawing.Color.Blue;
-        }
+        lbApprovers.SelectedValue = ManagedEmployee.approver.ToString();
         tbMinHours.Text = ManagedEmployee.minHoursPerWeek.ToString();
         tbVacation.Text = ManagedEmployee.vacationLeave.ToString();
         tbSickDays.Text = ManagedEmployee.sickDays.ToString();
@@ -378,27 +342,20 @@ public partial class UserManagement : System.Web.UI.Page
     //Returns a list of all Supervisors ..... List<String> is placeholder for correct type
     protected void fillSupervisorApproverListBoxes()
     {
-        //Fills Approvers DDL with all users in role TimesheetApprover
-        lbApprovers.DataSource = ff.vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
-            .Where(r => r.RoleName == "TimesheetApprover")
+        var list = ff.vw_AllValid_UserName_EmpIDs
             .Select(u => new
             {
                 empID = u.empId,
                 tsa = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
             })
             .OrderBy(u => u.tsa);
+
+        lbApprovers.DataSource = list;
         lbApprovers.DataTextField = "tsa";
         lbApprovers.DataValueField = "empId";
         lbApprovers.DataBind();
 
-        //Fills Supervisors DDL with all users in ??? can supervisors be anyone?
-        lbSupervisors.DataSource = ff.vw_AllValid_UserName_EmpIDs
-            .Select(u => new
-            {
-                empID = u.empId,
-                tsa = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
-            })
-            .OrderBy(u => u.tsa);
+        lbSupervisors.DataSource = list;
         lbSupervisors.DataTextField = "tsa";
         lbSupervisors.DataValueField = "empId";
         lbSupervisors.DataBind();
@@ -410,49 +367,60 @@ public partial class UserManagement : System.Web.UI.Page
     //Populates DDL and LB with all unassigned emplpoyees and valid projects
     protected void popluateUnassignedEmployeesAndProjects()
     {
-        lbUnassignedUsers.DataSource = ff.vwUnassignedEmployees.Select(u => new
-        {
-            EmpID = u.Expr1,
-            EmployeeName = ((((u.firstName + " ") + u.lastName) + " (") + u.Expr1 + ")")
-        })
-        .OrderBy(u => u.EmployeeName);
-        lbUnassignedUsers.DataTextField = "EmployeeName";
-        lbUnassignedUsers.DataValueField = "EmpID";
-        lbUnassignedUsers.DataBind();
-
-        lbAllProjects.DataSource = ff.Projects.Select(p => new
+        ddlAllProjects.DataSource = ff.Projects.Select(p => new
         {
             ProjID = p.projId,
             ProjectName = (p.projName + " (") + p.projId + ")"
         });
-        lbAllProjects.DataValueField = "ProjId";
-        lbAllProjects.DataTextField = "ProjectName";
-        lbAllProjects.DataBind();
+        ddlAllProjects.DataValueField = "ProjId";
+        ddlAllProjects.DataTextField = "ProjectName";
+        ddlAllProjects.DataBind();
     }
+
+    //lbUnassignedUsers.DataSource = ff.vwUnassignedEmployees.Select(u => new
+    //{
+    //    EmpID = u.Expr1,
+    //    EmployeeName = ((((u.firstName + " ") + u.lastName) + " (") + u.Expr1 + ")")
+    //})
+    //.OrderBy(u => u.EmployeeName);
+    //lbUnassignedUsers.DataTextField = "EmployeeName";
+    //lbUnassignedUsers.DataValueField = "EmpID";
+    //lbUnassignedUsers.DataBind();
 
     //Adds select employee to selected project and repopulates the list
     protected void buttonAddToProject_Click(object sender, EventArgs e)
     {
-        EmployeeProject ep = new EmployeeProject();
-        ep.empId = Convert.ToInt32(lbUnassignedUsers.SelectedValue);
-        ep.projId = Convert.ToInt32(lbAllProjects.SelectedValue);
+        //EmployeeProject ep = new EmployeeProject();
+        //ep.empId = Convert.ToInt32(lbUnassignedUsers.SelectedValue);
+        //ep.projId = Convert.ToInt32(lbAllProjects.SelectedValue);
 
-        ff.EmployeeProjects.InsertOnSubmit(ep);
+        //ff.EmployeeProjects.InsertOnSubmit(ep);
 
-        try
-        {
-            ff.SubmitChanges();
-        }
-        catch (Exception ex)
-        {
-            AssignLabel.Text = ex.StackTrace;
-            AssignLabel.ForeColor = System.Drawing.Color.Red;
-        }
-        //refreshes lb and ddl
-        popluateUnassignedEmployeesAndProjects();
+        //try
+        //{
+        //    ff.SubmitChanges();
+        //}
+        //catch (Exception ex)
+        //{
+        //    AssignLabel.Text = ex.StackTrace;
+        //    AssignLabel.ForeColor = System.Drawing.Color.Red;
+        //}
+        ////refreshes lb and ddl
+        //popluateUnassignedEmployeesAndProjects();
 
-        AssignLabel.Text = "Employee has been assigned to Project";
-        AssignLabel.ForeColor = System.Drawing.Color.Green;
+        //AssignLabel.Text = "Employee has been assigned to Project";
+        //AssignLabel.ForeColor = System.Drawing.Color.Green;
     }
     #endregion
+    protected void buttonSelectProject_Click(object sender, EventArgs e)
+    {
+        //fills assigned users in a proj
+        lbAssignedEmployees.DataSource = ff.EmployeeProjects
+            .Join(ff.Employees, em => em.empId, c => c.empId, (em, c) => new { em = em, c = c })
+            .Where(x => (x.em.projId == Convert.ToInt32(ddlAllProjects.SelectedValue)))
+            .Select(y => new { EmpID = y.em.empId, EmployeeName = (((((y.c.firstName + " ") + y.c.lastName) + " (") + y.em.empId) + ")") });
+        lbAssignedEmployees.DataTextField = "EmployeeName";
+        lbAssignedEmployees.DataValueField = "EmpID";
+        lbAssignedEmployees.DataBind();
+    }
 }
