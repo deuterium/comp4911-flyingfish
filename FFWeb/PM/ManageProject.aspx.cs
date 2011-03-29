@@ -95,8 +95,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            divChangeAlloc.Visible = true;
-            lblError.Text = "Invalid Budget.";
+            lblException.Text = exception.StackTrace;
         }
     }
 }

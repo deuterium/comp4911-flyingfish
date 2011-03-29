@@ -35,6 +35,14 @@
                         <asp:Label ID="lblUnallocMsg2" runat="server" Text="Unallocated Budget: " />
                         <asp:TextBox ID="tbUnalloc" runat="server" />
                         <br />
+                        <asp:CompareValidator ID="cvUnallocated" runat="server" 
+                            ControlToValidate="tbUnalloc" ErrorMessage="Invalid Budget." ForeColor="Red" 
+                            Operator="DataTypeCheck" Type="Integer"></asp:CompareValidator>
+                        <br />
+                        <asp:RangeValidator ID="rvUnalloc" runat="server" ControlToValidate="tbUnalloc" 
+                            ErrorMessage="Budget must be a positive number." ForeColor="Red" 
+                            MaximumValue="2147483647" MinimumValue="0" Type="Integer"></asp:RangeValidator>
+                        <br />
                         <asp:Button ID="btnSaveAlloc" runat="server" Text="Save Changes" 
                             onclick="btnSaveAlloc_Click" />
                     </div>
