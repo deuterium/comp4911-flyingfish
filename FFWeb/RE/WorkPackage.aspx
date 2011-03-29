@@ -59,6 +59,14 @@
                     <br />
                 </td>
             </tr>
+            <tr>
+                <td align="center" colspan="2">
+                    <asp:LinkButton ID="lbProjectList" runat="server" onclick="lbProjectList_Click" 
+                        CausesValidation="False">Go to Project List</asp:LinkButton>
+                    <asp:LinkButton ID="lbProject" runat="server" CausesValidation="False" 
+                        onclick="lbProject_Click">Go to Project</asp:LinkButton>
+                </td>
+            </tr>
         </table>
     </div>
     <div id="divCreateSuccess" runat="server" visible="false">

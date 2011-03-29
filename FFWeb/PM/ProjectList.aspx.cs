@@ -13,6 +13,8 @@ public partial class PM_ProjectList : System.Web.UI.Page
     {
         try
         {
+            if (Session["wpID"] != null)
+                Session["wpID"] = null;
             var qry =
                 from projs in ff.Projects
                 select projs;

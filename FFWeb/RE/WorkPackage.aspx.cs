@@ -38,16 +38,19 @@ public partial class RE_WorkPackage : System.Web.UI.Page
             {
                 lblError.Text = "Work Package already exists";
             }
-            else if (ff.WorkPackages.Where(te => te.wpId == Session["wpID"].ToString() + "." + tbwpID.Text).ToArray().Length > 0 && Session["wpID"] != null)
-            {
-                lblError.Text = "Work Package already exists";
-            }
             else
             {
                 if (Session["wpID"] == null)
                     wp.wpId = Convert.ToInt32(Session["projID"]) + "." + tbwpID.Text;
                 else
+                {
                     wp.wpId = Session["wpID"].ToString() + "." + tbwpID.Text;
+                    if (ff.WorkPackages.Where(te => te.wpId == Session["wpID"].ToString() + "." + tbwpID.Text).ToArray().Length > 0)
+                    {
+                        lblError.Text = "Work Package already exists";
+                        return;
+                    }
+                }
                 wp.name = tbwpName.Text;
                 wp.description = tbDescription.Text;
                 wp.projId = Convert.ToInt32(Session["projID"]);
@@ -57,6 +60,7 @@ public partial class RE_WorkPackage : System.Web.UI.Page
                 divCreateWorkPackage.Visible = false;
                 divCreateSuccess.Visible = true;
                 lblSuccessMsg.Text = "Work Package(" + wp.wpId + ") is created successfully.";
+
             }
         }
         catch (Exception exception)
@@ -67,5 +71,13 @@ public partial class RE_WorkPackage : System.Web.UI.Page
     protected void btnManage_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/RE/ManageWorkPackage.aspx");
+    }
+    protected void lbProjectList_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PM/ProjectList.aspx");
+    }
+    protected void lbProject_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PM/ManageProject.aspx");
     }
 }
