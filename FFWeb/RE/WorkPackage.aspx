@@ -23,7 +23,7 @@
                         Type="Integer" Operator="DataTypeCheck">*</asp:CompareValidator>
                     <asp:RangeValidator ID="rvID" runat="server" ControlToValidate="tbwpID" 
                         ErrorMessage="Work Package ID must be a positive integer." ForeColor="Red" 
-                        MaximumValue="2147483647" MinimumValue="0" Type="Integer">*</asp:RangeValidator>
+                        MaximumValue="2147483647" MinimumValue="1" Type="Integer">*</asp:RangeValidator>
                 </td>
             </tr>
             <tr>
