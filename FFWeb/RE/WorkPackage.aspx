@@ -41,36 +41,6 @@
                     ForeColor="Red" ValidationExpression="^[a-zA-Z\s]+$">*</asp:RegularExpressionValidator>
                 </td>
             </tr>
-            <!--<tr>
-                <td align="right">
-                    <asp:Label ID="lblAllocated" runat="server" Text="Allocated Budget: " />
-                </td>
-                <td>
-                    <asp:TextBox ID="tbAllocated" runat="server" />
-                    <asp:RequiredFieldValidator ID="rfvAllocated" runat="server" 
-                        ControlToValidate="tbAllocated" ErrorMessage="Allocated budget is required." 
-                        ForeColor="Red">*</asp:RequiredFieldValidator>
-                    <asp:CompareValidator ID="cvAllocated" runat="server" 
-                        ControlToValidate="tbAllocated" 
-                        ErrorMessage="Allocated budget must be an integer." ForeColor="Red" 
-                        Operator="DataTypeCheck" Type="Integer">*</asp:CompareValidator>
-                </td>
-            </tr>
-            <tr>
-                <td align="right">
-                    <asp:Label ID="lblUnallocated" runat="server" Text="Unallocated Budget: " />
-                </td>
-                <td>
-                    <asp:TextBox ID="tbUnallocated" runat="server" />
-                    <asp:RequiredFieldValidator ID="rfvUnallocated" runat="server" 
-                        ControlToValidate="tbUnallocated" 
-                        ErrorMessage="Unallocated budget is required." ForeColor="Red">*</asp:RequiredFieldValidator>
-                    <asp:CompareValidator ID="cvUnallocated" runat="server" 
-                        ControlToValidate="tbUnallocated" 
-                        ErrorMessage="Unallocated budget must be an integer." ForeColor="Red" 
-                        Operator="DataTypeCheck" Type="Integer">*</asp:CompareValidator>
-                </td>
-            </tr>-->
             <tr>
                 <td align="right">
                     <asp:Label ID="lblDescription" runat="server" Text="Description: " />
@@ -85,6 +55,8 @@
                         onclick="btnCreateWorkPackage_Click" />
                     <br />
                     <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
+                    <asp:ValidationSummary ID="vsSummary" runat="server" ForeColor="Red" />
+                    <br />
                 </td>
             </tr>
         </table>

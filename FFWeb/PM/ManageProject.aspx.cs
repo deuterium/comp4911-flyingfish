@@ -15,6 +15,8 @@ public partial class PM_ManageProject : System.Web.UI.Page
         {
             if (Session["projID"] == null)
                 Response.Redirect("~/PM/ProjectList.aspx");
+            if(divChangeAlloc.Visible == false)
+                divOriginalAlloc.Visible = true;
             divChangeAlloc.Visible = false;
             lblProjID2.Text = Session["projID"].ToString();
 
@@ -93,7 +95,8 @@ public partial class PM_ManageProject : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            divChangeAlloc.Visible = true;
+            lblError.Text = "Invalid Budget.";
         }
     }
 }

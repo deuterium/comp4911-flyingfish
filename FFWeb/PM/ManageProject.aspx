@@ -38,6 +38,7 @@
                         <asp:Button ID="btnSaveAlloc" runat="server" Text="Save Changes" 
                             onclick="btnSaveAlloc_Click" />
                     </div>
+                    <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
             </div>
             </ContentTemplate>
             </asp:UpdatePanel>
