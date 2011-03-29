@@ -365,17 +365,17 @@ public partial class UserManagement : System.Web.UI.Page
     #region Assign Employee to Project
 
     //Populates DDL and LB with all unassigned emplpoyees and valid projects
-    protected void popluateUnassignedEmployeesAndProjects()
-    {
-        ddlAllProjects.DataSource = ff.Projects.Select(p => new
-        {
-            ProjID = p.projId,
-            ProjectName = (p.projName + " (") + p.projId + ")"
-        });
-        ddlAllProjects.DataValueField = "ProjId";
-        ddlAllProjects.DataTextField = "ProjectName";
-        ddlAllProjects.DataBind();
-    }
+    //protected void popluateUnassignedEmployeesAndProjects()
+    //{
+    //    ddlAllProjects.DataSource = ff.Projects.Select(p => new
+    //    {
+    //        ProjID = p.projId,
+    //        ProjectName = (p.projName + " (") + p.projId + ")"
+    //    });
+    //    ddlAllProjects.DataValueField = "ProjId";
+    //    ddlAllProjects.DataTextField = "ProjectName";
+    //    ddlAllProjects.DataBind();
+    //}
 
     //lbUnassignedUsers.DataSource = ff.vwUnassignedEmployees.Select(u => new
     //{
@@ -422,5 +422,14 @@ public partial class UserManagement : System.Web.UI.Page
         lbAssignedEmployees.DataTextField = "EmployeeName";
         lbAssignedEmployees.DataValueField = "EmpID";
         lbAssignedEmployees.DataBind();
+
+        //BROKEN
+        //lbUnassignedUsers.DataSource = ff.EmployeeProjects
+        //    .Join(ff.Employees, em => em.empId, c => c.empId, (em, c) => new { em = em, c = c })
+        //    .Where(x => (x.em.projId != Convert.ToInt32(ddlAllProjects.SelectedValue)))
+        //    .Select(y => new { EmpID = y.em.empId, EmployeeName = (((((y.c.firstName + " ") + y.c.lastName) + " (") + y.em.empId) + ")") });
+        //lbUnassignedUsers.DataTextField = "EmployeeName";
+        //lbUnassignedUsers.DataValueField = "EmpID";
+        //lbUnassignedUsers.DataBind();
     }
 }

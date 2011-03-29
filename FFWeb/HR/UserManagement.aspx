@@ -531,7 +531,7 @@
                 <td>
                     <asp:UpdatePanel ID="UnassignedUsersUpdatePanel" runat="server">
                         <ContentTemplate>
-                            <asp:ListBox ID="lbUnassignedUsers" runat="server" Rows="6" Width="200" SelectionMode="Multiple" />
+                            <asp:ListBox ID="lbUnassignedUsers" runat="server" Rows="15" Width="200" SelectionMode="Multiple" />
                             <asp:RequiredFieldValidator ID="SelectAssignUserRequired" runat="server" ErrorMessage="Please select an Employee."
                                 ControlToValidate="lbUnassignedUsers" Display="Dynamic" ForeColor="Red" ValidationGroup="vgAssignUser">*</asp:RequiredFieldValidator>
                         </ContentTemplate>
@@ -545,7 +545,7 @@
                 <td align="right">
                     <asp:UpdatePanel ID="AssignedUsersUpdatePanel" runat="server">
                         <ContentTemplate>
-                            <asp:ListBox ID="lbAssignedEmployees" runat="server" Rows="6" Width="200" SelectionMode="Multiple" />
+                            <asp:ListBox ID="lbAssignedEmployees" runat="server" Rows="15" Width="200" SelectionMode="Multiple" />
                             <asp:RequiredFieldValidator ID="SelectUnassignUserRequired" runat="server" ErrorMessage="Please select an Employee."
                                 ControlToValidate="lbAssignedEmployees" Display="Dynamic" ForeColor="Red" ValidationGroup="vgUnassignUser">*</asp:RequiredFieldValidator>
                         </ContentTemplate>
