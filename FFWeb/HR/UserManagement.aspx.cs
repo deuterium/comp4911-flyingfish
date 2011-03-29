@@ -53,7 +53,7 @@ public partial class UserManagement : System.Web.UI.Page
             DivManageUsers.Visible = false;
         }
         DivAssignUsers.Visible = true;
-        popluateUnassignedEmployeesAndProjects();
+        //popluateUnassignedEmployeesAndProjects();
         AssignLabel.Text = "";
     }
     #endregion

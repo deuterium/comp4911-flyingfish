@@ -12,30 +12,79 @@
 <body>
     <form id="form" runat="server">
     <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" ShowStartingNode="False" />
-
+    
     <div class="divcentertop">
-        <asp:Image ID="imgBanner" ImageUrl="~/images/FlyingFish_Banner.png" 
-            AlternateText="Banner" ImageAlign="Middle" runat="server" />
-    </div>
-
-    <div class="divmastermenubar">
-        <div class="divmastermenu">
-            <div class="status">
-                <asp:LoginName ID="LoginName" runat="server" />
-                <asp:LoginStatus BackColor="Transparent" ID="LoginStatus" runat="server" Width="60px" />
-            </div>
-            <asp:Menu ID="Menu1" runat="server" Orientation="Horizontal" DataSourceID="SiteMapDataSource1" 
-                SkipLinkText="" StaticEnableDefaultPopOutImage="False" />
+        <div class="login" runat="server" id="divLogin" visible="false">
+            <asp:Login ID="Login1" runat="server">
+                <LayoutTemplate>
+                    <table cellpadding="1" cellspacing="0" style="border-collapse:collapse;">
+                        <tr>
+                            <td>
+                                <table cellpadding="0">
+                                    
+                                    <tr>
+                                        <td width="220" align="center" style="color:Red;">
+                                            <asp:Literal ID="FailureText" runat="server" EnableViewState="False"></asp:Literal>
+                                        </td>
+                                        <td align="right">
+                                            <asp:Label ID="UserNameLabel" runat="server" AssociatedControlID="UserName">User Name:</asp:Label>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox ID="UserName" runat="server"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" 
+                                                ControlToValidate="UserName" ErrorMessage="User Name is required." 
+                                                ToolTip="User Name is required." ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                        </td>
+                                        <td align="right">
+                                            <asp:Label ID="PasswordLabel" runat="server" AssociatedControlID="Password">Password:</asp:Label>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox ID="Password" runat="server" TextMode="Password"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" 
+                                                ControlToValidate="Password" ErrorMessage="Password is required." 
+                                                ToolTip="Password is required." ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td>
+                                            <asp:CheckBox ID="RememberMe" runat="server" Text="Remember me next time." />
+                                        </td>
+                                        <td align="right">
+                                            <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Log In" 
+                                                ValidationGroup="ctl00$Login1" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </LayoutTemplate>
+            </asp:Login>
         </div>
+        <asp:Image ID="imgBanner" runat="server" ImageUrl="~/images/FlyingFish_Banner2.png" />
     </div>
 
     <div class="page">
+        <div class="divmastermenubar">
+            <div class="divmastermenu">
+                <div class="status">
+                    <asp:LoginName ID="LoginName" runat="server" />
+                    <asp:LoginStatus ID="LoginStatus" runat="server" 
+                        LogoutPageUrl="~/Default.aspx" Width="80px" />
+                </div>
+                <asp:Menu ID="Menu1" runat="server" Orientation="Horizontal" DataSourceID="SiteMapDataSource1" 
+                    SkipLinkText="" StaticEnableDefaultPopOutImage="False" Width="700px" />
+            </div>
+        </div>
         <div  class="content">
             <asp:ContentPlaceHolder ID="content" runat="server">
             </asp:ContentPlaceHolder>
         </div>
-        <div class="footer">
-        </div>
+    </div>
+    <div class="line"></div>
+    <div class="footer">
+        Copyright &copy; Rainbow Motions 2011
     </div>
 
     </form>
