@@ -12,49 +12,37 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
-        /*
         if (!IsPostBack)
         {
-            defalutLoad();
-            approveTimeSheet();
+            GridView1.DataBind(); 
         }
-         * */
-     
-    }
-
-    /*
-    public void defalutLoad()
-    {
-        var qry = from tsh in ff.TimeSheetHeaders
-                  where tsh.status != "APPROVED"
-                  select new
-                  {
-                      EmpID = tsh.empId,
-                      Date = tsh.tsDate,
-                      Status = tsh.status,
-                      Comments = tsh.comments
-
-                  };
-
-        gv1.DataSource = qry;
-        gv1.DataBind();
-    }
-
-    public void approveTimeSheet()
-    {
+        
         
     }
-     * */
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
+        GridViewRow selectedRow = GridView1.SelectedRow;
+        
+        int selectedEmpId = Convert.ToInt16(GridView1.SelectedValue.ToString());
+        DateTime date = Convert.ToDateTime(selectedRow.Cells[2].Text);
+        
+       
+        var selectedStatus = (from c in ff.TimesheetHeaders
+                              where c.empId == selectedEmpId && c.tsDate == date
+                              select c).Single();
+        
         if (DropDownList1.SelectedValue == "Approve")
         {
+            selectedStatus.status = "APPROVED";
 
         }
         else
         {
-
+            selectedStatus.status = "REJECTED";
         }
+
+        ff.SubmitChanges();
+  
     }
 }
