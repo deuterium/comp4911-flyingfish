@@ -43,7 +43,7 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page {
                                    .Where(wp => wp.projId == Convert.ToInt16(ddlAllProjects.SelectedValue))
                                    .Select(wp => new {
                                        WpID = wp.wpId,
-                                       WpName = wp.name + "(" + wp.wpId + ")"
+                                       WpName = wp.wpId + "  " + wp.name
                                    });
         ddlWorkpackages.DataValueField = "WpId";
         ddlWorkpackages.DataTextField = "WpName";
