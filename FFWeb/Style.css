@@ -215,3 +215,35 @@ a:hover
    background-color:#0066FF;
    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#ff339900',EndColorStr='#ff0033FF');
 }
+
+/* Default.aspx */
+
+.ajaxkeygen
+{
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:5;
+    opacity:0.5;
+    background-color:Black;
+}
+
+.keygenwindow
+{
+    position:absolute;
+    top:100px;
+    width:500px;
+    margin-left: -250px;
+    left: 50%;
+    z-index:6;
+    background-color:White;
+    border:3px Solid Black;
+    padding:15px;
+}
+
+.ajaxblurb
+{
+    text-align:center;
+}
