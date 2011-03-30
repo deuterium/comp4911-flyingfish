@@ -481,14 +481,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="3">
+                        <td colspan="2">
                             <asp:Button ID="buttonDetailsCancel" runat="server" Text="Cancel Editing" OnClick="buttonDetailsCancel_Click" />
                             &nbsp;<asp:Button ID="buttonDetailsSubmit" Text="Submit Changes" ValidationGroup="vgEditUser"
                                 runat="server" OnClick="buttonDetailsSubmit_Click" />
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="3">
+                        <td colspan="2">
                             <asp:Label ID="lblUserEditError" runat="server" Text=""></asp:Label>
                             <asp:ValidationSummary ID="vsEditUser" runat="server" ValidationGroup="vgEditUser"
                                 DisplayMode="List" ForeColor="Red" />
@@ -511,7 +511,7 @@
             border-style: Solid; font-family: Verdana; font-size: 0.8em; border-collapse: collapse;
             margin-left: auto; margin-right: auto;">
             <tr>
-                <td colspan="4">
+                <td colspan="3">
                     Select a project to manage:
                     <asp:DropDownList ID="ddlAllProjects" runat="server" />
                     &nbsp;<asp:Button ID="buttonSelectProject" runat="server" Text="Select Project" OnClick="buttonSelectProject_Click" />
@@ -556,15 +556,17 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td>
                     <asp:Button ID="buttonAssignUser" Text="Assign to Project" runat="server" ValidationGroup="vgAssignUser" />
+                </td>
+                <td width="50">
                 </td>
                 <td align="right">
                     <asp:Button ID="buttonUnassignUser" Text="Unassign from Project" runat="server" ValidationGroup="vgUnassignUser" />
                 </td>
             </tr>
             <tr>
-                <td colspan="4" align="right">
+                <td colspan="3" align="right">
                     <asp:Label ID="AssignLabel" runat="server" Text=""></asp:Label>
                 </td>
             </tr>

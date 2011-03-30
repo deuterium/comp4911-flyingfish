@@ -53,7 +53,7 @@ public partial class UserManagement : System.Web.UI.Page
             DivManageUsers.Visible = false;
         }
         DivAssignUsers.Visible = true;
-        //popluateUnassignedEmployeesAndProjects();
+        popluateProjectsDropdown();
         AssignLabel.Text = "";
     }
     #endregion
@@ -365,17 +365,17 @@ public partial class UserManagement : System.Web.UI.Page
     #region Assign Employee to Project
 
     //Populates DDL and LB with all unassigned emplpoyees and valid projects
-    //protected void popluateUnassignedEmployeesAndProjects()
-    //{
-    //    ddlAllProjects.DataSource = ff.Projects.Select(p => new
-    //    {
-    //        ProjID = p.projId,
-    //        ProjectName = (p.projName + " (") + p.projId + ")"
-    //    });
-    //    ddlAllProjects.DataValueField = "ProjId";
-    //    ddlAllProjects.DataTextField = "ProjectName";
-    //    ddlAllProjects.DataBind();
-    //}
+    protected void popluateProjectsDropdown()
+    {
+        ddlAllProjects.DataSource = ff.Projects.Select(p => new
+        {
+            ProjID = p.projId,
+            ProjectName = (p.projName + " (") + p.projId + ")"
+        });
+        ddlAllProjects.DataValueField = "ProjId";
+        ddlAllProjects.DataTextField = "ProjectName";
+        ddlAllProjects.DataBind();
+    }
 
     //lbUnassignedUsers.DataSource = ff.vwUnassignedEmployees.Select(u => new
     //{
