@@ -49,9 +49,9 @@
       <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
     </Compile>
     <Compile Include="FlyingFishClasses.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="ManagedEmployee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,18 +77,18 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="FlyingFishClasses.dbml.layout">
-      <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="SQL_Files\CreateDBViews.sql" />
     <Content Include="SQL_Files\CreateDB.sql" />
     <Content Include="SQL_Files\DeleteDB.sql" />
     <Content Include="SQL_Files\DBExportForMigration.sql" />
     <Content Include="SQL_Files\FlushDB.sql" />
     <Content Include="SQL_Files\PopulateDB.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FlyingFishClasses.dbml.layout">
+      <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
