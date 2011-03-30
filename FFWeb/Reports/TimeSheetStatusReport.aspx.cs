@@ -12,16 +12,13 @@ using FFLib;
  * Finish getting data/doing calcs
  */
 
-public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page
-{
+public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page {
     FlyingFishClassesDataContext ffdb = new FlyingFishClassesDataContext();
     WorkPackageStatusReport wpsr;
     WorkPackageResponsibleEngineer wpre;
 
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        if (!IsPostBack)
-        {
+    protected void Page_Load(object sender, EventArgs e) {
+        if (!IsPostBack) {
             populateProjects();
             populateWorkpackages();
         }
@@ -30,10 +27,8 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page
         GetWorkPackageStatusReport(4911, "1", Convert.ToDateTime("2011/01/01"), Convert.ToDateTime("2011/03/01"));
     }
 
-    private void populateProjects()
-    {
-        ddlAllProjects.DataSource = ffdb.Projects.Select(p => new
-        {
+    private void populateProjects() {
+        ddlAllProjects.DataSource = ffdb.Projects.Select(p => new {
             ProjID = p.projId,
             ProjectName = (p.projName + " (") + p.projId + ")"
         });
@@ -43,12 +38,10 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page
         //PopulateWorkpackages();
     }
 
-    private void populateWorkpackages()
-    {
+    private void populateWorkpackages() {
         ddlWorkpackages.DataSource = ffdb.WorkPackages
                                    .Where(wp => wp.projId == Convert.ToInt16(ddlAllProjects.SelectedValue))
-                                   .Select(wp => new
-                                   {
+                                   .Select(wp => new {
                                        WpID = wp.wpId,
                                        WpName = wp.name + "(" + wp.wpId + ")"
                                    });
@@ -57,13 +50,11 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page
         ddlWorkpackages.DataBind();
     }
 
-    protected void ddlAllProjects_SelectedIndexChanged(object sender, EventArgs e)
-    {
+    protected void ddlAllProjects_SelectedIndexChanged(object sender, EventArgs e) {
         populateWorkpackages();
     }
 
-    public void GetWorkPackageStatusReport(int projId, String wpId, DateTime start, DateTime end)
-    {
+    public void GetWorkPackageStatusReport(int projId, String wpId, DateTime start, DateTime end) {
         // Find out how much work each employee has done on the work package
         // Calculate the PDays and PDollar value of this work
         // Calculate the EAC from the ACWP and ETC
@@ -75,10 +66,10 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page
                                  && (t.wpId == wpId)
                                  && (t.tsDate >= start)
                                  && (t.tsDate <= end)
-                         group t by new { t.projId, t.wpId, t.empId } into g
+                         group t by new { t.projId, t.wpId, ID = t.empId } into g
                          select new {
-                             empId = g.Key.empId,
-                             hours = g.Sum(s => (s.mon + s.tue + s.wed + s.thu + s.fri + s.sat + s.sun))
+                             empId = g.Key.ID,
+                             hours = (double)g.Sum(s => (s.mon + s.tue + s.wed + s.thu + s.fri + s.sat + s.sun))
                          };
 
         var etcForAll = from etc in ffdb.EmployeeWorkPackageETCs
@@ -89,28 +80,52 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page
                                          select du.dateUpdated).Max())
                         select new {
                             empId = etc.empId,
-                            days = etc.ETC_days
+                            days = (double)etc.ETC_days.GetValueOrDefault(0)
                         };
-    
+
         var qry = from tse in ffdb.TimesheetEntries
                   join emp in ffdb.Employees on tse.empId equals emp.empId
                   join proj in ffdb.Projects on tse.projId equals proj.projId
                   join wp in ffdb.WorkPackages on tse.wpId equals wp.wpId
                   orderby tse.projId, tse.wpId, tse.empId
                   where (tse.tsDate >= start) && (tse.tsDate <= end)
-                  select new
-                  {
+                  select new {
                       Emp = emp.firstName + " " + emp.lastName + " (" + emp.empId + ")",
-                      ACWP = acwpForAll.Where(afa => afa.hours == tse.empId),
-                       // get last estimate before this report ends
-                      ETC = etcForAll.Where(efa => efa.empId == tse.empId),
-                      EAC = (from efa in etcForAll
-                            where efa.empId == tse.empId
-                            select efa.days),
-                      EAC2 = (from afa in acwpForAll
+                      ACWP = ((double?)
+                             (from afa in acwpForAll
+                              where afa.empId == tse.empId
+                              select afa.hours).FirstOrDefault()).GetValueOrDefault(),
+                      // get last estimate before this report ends
+                      ETC = ((double?)
+                             (from efa in etcForAll
+                              where efa.empId == tse.empId
+                              select efa.days).FirstOrDefault()).GetValueOrDefault(),
+                      EAC = (((double?)
+                            (from afa in acwpForAll
                              where afa.empId == tse.empId
-                             select afa.hours),
-                      Complete = "UNKNOWN %",
+                             select afa.hours).FirstOrDefault()).GetValueOrDefault()
+                             +
+                             ((double?)
+                             (from efa in etcForAll
+                              where efa.empId == tse.empId
+                              select efa.days).FirstOrDefault()).GetValueOrDefault()),
+                      Complete = // ACWP
+                            (((double?)
+                             (from afa in acwpForAll
+                              where afa.empId == tse.empId
+                              select afa.hours).FirstOrDefault()).GetValueOrDefault()
+                             /
+                          // EAC
+                            (((double?)
+                            (from afa in acwpForAll
+                             where afa.empId == tse.empId
+                             select afa.hours).FirstOrDefault()).GetValueOrDefault()
+                             +
+                             ((double?)
+                             (from efa in etcForAll
+                              where efa.empId == tse.empId
+                              select efa.days).FirstOrDefault()).GetValueOrDefault()))
+                              * 100,
                       Project = proj
                   };
 
@@ -131,11 +146,11 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page
         lblWpId.Text = wpsr.wpId;
         lblWpName.Text = wpsr.WorkPackage.name;
         lblRe.Text = wpre.EmployeeWorkPackage.EmployeeProject.Employee.firstName
-                        +  " " + wpre.EmployeeWorkPackage.EmployeeProject.Employee.lastName
-                        + "(" + wpre.responsibleEngineer + ")";
+                        + " " + wpre.EmployeeWorkPackage.EmployeeProject.Employee.lastName
+                        + " (" + wpre.responsibleEngineer + ")";
         lblPm.Text = qry.First().Project.Employee.firstName
                         + " " + qry.First().Project.Employee.lastName
-                        + "(" + qry.First().Project.manager + ")";
+                        + " (" + qry.First().Project.manager + ")";
         lblReportNo.Text = "Unavailabile";
         lblReportPeriod.Text = "";
         lblPmBac.Text = "NULL";
@@ -147,10 +162,9 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page
         tbWorkPlannedNext.Text = wpsr.workPlannedNext;
         tbProblemsEncountered.Text = wpsr.problemsEncountered;
         tbProblemsAncticipatedNext.Text = wpsr.problemsAnticipated;
-        
+
     }
-    protected void btnSubmit_Click(object sender, EventArgs e)
-    {
+    protected void btnSubmit_Click(object sender, EventArgs e) {
         DateTime periodStart = Convert.ToDateTime(tbPeriodStart.Text);
         DateTime periodEnd = Convert.ToDateTime(tbPeriodEnd.Text);
         int projId = Convert.ToInt16(ddlWorkpackages.SelectedValue);

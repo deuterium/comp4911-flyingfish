@@ -67,7 +67,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <br />Workpackage Id: 
+                            Workpackage Id: 
                         </td>
                         <td>
                             <asp:Label ID="lblWpId" runat="server" Text=""></asp:Label>
