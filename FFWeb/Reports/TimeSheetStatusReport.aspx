@@ -44,7 +44,6 @@
     <asp:TextBox ID="tbPeriodEnd" runat="server"></asp:TextBox>
     <asp:CalendarExtender ID="cexPeriodEnd" runat="server" Format="yyyy/MM/dd" TargetControlID="tbPeriodEnd" >
     </asp:CalendarExtender>
-     .
     <br />
     <br />
 
@@ -55,7 +54,7 @@
     <table cellpadding="10px">
         <tr>
             <td>
-                <asp:GridView ID="gvStatus" runat="server" >
+                <asp:GridView ID="gvStatus" runat="server">
                 </asp:GridView>
             </td>
             <td>

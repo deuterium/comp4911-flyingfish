@@ -72,6 +72,7 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page {
                              hours = (double)g.Sum(s => (s.mon + s.tue + s.wed + s.thu + s.fri + s.sat + s.sun))
                          };
 
+        // restrict date to within reporting period
         var etcForAll = from etc in ffdb.EmployeeWorkPackageETCs
                         where (etc.projId == projId)
                                 && (etc.wpId == wpId)
@@ -128,7 +129,6 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page {
                               * 100,
                       Project = proj
                   };
-
 
         gvStatus.DataSource = qry;
         gvStatus.DataBind();
