@@ -529,40 +529,44 @@
             </tr>
             <tr>
                 <td>
-                    <asp:UpdatePanel ID="UnassignedUsersUpdatePanel" runat="server">
-                        <ContentTemplate>
+                    <%--<asp:UpdatePanel ID="UnassignedUsersUpdatePanel" runat="server">
+                        <ContentTemplate>--%>
                             <asp:ListBox ID="lbUnassignedUsers" runat="server" Rows="15" Width="200" SelectionMode="Multiple" />
                             <asp:RequiredFieldValidator ID="SelectAssignUserRequired" runat="server" ErrorMessage="Please select an Employee."
                                 ControlToValidate="lbUnassignedUsers" Display="Dynamic" ForeColor="Red" ValidationGroup="vgAssignUser">*</asp:RequiredFieldValidator>
-                        </ContentTemplate>
+                        <%--</ContentTemplate>
                         <Triggers>
-                            <asp:AsyncPostBackTrigger ControlID="buttonSelectProject" EventName="Click" />
+                            <asp:AsyncPostBackTrigger ControlID="buttonAssignUser" EventName="Click" />
+                            <asp:AsyncPostBackTrigger ControlID="buttonUnassignUser" EventName="Click" />
                         </Triggers>
-                    </asp:UpdatePanel>
+                    </asp:UpdatePanel>--%>
                 </td>
                 <td width="50">
                 </td>
                 <td align="right">
-                    <asp:UpdatePanel ID="AssignedUsersUpdatePanel" runat="server">
-                        <ContentTemplate>
+                    <%--<asp:UpdatePanel ID="AssignedUsersUpdatePanel" runat="server">
+                        <ContentTemplate>--%>
                             <asp:ListBox ID="lbAssignedEmployees" runat="server" Rows="15" Width="200" SelectionMode="Multiple" />
                             <asp:RequiredFieldValidator ID="SelectUnassignUserRequired" runat="server" ErrorMessage="Please select an Employee."
                                 ControlToValidate="lbAssignedEmployees" Display="Dynamic" ForeColor="Red" ValidationGroup="vgUnassignUser">*</asp:RequiredFieldValidator>
-                        </ContentTemplate>
+                        <%--</ContentTemplate>
                         <Triggers>
-                            <asp:AsyncPostBackTrigger ControlID="buttonSelectProject" EventName="Click" />
+                            <asp:AsyncPostBackTrigger ControlID="buttonAssignUser" EventName="Click" />
+                            <asp:AsyncPostBackTrigger ControlID="buttonUnassignUser" EventName="Click" />
                         </Triggers>
-                    </asp:UpdatePanel>
+                    </asp:UpdatePanel>--%>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <asp:Button ID="buttonAssignUser" Text="Assign to Project" runat="server" ValidationGroup="vgAssignUser" />
+                    <asp:Button ID="buttonAssignUser" Text="Assign to Project" runat="server" 
+                        ValidationGroup="vgAssignUser" onclick="buttonAssignUser_Click" />
                 </td>
                 <td width="50">
                 </td>
                 <td align="right">
-                    <asp:Button ID="buttonUnassignUser" Text="Unassign from Project" runat="server" ValidationGroup="vgUnassignUser" />
+                    <asp:Button ID="buttonUnassignUser" Text="Unassign from Project" runat="server" 
+                        ValidationGroup="vgUnassignUser" onclick="buttonUnassignUser_Click" />
                 </td>
             </tr>
             <tr>

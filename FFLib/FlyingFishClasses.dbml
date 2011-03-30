@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="comp4911db" Class="FlyingFishClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=142.232.17.225;Initial Catalog=comp4911db;User ID=comp4911" SettingsObjectName="FFLib.Properties.Settings" SettingsPropertyName="FlyingFishConnectionString3" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=142.232.17.225;Initial Catalog=comp4911db;Persist Security Info=True;User ID=comp4911" SettingsObjectName="FFLib.Properties.Settings" SettingsPropertyName="comp4911dbConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.aspnet_Membership" Member="aspnet_Memberships">
     <Type Name="aspnet_Membership">
       <Column Name="ApplicationId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
@@ -256,6 +256,14 @@
       <Association Name="EmployeeWorkPackage_WorkPackageResponsibleEngineer" Member="EmployeeWorkPackage" ThisKey="responsibleEngineer,projId,wpId" OtherKey="empId,projId,wpId" Type="EmployeeWorkPackage" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.vw_AllValid_UserName_EmpID" Member="vw_AllValid_UserName_EmpIDs">
+    <Type Name="vw_AllValid_UserName_EmpID">
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="firstName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="lastName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
   <Table Name="dbo.vw_EmployeeInRolewFirstLastNameEmpIDUserID" Member="vw_EmployeeInRolewFirstLastNameEmpIDUserIDs">
     <Type Name="vw_EmployeeInRolewFirstLastNameEmpIDUserID">
       <Column Name="RoleId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
@@ -265,14 +273,6 @@
       <Column Name="firstName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="lastName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="UserId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.vw_AllValid_UserName_EmpID" Member="vw_AllValid_UserName_EmpIDs">
-    <Type Name="vw_AllValid_UserName_EmpID">
-      <Column Name="UserName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
-      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="firstName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="lastName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Table Name="dbo.vwUnassignedEmployees" Member="vwUnassignedEmployees">
@@ -291,12 +291,9 @@
       <Column Name="isActive" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.TimesheetEntriesTotalHours" Member="TimesheetEntriesTotalHours">
-    <Type Name="TimesheetEntriesTotalHour">
-      <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="wpId" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="totalHoursOnWp" Type="System.Decimal" DbType="Decimal(38,1)" CanBeNull="true" />
+  <Table Name="dbo.TimeSheetSummaryReportWeeks" Member="TimeSheetSummaryReportWeek1s">
+    <Type Name="TimeSheetSummaryReportWeek1">
+      <Column Name="Week" Type="System.Decimal" DbType="Decimal(38,1)" CanBeNull="true" />
     </Type>
   </Table>
 </Database>

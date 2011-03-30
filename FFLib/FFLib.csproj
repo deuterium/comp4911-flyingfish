@@ -45,13 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FlyingFishClasses.cs">
-      <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
-    </Compile>
     <Compile Include="FlyingFishClasses.designer.cs">
-      <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
-      <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
     </Compile>
     <Compile Include="ManagedEmployee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,7 +84,6 @@
   <ItemGroup>
     <None Include="FlyingFishClasses.dbml.layout">
       <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
-      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -33,5 +33,16 @@ namespace FFLib.Properties {
                 return ((string)(this["FlyingFishConnectionString3"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=142.232.17.225;Initial Catalog=comp4911db;Persist Security Info=True;" +
+            "User ID=comp4911;Password=comp4911")]
+        public string comp4911dbConnectionString {
+            get {
+                return ((string)(this["comp4911dbConnectionString"]));
+            }
+        }
     }
 }

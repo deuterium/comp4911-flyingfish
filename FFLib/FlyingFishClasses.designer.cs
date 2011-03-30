@@ -96,7 +96,7 @@ namespace FFLib
     #endregion
 		
 		public FlyingFishClassesDataContext() : 
-				base(global::FFLib.Properties.Settings.Default.FlyingFishConnectionString3, mappingSource)
+				base(global::FFLib.Properties.Settings.Default.comp4911dbConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -293,19 +293,19 @@ namespace FFLib
 			}
 		}
 		
-		public System.Data.Linq.Table<vw_EmployeeInRolewFirstLastNameEmpIDUserID> vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
-		{
-			get
-			{
-				return this.GetTable<vw_EmployeeInRolewFirstLastNameEmpIDUserID>();
-			}
-		}
-		
 		public System.Data.Linq.Table<vw_AllValid_UserName_EmpID> vw_AllValid_UserName_EmpIDs
 		{
 			get
 			{
 				return this.GetTable<vw_AllValid_UserName_EmpID>();
+			}
+		}
+		
+		public System.Data.Linq.Table<vw_EmployeeInRolewFirstLastNameEmpIDUserID> vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
+		{
+			get
+			{
+				return this.GetTable<vw_EmployeeInRolewFirstLastNameEmpIDUserID>();
 			}
 		}
 		
@@ -317,11 +317,11 @@ namespace FFLib
 			}
 		}
 		
-		public System.Data.Linq.Table<TimesheetEntriesTotalHour> TimesheetEntriesTotalHours
+		public System.Data.Linq.Table<TimeSheetSummaryReportWeek1> TimeSheetSummaryReportWeek1s
 		{
 			get
 			{
-				return this.GetTable<TimesheetEntriesTotalHour>();
+				return this.GetTable<TimeSheetSummaryReportWeek1>();
 			}
 		}
 	}
@@ -5900,6 +5900,87 @@ namespace FFLib
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.vw_AllValid_UserName_EmpID")]
+	public partial class vw_AllValid_UserName_EmpID
+	{
+		
+		private string _UserName;
+		
+		private int _empId;
+		
+		private string _firstName;
+		
+		private string _lastName;
+		
+		public vw_AllValid_UserName_EmpID()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string UserName
+		{
+			get
+			{
+				return this._UserName;
+			}
+			set
+			{
+				if ((this._UserName != value))
+				{
+					this._UserName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL")]
+		public int empId
+		{
+			get
+			{
+				return this._empId;
+			}
+			set
+			{
+				if ((this._empId != value))
+				{
+					this._empId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_firstName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string firstName
+		{
+			get
+			{
+				return this._firstName;
+			}
+			set
+			{
+				if ((this._firstName != value))
+				{
+					this._firstName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string lastName
+		{
+			get
+			{
+				return this._lastName;
+			}
+			set
+			{
+				if ((this._lastName != value))
+				{
+					this._lastName = value;
+				}
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.vw_EmployeeInRolewFirstLastNameEmpIDUserID")]
 	public partial class vw_EmployeeInRolewFirstLastNameEmpIDUserID
 	{
@@ -6030,87 +6111,6 @@ namespace FFLib
 				if ((this._UserId != value))
 				{
 					this._UserId = value;
-				}
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.vw_AllValid_UserName_EmpID")]
-	public partial class vw_AllValid_UserName_EmpID
-	{
-		
-		private string _UserName;
-		
-		private int _empId;
-		
-		private string _firstName;
-		
-		private string _lastName;
-		
-		public vw_AllValid_UserName_EmpID()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
-		public string UserName
-		{
-			get
-			{
-				return this._UserName;
-			}
-			set
-			{
-				if ((this._UserName != value))
-				{
-					this._UserName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL")]
-		public int empId
-		{
-			get
-			{
-				return this._empId;
-			}
-			set
-			{
-				if ((this._empId != value))
-				{
-					this._empId = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_firstName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
-		public string firstName
-		{
-			get
-			{
-				return this._firstName;
-			}
-			set
-			{
-				if ((this._firstName != value))
-				{
-					this._firstName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
-		public string lastName
-		{
-			get
-			{
-				return this._lastName;
-			}
-			set
-			{
-				if ((this._lastName != value))
-				{
-					this._lastName = value;
 				}
 			}
 		}
@@ -6341,82 +6341,28 @@ namespace FFLib
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TimesheetEntriesTotalHours")]
-	public partial class TimesheetEntriesTotalHour
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TimeSheetSummaryReportWeeks")]
+	public partial class TimeSheetSummaryReportWeek1
 	{
 		
-		private int _projId;
+		private System.Nullable<decimal> _Week;
 		
-		private string _wpId;
-		
-		private int _empId;
-		
-		private System.Nullable<decimal> _totalHoursOnWp;
-		
-		public TimesheetEntriesTotalHour()
+		public TimeSheetSummaryReportWeek1()
 		{
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int NOT NULL")]
-		public int projId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Week", DbType="Decimal(38,1)")]
+		public System.Nullable<decimal> Week
 		{
 			get
 			{
-				return this._projId;
+				return this._Week;
 			}
 			set
 			{
-				if ((this._projId != value))
+				if ((this._Week != value))
 				{
-					this._projId = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wpId", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
-		public string wpId
-		{
-			get
-			{
-				return this._wpId;
-			}
-			set
-			{
-				if ((this._wpId != value))
-				{
-					this._wpId = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL")]
-		public int empId
-		{
-			get
-			{
-				return this._empId;
-			}
-			set
-			{
-				if ((this._empId != value))
-				{
-					this._empId = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_totalHoursOnWp", DbType="Decimal(38,1)")]
-		public System.Nullable<decimal> totalHoursOnWp
-		{
-			get
-			{
-				return this._totalHoursOnWp;
-			}
-			set
-			{
-				if ((this._totalHoursOnWp != value))
-				{
-					this._totalHoursOnWp = value;
+					this._Week = value;
 				}
 			}
 		}

@@ -85,10 +85,10 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
                                 select new {
                                     sum = (w1.mon + w1.tue + w1.wed + w1.thu + w1.fri + w1.sat + w1.sun)
                                 }).First().sum,
-                      TotalHours = ffdb.TimesheetEntriesTotalHours
-                                    .Where(e => e.empId == tse.empId)
-                                    .Select(e => e.totalHoursOnWp)
-                                    .Sum()
+                      //TotalHours = ffdb.TimesheetEntriesTotalHours
+                      //              .Where(e => e.empId == tse.empId)
+                      //              .Select(e => e.totalHoursOnWp)
+                      //              .Sum()
 
                   };
 

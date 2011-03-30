@@ -379,6 +379,12 @@ public partial class UserManagement : System.Web.UI.Page
 
     protected void buttonSelectProject_Click(object sender, EventArgs e)
     {
+        AssignLabel.Text = "";
+        populateListBoxes();
+    }
+
+    protected void populateListBoxes()
+    {
         //fills assigned users in a proj
         var assignedList = ff.EmployeeProjects
             .Join(ff.Employees, em => em.empId, c => c.empId, (em, c) => new { em = em, c = c })
@@ -400,29 +406,66 @@ public partial class UserManagement : System.Web.UI.Page
         lbUnassignedUsers.DataBind();
     }
 
-    //Adds select employee to selected project and repopulates the list
-    protected void buttonAddToProject_Click(object sender, EventArgs e)
+    //Adds selected users to a project
+    protected void buttonAssignUser_Click(object sender, EventArgs e)
     {
-        //EmployeeProject ep = new EmployeeProject();
-        //ep.empId = Convert.ToInt32(lbUnassignedUsers.SelectedValue);
-        //ep.projId = Convert.ToInt32(lbAllProjects.SelectedValue);
+        foreach (ListItem l in lbUnassignedUsers.Items)
+        {
+            if (l.Selected)
+            {
+                EmployeeProject ep = new EmployeeProject()
+                {
+                    empId = Convert.ToInt32(l.Value),
+                    projId = Convert.ToInt32(ddlAllProjects.SelectedValue)
+                };
+                try
+                {
+                    ff.EmployeeProjects.InsertOnSubmit(ep);
+                    ff.SubmitChanges();
+                }
+                catch (Exception ex)
+                {
+                    AssignLabel.Text = "An error has occured: " + ex.Message;
+                    AssignLabel.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+        }
+        populateListBoxes();
+    }
 
-        //ff.EmployeeProjects.InsertOnSubmit(ep);
-
-        //try
-        //{
-        //    ff.SubmitChanges();
-        //}
-        //catch (Exception ex)
-        //{
-        //    AssignLabel.Text = ex.StackTrace;
-        //    AssignLabel.ForeColor = System.Drawing.Color.Red;
-        //}
-        ////refreshes lb and ddl
-        //popluateUnassignedEmployeesAndProjects();
-
-        //AssignLabel.Text = "Employee has been assigned to Project";
-        //AssignLabel.ForeColor = System.Drawing.Color.Green;
+    //Removes selected users to a project
+    protected void buttonUnassignUser_Click(object sender, EventArgs e)
+    {
+        foreach (ListItem l in lbAssignedEmployees.Items)
+        {
+            if (l.Selected)
+            {
+                EmployeeProject ep = new EmployeeProject()
+                {
+                    empId = Convert.ToInt32(l.Value),
+                    projId = Convert.ToInt32(ddlAllProjects.SelectedValue)
+                };
+                try
+                {
+                    ff.EmployeeProjects.Attach(ep);
+                    ff.EmployeeProjects.DeleteOnSubmit(ep);
+                    ff.SubmitChanges();
+                }
+                catch (System.Data.SqlClient.SqlException sx)
+                {
+                    Trace.Write("An error has occured: " + sx.Message);
+                    AssignLabel.Text = "An error has occured: Is user assigned to a Work Package?";
+                    AssignLabel.ForeColor = System.Drawing.Color.Red;
+                }
+                catch (Exception ex)
+                {
+                    Trace.Write("An error has occured: " + ex.Message);
+                    AssignLabel.Text = "An error has occured; Please check server log";
+                    AssignLabel.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+        }
+        populateListBoxes();
     }
     #endregion
 }
