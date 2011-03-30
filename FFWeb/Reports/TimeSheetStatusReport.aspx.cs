@@ -61,6 +61,9 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page {
         // Calculate the percent complete
         // Calculate the total
 
+
+        // Divide by 0 Exception
+
         var acwpForAll = from t in ffdb.TimesheetEntries
                          where (t.projId == projId)
                                  && (t.wpId == wpId)
@@ -116,8 +119,8 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page {
                               where afa.empId == tse.empId
                               select afa.hours).FirstOrDefault()).GetValueOrDefault()
                              /
-                          // EAC
-                            (((double?)
+                            // EAC
+                            (((double?) // *********** DIVIDE BY ZERO ****************
                             (from afa in acwpForAll
                              where afa.empId == tse.empId
                              select afa.hours).FirstOrDefault()).GetValueOrDefault()
@@ -137,11 +140,11 @@ public partial class Reports_TimeSheetStatusReport : System.Web.UI.Page {
                 where (sr.reportDate <= end)
                             && (sr.projId == projId)
                             && (sr.wpId == wpId)
-                select sr).First();
+                select sr).FirstOrDefault();
 
         wpre = (from re in ffdb.WorkPackageResponsibleEngineers
                 where (projId == wpsr.projId && wpId == wpsr.wpId)
-                select re).First();
+                select re).FirstOrDefault();
 
         lblWpId.Text = wpsr.wpId;
         lblWpName.Text = wpsr.WorkPackage.name;
