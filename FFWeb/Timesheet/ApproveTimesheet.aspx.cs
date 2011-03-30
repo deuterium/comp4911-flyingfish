@@ -8,10 +8,15 @@ using FFLib;
 
 public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
 {
-
+    
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!User.IsInRole("TimesheetApprover"))
+        {
+            Response.Redirect("~/Login.aspx");
+        }
+
         if (!IsPostBack)
         {
             GridView1.DataBind(); 

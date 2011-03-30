@@ -83,10 +83,10 @@
                         <SortedDescendingCellStyle BackColor="#CAC9C9" />
                         <SortedDescendingHeaderStyle BackColor="#00547E" />
                     </asp:GridView>
-
-                    <asp:LinkButton ID="lbCreateWP" runat="server" onclick="lbCreateWP_Click">Create a Work Package</asp:LinkButton>
-        <asp:LinkButton ID="lbProjectList" runat="server" onclick="lbProjectList_Click">View Project List</asp:LinkButton>
-        <br />
-        <asp:Label ID="lblException" runat="server" Text=""></asp:Label>
+                    
+                    <asp:Button CssClass="buttongrad" ID="lbCreateWP" Text="Create a Work Package" runat="server" onclick="lbCreateWP_Click"></asp:Button>
+                    <asp:Button ID="lbProjectList" runat="server" Text="View Project List" onclick="lbProjectList_Click"></asp:Button>
+                    <br />
+                    <asp:Label ID="lblException" runat="server" Text=""></asp:Label>
         </asp:Content>
 
