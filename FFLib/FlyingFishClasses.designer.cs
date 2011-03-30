@@ -316,6 +316,14 @@ namespace FFLib
 				return this.GetTable<vwUnassignedEmployee>();
 			}
 		}
+		
+		public System.Data.Linq.Table<TimesheetEntriesTotalHour> TimesheetEntriesTotalHours
+		{
+			get
+			{
+				return this.GetTable<TimesheetEntriesTotalHour>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.aspnet_Membership")]
@@ -6328,6 +6336,87 @@ namespace FFLib
 				if ((this._isActive != value))
 				{
 					this._isActive = value;
+				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TimesheetEntriesTotalHours")]
+	public partial class TimesheetEntriesTotalHour
+	{
+		
+		private int _projId;
+		
+		private string _wpId;
+		
+		private int _empId;
+		
+		private System.Nullable<decimal> _totalHoursOnWp;
+		
+		public TimesheetEntriesTotalHour()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int NOT NULL")]
+		public int projId
+		{
+			get
+			{
+				return this._projId;
+			}
+			set
+			{
+				if ((this._projId != value))
+				{
+					this._projId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wpId", DbType="NVarChar(30) NOT NULL", CanBeNull=false)]
+		public string wpId
+		{
+			get
+			{
+				return this._wpId;
+			}
+			set
+			{
+				if ((this._wpId != value))
+				{
+					this._wpId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL")]
+		public int empId
+		{
+			get
+			{
+				return this._empId;
+			}
+			set
+			{
+				if ((this._empId != value))
+				{
+					this._empId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_totalHoursOnWp", DbType="Decimal(38,1)")]
+		public System.Nullable<decimal> totalHoursOnWp
+		{
+			get
+			{
+				return this._totalHoursOnWp;
+			}
+			set
+			{
+				if ((this._totalHoursOnWp != value))
+				{
+					this._totalHoursOnWp = value;
 				}
 			}
 		}

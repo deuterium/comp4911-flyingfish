@@ -83,6 +83,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SQL_Files\CreateDBViews.sql" />
     <Content Include="SQL_Files\CreateDB.sql" />
     <Content Include="SQL_Files\DeleteDB.sql" />
     <Content Include="SQL_Files\DBExportForMigration.sql" />

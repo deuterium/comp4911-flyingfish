@@ -291,4 +291,12 @@
       <Column Name="isActive" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Table Name="dbo.TimesheetEntriesTotalHours" Member="TimesheetEntriesTotalHours">
+    <Type Name="TimesheetEntriesTotalHour">
+      <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="wpId" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="totalHoursOnWp" Type="System.Decimal" DbType="Decimal(38,1)" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>

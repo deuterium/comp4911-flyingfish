@@ -63,10 +63,10 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
                                }).First().sum,
                       Month1 = (double?)
                                (from w1 in ffdb.TimesheetEntries
-                               where (w1.empId == tse.empId) && w1.tsDate.Month == dateFor.Month
-                               select new {
-                                   sum = (w1.mon + w1.tue + w1.wed + w1.thu + w1.fri + w1.sat + w1.sun)
-                               }).First().sum,
+                                where (w1.empId == tse.empId) && w1.tsDate.Month == dateFor.Month
+                                select new {
+                                    sum = (w1.mon + w1.tue + w1.wed + w1.thu + w1.fri + w1.sat + w1.sun)
+                                }).First().sum,
                       Month2 = (double?)
                                (from w1 in ffdb.TimesheetEntries
                                 where (w1.empId == tse.empId) && w1.tsDate.Month == dateFor.AddMonths(-1).Month
@@ -84,7 +84,12 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
                                 where (w1.empId == tse.empId) && w1.tsDate.Month == dateFor.AddMonths(-3).Month
                                 select new {
                                     sum = (w1.mon + w1.tue + w1.wed + w1.thu + w1.fri + w1.sat + w1.sun)
-                                }).First().sum
+                                }).First().sum,
+                      TotalHours = ffdb.TimesheetEntriesTotalHours
+                                    .Where(e => e.empId == tse.empId)
+                                    .Select(e => e.totalHoursOnWp)
+                                    .Sum()
+
                   };
 
         gvSummary.DataSource = qry;
