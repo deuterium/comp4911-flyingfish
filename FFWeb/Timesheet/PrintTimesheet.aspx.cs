@@ -60,7 +60,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         gvPrintTimesheet.DataSource = qry;
         gvPrintTimesheet.DataBind();
 
-        Label1.Text = now + " " + pre;
+        //Label1.Text = now + " " + pre;
     }
 
     public void qryTimesheet()

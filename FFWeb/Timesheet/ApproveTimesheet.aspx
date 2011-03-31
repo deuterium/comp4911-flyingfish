@@ -72,7 +72,7 @@
             <asp:ListItem>Approve</asp:ListItem>
             <asp:ListItem>Reject</asp:ListItem>
         </asp:DropDownList>
-        <br />
+        <br /><br />
         <asp:Button ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" Text="Submit" /></div>
     <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
 </asp:Content>
