@@ -8,8 +8,8 @@
       </siteMapNode>
       <siteMapNode url="~/Reports/ReportsMainPage.aspx" title="Reports" description="Reports">
         <siteMapNode url="~/Reports/WorkPackageStatusReport.aspx" title="Work Package Status" description="Work Package Status Report" />
-        <siteMapNode url="~/Reports/TimeSheetStatusReport.aspx" title="Timesheet Status" description="Timesheet Status Report" />
-        <siteMapNode url="~/Reports/Reports.aspx" title="Timesheet Summary" description="Timesheet Summary Report"></siteMapNode>
+        <siteMapNode url="~/Reports/TimesheetSummaryReport.aspx" title="Timesheet Summary" description="Timesheet Summary Report"></siteMapNode>
+          <siteMapNode url="~/Reports/EarnedValueReport.aspx" title="Earned Value" description="Earned Value Report"></siteMapNode>
       </siteMapNode>
       <siteMapNode url="~/Timesheet/TimesheetMainPage.aspx" title="Timesheets" description="Timesheets">
         <siteMapNode url="~/Timesheet/TimesheetEntry.aspx" title="Timesheet Entry" description="Timesheet Entry" />
