@@ -36,9 +36,12 @@ input
     <asp:LinqDataSource ID="LinqDataSource1" runat="server" 
         ContextTypeName="FFLib.FlyingFishClassesDataContext" EnableDelete="True" 
         EnableInsert="True" EnableUpdate="True" EntityTypeName="" 
-        TableName="TimesheetEntries" Where="empId == @empId">
+        TableName="TimesheetEntries" 
+        Where="empId == @empId &amp;&amp; tsDate &lt;= @tsDate1">
         <WhereParameters>
             <asp:SessionParameter Name="empId" SessionField="CurEmpId" Type="Int32" />
+            <asp:SessionParameter Name="tsDate1" SessionField="CurrentDate" 
+                Type="DateTime" />
         </WhereParameters>
     </asp:LinqDataSource>
     <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>

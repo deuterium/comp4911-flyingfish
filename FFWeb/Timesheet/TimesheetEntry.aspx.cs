@@ -12,15 +12,32 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
     {
         FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
 
-       
+
         var qry = (from o in ff.EmployeeMemberships
-                  join emp in ff.aspnet_Users on o.userId equals emp.UserId
-                  where emp.UserName == User.Identity.Name
-                  select o.empId).Single();
+                   join emp in ff.aspnet_Users on o.userId equals emp.UserId
+                   where emp.UserName == User.Identity.Name
+                   select o.empId).Single();
 
         Session["CurEmpId"] = qry.ToString();
         //Label1.Text += "\t" + Convert.ToString(Session["CurEmpId"]);
 
+        System.DateTime currentDate = System.DateTime.Now;
+        System.DateTime actualQryDate = currentDate;
+        System.DayOfWeek dayOfWeek = currentDate.DayOfWeek;
 
+        // trying to get the sunday of the week picked by the user
+        switch (dayOfWeek.ToString())
+        {
+            case "Monday": actualQryDate = currentDate.AddDays(-1); break;
+            case "Tuesday": actualQryDate = currentDate.AddDays(-2); break;
+            case "Wednesday": actualQryDate = currentDate.AddDays(-3); break;
+            case "Thursday": actualQryDate = currentDate.AddDays(-4); break;
+            case "Friday": actualQryDate = currentDate.AddDays(-5); break;
+            case "Saturday": actualQryDate = currentDate.AddDays(-6); break;
+            default: break;
+        }
+        Session["CurrentDate"] = actualQryDate;
+
+        Label1.Text = Session["CurrentDate"].ToString();
     }
 }
