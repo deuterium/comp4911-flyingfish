@@ -83,7 +83,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
 
        
         System.DateTime pre = actualQryDate.AddDays(6);
-        Label1.Text = actualQryDate + " " + pre;
+        //Label1.Text = actualQryDate + " " + pre;
         var qry = from o in ff.TimesheetEntries
                   // code to determine the role or id
                   where o.tsDate >= actualQryDate && o.tsDate <= pre && o.empId == Convert.ToInt32(Session["CurEmpId"])
