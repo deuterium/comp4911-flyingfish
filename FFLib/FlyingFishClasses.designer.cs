@@ -30,6 +30,9 @@ namespace FFLib
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
+    partial void Insertaspnet_Application(aspnet_Application instance);
+    partial void Updateaspnet_Application(aspnet_Application instance);
+    partial void Deleteaspnet_Application(aspnet_Application instance);
     partial void Insertaspnet_Membership(aspnet_Membership instance);
     partial void Updateaspnet_Membership(aspnet_Membership instance);
     partial void Deleteaspnet_Membership(aspnet_Membership instance);
@@ -60,9 +63,6 @@ namespace FFLib
     partial void InsertEmployeeProject(EmployeeProject instance);
     partial void UpdateEmployeeProject(EmployeeProject instance);
     partial void DeleteEmployeeProject(EmployeeProject instance);
-    partial void InsertEmployeeWorkPackage(EmployeeWorkPackage instance);
-    partial void UpdateEmployeeWorkPackage(EmployeeWorkPackage instance);
-    partial void DeleteEmployeeWorkPackage(EmployeeWorkPackage instance);
     partial void InsertEmployeeWorkPackageETC(EmployeeWorkPackageETC instance);
     partial void UpdateEmployeeWorkPackageETC(EmployeeWorkPackageETC instance);
     partial void DeleteEmployeeWorkPackageETC(EmployeeWorkPackageETC instance);
@@ -93,6 +93,9 @@ namespace FFLib
     partial void InsertWorkPackageResponsibleEngineer(WorkPackageResponsibleEngineer instance);
     partial void UpdateWorkPackageResponsibleEngineer(WorkPackageResponsibleEngineer instance);
     partial void DeleteWorkPackageResponsibleEngineer(WorkPackageResponsibleEngineer instance);
+    partial void InsertEmployeeWorkPackage(EmployeeWorkPackage instance);
+    partial void UpdateEmployeeWorkPackage(EmployeeWorkPackage instance);
+    partial void DeleteEmployeeWorkPackage(EmployeeWorkPackage instance);
     #endregion
 		
 		public FlyingFishClassesDataContext() : 
@@ -123,6 +126,14 @@ namespace FFLib
 				base(connection, mappingSource)
 		{
 			OnCreated();
+		}
+		
+		public System.Data.Linq.Table<aspnet_Application> aspnet_Applications
+		{
+			get
+			{
+				return this.GetTable<aspnet_Application>();
+			}
 		}
 		
 		public System.Data.Linq.Table<aspnet_Membership> aspnet_Memberships
@@ -202,14 +213,6 @@ namespace FFLib
 			get
 			{
 				return this.GetTable<EmployeeProject>();
-			}
-		}
-		
-		public System.Data.Linq.Table<EmployeeWorkPackage> EmployeeWorkPackages
-		{
-			get
-			{
-				return this.GetTable<EmployeeWorkPackage>();
 			}
 		}
 		
@@ -301,14 +304,6 @@ namespace FFLib
 			}
 		}
 		
-		public System.Data.Linq.Table<vw_EmployeeInRolewFirstLastNameEmpIDUserID> vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
-		{
-			get
-			{
-				return this.GetTable<vw_EmployeeInRolewFirstLastNameEmpIDUserID>();
-			}
-		}
-		
 		public System.Data.Linq.Table<vwUnassignedEmployee> vwUnassignedEmployees
 		{
 			get
@@ -317,12 +312,238 @@ namespace FFLib
 			}
 		}
 		
-		public System.Data.Linq.Table<TimeSheetSummaryReportWeek1> TimeSheetSummaryReportWeek1s
+		public System.Data.Linq.Table<vw_EmployeeInRolewFirstLastNameEmpIDUserID> vw_EmployeeInRolewFirstLastNameEmpIDUserIDs
 		{
 			get
 			{
-				return this.GetTable<TimeSheetSummaryReportWeek1>();
+				return this.GetTable<vw_EmployeeInRolewFirstLastNameEmpIDUserID>();
 			}
+		}
+		
+		public System.Data.Linq.Table<EmployeeWorkPackage> EmployeeWorkPackages
+		{
+			get
+			{
+				return this.GetTable<EmployeeWorkPackage>();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.aspnet_Applications")]
+	public partial class aspnet_Application : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _ApplicationName;
+		
+		private string _LoweredApplicationName;
+		
+		private System.Guid _ApplicationId;
+		
+		private string _Description;
+		
+		private EntitySet<aspnet_Membership> _aspnet_Memberships;
+		
+		private EntitySet<aspnet_Role> _aspnet_Roles;
+		
+		private EntitySet<aspnet_User> _aspnet_Users;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnApplicationNameChanging(string value);
+    partial void OnApplicationNameChanged();
+    partial void OnLoweredApplicationNameChanging(string value);
+    partial void OnLoweredApplicationNameChanged();
+    partial void OnApplicationIdChanging(System.Guid value);
+    partial void OnApplicationIdChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    #endregion
+		
+		public aspnet_Application()
+		{
+			this._aspnet_Memberships = new EntitySet<aspnet_Membership>(new Action<aspnet_Membership>(this.attach_aspnet_Memberships), new Action<aspnet_Membership>(this.detach_aspnet_Memberships));
+			this._aspnet_Roles = new EntitySet<aspnet_Role>(new Action<aspnet_Role>(this.attach_aspnet_Roles), new Action<aspnet_Role>(this.detach_aspnet_Roles));
+			this._aspnet_Users = new EntitySet<aspnet_User>(new Action<aspnet_User>(this.attach_aspnet_Users), new Action<aspnet_User>(this.detach_aspnet_Users));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ApplicationName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string ApplicationName
+		{
+			get
+			{
+				return this._ApplicationName;
+			}
+			set
+			{
+				if ((this._ApplicationName != value))
+				{
+					this.OnApplicationNameChanging(value);
+					this.SendPropertyChanging();
+					this._ApplicationName = value;
+					this.SendPropertyChanged("ApplicationName");
+					this.OnApplicationNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LoweredApplicationName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string LoweredApplicationName
+		{
+			get
+			{
+				return this._LoweredApplicationName;
+			}
+			set
+			{
+				if ((this._LoweredApplicationName != value))
+				{
+					this.OnLoweredApplicationNameChanging(value);
+					this.SendPropertyChanging();
+					this._LoweredApplicationName = value;
+					this.SendPropertyChanged("LoweredApplicationName");
+					this.OnLoweredApplicationNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ApplicationId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid ApplicationId
+		{
+			get
+			{
+				return this._ApplicationId;
+			}
+			set
+			{
+				if ((this._ApplicationId != value))
+				{
+					this.OnApplicationIdChanging(value);
+					this.SendPropertyChanging();
+					this._ApplicationId = value;
+					this.SendPropertyChanged("ApplicationId");
+					this.OnApplicationIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(256)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Application_aspnet_Membership", Storage="_aspnet_Memberships", ThisKey="ApplicationId", OtherKey="ApplicationId")]
+		public EntitySet<aspnet_Membership> aspnet_Memberships
+		{
+			get
+			{
+				return this._aspnet_Memberships;
+			}
+			set
+			{
+				this._aspnet_Memberships.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Application_aspnet_Role", Storage="_aspnet_Roles", ThisKey="ApplicationId", OtherKey="ApplicationId")]
+		public EntitySet<aspnet_Role> aspnet_Roles
+		{
+			get
+			{
+				return this._aspnet_Roles;
+			}
+			set
+			{
+				this._aspnet_Roles.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Application_aspnet_User", Storage="_aspnet_Users", ThisKey="ApplicationId", OtherKey="ApplicationId")]
+		public EntitySet<aspnet_User> aspnet_Users
+		{
+			get
+			{
+				return this._aspnet_Users;
+			}
+			set
+			{
+				this._aspnet_Users.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_aspnet_Memberships(aspnet_Membership entity)
+		{
+			this.SendPropertyChanging();
+			entity.aspnet_Application = this;
+		}
+		
+		private void detach_aspnet_Memberships(aspnet_Membership entity)
+		{
+			this.SendPropertyChanging();
+			entity.aspnet_Application = null;
+		}
+		
+		private void attach_aspnet_Roles(aspnet_Role entity)
+		{
+			this.SendPropertyChanging();
+			entity.aspnet_Application = this;
+		}
+		
+		private void detach_aspnet_Roles(aspnet_Role entity)
+		{
+			this.SendPropertyChanging();
+			entity.aspnet_Application = null;
+		}
+		
+		private void attach_aspnet_Users(aspnet_User entity)
+		{
+			this.SendPropertyChanging();
+			entity.aspnet_Application = this;
+		}
+		
+		private void detach_aspnet_Users(aspnet_User entity)
+		{
+			this.SendPropertyChanging();
+			entity.aspnet_Application = null;
 		}
 	}
 	
@@ -373,6 +594,8 @@ namespace FFLib
 		private System.DateTime _FailedPasswordAnswerAttemptWindowStart;
 		
 		private string _Comment;
+		
+		private EntityRef<aspnet_Application> _aspnet_Application;
 		
 		private EntityRef<aspnet_User> _aspnet_User;
 		
@@ -426,6 +649,7 @@ namespace FFLib
 		
 		public aspnet_Membership()
 		{
+			this._aspnet_Application = default(EntityRef<aspnet_Application>);
 			this._aspnet_User = default(EntityRef<aspnet_User>);
 			OnCreated();
 		}
@@ -441,6 +665,10 @@ namespace FFLib
 			{
 				if ((this._ApplicationId != value))
 				{
+					if (this._aspnet_Application.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnApplicationIdChanging(value);
 					this.SendPropertyChanging();
 					this._ApplicationId = value;
@@ -854,6 +1082,40 @@ namespace FFLib
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Application_aspnet_Membership", Storage="_aspnet_Application", ThisKey="ApplicationId", OtherKey="ApplicationId", IsForeignKey=true)]
+		public aspnet_Application aspnet_Application
+		{
+			get
+			{
+				return this._aspnet_Application.Entity;
+			}
+			set
+			{
+				aspnet_Application previousValue = this._aspnet_Application.Entity;
+				if (((previousValue != value) 
+							|| (this._aspnet_Application.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._aspnet_Application.Entity = null;
+						previousValue.aspnet_Memberships.Remove(this);
+					}
+					this._aspnet_Application.Entity = value;
+					if ((value != null))
+					{
+						value.aspnet_Memberships.Add(this);
+						this._ApplicationId = value.ApplicationId;
+					}
+					else
+					{
+						this._ApplicationId = default(System.Guid);
+					}
+					this.SendPropertyChanged("aspnet_Application");
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_User_aspnet_Membership", Storage="_aspnet_User", ThisKey="UserId", OtherKey="UserId", IsForeignKey=true)]
 		public aspnet_User aspnet_User
 		{
@@ -927,6 +1189,8 @@ namespace FFLib
 		
 		private EntitySet<aspnet_UsersInRole> _aspnet_UsersInRoles;
 		
+		private EntityRef<aspnet_Application> _aspnet_Application;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -946,6 +1210,7 @@ namespace FFLib
 		public aspnet_Role()
 		{
 			this._aspnet_UsersInRoles = new EntitySet<aspnet_UsersInRole>(new Action<aspnet_UsersInRole>(this.attach_aspnet_UsersInRoles), new Action<aspnet_UsersInRole>(this.detach_aspnet_UsersInRoles));
+			this._aspnet_Application = default(EntityRef<aspnet_Application>);
 			OnCreated();
 		}
 		
@@ -960,6 +1225,10 @@ namespace FFLib
 			{
 				if ((this._ApplicationId != value))
 				{
+					if (this._aspnet_Application.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnApplicationIdChanging(value);
 					this.SendPropertyChanging();
 					this._ApplicationId = value;
@@ -1062,6 +1331,40 @@ namespace FFLib
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Application_aspnet_Role", Storage="_aspnet_Application", ThisKey="ApplicationId", OtherKey="ApplicationId", IsForeignKey=true)]
+		public aspnet_Application aspnet_Application
+		{
+			get
+			{
+				return this._aspnet_Application.Entity;
+			}
+			set
+			{
+				aspnet_Application previousValue = this._aspnet_Application.Entity;
+				if (((previousValue != value) 
+							|| (this._aspnet_Application.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._aspnet_Application.Entity = null;
+						previousValue.aspnet_Roles.Remove(this);
+					}
+					this._aspnet_Application.Entity = value;
+					if ((value != null))
+					{
+						value.aspnet_Roles.Add(this);
+						this._ApplicationId = value.ApplicationId;
+					}
+					else
+					{
+						this._ApplicationId = default(System.Guid);
+					}
+					this.SendPropertyChanged("aspnet_Application");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -1121,6 +1424,8 @@ namespace FFLib
 		
 		private EntitySet<EmployeeMembership> _EmployeeMemberships;
 		
+		private EntityRef<aspnet_Application> _aspnet_Application;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1146,6 +1451,7 @@ namespace FFLib
 			this._aspnet_Membership = default(EntityRef<aspnet_Membership>);
 			this._aspnet_UsersInRoles = new EntitySet<aspnet_UsersInRole>(new Action<aspnet_UsersInRole>(this.attach_aspnet_UsersInRoles), new Action<aspnet_UsersInRole>(this.detach_aspnet_UsersInRoles));
 			this._EmployeeMemberships = new EntitySet<EmployeeMembership>(new Action<EmployeeMembership>(this.attach_EmployeeMemberships), new Action<EmployeeMembership>(this.detach_EmployeeMemberships));
+			this._aspnet_Application = default(EntityRef<aspnet_Application>);
 			OnCreated();
 		}
 		
@@ -1160,6 +1466,10 @@ namespace FFLib
 			{
 				if ((this._ApplicationId != value))
 				{
+					if (this._aspnet_Application.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnApplicationIdChanging(value);
 					this.SendPropertyChanging();
 					this._ApplicationId = value;
@@ -1341,6 +1651,40 @@ namespace FFLib
 			set
 			{
 				this._EmployeeMemberships.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="aspnet_Application_aspnet_User", Storage="_aspnet_Application", ThisKey="ApplicationId", OtherKey="ApplicationId", IsForeignKey=true)]
+		public aspnet_Application aspnet_Application
+		{
+			get
+			{
+				return this._aspnet_Application.Entity;
+			}
+			set
+			{
+				aspnet_Application previousValue = this._aspnet_Application.Entity;
+				if (((previousValue != value) 
+							|| (this._aspnet_Application.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._aspnet_Application.Entity = null;
+						previousValue.aspnet_Users.Remove(this);
+					}
+					this._aspnet_Application.Entity = value;
+					if ((value != null))
+					{
+						value.aspnet_Users.Add(this);
+						this._ApplicationId = value.ApplicationId;
+					}
+					else
+					{
+						this._ApplicationId = default(System.Guid);
+					}
+					this.SendPropertyChanged("aspnet_Application");
+				}
 			}
 		}
 		
@@ -2025,6 +2369,8 @@ namespace FFLib
 		
 		private EntitySet<EmployeeProject> _EmployeeProjects;
 		
+		private EntitySet<EmployeeWorkPackageETC> _EmployeeWorkPackageETCs;
+		
 		private EntityRef<HumanResourcesStaff> _HumanResourcesStaff;
 		
 		private EntitySet<Project> _Projects;
@@ -2063,6 +2409,7 @@ namespace FFLib
 		{
 			this._EmployeeMembership = default(EntityRef<EmployeeMembership>);
 			this._EmployeeProjects = new EntitySet<EmployeeProject>(new Action<EmployeeProject>(this.attach_EmployeeProjects), new Action<EmployeeProject>(this.detach_EmployeeProjects));
+			this._EmployeeWorkPackageETCs = new EntitySet<EmployeeWorkPackageETC>(new Action<EmployeeWorkPackageETC>(this.attach_EmployeeWorkPackageETCs), new Action<EmployeeWorkPackageETC>(this.detach_EmployeeWorkPackageETCs));
 			this._HumanResourcesStaff = default(EntityRef<HumanResourcesStaff>);
 			this._Projects = new EntitySet<Project>(new Action<Project>(this.attach_Projects), new Action<Project>(this.detach_Projects));
 			this._TimesheetHeaders = new EntitySet<TimesheetHeader>(new Action<TimesheetHeader>(this.attach_TimesheetHeaders), new Action<TimesheetHeader>(this.detach_TimesheetHeaders));
@@ -2312,6 +2659,19 @@ namespace FFLib
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackageETCs", ThisKey="empId", OtherKey="empId")]
+		public EntitySet<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
+		{
+			get
+			{
+				return this._EmployeeWorkPackageETCs;
+			}
+			set
+			{
+				this._EmployeeWorkPackageETCs.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_HumanResourcesStaff", Storage="_HumanResourcesStaff", ThisKey="empId", OtherKey="empId", IsUnique=true, IsForeignKey=false)]
 		public HumanResourcesStaff HumanResourcesStaff
 		{
@@ -2407,6 +2767,18 @@ namespace FFLib
 		}
 		
 		private void detach_EmployeeProjects(EmployeeProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = null;
+		}
+		
+		private void attach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = this;
+		}
+		
+		private void detach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
 		{
 			this.SendPropertyChanging();
 			entity.Employee = null;
@@ -2994,262 +3366,6 @@ namespace FFLib
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeWorkPackage")]
-	public partial class EmployeeWorkPackage : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _empId;
-		
-		private int _projId;
-		
-		private string _wpId;
-		
-		private EntitySet<EmployeeWorkPackageETC> _EmployeeWorkPackageETCs;
-		
-		private EntitySet<WorkPackageResponsibleEngineer> _WorkPackageResponsibleEngineers;
-		
-		private EntityRef<EmployeeProject> _EmployeeProject;
-		
-		private EntityRef<WorkPackage> _WorkPackage;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnempIdChanging(int value);
-    partial void OnempIdChanged();
-    partial void OnprojIdChanging(int value);
-    partial void OnprojIdChanged();
-    partial void OnwpIdChanging(string value);
-    partial void OnwpIdChanged();
-    #endregion
-		
-		public EmployeeWorkPackage()
-		{
-			this._EmployeeWorkPackageETCs = new EntitySet<EmployeeWorkPackageETC>(new Action<EmployeeWorkPackageETC>(this.attach_EmployeeWorkPackageETCs), new Action<EmployeeWorkPackageETC>(this.detach_EmployeeWorkPackageETCs));
-			this._WorkPackageResponsibleEngineers = new EntitySet<WorkPackageResponsibleEngineer>(new Action<WorkPackageResponsibleEngineer>(this.attach_WorkPackageResponsibleEngineers), new Action<WorkPackageResponsibleEngineer>(this.detach_WorkPackageResponsibleEngineers));
-			this._EmployeeProject = default(EntityRef<EmployeeProject>);
-			this._WorkPackage = default(EntityRef<WorkPackage>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int empId
-		{
-			get
-			{
-				return this._empId;
-			}
-			set
-			{
-				if ((this._empId != value))
-				{
-					if (this._EmployeeProject.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnempIdChanging(value);
-					this.SendPropertyChanging();
-					this._empId = value;
-					this.SendPropertyChanged("empId");
-					this.OnempIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int projId
-		{
-			get
-			{
-				return this._projId;
-			}
-			set
-			{
-				if ((this._projId != value))
-				{
-					if ((this._EmployeeProject.HasLoadedOrAssignedValue || this._WorkPackage.HasLoadedOrAssignedValue))
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnprojIdChanging(value);
-					this.SendPropertyChanging();
-					this._projId = value;
-					this.SendPropertyChanged("projId");
-					this.OnprojIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wpId", DbType="NVarChar(30) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string wpId
-		{
-			get
-			{
-				return this._wpId;
-			}
-			set
-			{
-				if ((this._wpId != value))
-				{
-					if (this._WorkPackage.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnwpIdChanging(value);
-					this.SendPropertyChanging();
-					this._wpId = value;
-					this.SendPropertyChanged("wpId");
-					this.OnwpIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EmployeeWorkPackage_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackageETCs", ThisKey="empId,projId,wpId", OtherKey="empId,projId,wpId")]
-		public EntitySet<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
-		{
-			get
-			{
-				return this._EmployeeWorkPackageETCs;
-			}
-			set
-			{
-				this._EmployeeWorkPackageETCs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EmployeeWorkPackage_WorkPackageResponsibleEngineer", Storage="_WorkPackageResponsibleEngineers", ThisKey="empId,projId,wpId", OtherKey="responsibleEngineer,projId,wpId")]
-		public EntitySet<WorkPackageResponsibleEngineer> WorkPackageResponsibleEngineers
-		{
-			get
-			{
-				return this._WorkPackageResponsibleEngineers;
-			}
-			set
-			{
-				this._WorkPackageResponsibleEngineers.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EmployeeProject_EmployeeWorkPackage", Storage="_EmployeeProject", ThisKey="projId,empId", OtherKey="projId,empId", IsForeignKey=true)]
-		public EmployeeProject EmployeeProject
-		{
-			get
-			{
-				return this._EmployeeProject.Entity;
-			}
-			set
-			{
-				EmployeeProject previousValue = this._EmployeeProject.Entity;
-				if (((previousValue != value) 
-							|| (this._EmployeeProject.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._EmployeeProject.Entity = null;
-						previousValue.EmployeeWorkPackages.Remove(this);
-					}
-					this._EmployeeProject.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeWorkPackages.Add(this);
-						this._projId = value.projId;
-						this._empId = value.empId;
-					}
-					else
-					{
-						this._projId = default(int);
-						this._empId = default(int);
-					}
-					this.SendPropertyChanged("EmployeeProject");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackage", Storage="_WorkPackage", ThisKey="projId,wpId", OtherKey="projId,wpId", IsForeignKey=true)]
-		public WorkPackage WorkPackage
-		{
-			get
-			{
-				return this._WorkPackage.Entity;
-			}
-			set
-			{
-				WorkPackage previousValue = this._WorkPackage.Entity;
-				if (((previousValue != value) 
-							|| (this._WorkPackage.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._WorkPackage.Entity = null;
-						previousValue.EmployeeWorkPackages.Remove(this);
-					}
-					this._WorkPackage.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeWorkPackages.Add(this);
-						this._projId = value.projId;
-						this._wpId = value.wpId;
-					}
-					else
-					{
-						this._projId = default(int);
-						this._wpId = default(string);
-					}
-					this.SendPropertyChanged("WorkPackage");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
-		{
-			this.SendPropertyChanging();
-			entity.EmployeeWorkPackage = this;
-		}
-		
-		private void detach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
-		{
-			this.SendPropertyChanging();
-			entity.EmployeeWorkPackage = null;
-		}
-		
-		private void attach_WorkPackageResponsibleEngineers(WorkPackageResponsibleEngineer entity)
-		{
-			this.SendPropertyChanging();
-			entity.EmployeeWorkPackage = this;
-		}
-		
-		private void detach_WorkPackageResponsibleEngineers(WorkPackageResponsibleEngineer entity)
-		{
-			this.SendPropertyChanging();
-			entity.EmployeeWorkPackage = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeWorkPackageETC")]
 	public partial class EmployeeWorkPackageETC : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -3268,7 +3384,9 @@ namespace FFLib
 		
 		private EntityRef<WorkPackageStatusReport> _WorkPackageStatusReport;
 		
-		private EntityRef<EmployeeWorkPackage> _EmployeeWorkPackage;
+		private EntityRef<Employee> _Employee;
+		
+		private EntityRef<WorkPackage> _WorkPackage;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -3289,7 +3407,8 @@ namespace FFLib
 		public EmployeeWorkPackageETC()
 		{
 			this._WorkPackageStatusReport = default(EntityRef<WorkPackageStatusReport>);
-			this._EmployeeWorkPackage = default(EntityRef<EmployeeWorkPackage>);
+			this._Employee = default(EntityRef<Employee>);
+			this._WorkPackage = default(EntityRef<WorkPackage>);
 			OnCreated();
 		}
 		
@@ -3304,7 +3423,7 @@ namespace FFLib
 			{
 				if ((this._empId != value))
 				{
-					if (this._EmployeeWorkPackage.HasLoadedOrAssignedValue)
+					if (this._Employee.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -3328,7 +3447,7 @@ namespace FFLib
 			{
 				if ((this._projId != value))
 				{
-					if ((this._WorkPackageStatusReport.HasLoadedOrAssignedValue || this._EmployeeWorkPackage.HasLoadedOrAssignedValue))
+					if ((this._WorkPackageStatusReport.HasLoadedOrAssignedValue || this._WorkPackage.HasLoadedOrAssignedValue))
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -3352,7 +3471,7 @@ namespace FFLib
 			{
 				if ((this._wpId != value))
 				{
-					if ((this._WorkPackageStatusReport.HasLoadedOrAssignedValue || this._EmployeeWorkPackage.HasLoadedOrAssignedValue))
+					if ((this._WorkPackageStatusReport.HasLoadedOrAssignedValue || this._WorkPackage.HasLoadedOrAssignedValue))
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -3447,40 +3566,72 @@ namespace FFLib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EmployeeWorkPackage_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackage", ThisKey="empId,projId,wpId", OtherKey="empId,projId,wpId", IsForeignKey=true)]
-		public EmployeeWorkPackage EmployeeWorkPackage
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeWorkPackageETC", Storage="_Employee", ThisKey="empId", OtherKey="empId", IsForeignKey=true)]
+		public Employee Employee
 		{
 			get
 			{
-				return this._EmployeeWorkPackage.Entity;
+				return this._Employee.Entity;
 			}
 			set
 			{
-				EmployeeWorkPackage previousValue = this._EmployeeWorkPackage.Entity;
+				Employee previousValue = this._Employee.Entity;
 				if (((previousValue != value) 
-							|| (this._EmployeeWorkPackage.HasLoadedOrAssignedValue == false)))
+							|| (this._Employee.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._EmployeeWorkPackage.Entity = null;
+						this._Employee.Entity = null;
 						previousValue.EmployeeWorkPackageETCs.Remove(this);
 					}
-					this._EmployeeWorkPackage.Entity = value;
+					this._Employee.Entity = value;
 					if ((value != null))
 					{
 						value.EmployeeWorkPackageETCs.Add(this);
 						this._empId = value.empId;
+					}
+					else
+					{
+						this._empId = default(int);
+					}
+					this.SendPropertyChanged("Employee");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackageETC", Storage="_WorkPackage", ThisKey="projId,wpId", OtherKey="projId,wpId", IsForeignKey=true)]
+		public WorkPackage WorkPackage
+		{
+			get
+			{
+				return this._WorkPackage.Entity;
+			}
+			set
+			{
+				WorkPackage previousValue = this._WorkPackage.Entity;
+				if (((previousValue != value) 
+							|| (this._WorkPackage.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._WorkPackage.Entity = null;
+						previousValue.EmployeeWorkPackageETCs.Remove(this);
+					}
+					this._WorkPackage.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeWorkPackageETCs.Add(this);
 						this._projId = value.projId;
 						this._wpId = value.wpId;
 					}
 					else
 					{
-						this._empId = default(int);
 						this._projId = default(int);
 						this._wpId = default(string);
 					}
-					this.SendPropertyChanged("EmployeeWorkPackage");
+					this.SendPropertyChanged("WorkPackage");
 				}
 			}
 		}
@@ -4820,13 +4971,15 @@ namespace FFLib
 		
 		private EntitySet<WorkPackageStatusReport> _WorkPackageStatusReports;
 		
-		private EntitySet<EmployeeWorkPackage> _EmployeeWorkPackages;
+		private EntitySet<EmployeeWorkPackageETC> _EmployeeWorkPackageETCs;
 		
 		private EntitySet<TimesheetEntry> _TimesheetEntries;
 		
 		private EntitySet<WorkPackageBudgetPM> _WorkPackageBudgetPMs;
 		
 		private EntitySet<WorkPackageEstimateRE> _WorkPackageEstimateREs;
+		
+		private EntitySet<EmployeeWorkPackage> _EmployeeWorkPackages;
 		
 		private EntityRef<Project> _Project;
 		
@@ -4853,10 +5006,11 @@ namespace FFLib
 		public WorkPackage()
 		{
 			this._WorkPackageStatusReports = new EntitySet<WorkPackageStatusReport>(new Action<WorkPackageStatusReport>(this.attach_WorkPackageStatusReports), new Action<WorkPackageStatusReport>(this.detach_WorkPackageStatusReports));
-			this._EmployeeWorkPackages = new EntitySet<EmployeeWorkPackage>(new Action<EmployeeWorkPackage>(this.attach_EmployeeWorkPackages), new Action<EmployeeWorkPackage>(this.detach_EmployeeWorkPackages));
+			this._EmployeeWorkPackageETCs = new EntitySet<EmployeeWorkPackageETC>(new Action<EmployeeWorkPackageETC>(this.attach_EmployeeWorkPackageETCs), new Action<EmployeeWorkPackageETC>(this.detach_EmployeeWorkPackageETCs));
 			this._TimesheetEntries = new EntitySet<TimesheetEntry>(new Action<TimesheetEntry>(this.attach_TimesheetEntries), new Action<TimesheetEntry>(this.detach_TimesheetEntries));
 			this._WorkPackageBudgetPMs = new EntitySet<WorkPackageBudgetPM>(new Action<WorkPackageBudgetPM>(this.attach_WorkPackageBudgetPMs), new Action<WorkPackageBudgetPM>(this.detach_WorkPackageBudgetPMs));
 			this._WorkPackageEstimateREs = new EntitySet<WorkPackageEstimateRE>(new Action<WorkPackageEstimateRE>(this.attach_WorkPackageEstimateREs), new Action<WorkPackageEstimateRE>(this.detach_WorkPackageEstimateREs));
+			this._EmployeeWorkPackages = new EntitySet<EmployeeWorkPackage>(new Action<EmployeeWorkPackage>(this.attach_EmployeeWorkPackages), new Action<EmployeeWorkPackage>(this.detach_EmployeeWorkPackages));
 			this._Project = default(EntityRef<Project>);
 			OnCreated();
 		}
@@ -5018,16 +5172,16 @@ namespace FFLib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackage", Storage="_EmployeeWorkPackages", ThisKey="projId,wpId", OtherKey="projId,wpId")]
-		public EntitySet<EmployeeWorkPackage> EmployeeWorkPackages
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackageETCs", ThisKey="projId,wpId", OtherKey="projId,wpId")]
+		public EntitySet<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
 		{
 			get
 			{
-				return this._EmployeeWorkPackages;
+				return this._EmployeeWorkPackageETCs;
 			}
 			set
 			{
-				this._EmployeeWorkPackages.Assign(value);
+				this._EmployeeWorkPackageETCs.Assign(value);
 			}
 		}
 		
@@ -5067,6 +5221,19 @@ namespace FFLib
 			set
 			{
 				this._WorkPackageEstimateREs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackage", Storage="_EmployeeWorkPackages", ThisKey="projId,wpId", OtherKey="projId,wpId")]
+		public EntitySet<EmployeeWorkPackage> EmployeeWorkPackages
+		{
+			get
+			{
+				return this._EmployeeWorkPackages;
+			}
+			set
+			{
+				this._EmployeeWorkPackages.Assign(value);
 			}
 		}
 		
@@ -5136,13 +5303,13 @@ namespace FFLib
 			entity.WorkPackage = null;
 		}
 		
-		private void attach_EmployeeWorkPackages(EmployeeWorkPackage entity)
+		private void attach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
 		{
 			this.SendPropertyChanging();
 			entity.WorkPackage = this;
 		}
 		
-		private void detach_EmployeeWorkPackages(EmployeeWorkPackage entity)
+		private void detach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
 		{
 			this.SendPropertyChanging();
 			entity.WorkPackage = null;
@@ -5179,6 +5346,18 @@ namespace FFLib
 		}
 		
 		private void detach_WorkPackageEstimateREs(WorkPackageEstimateRE entity)
+		{
+			this.SendPropertyChanging();
+			entity.WorkPackage = null;
+		}
+		
+		private void attach_EmployeeWorkPackages(EmployeeWorkPackage entity)
+		{
+			this.SendPropertyChanging();
+			entity.WorkPackage = this;
+		}
+		
+		private void detach_EmployeeWorkPackages(EmployeeWorkPackage entity)
 		{
 			this.SendPropertyChanging();
 			entity.WorkPackage = null;
@@ -5981,141 +6160,6 @@ namespace FFLib
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.vw_EmployeeInRolewFirstLastNameEmpIDUserID")]
-	public partial class vw_EmployeeInRolewFirstLastNameEmpIDUserID
-	{
-		
-		private System.Guid _RoleId;
-		
-		private string _RoleName;
-		
-		private string _UserName;
-		
-		private int _empId;
-		
-		private string _firstName;
-		
-		private string _lastName;
-		
-		private System.Guid _UserId;
-		
-		public vw_EmployeeInRolewFirstLastNameEmpIDUserID()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="UniqueIdentifier NOT NULL")]
-		public System.Guid RoleId
-		{
-			get
-			{
-				return this._RoleId;
-			}
-			set
-			{
-				if ((this._RoleId != value))
-				{
-					this._RoleId = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
-		public string RoleName
-		{
-			get
-			{
-				return this._RoleName;
-			}
-			set
-			{
-				if ((this._RoleName != value))
-				{
-					this._RoleName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
-		public string UserName
-		{
-			get
-			{
-				return this._UserName;
-			}
-			set
-			{
-				if ((this._UserName != value))
-				{
-					this._UserName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL")]
-		public int empId
-		{
-			get
-			{
-				return this._empId;
-			}
-			set
-			{
-				if ((this._empId != value))
-				{
-					this._empId = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_firstName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
-		public string firstName
-		{
-			get
-			{
-				return this._firstName;
-			}
-			set
-			{
-				if ((this._firstName != value))
-				{
-					this._firstName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
-		public string lastName
-		{
-			get
-			{
-				return this._lastName;
-			}
-			set
-			{
-				if ((this._lastName != value))
-				{
-					this._lastName = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="UniqueIdentifier NOT NULL")]
-		public System.Guid UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					this._UserId = value;
-				}
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.vwUnassignedEmployees")]
 	public partial class vwUnassignedEmployee
 	{
@@ -6341,30 +6385,366 @@ namespace FFLib
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TimeSheetSummaryReportWeeks")]
-	public partial class TimeSheetSummaryReportWeek1
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.vw_EmployeeInRolewFirstLastNameEmpIDUserID")]
+	public partial class vw_EmployeeInRolewFirstLastNameEmpIDUserID
 	{
 		
-		private System.Nullable<decimal> _Week;
+		private System.Guid _RoleId;
 		
-		public TimeSheetSummaryReportWeek1()
+		private string _RoleName;
+		
+		private string _UserName;
+		
+		private int _empId;
+		
+		private string _firstName;
+		
+		private string _lastName;
+		
+		private System.Guid _UserId;
+		
+		public vw_EmployeeInRolewFirstLastNameEmpIDUserID()
 		{
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Week", DbType="Decimal(38,1)")]
-		public System.Nullable<decimal> Week
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid RoleId
 		{
 			get
 			{
-				return this._Week;
+				return this._RoleId;
 			}
 			set
 			{
-				if ((this._Week != value))
+				if ((this._RoleId != value))
 				{
-					this._Week = value;
+					this._RoleId = value;
 				}
 			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string RoleName
+		{
+			get
+			{
+				return this._RoleName;
+			}
+			set
+			{
+				if ((this._RoleName != value))
+				{
+					this._RoleName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string UserName
+		{
+			get
+			{
+				return this._UserName;
+			}
+			set
+			{
+				if ((this._UserName != value))
+				{
+					this._UserName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL")]
+		public int empId
+		{
+			get
+			{
+				return this._empId;
+			}
+			set
+			{
+				if ((this._empId != value))
+				{
+					this._empId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_firstName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string firstName
+		{
+			get
+			{
+				return this._firstName;
+			}
+			set
+			{
+				if ((this._firstName != value))
+				{
+					this._firstName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastName", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string lastName
+		{
+			get
+			{
+				return this._lastName;
+			}
+			set
+			{
+				if ((this._lastName != value))
+				{
+					this._lastName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					this._UserId = value;
+				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeWorkPackage")]
+	public partial class EmployeeWorkPackage : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _empId;
+		
+		private int _projId;
+		
+		private string _wpId;
+		
+		private EntitySet<WorkPackageResponsibleEngineer> _WorkPackageResponsibleEngineers;
+		
+		private EntityRef<EmployeeProject> _EmployeeProject;
+		
+		private EntityRef<WorkPackage> _WorkPackage;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnempIdChanging(int value);
+    partial void OnempIdChanged();
+    partial void OnprojIdChanging(int value);
+    partial void OnprojIdChanged();
+    partial void OnwpIdChanging(string value);
+    partial void OnwpIdChanged();
+    #endregion
+		
+		public EmployeeWorkPackage()
+		{
+			this._WorkPackageResponsibleEngineers = new EntitySet<WorkPackageResponsibleEngineer>(new Action<WorkPackageResponsibleEngineer>(this.attach_WorkPackageResponsibleEngineers), new Action<WorkPackageResponsibleEngineer>(this.detach_WorkPackageResponsibleEngineers));
+			this._EmployeeProject = default(EntityRef<EmployeeProject>);
+			this._WorkPackage = default(EntityRef<WorkPackage>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int empId
+		{
+			get
+			{
+				return this._empId;
+			}
+			set
+			{
+				if ((this._empId != value))
+				{
+					if (this._EmployeeProject.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnempIdChanging(value);
+					this.SendPropertyChanging();
+					this._empId = value;
+					this.SendPropertyChanged("empId");
+					this.OnempIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int projId
+		{
+			get
+			{
+				return this._projId;
+			}
+			set
+			{
+				if ((this._projId != value))
+				{
+					if ((this._EmployeeProject.HasLoadedOrAssignedValue || this._WorkPackage.HasLoadedOrAssignedValue))
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnprojIdChanging(value);
+					this.SendPropertyChanging();
+					this._projId = value;
+					this.SendPropertyChanged("projId");
+					this.OnprojIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wpId", DbType="NVarChar(30) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string wpId
+		{
+			get
+			{
+				return this._wpId;
+			}
+			set
+			{
+				if ((this._wpId != value))
+				{
+					if (this._WorkPackage.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnwpIdChanging(value);
+					this.SendPropertyChanging();
+					this._wpId = value;
+					this.SendPropertyChanged("wpId");
+					this.OnwpIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EmployeeWorkPackage_WorkPackageResponsibleEngineer", Storage="_WorkPackageResponsibleEngineers", ThisKey="empId,projId,wpId", OtherKey="responsibleEngineer,projId,wpId")]
+		public EntitySet<WorkPackageResponsibleEngineer> WorkPackageResponsibleEngineers
+		{
+			get
+			{
+				return this._WorkPackageResponsibleEngineers;
+			}
+			set
+			{
+				this._WorkPackageResponsibleEngineers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EmployeeProject_EmployeeWorkPackage", Storage="_EmployeeProject", ThisKey="projId,empId", OtherKey="projId,empId", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public EmployeeProject EmployeeProject
+		{
+			get
+			{
+				return this._EmployeeProject.Entity;
+			}
+			set
+			{
+				EmployeeProject previousValue = this._EmployeeProject.Entity;
+				if (((previousValue != value) 
+							|| (this._EmployeeProject.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EmployeeProject.Entity = null;
+						previousValue.EmployeeWorkPackages.Remove(this);
+					}
+					this._EmployeeProject.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeWorkPackages.Add(this);
+						this._projId = value.projId;
+						this._empId = value.empId;
+					}
+					else
+					{
+						this._projId = default(int);
+						this._empId = default(int);
+					}
+					this.SendPropertyChanged("EmployeeProject");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackage", Storage="_WorkPackage", ThisKey="projId,wpId", OtherKey="projId,wpId", IsForeignKey=true)]
+		public WorkPackage WorkPackage
+		{
+			get
+			{
+				return this._WorkPackage.Entity;
+			}
+			set
+			{
+				WorkPackage previousValue = this._WorkPackage.Entity;
+				if (((previousValue != value) 
+							|| (this._WorkPackage.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._WorkPackage.Entity = null;
+						previousValue.EmployeeWorkPackages.Remove(this);
+					}
+					this._WorkPackage.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeWorkPackages.Add(this);
+						this._projId = value.projId;
+						this._wpId = value.wpId;
+					}
+					else
+					{
+						this._projId = default(int);
+						this._wpId = default(string);
+					}
+					this.SendPropertyChanged("WorkPackage");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_WorkPackageResponsibleEngineers(WorkPackageResponsibleEngineer entity)
+		{
+			this.SendPropertyChanging();
+			entity.EmployeeWorkPackage = this;
+		}
+		
+		private void detach_WorkPackageResponsibleEngineers(WorkPackageResponsibleEngineer entity)
+		{
+			this.SendPropertyChanging();
+			entity.EmployeeWorkPackage = null;
 		}
 	}
 }

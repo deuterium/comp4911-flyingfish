@@ -34,3 +34,9 @@ C:\Users\Lindsay\Desktop\RM_4911_Project\comp4911-flyingfish\FFLib\bin\Debug\FFL
 C:\Users\Lindsay\Desktop\RM_4911_Project\comp4911-flyingfish\FFLib\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Lindsay\Desktop\RM_4911_Project\comp4911-flyingfish\FFLib\obj\Debug\FFLib.dll
 C:\Users\Lindsay\Desktop\RM_4911_Project\comp4911-flyingfish\FFLib\obj\Debug\FFLib.pdb
+C:\Users\Lindsay\Desktop\_RM_Project2\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\FFLib\bin\Debug\FFLib.dll.config
+C:\Users\Lindsay\Desktop\_RM_Project2\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\FFLib\bin\Debug\FFLib.dll
+C:\Users\Lindsay\Desktop\_RM_Project2\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\FFLib\bin\Debug\FFLib.pdb
+C:\Users\Lindsay\Desktop\_RM_Project2\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\FFLib\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Lindsay\Desktop\_RM_Project2\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\FFLib\obj\Debug\FFLib.dll
+C:\Users\Lindsay\Desktop\_RM_Project2\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\FFLib\obj\Debug\FFLib.pdb

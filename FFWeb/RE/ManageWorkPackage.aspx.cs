@@ -72,6 +72,12 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 //divAssignRE.Visible = false;
                 allocOriginal = Convert.ToDouble(tbAlloc.Text);
                 unallocOriginal = Convert.ToDouble(tbUnalloc.Text);
+                var subwp =
+                    from wp in ff.WorkPackages
+                    where (wp.wpId.ToString().Contains(Session["wpID"].ToString() + "."))
+                    select new { wp.wpId, wp.name, wp.unallocated_dollars, wp.allocated_dollars, wp.description };
+                gvSubWP.DataSource = subwp;
+                gvSubWP.DataBind();
             }
             else
             {
