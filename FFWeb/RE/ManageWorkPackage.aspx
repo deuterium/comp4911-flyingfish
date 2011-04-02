@@ -73,10 +73,20 @@
                     <asp:Button ID="btnSave" runat="server" Text="Save Changes" 
                             onclick="btnSave_Click" PostBackUrl="~/RE/ManageWorkPackage.aspx" />
                             <br />
-
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    <asp:Label ID="lblSubWP" runat="server" Text="Sub-Workpackages: "></asp:Label>
+                </td>
+                <td>
+                    <asp:GridView ID="gvSubWP" runat="server">
+                    </asp:GridView>
 
                 </td>
+            </tr>
             <tr>
+
                 <td>
                     <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
                 </td>
