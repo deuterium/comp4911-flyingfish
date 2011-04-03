@@ -114,12 +114,19 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         lblTotalAcwp.Text = "NULL";
 
         WorkPackageStatusReport wpsr = getExistingReportDetails(projId, wpId, start, end);
-
-        tbComments.Text = wpsr.comments;
-        tbWorkAccomplished.Text = wpsr.workAccomplished;
-        tbWorkPlannedNext.Text = wpsr.workPlannedNext;
-        tbProblemsEncountered.Text = wpsr.problemsEncountered;
-        tbProblemsAncticipatedNext.Text = wpsr.problemsAnticipated;
+        if (wpsr == null) {
+            tbComments.Text = "";
+            tbWorkAccomplished.Text = "";
+            tbWorkPlannedNext.Text = "";
+            tbProblemsEncountered.Text = "";
+            tbProblemsAncticipatedNext.Text = "";
+        } else {
+            tbComments.Text = wpsr.comments;
+            tbWorkAccomplished.Text = wpsr.workAccomplished;
+            tbWorkPlannedNext.Text = wpsr.workPlannedNext;
+            tbProblemsEncountered.Text = wpsr.problemsEncountered;
+            tbProblemsAncticipatedNext.Text = wpsr.problemsAnticipated;
+        }
 
         lblResults.Visible = false;
         divReportData.Visible = true;
@@ -131,14 +138,9 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     }
 
     private WorkPackageStatusReport getExistingReportDetails(int projId, String wpId, DateTime start, DateTime end) {
-        DateTime mostRecent = (from sr in ffdb.WorkPackageStatusReports
-                               where (sr.reportDate <= end && sr.reportDate >= start)
-                                    && (sr.projId == projId)
-                                    && (sr.wpId == wpId)
-                               select sr.reportDate).Max();
-
         WorkPackageStatusReport wpsr = (from sr in ffdb.WorkPackageStatusReports
-                                where (sr.reportDate.Equals(mostRecent))
+                                where sr.endDate.Equals(end)
+                                        && sr.startDate.Equals(start)
                                         && (sr.projId == projId)
                                         && (sr.wpId == wpId)
                                 select sr).FirstOrDefault();

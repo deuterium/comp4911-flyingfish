@@ -19,7 +19,7 @@
 -- PLevel rates are usually updated every fiscal year.
 -- Used to calculate reports/Timesheets from previous years.
 ---------------------------------------------------------------------------------
-CREATE TABLE PersonLevel (
+CREATE TABLE [comp4911db].[dbo].[PersonLevel] (
 	pLevel			NCHAR(2)		NOT NULL
 	, rate 			DECIMAL(5, 2)	NOT NULL							-- salary($) / person-day
 	, fiscalYear	INT				NOT NULL	DEFAULT YEAR(GETDATE())	-- date this value was set on
@@ -34,7 +34,7 @@ CREATE TABLE PersonLevel (
 -- Only approver can approve Timesheet (supervisor can't).
 -- For isActive, 1 is true and 0 is false.
 ---------------------------------------------------------------------------------
-CREATE TABLE Employee (
+CREATE TABLE [comp4911db].[dbo].[Employee] (
 	empId				INT				NOT NULL	UNIQUE
 	, firstName			NVARCHAR(30)	NOT NULL
 	, lastName			NVARCHAR(30)	NOT NULL
@@ -56,7 +56,7 @@ CREATE TABLE Employee (
 ---------------------------------------------------------------------------------
 -- Links Employee table to Membership Services table.
 ---------------------------------------------------------------------------------
-CREATE TABLE EmployeeMembership (
+CREATE TABLE [comp4911db].[dbo].[EmployeeMembership] (
 	empId		INT					NOT NULL	UNIQUE	
 	, userId	UNIQUEIDENTIFIER 	NOT NULL	UNIQUE  
 	, CONSTRAINT pk_EmployeeMembership PRIMARY KEY (empId)
@@ -67,11 +67,23 @@ CREATE TABLE EmployeeMembership (
 );
 
 ---------------------------------------------------------------------------------
+-- Links Employee table to Membership Services table.
+---------------------------------------------------------------------------------
+CREATE TABLE [comp4911db].[dbo].[EmployeeSignature] (
+	empId			INT				NOT NULL	UNIQUE
+	, passphrase	NVARCHAR(255)
+	, publicKey		NVARCHAR(255)
+	, CONSTRAINT pk_EmployeeSignature PRIMARY KEY (empId)
+	, CONSTRAINT fk_EmployeeSignature_empId FOREIGN KEY (empId)
+		REFERENCES Employee (empId)
+);
+
+---------------------------------------------------------------------------------
 -- Tracks employee's pLevel over time.
 -- Used to generate reports/Timesheets from past.
 -- E.g. Employee may have gotten a promotion in the middle of a project.
 ---------------------------------------------------------------------------------
-CREATE TABLE EmployeePersonLevel (
+CREATE TABLE [comp4911db].[dbo].[EmployeePersonLevel] (
 	dateUpdated		DATE			NOT NULL	DEFAULT GETDATE()
 	, empId			INT				NOT NULL
 	, pLevel		NCHAR(2)		NOT NULL
@@ -85,7 +97,7 @@ CREATE TABLE EmployeePersonLevel (
 ---------------------------------------------------------------------------------
 -- Records which employees are HR Staff.
 ---------------------------------------------------------------------------------
-CREATE TABLE HumanResourcesStaff (
+CREATE TABLE [comp4911db].[dbo].[HumanResourcesStaff] (
 	empId INT		NOT NULL	UNIQUE
 	, CONSTRAINT pk_HumanResourcesStaff PRIMARY KEY (empId) 
 	, CONSTRAINT fk_HumanResourcesStaff_empId FOREIGN KEY (empId)
@@ -95,7 +107,7 @@ CREATE TABLE HumanResourcesStaff (
 ---------------------------------------------------------------------------------
 -- Records static Project attributes (past values not tracked).
 ---------------------------------------------------------------------------------
-CREATE TABLE Project (
+CREATE TABLE [comp4911db].[dbo].[Project] (
 	projId					INT				NOT NULL	UNIQUE	-- NOT ALPHANUMERIC, just a number (no periods)
 	, projName				NVARCHAR(30)	NOT NULL
 	, manager				INT
@@ -114,7 +126,7 @@ CREATE TABLE Project (
 ---------------------------------------------------------------------------------
 -- Records which employees have been assigned to which project.
 ---------------------------------------------------------------------------------
-CREATE TABLE EmployeeProject (
+CREATE TABLE [comp4911db].[dbo].[EmployeeProject] (
 	projId			INT		NOT NULL
 	, empId			INT		NOT NULL
 	, CONSTRAINT pk_EmployeeProject PRIMARY KEY (projId, empId)
@@ -131,7 +143,7 @@ CREATE TABLE EmployeeProject (
 -- The allocated/unallocated dollars make up the total WP budget.
 -- A null budget is undefined?
 ---------------------------------------------------------------------------------
-CREATE TABLE WorkPackage (
+CREATE TABLE [comp4911db].[dbo].[WorkPackage] (
 	projId					INT				NOT NULL
 	, wpId					NVARCHAR(30) 	NOT NULL
 	, name	 				NVARCHAR(30)	NOT NULL
@@ -152,13 +164,13 @@ CREATE TABLE WorkPackage (
 -- The ETC_days is estimated days until an employee completes his/her work on that work package.
 -- A null ETC_days means it's unknown (the employee has just started and no estimate is available yet).
 ---------------------------------------------------------------------------------
-CREATE TABLE EmployeeWorkPackage (
+CREATE TABLE [comp4911db].[dbo].[EmployeeWorkPackage] (
 	empId			INT				NOT NULL	
 	, projId		INT				NOT NULL
 	, wpId			NVARCHAR(30)	NOT NULL
 	, CONSTRAINT pk_EmployeeWorkPackage PRIMARY KEY (empId, projId, wpId)
 	, CONSTRAINT fk_EmployeeWorkPackage_empId FOREIGN KEY (projId, empId)
-		REFERENCES EmployeeProject (projId, empId)
+		REFERENCES EmployeeProject (projId, empId) ON DELETE CASCADE
 	, CONSTRAINT fk_EmployeeWorkPackage_projWp FOREIGN KEY (projId, wpId)
 		REFERENCES WorkPackage (projId, wpId)
 );
@@ -166,17 +178,19 @@ CREATE TABLE EmployeeWorkPackage (
 ---------------------------------------------------------------------------------
 -- Records responsible engineer's notes about a work package.
 ---------------------------------------------------------------------------------
-CREATE TABLE WorkPackageStatusReport (
+CREATE TABLE [comp4911db].[dbo].[WorkPackageStatusReport] (
 	projId					INT				NOT NULL	
 	, wpId					NVARCHAR(30) 	NOT NULL	
-	, reportDate			DATE			NOT NULL	DEFAULT CURRENT_TIMESTAMP
+	, startDate				DATE			NOT NULL
+	, endDate				DATE			NOT NULL	DEFAULT CURRENT_TIMESTAMP
 	, comments				TEXT			NOT NULL
 	, workAccomplished		TEXT			NOT NULL
 	, workPlannedNext		TEXT			NOT NULL
 	, problemsEncountered	TEXT			NOT NULL
 	, problemsAnticipated	TEXT			NOT NULL
-	, CONSTRAINT pk_WpStatusReport PRIMARY KEY (projId, wpId, reportDate)
-	, CONSTRAINT ck_WpStatusReport_reportDate CHECK (reportDate >= '2010/01/01' AND reportDate <= '2500/01/01')
+	, CONSTRAINT pk_WpStatusReport PRIMARY KEY (projId, wpId, startDate, endDate)
+	, CONSTRAINT ck_WpStatusReport_startDate CHECK (startDate >= '2010/01/01' AND startDate <= '2500/01/01')
+	, CONSTRAINT ck_WpStatusReport_endDate CHECK (endDate >= '2010/01/01' AND endDate <= '2500/01/01')
 	, CONSTRAINT fk_WpStatusReport_projWp FOREIGN KEY (projId, wpId)
 		REFERENCES WorkPackage (projId, wpId)
 );
@@ -186,17 +200,17 @@ CREATE TABLE WorkPackageStatusReport (
 -- The ETC_days is estimated days until an employee completes his/her work on that work package.
 -- A null ETC_days means it's unknown (the employee has just started and no estimate is available yet).
 ---------------------------------------------------------------------------------
-CREATE TABLE EmployeeWorkPackageETC (
+CREATE TABLE [comp4911db].[dbo].[EmployeeWorkPackageETC] (
 	empId			INT				NOT NULL
 	, projId		INT				NOT NULL
 	, wpId			NVARCHAR(30)	NOT NULL
 	, dateUpdated	DATE			NOT NULL	DEFAULT CURRENT_TIMESTAMP
 	, ETC_days		INT
 	, CONSTRAINT pk_EmployeeWorkPackageETC PRIMARY KEY (empId, projId, wpId, dateUpdated)
-	, CONSTRAINT fk_EmployeeWorkPackageETC_EmpProjWp FOREIGN KEY (empId, projId, wpId)
-		REFERENCES EmployeeWorkPackage (empId, projId, wpId)
-	, CONSTRAINT fk_EmployeeWorkPackageETC_date FOREIGN KEY (projId, wpId, dateUpdated)
-		REFERENCES WorkPackageStatusReport (projId, wpId, reportDate)
+	, CONSTRAINT fk_EmployeeWorkPackageETC_Emp FOREIGN KEY (empId)
+		REFERENCES Employee (empId)
+	, CONSTRAINT fk_EmployeeWorkPackageETC_ProjWp FOREIGN KEY (projId, wpId)
+		REFERENCES WorkPackage(projId, wpId)
 	, CONSTRAINT ck_ETCdays CHECK (ETC_days >= 0)
 );
 
@@ -204,7 +218,7 @@ CREATE TABLE EmployeeWorkPackageETC (
 -- Records which work packages have a responsible engineer.
 -- Usually, only the leaf (lowest-level) work packages have responsible engineers.
 ---------------------------------------------------------------------------------
-CREATE TABLE WorkPackageResponsibleEngineer (
+CREATE TABLE [comp4911db].[dbo].[WorkPackageResponsibleEngineer] (
 	projId					INT				NOT NULL
 	, wpId					NVARCHAR(30) 	NOT NULL
 	, responsibleEngineer	INT 			NOT NULL
@@ -220,7 +234,7 @@ CREATE TABLE WorkPackageResponsibleEngineer (
 -- This is given initially and usually not changed (it serves as the baseline).
 -- It's compared to the ETC_days in the EmployeeWorkPackage table.
 ---------------------------------------------------------------------------------
-CREATE TABLE WorkPackageEstimateRE (
+CREATE TABLE [comp4911db].[dbo].[WorkPackageEstimateRE] (
 	dateUpdated			DATE			NOT NULL	DEFAULT CURRENT_TIMESTAMP -- may not need
 	, projId			INT				NOT NULL
 	, wpId				NVARCHAR(30)	NOT NULL
@@ -243,7 +257,7 @@ CREATE TABLE WorkPackageEstimateRE (
 -- This, like the RE's Estimate, serves as a baseline.
 -- It's compared to the ETC_days in the EmployeeWorkPackage table.
 ---------------------------------------------------------------------------------
-CREATE TABLE WorkPackageBudgetPM (
+CREATE TABLE [comp4911db].[dbo].[WorkPackageBudgetPM] (
 	dateUpdated			DATE			NOT NULL	DEFAULT CURRENT_TIMESTAMP -- may not need
 	, projId			INT				NOT NULL
 	, wpId				NVARCHAR(30)	NOT NULL
@@ -262,7 +276,7 @@ CREATE TABLE WorkPackageBudgetPM (
 ---------------------------------------------------------------------------------
 -- Records attributes common to multiple time sheet entries. 
 ---------------------------------------------------------------------------------
-CREATE TABLE TimesheetHeader (
+CREATE TABLE [comp4911db].[dbo].[TimesheetHeader] (
 	empId			INT				NOT NULL
 	, tsDate		DATE			NOT NULL	DEFAULT CURRENT_TIMESTAMP
 	, status		NVARCHAR(9)					DEFAULT 'SAVED'
@@ -282,7 +296,7 @@ CREATE TABLE TimesheetHeader (
 -- Whenever that employee requests a new Timesheet, the default is used.
 -- If a default is not specified, a blank Timesheet is created/used.
 ---------------------------------------------------------------------------------
-CREATE TABLE DefaultTimesheet (
+CREATE TABLE [comp4911db].[dbo].[DefaultTimesheet] (
 	empId		INT		NOT NULL
 	, tsDate	DATE	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 	, CONSTRAINT pk_DefaultTimesheet PRIMARY KEY (empId)
@@ -293,7 +307,7 @@ CREATE TABLE DefaultTimesheet (
 ---------------------------------------------------------------------------------
 -- Records attributes specific to each time sheet entry (row).
 ---------------------------------------------------------------------------------
-CREATE TABLE TimesheetEntry (
+CREATE TABLE [comp4911db].[dbo].[TimesheetEntry] (
 	empId			INT				NOT NULL
 	, tsDate		DATE			NOT NULL	DEFAULT CURRENT_TIMESTAMP
 	, projId		INT				NOT NULL
@@ -305,6 +319,7 @@ CREATE TABLE TimesheetEntry (
 	, wed			DECIMAL(3, 1)	NOT NULL	DEFAULT 0.0	CHECK (wed BETWEEN 0 AND 24)
 	, thu			DECIMAL(3, 1)	NOT NULL	DEFAULT 0.0	CHECK (thu BETWEEN 0 AND 24)
 	, fri			DECIMAL(3, 1)	NOT NULL	DEFAULT 0.0	CHECK (fri BETWEEN 0 AND 24)
+	, totalHours	AS (sat + sun + mon + tue + wed + thu + fri) PERSISTED
 	, notes			NVARCHAR(MAX)
 	, CONSTRAINT pk_TimesheetEntry PRIMARY KEY (empId, tsDate, projId, wpId)
 	, CONSTRAINT fk_TimesheetEntry_projWP FOREIGN KEY (projId, wpId)
@@ -316,38 +331,38 @@ CREATE TABLE TimesheetEntry (
 ---------------------------------------------------------------------------------
 -- Populate system data.
 ---------------------------------------------------------------------------------
-INSERT INTO [FlyingFish_new22-26].[dbo].[Project] (projId, projName, manager)
+INSERT INTO [comp4911db].[dbo].[Project] (projId, projName, manager)
 	VALUES (10, 'System', NULL);
 
-INSERT INTO [FlyingFish_new22-26].[dbo].[WorkPackage] (projID, wpId, name, description, unallocated_dollars, allocated_dollars)
+INSERT INTO [comp4911db].[dbo].[WorkPackage] (projID, wpId, name, description, unallocated_dollars, allocated_dollars)
 	VALUES (10, 'SICK', 'SICK_DAYS', 'Employees charge to this package when they take a sick day.', DEFAULT, DEFAULT);
 
-INSERT INTO [FlyingFish_new22-26].[dbo].[WorkPackage] (projID, wpId, name, description, unallocated_dollars, allocated_dollars)
+INSERT INTO [comp4911db].[dbo].[WorkPackage] (projID, wpId, name, description, unallocated_dollars, allocated_dollars)
 	VALUES (10, 'FLEX', 'FLEX_HOURS', 'Employees charge their flex time to this work package.', DEFAULT, DEFAULT);
 
-INSERT INTO [FlyingFish_new22-26].[dbo].[WorkPackage] (projID, wpId, name, description, unallocated_dollars, allocated_dollars)
+INSERT INTO [comp4911db].[dbo].[WorkPackage] (projID, wpId, name, description, unallocated_dollars, allocated_dollars)
 	VALUES (10, 'VACATION', 'VACATION_LEAVE', 'Employees charge to this package when they take vacation leave.', DEFAULT, DEFAULT);
 
-INSERT INTO [FlyingFish_new22-26].[dbo].[WorkPackage] (projID, wpId, name, description, unallocated_dollars, allocated_dollars)
+INSERT INTO [comp4911db].[dbo].[WorkPackage] (projID, wpId, name, description, unallocated_dollars, allocated_dollars)
 	VALUES (10, 'HOLIDAY', 'STATUTORY_HOLIDAYS', 'Employees charge to this package when they get a stat holiday off.', DEFAULT, DEFAULT);
 
-INSERT INTO [FlyingFish_new22-26].[dbo].[aspnet_Applications] (ApplicationName, LoweredApplicationName, ApplicationId, Description)
+INSERT INTO [comp4911db].[dbo].[aspnet_Applications] (ApplicationName, LoweredApplicationName, ApplicationId, Description)
 	VALUES('/', '/', '3A6237FA-1533-455A-A5A0-91418CC54F73', NULL);
 
-INSERT INTO [FlyingFish_new22-26].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
+INSERT INTO [comp4911db].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
 	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', '67DA9471-9374-44FC-91FA-2F4EDF54EED1', 'Employee', 'employee', NULL);
 
-INSERT INTO [FlyingFish_new22-26].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
-	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', '6ABFAB3A-A484-4A16-97B3-DAE17E55ECEA', 'Timesheet Approver', 'timesheetapprover', NULL);
+INSERT INTO [comp4911db].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
+	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', '6ABFAB3A-A484-4A16-97B3-DAE17E55ECEA', 'TimesheetApprover', 'timesheetapprover', NULL);
 	
-INSERT INTO [FlyingFish_new22-26].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
-	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', 'A00A755E-210D-4F65-A039-CE4F902307CC', 'Employee Manager', 'employeemanager', NULL);
+INSERT INTO [comp4911db].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
+	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', 'A00A755E-210D-4F65-A039-CE4F902307CC', 'EmployeeManager', 'employeemanager', NULL);
 
-INSERT INTO [FlyingFish_new22-26].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
-	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', 'CEE18FE3-BE0E-417B-A66B-94B76E328100', 'Human Resources Staff', 'hrstaff', NULL);
+INSERT INTO [comp4911db].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
+	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', 'CEE18FE3-BE0E-417B-A66B-94B76E328100', 'HRStaff', 'hrstaff', NULL);
 
-INSERT INTO [FlyingFish_new22-26].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
-	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', '0C8981A5-A7B3-4020-86C3-E16A0FE45EC3', 'Project Manager', 'projectmanager', NULL);
+INSERT INTO [comp4911db].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
+	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', '0C8981A5-A7B3-4020-86C3-E16A0FE45EC3', 'ProjectManager', 'projectmanager', NULL);
 
-INSERT INTO [FlyingFish_new22-26].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
-	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', '4C33878C-860C-4D37-B4E8-02E993E7F6F3', 'Responsible Engineer', 'responsibleengineer', NULL);
+INSERT INTO [comp4911db].[dbo].[aspnet_Roles] (ApplicationId, RoleId, RoleName, LoweredRoleName, Description)
+	VALUES('3A6237FA-1533-455A-A5A0-91418CC54F73', '4C33878C-860C-4D37-B4E8-02E993E7F6F3', 'ResponsibleEngineer', 'responsibleengineer', NULL);

@@ -3,25 +3,30 @@
 -- Script used to destroy the database
 -- SQL Express
 
-DELETE FROM [FlyingFish_new22-26].[dbo].[aspnet_UsersInRoles];
-DELETE FROM [FlyingFish_new22-26].[dbo].[aspnet_Roles];
-DELETE FROM [FlyingFish_new22-26].[dbo].[aspnet_Membership];
-DELETE FROM [FlyingFish_new22-26].[dbo].[aspnet_Users];
-DELETE FROM [FlyingFish_new22-26].[dbo].[aspnet_Applications];
-DROP TABLE [FlyingFish_new22-26].[dbo].[TimeSheetEntry];
-DROP TABLE [FlyingFish_new22-26].[dbo].[DefaultTimeSheet];
-DROP TABLE [FlyingFish_new22-26].[dbo].[TimeSheetHeader];
-DROP TABLE [FlyingFish_new22-26].[dbo].[WorkPackageBudgetPM];
-DROP TABLE [FlyingFish_new22-26].[dbo].[WorkPackageEstimateRE];
-DROP TABLE [FlyingFish_new22-26].[dbo].[WorkPackageResponsibleEngineer];
-DROP TABLE [FlyingFish_new22-26].[dbo].[EmployeeWorkPackageETC];
-DROP TABLE [FlyingFish_new22-26].[dbo].[WorkPackageStatusReport];
-DROP TABLE [FlyingFish_new22-26].[dbo].[EmployeeWorkPackage];
-DROP TABLE [FlyingFish_new22-26].[dbo].[WorkPackage];
-DROP TABLE [FlyingFish_new22-26].[dbo].[EmployeeProject];
-DROP TABLE [FlyingFish_new22-26].[dbo].[Project];
-DROP TABLE [FlyingFish_new22-26].[dbo].[HumanResourcesStaff];
-DROP TABLE [FlyingFish_new22-26].[dbo].[EmployeePersonLevel];
-DROP TABLE [FlyingFish_new22-26].[dbo].[EmployeeMembership];
-DROP TABLE [FlyingFish_new22-26].[dbo].[Employee];
-DROP TABLE [FlyingFish_new22-26].[dbo].[PersonLevel];
+DELETE FROM [comp4911db].[dbo].[aspnet_UsersInRoles];
+DELETE FROM [comp4911db].[dbo].[aspnet_Roles];
+DELETE FROM [comp4911db].[dbo].[aspnet_Membership];
+DELETE FROM [comp4911db].[dbo].[aspnet_Users];
+DELETE FROM [comp4911db].[dbo].[aspnet_Applications];
+-- Sometimes there are errors, run it twice...
+DELETE FROM [comp4911db].[dbo].[aspnet_Users];
+DELETE FROM [comp4911db].[dbo].[aspnet_Applications];
+
+DROP TABLE [comp4911db].[dbo].[TimeSheetEntry];
+DROP TABLE [comp4911db].[dbo].[DefaultTimeSheet];
+DROP TABLE [comp4911db].[dbo].[TimeSheetHeader];
+DROP TABLE [comp4911db].[dbo].[WorkPackageBudgetPM];
+DROP TABLE [comp4911db].[dbo].[WorkPackageEstimateRE];
+DROP TABLE [comp4911db].[dbo].[WorkPackageResponsibleEngineer];
+DROP TABLE [comp4911db].[dbo].[EmployeeWorkPackageETC];
+DROP TABLE [comp4911db].[dbo].[WorkPackageStatusReport];
+DROP TABLE [comp4911db].[dbo].[EmployeeWorkPackage];
+DROP TABLE [comp4911db].[dbo].[WorkPackage];
+DROP TABLE [comp4911db].[dbo].[EmployeeProject];
+DROP TABLE [comp4911db].[dbo].[Project];
+DROP TABLE [comp4911db].[dbo].[HumanResourcesStaff];
+DROP TABLE [comp4911db].[dbo].[EmployeePersonLevel];
+DROP TABLE [comp4911db].[dbo].[EmployeeMembership];
+DROP TABLE [comp4911db].[dbo].[EmployeeSignature];
+DROP TABLE [comp4911db].[dbo].[Employee];
+DROP TABLE [comp4911db].[dbo].[PersonLevel];

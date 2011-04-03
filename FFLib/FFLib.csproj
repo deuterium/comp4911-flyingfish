@@ -45,9 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FlyingFishClasses.cs">
-      <DependentUpon>FlyingFishClasses.dbml</DependentUpon>
-    </Compile>
     <Compile Include="FlyingFishClasses.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -77,7 +74,6 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SQL_Files\CreateDBViews.sql" />
     <Content Include="SQL_Files\CreateDB.sql" />
     <Content Include="SQL_Files\DeleteDB.sql" />
     <Content Include="SQL_Files\DBExportForMigration.sql" />
