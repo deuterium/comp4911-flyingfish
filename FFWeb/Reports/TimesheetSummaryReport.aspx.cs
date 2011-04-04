@@ -84,15 +84,19 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
                                select w1.totalHours).FirstOrDefault(),
                       Month1 = (from w1 in ffdb.TimesheetEntries
                                 where (w1.empId == g.Key.emp.empId) && w1.tsDate.Month == dateFor.Month
+                                    && w1.tsDate.Year.Equals(dateFor.Year)
                                 select w1.totalHours).FirstOrDefault(),
                       Month2 = (from w1 in ffdb.TimesheetEntries
                                 where (w1.empId == g.Key.emp.empId) && w1.tsDate.Month == dateFor.AddMonths(-1).Month
+                                    && w1.tsDate.Year.Equals(dateFor.AddMonths(-1).Year)
                                 select w1.totalHours).FirstOrDefault(),
                       Month3 = (from w1 in ffdb.TimesheetEntries
-                                where (w1.empId == g.Key.emp.empId) && w1.tsDate.Month == dateFor.AddMonths(-2).Month
+                                where (w1.empId == g.Key.emp.empId) && w1.tsDate.Month.Equals(dateFor.AddMonths(-2).Month)
+                                    && w1.tsDate.Year.Equals(dateFor.AddMonths(-2).Year)
                                 select w1.totalHours).FirstOrDefault(),
                       Month4 = (from w1 in ffdb.TimesheetEntries
                                 where (w1.empId == g.Key.emp.empId) && w1.tsDate.Month == dateFor.AddMonths(-3).Month
+                                    && w1.tsDate.Year.Equals(dateFor.AddMonths(-3).Year)
                                 select w1.totalHours).FirstOrDefault(),
                       TotalHours = (from t in ffdb.TimesheetEntries
                                     where (t.empId == g.Key.emp.empId) && t.tsDate <= dateFor
@@ -106,6 +110,7 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
         // Binds the query data to the Grid View.
         gvSummary.DataSource = qry;
         gvSummary.DataBind();
+        gvSummary.Visible = true;
 
         // Changes the Header columns of the Grid View to more informative names.
         gvSummary.HeaderRow.Cells[0].Text = "Work Package";
@@ -138,9 +143,14 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
     /// <param name="sender">Object that called the event</param>
     /// <param name="e">the action event</param>
     protected void btnSubmit_Click(object sender, EventArgs e) {
+        //gvSummary.DataSource = null;
+        //gvSummary.DataBind();
+        //gvSummary.Visible = false;
+        
         if (tbForDate.Text.Equals("")) {
             tbForDate.Text = DateTime.Now.ToString("yyyy/MM/dd");
         }
+
         this.GetTimesheetSummaryReport(Convert.ToInt16(ddlAllProjects.SelectedValue), Convert.ToDateTime(tbForDate.Text));
     }
 }

@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using FFLib;
+using System.Data;
+
 
 /* TO DO:
  * Validators
@@ -17,7 +19,8 @@ using FFLib;
 
 public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     FlyingFishClassesDataContext ffdb = new FlyingFishClassesDataContext();
-
+    WorkPackageStatusReport wpsr;
+    
     protected void Page_Load(object sender, EventArgs e) {
         if (!IsPostBack) {
             populateProjects();
@@ -25,13 +28,13 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         }
 
         // for testing purposes only, so I don't have to fill out the form every time
-        //GetWorkPackageStatusReport(4911, "1", Convert.ToDateTime("2011/01/01"), Convert.ToDateTime("2011/03/01"));
+        GetWorkPackageStatusReport(4911, "1", Convert.ToDateTime("2011/01/01"), Convert.ToDateTime("2011/03/01"));
     }
 
     private void populateProjects() {
         ddlAllProjects.DataSource = ffdb.Projects.Select(p => new {
             ProjID = p.projId,
-            ProjectName = (p.projName + " (") + p.projId + ")"
+            ProjectName = p.projName + " (" + p.projId + ")"
         });
         ddlAllProjects.DataValueField = "ProjId";
         ddlAllProjects.DataTextField = "ProjectName";
@@ -93,12 +96,31 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
                   };
 
         if (qry.Count() == 0) {
+            gvStatus.DataSource = null;
+            gvStatus.DataBind();
             lblResults.Visible = true;
             divReportData.Visible = false;
             return;
         }
 
-        gvStatus.DataSource = qry;
+        DataTable dt = new DataTable();
+        dt.Columns.Add(new DataColumn("Employee", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("ACWP", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("ETC", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("EAC", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("PercentComplete", typeof(System.String)));
+                
+        foreach (var row in qry) {
+            DataRow dr = dt.NewRow();
+            dr["Employee"] = row.Emp;
+            dr["ACWP"] = row.ACWP;
+            dr["ETC"] = row.ETC;
+            dr["EAC"] = row.EAC; 
+            dr["PercentComplete"] = row.PercentComplete; 
+            dt.Rows.Add(dr);
+        }
+
+        gvStatus.DataSource = dt;
         gvStatus.DataBind();
 
         var q = qry.FirstOrDefault();
@@ -109,11 +131,36 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         lblPm.Text = q.PM.firstName + " " + q.PM.lastName + " (" + q.PM.empId + ")";
         lblReportNo.Text = "Unavailabile";
         lblReportPeriod.Text = start.ToString("yyyy/MM/dd") + " to " + end.ToString("yyyy/MM/dd");
-        lblPmBac.Text = "NULL";
-        lblReBac.Text = "NULL";
-        lblTotalAcwp.Text = "NULL";
+        lblPmBac.Text = this.getPMBudget(projId, wpId).ToString();
 
-        WorkPackageStatusReport wpsr = getExistingReportDetails(projId, wpId, start, end);
+        double reBAC = 0;
+
+        foreach (var item in qry) {
+            if (!(item.EAC.Equals("Unknown"))) {
+                reBAC += Convert.ToDouble(item.EAC);
+            }
+        }
+        
+        lblReBac.Text = reBAC.ToString();
+        if (reBAC == 0) {
+            lblReBac.Text = "Unknown";
+        }
+        
+        double totalAcwp = 0;
+
+        foreach (var item in qry) {
+            if (!(item.ACWP.Equals("Unknown"))) {
+                totalAcwp += Convert.ToDouble(item.ACWP);
+            }
+        }
+
+
+        lblTotalAcwp.Text = totalAcwp.ToString() + " hours";
+        if (totalAcwp == 0) {
+            lblTotalAcwp.Text = "Unknown";
+        }
+        
+        wpsr = getExistingReportDetails(projId, wpId, start, end);
         if (wpsr == null) {
             tbComments.Text = "";
             tbWorkAccomplished.Text = "";
@@ -136,6 +183,23 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     private void createNewReport() {
 
     }
+
+
+    private double getPMBudget(int projId, String wpId) {
+        var qry = (from wp in ffdb.WorkPackages
+                   where (wp.projId == projId) && wp.wpId.Equals(wpId)
+                   select wp).FirstOrDefault();
+        return (Double)(qry.unallocated_dollars + qry.allocated_dollars);
+    }
+
+    private double getREBudget(int projId, String wpId) {
+        var qry = (from wp in ffdb.WorkPackages
+                   where (wp.projId == projId) && wp.wpId.Equals(wpId)
+                   select wp).FirstOrDefault();
+        return (Double)(qry.unallocated_dollars + qry.allocated_dollars);
+    }
+
+
 
     private WorkPackageStatusReport getExistingReportDetails(int projId, String wpId, DateTime start, DateTime end) {
         WorkPackageStatusReport wpsr = (from sr in ffdb.WorkPackageStatusReports
@@ -272,5 +336,76 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         DateTime periodEnd = Convert.ToDateTime(tbPeriodEnd.Text);
         int projId = Convert.ToInt16(ddlAllProjects.SelectedValue);
         GetWorkPackageStatusReport(projId, ddlWorkpackages.SelectedValue, periodStart, periodEnd);
+    }
+
+    protected void gvStatus_RowEditing(object sender, GridViewEditEventArgs e) {
+        gvStatus.EditIndex = e.NewEditIndex;
+        gvStatus.DataBind();
+    }
+
+    protected void gvStatus_RowUpdated(object sender, GridViewUpdatedEventArgs e) {
+        // handle row updated
+    }
+
+    protected void gvStatus_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e) {
+        gvStatus.EditIndex = -1;
+        gvStatus.DataBind();
+    }
+
+    protected void gvStatus_RowCommand(object sender, GridViewCommandEventArgs e) {
+        // handle row command
+    }
+
+    protected void btnSave_Click(object sender, EventArgs e) {
+        if (Page.IsValid) {
+            lblResults.Text = "";
+            lblResults.Visible = true;
+            DateTime start = Convert.ToDateTime(tbPeriodStart.Text);
+            DateTime end = Convert.ToDateTime(tbPeriodEnd.Text);
+            int projId = Convert.ToInt16(ddlAllProjects.SelectedValue);
+
+            var report = (from sr in ffdb.WorkPackageStatusReports
+                          where sr.endDate.Equals(end)
+                              && sr.startDate.Equals(start)
+                              && (sr.projId == projId)
+                              && (sr.wpId.Equals(ddlWorkpackages.SelectedValue))
+                          select sr).SingleOrDefault();
+            if (report == null) {
+                lblResults.Text += "No report found!\n";
+                wpsr = new WorkPackageStatusReport();
+                wpsr.startDate = Convert.ToDateTime(tbPeriodStart.Text);
+                wpsr.endDate = Convert.ToDateTime(tbPeriodEnd.Text);
+                wpsr.comments = tbComments.Text;
+                wpsr.workAccomplished = tbWorkAccomplished.Text;
+                wpsr.workPlannedNext = tbWorkPlannedNext.Text;
+                wpsr.problemsEncountered = tbProblemsEncountered.Text;
+                wpsr.problemsAnticipated = tbProblemsAncticipatedNext.Text;
+                ffdb.WorkPackageStatusReports.InsertOnSubmit(wpsr);
+                try {
+                    ffdb.SubmitChanges();
+                }
+                catch (Exception ex) {
+                    lblResults.Text += "Unable to save report at this time.";
+                }
+ 
+            } else {
+                report.comments = tbComments.Text;
+                report.workAccomplished = tbWorkAccomplished.Text;
+                report.workPlannedNext = tbWorkPlannedNext.Text;
+                report.problemsEncountered = tbProblemsEncountered.Text;
+                report.problemsAnticipated = tbProblemsAncticipatedNext.Text;
+                try {
+                    ffdb.SubmitChanges();
+                }
+                catch (Exception ex) {
+                    lblResults.Text += "Unable to save report at this time.";
+                }
+ 
+            }
+
+            
+            lblResults.Text += "Is read only? " + ffdb.WorkPackageStatusReports.IsReadOnly;
+            
+                   }
     }
 }
