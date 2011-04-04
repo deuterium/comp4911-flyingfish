@@ -9,19 +9,19 @@ using System.Data;
 
 
 /* TO DO:
- * Validators
- * Persist changes
  * Enable Editing of ETC or EAC
  * Calculate PDays and PDollars
  * Turns hours into Days
  * Create functionality
+ * If you change value in form, will affect code (extracts from there, doesn't store it)
  */
 
 public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     FlyingFishClassesDataContext ffdb = new FlyingFishClassesDataContext();
-    WorkPackageStatusReport wpsr;
-    
+
     protected void Page_Load(object sender, EventArgs e) {
+        
+
         if (!IsPostBack) {
             populateProjects();
             populateWorkpackages();
@@ -39,7 +39,6 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         ddlAllProjects.DataValueField = "ProjId";
         ddlAllProjects.DataTextField = "ProjectName";
         ddlAllProjects.DataBind();
-        //PopulateWorkpackages();
     }
 
     private void populateWorkpackages() {
@@ -58,18 +57,25 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         populateWorkpackages();
     }
 
+    public void test() {
+        lblResults.Text += (Convert.ToInt16(ViewState["projId"]).ToString()) + "<br />";
+        lblResults.Text += (ViewState["wpId"]).ToString() + "<br />";
+        lblResults.Text += ((DateTime)ViewState["startDate"]).ToString() + "<br />";
+        lblResults.Text += ((DateTime)ViewState["endDate"]).ToString() + "<br />";
+    }
+
     // NEED DAYS! NOT HOURS! DIVIDE IT BY 8!!!
 
-    public void GetWorkPackageStatusReport(int projId, String wpId, DateTime start, DateTime end) {
+    public void GetWorkPackageStatusReport() {
         // Find out how much work each employee has done on the work package
         // Calculate the PDays and PDollar value of this work
         // Calculate the EAC from the ACWP and ETC
         // Calculate the percent complete
         // Calculate the total
 
-        List<KeyValuePair<int, double>> acwpForAll = getAcwpForAll(projId, wpId, start, end);
-        List<EmployeeWorkPackageETC> etcForAll = getEtcForAll(projId, wpId, start, end);
-
+        List<KeyValuePair<int, double>> acwpForAll = getAcwpForAll();
+        List<EmployeeWorkPackageETC> etcForAll = getEtcForAll();
+        
         var qry = from tse in ffdb.TimesheetEntries
                   join proj in ffdb.Projects on tse.projId equals proj.projId
                   join wp in ffdb.WorkPackages on (tse.projId + tse.wpId) equals (wp.projId + wp.wpId)
@@ -78,8 +84,8 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
                   join re in ffdb.Employees on wpre.responsibleEngineer equals re.empId
                   join pm in ffdb.Employees on proj.manager equals pm.empId
                   orderby tse.projId, tse.wpId, tse.empId
-                  where (tse.tsDate >= start) && (tse.tsDate <= end)
-                        && (tse.projId == projId) && (tse.wpId == wpId)
+                  where (tse.tsDate >= (DateTime)ViewState["startDate"]) && (tse.tsDate <= (DateTime)ViewState["endDate"])
+                        && (tse.projId == Convert.ToInt16(ViewState["projId"])) && (tse.wpId.Equals(ViewState["wpId"]))
                   select new {
                       Proj = proj,
                       PM = pm,
@@ -130,8 +136,9 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         lblRe.Text = q.RE.firstName + " " + q.RE.lastName + " (" + q.RE.empId + ")";
         lblPm.Text = q.PM.firstName + " " + q.PM.lastName + " (" + q.PM.empId + ")";
         lblReportNo.Text = "Unavailabile";
-        lblReportPeriod.Text = start.ToString("yyyy/MM/dd") + " to " + end.ToString("yyyy/MM/dd");
-        lblPmBac.Text = this.getPMBudget(projId, wpId).ToString();
+        lblReportPeriod.Text = ((DateTime)ViewState["startDate"]).ToString("yyyy/MM/dd")
+            + " to " + ((DateTime)ViewState["endDate"]).ToString("yyyy/MM/dd");
+        lblPmBac.Text = this.getPMBudget().ToString();
 
         double reBAC = 0;
 
@@ -159,14 +166,17 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         if (totalAcwp == 0) {
             lblTotalAcwp.Text = "Unknown";
         }
-        
-        wpsr = getExistingReportDetails(projId, wpId, start, end);
+
+        WorkPackageStatusReport wpsr = getExistingReportDetails();
+        ViewState["isNewReport"] = false;
+
         if (wpsr == null) {
             tbComments.Text = "";
             tbWorkAccomplished.Text = "";
             tbWorkPlannedNext.Text = "";
             tbProblemsEncountered.Text = "";
             tbProblemsAncticipatedNext.Text = "";
+            ViewState["isNewReport"] = true;
         } else {
             tbComments.Text = wpsr.comments;
             tbWorkAccomplished.Text = wpsr.workAccomplished;
@@ -185,39 +195,39 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     }
 
 
-    private double getPMBudget(int projId, String wpId) {
+    private double getPMBudget() {
         var qry = (from wp in ffdb.WorkPackages
-                   where (wp.projId == projId) && wp.wpId.Equals(wpId)
+                   where (wp.projId == (Convert.ToInt16(ViewState["projId"]))) && wp.wpId.Equals(ViewState["wpId"])
                    select wp).FirstOrDefault();
         return (Double)(qry.unallocated_dollars + qry.allocated_dollars);
     }
 
-    private double getREBudget(int projId, String wpId) {
+    private double getREBudget() {
         var qry = (from wp in ffdb.WorkPackages
-                   where (wp.projId == projId) && wp.wpId.Equals(wpId)
+                   where (wp.projId == (Convert.ToInt16(ViewState["projId"]))) && wp.wpId.Equals(ViewState["wpId"])
                    select wp).FirstOrDefault();
         return (Double)(qry.unallocated_dollars + qry.allocated_dollars);
     }
 
 
 
-    private WorkPackageStatusReport getExistingReportDetails(int projId, String wpId, DateTime start, DateTime end) {
+    private WorkPackageStatusReport getExistingReportDetails() {
         WorkPackageStatusReport wpsr = (from sr in ffdb.WorkPackageStatusReports
-                                where sr.endDate.Equals(end)
-                                        && sr.startDate.Equals(start)
-                                        && (sr.projId == projId)
-                                        && (sr.wpId == wpId)
-                                select sr).FirstOrDefault();
+                                        where sr.endDate.Equals((DateTime)ViewState["endDate"])
+                                            && sr.startDate.Equals((DateTime)ViewState["startDate"])
+                                            && (sr.projId == (Convert.ToInt16(ViewState["projId"])))
+                                            && (sr.wpId.Equals(ViewState["wpId"]))
+                                        select sr).FirstOrDefault();
         
         return wpsr;
     }
 
-    private List<KeyValuePair<int, double>> getAcwpForAll(int projId, String wpId, DateTime start, DateTime end) {
+    private List<KeyValuePair<int, double>> getAcwpForAll() {
         var qry = from t in ffdb.TimesheetEntries
-                    where (t.projId == projId)
-                            && (t.wpId == wpId)
-                            && (t.tsDate >= start)
-                            && (t.tsDate <= end)
+                  where (t.projId == (Convert.ToInt16(ViewState["projId"])))
+                            && (t.wpId.Equals(ViewState["wpId"]))
+                            && (t.tsDate >= ((DateTime)ViewState["startDate"]))
+                            && (t.tsDate <= ((DateTime)ViewState["endDate"]))
                     group t by new { t.projId, t.wpId, ID = t.empId } into g
                     select new {
                         empId = g.Key.ID,
@@ -230,12 +240,12 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         return listAcwp;
     }
 
-    private List<EmployeeWorkPackageETC> getEtcForAll(int projId, String wpId, DateTime start, DateTime end) {
+    private List<EmployeeWorkPackageETC> getEtcForAll() {
         var qry = from etc in ffdb.EmployeeWorkPackageETCs
-                   where (etc.projId == projId)
-                           && (etc.wpId == wpId)
-                           && (etc.dateUpdated >= start)
-                           && (etc.dateUpdated <= end)
+                  where (etc.projId == (Convert.ToInt16(ViewState["projId"])))
+                           && (etc.wpId.Equals(ViewState["wpId"]))
+                           && (etc.dateUpdated >= ((DateTime)ViewState["startDate"]))
+                           && (etc.dateUpdated <= ((DateTime)ViewState["endDate"]))
                            && (etc.dateUpdated ==
                                    (from du in ffdb.EmployeeWorkPackageETCs
                                     select du.dateUpdated).Max())
@@ -325,87 +335,80 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e) {
-        DateTime periodStart = Convert.ToDateTime(tbPeriodStart.Text);
-        DateTime periodEnd = Convert.ToDateTime(tbPeriodEnd.Text);
-        int projId = Convert.ToInt16(ddlAllProjects.SelectedValue);
-        GetWorkPackageStatusReport(projId, ddlWorkpackages.SelectedValue, periodStart, periodEnd);
+        ViewState["projId"] = Convert.ToInt16(ddlAllProjects.SelectedValue);
+        ViewState["wpId"] = ddlWorkpackages.SelectedValue;
+        ViewState["startDate"] = Convert.ToDateTime(tbPeriodStart.Text);
+        ViewState["endDate"] = Convert.ToDateTime(tbPeriodEnd.Text);
+        GetWorkPackageStatusReport();
     }
 
     protected void btnNewReport_Click(object sender, EventArgs e) {
-        DateTime periodStart = Convert.ToDateTime(tbPeriodStart.Text);
-        DateTime periodEnd = Convert.ToDateTime(tbPeriodEnd.Text);
-        int projId = Convert.ToInt16(ddlAllProjects.SelectedValue);
-        GetWorkPackageStatusReport(projId, ddlWorkpackages.SelectedValue, periodStart, periodEnd);
+        ViewState["projId"] = Convert.ToInt16(ddlAllProjects.SelectedValue);
+        ViewState["wpId"] = ddlWorkpackages.SelectedValue;
+        ViewState["startDate"] = Convert.ToDateTime(tbPeriodStart.Text);
+        ViewState["endDate"] = Convert.ToDateTime(tbPeriodEnd.Text);
+        GetWorkPackageStatusReport();
     }
 
     protected void gvStatus_RowEditing(object sender, GridViewEditEventArgs e) {
         gvStatus.EditIndex = e.NewEditIndex;
-        gvStatus.DataBind();
+        GetWorkPackageStatusReport();
     }
 
     protected void gvStatus_RowUpdated(object sender, GridViewUpdatedEventArgs e) {
-        // handle row updated
+        
+        //GridViewRow row = e.gvStatus.Rows[e.RowIndex];
+        //var newValues = this.GetValues(row);
+
     }
 
     protected void gvStatus_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e) {
         gvStatus.EditIndex = -1;
-        gvStatus.DataBind();
+        GetWorkPackageStatusReport();
     }
 
     protected void gvStatus_RowCommand(object sender, GridViewCommandEventArgs e) {
-        // handle row command
+        GetWorkPackageStatusReport();
     }
 
     protected void btnSave_Click(object sender, EventArgs e) {
         if (Page.IsValid) {
             lblResults.Text = "";
             lblResults.Visible = true;
-            DateTime start = Convert.ToDateTime(tbPeriodStart.Text);
-            DateTime end = Convert.ToDateTime(tbPeriodEnd.Text);
-            int projId = Convert.ToInt16(ddlAllProjects.SelectedValue);
+            Boolean isNewReport = false;
+            
+            WorkPackageStatusReport wpsr = getExistingReportDetails();
 
-            var report = (from sr in ffdb.WorkPackageStatusReports
-                          where sr.endDate.Equals(end)
-                              && sr.startDate.Equals(start)
-                              && (sr.projId == projId)
-                              && (sr.wpId.Equals(ddlWorkpackages.SelectedValue))
-                          select sr).SingleOrDefault();
-            if (report == null) {
-                lblResults.Text += "No report found!\n";
+            if (wpsr == null) {
                 wpsr = new WorkPackageStatusReport();
-                wpsr.startDate = Convert.ToDateTime(tbPeriodStart.Text);
-                wpsr.endDate = Convert.ToDateTime(tbPeriodEnd.Text);
-                wpsr.comments = tbComments.Text;
-                wpsr.workAccomplished = tbWorkAccomplished.Text;
-                wpsr.workPlannedNext = tbWorkPlannedNext.Text;
-                wpsr.problemsEncountered = tbProblemsEncountered.Text;
-                wpsr.problemsAnticipated = tbProblemsAncticipatedNext.Text;
-                ffdb.WorkPackageStatusReports.InsertOnSubmit(wpsr);
-                try {
-                    ffdb.SubmitChanges();
-                }
-                catch (Exception ex) {
-                    lblResults.Text += "Unable to save report at this time.";
-                }
- 
-            } else {
-                report.comments = tbComments.Text;
-                report.workAccomplished = tbWorkAccomplished.Text;
-                report.workPlannedNext = tbWorkPlannedNext.Text;
-                report.problemsEncountered = tbProblemsEncountered.Text;
-                report.problemsAnticipated = tbProblemsAncticipatedNext.Text;
-                try {
-                    ffdb.SubmitChanges();
-                }
-                catch (Exception ex) {
-                    lblResults.Text += "Unable to save report at this time.";
-                }
- 
+                wpsr.projId = Convert.ToInt16(ViewState["projId"]);
+                wpsr.wpId = ddlWorkpackages.SelectedValue;
+                wpsr.startDate = Convert.ToDateTime(ViewState["startDate"]);
+                wpsr.endDate = Convert.ToDateTime(ViewState["endDate"]);
+                isNewReport = true;
             }
 
-            
-            lblResults.Text += "Is read only? " + ffdb.WorkPackageStatusReports.IsReadOnly;
-            
-                   }
+            wpsr.comments = tbComments.Text;
+            wpsr.workAccomplished = tbWorkAccomplished.Text;
+            wpsr.workPlannedNext = tbWorkPlannedNext.Text;
+            wpsr.problemsEncountered = tbProblemsEncountered.Text;
+            wpsr.problemsAnticipated = tbProblemsAncticipatedNext.Text;
+
+            if (isNewReport) {
+                ffdb.WorkPackageStatusReports.InsertOnSubmit(wpsr);
+            }
+
+            try {
+                ffdb.SubmitChanges();
+                lblResults.ForeColor = System.Drawing.Color.Green;
+                lblResults.Text = "Report successfully saved!<br />";
+            }
+            catch (Exception ex) {
+                lblResults.ForeColor = System.Drawing.Color.Red;
+                lblResults.Text = "Unable to save report at this time.<br />";
+                Trace.Write(ex.Message);
+            }
+
+        }
     }
 }
