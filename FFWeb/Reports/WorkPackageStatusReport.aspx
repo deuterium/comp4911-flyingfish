@@ -5,7 +5,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
-    <center><div id="divInputForm" runat="server">
+    <center>
+    <div id="divInputForm" runat="server">
         <asp:ToolkitScriptManager ID="tsmManager" runat="server">
         </asp:ToolkitScriptManager>
         <table cellpadding="5px" >
@@ -61,6 +62,9 @@
                         ErrorMessage="End date must be between 2010/01/01 and 2500/01/01."
                         MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*">
                     </asp:RangeValidator>
+                    <asp:CompareValidator ID="cpvEndDate" runat="server" Operator="GreaterThan" ControlToValidate="tbPeriodEnd"
+                        ErrorMessage="End date must come after start date." ControlToCompare="tbPeriodStart" Text="*" ForeColor="Red">
+                    </asp:CompareValidator>
                 </td>
             </tr>
             <tr>
@@ -81,12 +85,16 @@
         </table>
     </div>
     <br />
-    <asp:Label ID="lblResults" runat="server" Text="No reports found." Visible="false" ></asp:Label>
+    
+    <asp:UpdatePanel ID="udpReportResults" runat="server">
+    <ContentTemplate>
+
+    <asp:Label ID="lblResults" runat="server" Text="No reports found." Visible="false" ></asp:Label>                        
     <div id="divReportData" runat="server" visible="false">
         <asp:Table ID="tblResults" runat="server" Visible="true" Cellpadding="10">
             <asp:TableRow>
                 <asp:TableCell>
-                  
+                
                    <asp:GridView ID="gvStatus" runat="server" AutoGenerateColumns="False" OnRowCancelingEdit="gvStatus_RowCancelingEdit"
                             OnRowCommand="gvStatus_RowCommand" OnRowEditing="gvStatus_RowEditing" OnRowUpdated="gvStatus_RowUpdated">
                         <Columns>
@@ -105,8 +113,8 @@
                                 <ItemTemplate>
                                     <asp:Label ID="Label4" runat="server" Text='<%# Bind("ACWP") %>'></asp:Label>
                                 </ItemTemplate>
-                                <ControlStyle Width="60px" />
-                                <ItemStyle Width="60px" />
+                                <ControlStyle Width="75px" />
+                                <ItemStyle Width="75px" />
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="ETC">
                                 <EditItemTemplate>
@@ -115,8 +123,8 @@
                                 <ItemTemplate>
                                     <asp:Label ID="Label5" runat="server" Text='<%# Bind("ETC") %>'></asp:Label>
                                 </ItemTemplate>
-                                <ControlStyle Width="60px" />
-                                <ItemStyle Width="60px" />
+                                <ControlStyle Width="75px" />
+                                <ItemStyle Width="75px" />
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="EAC">
                                 <EditItemTemplate>
@@ -125,8 +133,8 @@
                                 <ItemTemplate>
                                     <asp:Label ID="Label6" runat="server" Text='<%# Bind("EAC") %>'></asp:Label>
                                 </ItemTemplate>
-                                <ControlStyle Width="60px" />
-                                <ItemStyle Width="60px" />
+                                <ControlStyle Width="75px" />
+                                <ItemStyle Width="75px" />
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Percent Complete">
                                 <EditItemTemplate>
@@ -141,7 +149,7 @@
                             </asp:CommandField>
                         </Columns>
                     </asp:GridView>
-
+                
                 </asp:TableCell>
                 <asp:TableCell>
                     <table>
@@ -260,8 +268,15 @@
             <br />
         <asp:Button ID="btnSave" runat="server" Text="Save Report" 
             onclick="btnSave_Click" />
-        </center>
     </div>
+
+    </ContentTemplate>
+    <Triggers>
+        <asp:AsyncPostBackTrigger ControlID="btnSubmit" EventName="Click" />
+        <asp:AsyncPostBackTrigger ControlID="btnSave" EventName="Click" />
+    </Triggers>
+    </asp:UpdatePanel>
+    
     </center>
 </asp:Content>
 
