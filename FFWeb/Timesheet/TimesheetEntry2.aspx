@@ -3,8 +3,15 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
-    Project ID: <asp:TextBox ID="tbProjectID" runat="server"></asp:TextBox><br />
-    WP ID: <asp:TextBox ID="tbWpID" runat="server"></asp:TextBox><br />
+    Project ID: 
+    <asp:DropDownList ID="ddlProjectId" runat="server" AutoPostBack="True" 
+        onselectedindexchanged="ddlProjectId_SelectedIndexChanged">
+    </asp:DropDownList>
+    <asp:TextBox ID="tbProjectID" runat="server"></asp:TextBox><br />
+    WP ID: 
+    <asp:DropDownList ID="ddlWpId" runat="server" AutoPostBack="True">
+    </asp:DropDownList>
+    <asp:TextBox ID="tbWpID" runat="server"></asp:TextBox><br />
     Sunday: <asp:TextBox ID="tbSun" runat="server"></asp:TextBox><br />
     Monday: <asp:TextBox ID="tbMon" runat="server"></asp:TextBox><br />
     Tuesday: <asp:TextBox ID="tbTue" runat="server"></asp:TextBox><br />

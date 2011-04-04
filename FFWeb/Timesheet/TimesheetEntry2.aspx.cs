@@ -12,24 +12,39 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        // verifies if the user has logged in. If the
-        try
+        if (!IsPostBack)
         {
-            var qry = (from o in ff.EmployeeMemberships
-                       join emp in ff.aspnet_Users on o.userId equals emp.UserId
-                       where emp.UserName == User.Identity.Name
-                       select o.empId).Single();
 
-            Session["CurEmpId"] = qry.ToString();
-            
-            System.DateTime currentDate = System.DateTime.Now;
-        
-            Session["CurrentDate"] = currentDate;
+            ddlProjectId.DataSource = ff.Projects.Select(p => new
+            {
+                ProjID = p.projId,
+                ProjectName = (p.projName + " (") + p.projId + ")"
+            });
+            ddlProjectId.DataValueField = "ProjId";
+            ddlProjectId.DataTextField = "ProjectName";
+            ddlProjectId.DataBind();
+            // verifies if the user has logged in. If the
+            try
+            {
 
-        }
-        catch
-        {
-            Response.Redirect("~/Login.aspx");
+
+                var qry = (from o in ff.EmployeeMemberships
+                           join emp in ff.aspnet_Users on o.userId equals emp.UserId
+                           where emp.UserName == User.Identity.Name
+                           select o.empId).Single();
+
+                Session["CurEmpId"] = qry.ToString();
+
+                System.DateTime currentDate = System.DateTime.Now;
+
+                Session["CurrentDate"] = currentDate;
+
+            }
+            catch
+            {
+                Response.Redirect("~/Login.aspx");
+            }
+
         }
 
     }
@@ -40,7 +55,7 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
         {
             var qry = (from emp in ff.Employees
                        where emp.empId == Convert.ToInt32(Session["CurEmpId"])
-                       select emp.approver).Single();
+                       select emp.approver).FirstOrDefault();
 
 
             TimesheetHeader tmp = new TimesheetHeader()
@@ -55,11 +70,11 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
             };
 
 
-            var qry2 = from th in ff.TimesheetHeaders
+            var qry2 = (from th in ff.TimesheetHeaders
                        where th.empId == tmp.empId && th.tsDate == tmp.tsDate
-                       select th;
+                       select th).ToList();
 
-            if (qry2 == null)
+            if (qry2.Count == 0)
             {
                 ff.TimesheetHeaders.InsertOnSubmit(tmp);
                 ff.SubmitChanges();
@@ -69,8 +84,8 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
             {
                 tsDate = Convert.ToDateTime(Session["CurrentDate"]),
                 empId = Convert.ToInt32(Session["CurEmpId"]),
-                projId = Convert.ToInt32(tbProjectID.Text),
-                wpId = tbWpID.Text,
+                projId = Convert.ToInt32(ddlProjectId.SelectedValue),
+                wpId = (ddlWpId.SelectedIndex).ToString(),
                 sun = Convert.ToInt32(tbSun.Text),
                 sat = Convert.ToInt32(tbSat.Text),
                 fri = Convert.ToInt32(tbFri.Text),
@@ -106,5 +121,23 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
         }
         
 
+    }
+    protected void ddlProjectId_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+        int projId = Convert.ToInt32(ddlProjectId.SelectedValue);
+        Label1.Text += projId + " ";
+        ddlWpId.DataSource = ff.WorkPackages.Where(p => p.projId == projId).Select(p => new
+        {
+            text = p.wpId  ,
+            value = p.wpId
+
+
+        });
+        ddlWpId.DataValueField = "value";
+        ddlWpId.DataTextField = "text";
+        ddlWpId.DataBind();
+       
+      
     }
 }
