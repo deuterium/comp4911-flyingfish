@@ -28,7 +28,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         }
 
         // for testing purposes only, so I don't have to fill out the form every time
-        GetWorkPackageStatusReport(4911, "1", Convert.ToDateTime("2011/01/01"), Convert.ToDateTime("2011/03/01"));
+        //GetWorkPackageStatusReport(4911, "1", Convert.ToDateTime("2011/01/01"), Convert.ToDateTime("2011/03/01"));
     }
 
     private void populateProjects() {
