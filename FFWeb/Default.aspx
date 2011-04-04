@@ -7,7 +7,7 @@
     Welcome to the FlyingFish Project Management Application. This software simplifies the management of software development projects.
     <br /><br /><br />
     You can use FlyingFish to easily:
-    <asp:BulletedList id="bdlFeatures" runat="server">
+    <asp:BulletedList id="bdlFeatures" runat="server" onclick="bdlFeatures_Click">
         <asp:ListItem>Create, update, and view projects and work packages</asp:ListItem>
         <asp:ListItem>Divide projects into work packages</asp:ListItem>
         <asp:ListItem>Allocate budgets to projects and work packages</asp:ListItem>
@@ -25,7 +25,6 @@
     </asp:BulletedList>
     <br />
     Let FlyingFish do the stuff your too smart to do manually! Remember, FlyingFish good. To begin, click the Login button and enter your username and password. Your username is your firstname_lastname.
-        <asp:Button runat="server" Text="Ajax Test" ID="btnajaxtest" onclick="btnajaxtest_Click" />
     </div>
 
     <asp:ScriptManager ID="ScriptManager1" runat="server">
@@ -35,40 +34,47 @@
             <div id="ajaxkeygen" runat="server" visible="false" class="ajaxkeygen">
             </div>
             <div id="ajaxkeygenwindow" class="keygenwindow" visible="false" runat="server">
-                    <p class="ajaxblurb" id="ajaxblurb" runat="server">You must enter a password for your Timesheet Digital Signature</p>
+                    <asp:Label ID="lblKey" runat="server" Text="You must enter a password for your Timesheet Digital Signature"></asp:Label>
                     <br />
                     <table class="cent" runat="server" id="tblKeygenForm">
                         <tr>
                             <td>
-                                <asp:Label ID="Label2" runat="server" Text="Password: "></asp:Label>
+                                <asp:Label ID="lblPassword" runat="server" Text="Password: "></asp:Label>
                             </td>
                             <td>
-                                <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+                                <asp:TextBox ID="tbPassword" runat="server" TextMode="Password"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                                    ErrorMessage="Password required." ForeColor="Red" ControlToValidate="tbPassword">*</asp:RequiredFieldValidator>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <asp:Label ID="Label3" runat="server" Text="Confirm Password: "></asp:Label>
+                                <asp:Label ID="lblPasswordConfirm" runat="server" Text="Confirm Password: "></asp:Label>
                             </td>
                             <td>
-                                <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
+                                <asp:TextBox ID="tbPasswordConfirm" runat="server" TextMode="Password"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Confirm password required." 
+                                    ForeColor="Red" ControlToValidate="tbPasswordConfirm">*</asp:RequiredFieldValidator>
+                                <asp:CompareValidator ID="cvPasswordConfirm" runat="server" ErrorMessage="Passwords do not match." 
+                                    ForeColor="Red" ControlToValidate="tbPasswordConfirm" ControlToCompare="tbPassword">*</asp:CompareValidator>
                             </td>
                         </tr>
                     </table>
                     <br />
                     <asp:Button ID="btnPasswordConfirm" runat="server" Text="Submit" 
                         onclick="btnPasswordConfirm_Click" />
-
-                    <asp:Label id="lblPubKeyGen" Visible="false" runat="server" Text="Your Public key is: " /><asp:Label runat="server" ID="test"></asp:Label>
                     <br /><br />
-                    <asp:Button ID="btnAjaxContinue" runat="server" Text="Continue" 
-                        onclick="btnAjaxContinue_Click" Visible="false" />
+                    <asp:Button ID="btnDownload" runat="server" Text="Download Key" 
+                        onclick="btnDownload_Click" Visible="false" />
+                    <asp:Button ID="btnClose" runat="server" 
+                        Text="Close (I have downloaded my key)" Visible="false" 
+                        onclick="btnClose_Click" />
                 </div>
         </ContentTemplate>
         <Triggers>
-            <asp:AsyncPostBackTrigger ControlID="btnajaxtest" EventName="Click" />
             <asp:AsyncPostBackTrigger ControlID="btnPasswordConfirm" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnAjaxContinue" EventName="Click" />
+            <asp:AsyncPostBackTrigger ControlID="btnClose" EventName="Click" />
+            <asp:AsyncPostBackTrigger ControlID="btnDownload" EventName="Click" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
