@@ -96,10 +96,10 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
                       Emp = emp.firstName + " " + emp.lastName + " (" + emp.empId + ")",
                       ACWP = getAcwpForEmployee(tse.empId, acwpForAll),
                       ETC = getEtcForEmployee(tse.empId, etcForAll),
-                      EAC = getEacForEmployee(getAcwpForEmployee(tse.empId, acwpForAll), getEtcForEmployee(tse.empId, etcForAll)),
+                      EAC = getEacForEmployee(getEtcForEmployee(tse.empId, etcForAll), getAcwpForEmployee(tse.empId, acwpForAll)),
                       PercentComplete = getPercentComplete(getAcwpForEmployee(tse.empId, acwpForAll),
                                         getEacForEmployee(getAcwpForEmployee(tse.empId, acwpForAll),
-                                                getEtcForEmployee(tse.empId, etcForAll)).ToString())
+                                        getEacForEmployee(getEtcForEmployee(tse.empId, etcForAll), getAcwpForEmployee(tse.empId, acwpForAll)).ToString()))
                   };
 
         if (qry.Count() == 0) {
@@ -278,20 +278,25 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
        }
        return s;
     }
-
+    
     private String getEacForEmployee(String empEtc, String empAcwp) {
         double etc = 0;
         double acwp = 0;
+        double eac = 0;
 
-        if (!empEtc.Equals("Unknown")) {
+        if (empEtc.Equals("Unknown")) {
             return "Unknown";
         }
 
-        if (!empAcwp.Equals("Unknown")) {
-            acwp = Convert.ToDouble(empAcwp);
+        if (empAcwp.Equals("Unknown") || empAcwp == null) {
+            return "Unknown";
         }
-
-        return (etc + acwp).ToString();
+        
+        acwp = Convert.ToDouble(empAcwp);
+        etc = Convert.ToDouble(empEtc);
+        eac = etc + acwp;
+        
+        return eac.ToString();
     }
 
     private Double calculateEstimate(String empAcwp, String empEtc, String empEac, Boolean calculateEac) {
@@ -321,18 +326,21 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     private String getPercentComplete(String empAcwp, String empEac) {
         double acwp = 0;
         double eac = 0;
+        double pc = 0;
 
         if (!empAcwp.Equals("Unknown")) {
             acwp = Convert.ToDouble(empAcwp);
         }
 
-        if (!empEac.Equals("Unknown")) {
-            eac = Convert.ToDouble(empEac);
-            return ((acwp / eac) * 100).ToString();
-        }
-        else {
+        if (empEac.Equals("Unknown")) {
             return "Unknown";
         }
+
+        eac = Convert.ToDouble(empEac);
+        pc = (acwp / eac) * 100;
+        pc = Math.Round(pc, 1);
+        
+        return pc.ToString();
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e) {
@@ -369,41 +377,110 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         GetWorkPackageStatusReport();
     }
 
-    protected void gvStatus_RowUpdating(object sender, GridViewUpdateEventArgs e) {
-        EmployeeWorkPackageETC empWpEtc = new EmployeeWorkPackageETC();
-        GridViewRow row = gvStatus.Rows[e.RowIndex];
-        int empId = extractEmpId(((Label)row.Cells[0].Controls[1]).Text);
-
-        //EmployeeWorkPackageETC etc = from ewetc in ffdb.EmployeeWorkPackageETCs
-        //                             where ewetc.empId == empId
-        //                                && ewetc.dateUpdated.Equals(Convert.ToDateTime(ViewState["endDate"]))
-        //                             select ewetc;
-        
-        String strEtc = ((TextBox)row.Cells[2].Controls[1]).Text;
-        String strEac = ((TextBox)row.Cells[3].Controls[1]).Text;
-        double acwp = Convert.ToDouble(((Label)row.Cells[1].Controls[1]).Text);
-
-        if (strEtc.Equals("Unknown")) {
+    private void UpdateETC(String strEtc, String strEac, double acwp, EmployeeWorkPackageETC empWpEtc) {
+        if (strEac.Equals("Unknown")) {
             if (strEtc.Equals("Unknown")) {
                 empWpEtc.ETC_days = null;
             } else {
-                empWpEtc.ETC_days = (int)(Convert.ToDouble(strEac) - acwp);
+                empWpEtc.ETC_days = (int)(Convert.ToDouble(strEtc) + acwp);
             }
         } else {
-            empWpEtc.ETC_days = (int)(Convert.ToDouble(strEtc));
+            empWpEtc.ETC_days = (int)(Convert.ToDouble(strEac) - acwp);
+        }
+
+        ffdb.SubmitChanges();
+    }
+
+    protected void gvStatus_RowUpdating(object sender, GridViewUpdateEventArgs e) {
+        GridViewRow row = gvStatus.Rows[e.RowIndex];
+        int empId = extractEmpId(((Label)row.Cells[0].Controls[1]).Text);
+
+        EmployeeWorkPackageETC empWpEtc = (from ewetc in ffdb.EmployeeWorkPackageETCs
+                                           where ewetc.empId == empId
+                                                && ewetc.dateUpdated.Equals(Convert.ToDateTime(ViewState["endDate"]))
+                                           select ewetc).FirstOrDefault();
+
+        String strEtc = e.NewValues["ETC"].ToString();
+        String strEac = e.NewValues["EAC"].ToString();
+        String strAcwp = ((Label)row.Cells[1].Controls[1]).Text;
+        double acwp = Convert.ToDouble(strAcwp);
+        double etc = 0;
+        double eac = 0;
+
+        if (strEtc == null) {
+            strEtc = "Unknown";
+        }
+
+        if (strEac == null) {
+            strEac = "Unknown";
         }
         
+        // If no current ETC, create one and exit update
+        if (empWpEtc != null) {
+            UpdateETC(strEtc, strEac, acwp, empWpEtc);
+            gvStatus.EditIndex = -1;
+            e.Cancel = true;
+            GetWorkPackageStatusReport();
+            return;
+        } else {
+            empWpEtc = new EmployeeWorkPackageETC();
+        }
+
+        if (!strEtc.Equals("Unknown")) {
+            try {
+                etc = Convert.ToDouble(strEtc);
+                if (etc <= 0) {
+                    strEtc = "Unknown";
+                }
+            } catch (Exception ex) {
+                strEtc = "Unknown";
+            }
+        }
+
+        if (!strEac.Equals("Unknown")) {
+            try {
+                eac = Convert.ToDouble(strEac);
+                if (eac <= 0) {
+                    strEac = "Unknown";
+                }
+                if (eac < (etc + acwp)) {
+                    strEac = "Unknown";
+                }
+            } catch (Exception ex) {
+                strEac = "Unknown";
+            }
+        }
+
+        // Calculate missing value
+        if (strEac.Equals("Unknown")) {
+            if (strEtc.Equals("Unknown")) {
+                empWpEtc.ETC_days = null;
+            } else {
+                etc = Convert.ToDouble(strEtc);
+                empWpEtc.ETC_days = (int)(etc);
+            }
+        } else {
+            eac = Convert.ToDouble(strEac);
+            empWpEtc.ETC_days = (int)(eac - acwp);
+        }
+
         empWpEtc.empId = empId;
-        empWpEtc.dateUpdated = Convert.ToDateTime(ViewState["endDate"]);
         empWpEtc.projId = Convert.ToInt16(ViewState["projId"]);
         empWpEtc.wpId = (String)ViewState["wpId"];
         
+        if (DateTime.Now <= Convert.ToDateTime(ViewState["endDate"])) {
+            empWpEtc.dateUpdated = DateTime.Now;
+        } else {
+            empWpEtc.dateUpdated = Convert.ToDateTime(ViewState["endDate"]);
+        }
+
         ffdb.EmployeeWorkPackageETCs.InsertOnSubmit(empWpEtc);
         ffdb.SubmitChanges();
 
         gvStatus.EditIndex = -1;
-        //gvStatus.DataBind();
+        e.Cancel = true;
         GetWorkPackageStatusReport();
+        
     }
 
     private int extractEmpId(String emp) {

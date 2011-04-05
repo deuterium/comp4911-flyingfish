@@ -100,48 +100,48 @@
                         <Columns>
                             <asp:TemplateField HeaderText="Employee">
                                 <EditItemTemplate>
-                                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("Employee") %>'></asp:Label>
+                                    <asp:Label ID="lblEmployee1" runat="server" Text='<%# Bind("Employee") %>'></asp:Label>
                                 </EditItemTemplate>
                                 <ItemTemplate>
-                                    <asp:Label ID="Label2" runat="server" Text='<%# Bind("Employee") %>'></asp:Label>
+                                    <asp:Label ID="lblEmployee2" runat="server" Text='<%# Bind("Employee") %>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="ACWP">
                                 <EditItemTemplate>
-                                    <asp:Label ID="Label3" runat="server" Text='<%# Bind("ACWP") %>'></asp:Label>
+                                    <asp:Label ID="lblAcwp1" runat="server" Text='<%# Bind("ACWP") %>'></asp:Label>
                                 </EditItemTemplate>
                                 <ItemTemplate>
-                                    <asp:Label ID="Label4" runat="server" Text='<%# Bind("ACWP") %>'></asp:Label>
+                                    <asp:Label ID="lblAcwp2" runat="server" Text='<%# Bind("ACWP") %>'></asp:Label>
                                 </ItemTemplate>
                                 <ControlStyle Width="75px" />
                                 <ItemStyle Width="75px" />
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="ETC">
                                 <EditItemTemplate>
-                                    <asp:TextBox ID="TextBox1" Width="60px" runat="server" Text='<%# Bind("ETC") %>' />
+                                    <asp:TextBox ID="tbEtc" Width="60px" runat="server" Text='<%# Bind("ETC") %>' />
                                 </EditItemTemplate>
                                 <ItemTemplate>
-                                    <asp:Label ID="Label5" runat="server" Text='<%# Bind("ETC") %>'></asp:Label>
+                                    <asp:Label ID="lblEtc" runat="server" Text='<%# Bind("ETC") %>'></asp:Label>
                                 </ItemTemplate>
                                 <ControlStyle Width="75px" />
                                 <ItemStyle Width="75px" />
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="EAC">
                                 <EditItemTemplate>
-                                    <asp:TextBox ID="TextBox2" Width="60px" runat="server" Text='<%# Bind("EAC") %>' />
+                                    <asp:TextBox ID="tbEac" Width="60px" runat="server" Text='<%# Bind("EAC") %>' />
                                 </EditItemTemplate>
                                 <ItemTemplate>
-                                    <asp:Label ID="Label6" runat="server" Text='<%# Bind("EAC") %>'></asp:Label>
+                                    <asp:Label ID="lblEac" runat="server" Text='<%# Bind("EAC") %>'></asp:Label>
                                 </ItemTemplate>
                                 <ControlStyle Width="75px" />
                                 <ItemStyle Width="75px" />
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Percent Complete">
                                 <EditItemTemplate>
-                                    <asp:Label ID="Label7" runat="server" Text='<%# Bind("PercentComplete") %>'></asp:Label>
+                                    <asp:Label ID="lblPercentComplete1" runat="server" Text='<%# Bind("PercentComplete") %>'></asp:Label>
                                 </EditItemTemplate>
                                 <ItemTemplate>
-                                    <asp:Label ID="Label8" runat="server" Text='<%# Bind("PercentComplete") %>'></asp:Label>
+                                    <asp:Label ID="lblPercentComplete2" runat="server" Text='<%# Bind("PercentComplete") %>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:CommandField ButtonType="Button" ShowEditButton="True" UpdateText="Save">
