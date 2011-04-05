@@ -9,11 +9,13 @@ using System.Data;
 using System.Text.RegularExpressions;
 
 /* TO DO:
- * Enable Editing of ETC or EAC
  * Calculate PDays and PDollars
  * Turns hours into Days
  * Create functionality
- * If you change value in form, will affect code (extracts from there, doesn't store it)
+ * Improve look/layout
+ * Restrict project choices to all projects (for HR) and only projects you manage (PMs)
+ * Documentation
+ * Validation with better user messages
  */
 
 /// <summary>
@@ -21,15 +23,20 @@ using System.Text.RegularExpressions;
 /// </summary>
 public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     FlyingFishClassesDataContext ffdb = new FlyingFishClassesDataContext();
+    public const String EmptyCellText = "Unknown";
 
     protected void Page_Load(object sender, EventArgs e) {
         if (!IsPostBack) {
             populateProjects();
             populateWorkpackages();
         }
-        //GetWorkPackageStatusReport();
+        
         // for testing purposes only, so I don't have to fill out the form every time
-        //GetWorkPackageStatusReport(4911, "1", Convert.ToDateTime("2011/01/01"), Convert.ToDateTime("2011/03/01"));
+        // ViewState["projId"] = 4911;
+        // ViewState["wpId"] = "1";
+        // ViewState["startDate"] = "2011/01/01";
+        // ViewState["endDate"] = "2011/03/01";
+        //GetWorkPackageStatusReport();
     }
 
     private void populateProjects() {
@@ -77,6 +84,8 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         List<KeyValuePair<int, double>> acwpForAll = getAcwpForAll();
         List<EmployeeWorkPackageETC> etcForAll = getEtcForAll();
         
+        // logic needs to factor in plevels per timesheet (in case change, can't use bulk)
+
         var qry = from tse in ffdb.TimesheetEntries
                   join proj in ffdb.Projects on tse.projId equals proj.projId
                   join wp in ffdb.WorkPackages on (tse.projId + tse.wpId) equals (wp.projId + wp.wpId)
@@ -100,6 +109,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
                       PercentComplete = getPercentComplete( (getAcwpForEmployee(tse.empId, acwpForAll)),
                                                             (getEacForEmployee(getEtcForEmployee(tse.empId, etcForAll),
                                                                 getAcwpForEmployee(tse.empId, acwpForAll))) ).ToString()
+                      
                   };
         
         if (qry.Count() == 0) {
@@ -118,13 +128,20 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         dt.Columns.Add(new DataColumn("PercentComplete", typeof(System.String)));
                 
         foreach (var row in qry) {
-            DataRow dr = dt.NewRow();
-            dr["Employee"] = row.Emp;
-            dr["ACWP"] = row.ACWP;
-            dr["ETC"] = row.ETC;
-            dr["EAC"] = row.EAC; 
-            dr["PercentComplete"] = row.PercentComplete; 
-            dt.Rows.Add(dr);
+            DataRow drDays = dt.NewRow();
+            drDays["Employee"] = row.Emp;
+            drDays["ACWP"] = row.ACWP;
+            drDays["ETC"] = row.ETC;
+            drDays["EAC"] = row.EAC;
+            drDays["PercentComplete"] = row.PercentComplete;
+            dt.Rows.Add(drDays);
+            //DataRow drDollars = dt.NewRow();
+            //drDollars["Employee"] = row.Emp;
+            //drDollars["ACWP"] = row.ACWP;
+            //drDollars["ETC"] = row.ETC;
+            //drDollars["EAC"] = row.EAC;
+            //drDollars["PercentComplete"] = row.PercentComplete;
+            //dt.Rows.Add(drDollars);
         }
 
         gvStatus.DataSource = dt;
@@ -132,11 +149,9 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
 
         var q = qry.FirstOrDefault();
 
-        lblWpId.Text = q.WP.wpId;
-        lblWpName.Text = q.WP.name;
+        lblWp.Text = q.WP.name + " (" + q.WP.wpId + ")";
         lblRe.Text = q.RE.firstName + " " + q.RE.lastName + " (" + q.RE.empId + ")";
         lblPm.Text = q.PM.firstName + " " + q.PM.lastName + " (" + q.PM.empId + ")";
-        lblReportNo.Text = "Unavailabile";
         lblReportPeriod.Text = ((DateTime)ViewState["startDate"]).ToString("yyyy/MM/dd")
             + " to " + ((DateTime)ViewState["endDate"]).ToString("yyyy/MM/dd");
         lblPmBac.Text = this.getPMBudget().ToString();
@@ -144,20 +159,20 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         double reBAC = 0;
 
         foreach (var item in qry) {
-            if (!(item.EAC.Equals("Unknown"))) {
+            if (!(item.EAC.Equals(EmptyCellText))) {
                 reBAC += Convert.ToDouble(item.EAC);
             }
         }
         
         lblReBac.Text = reBAC.ToString();
         if (reBAC == 0) {
-            lblReBac.Text = "Unknown";
+            lblReBac.Text = EmptyCellText;
         }
         
         double totalAcwp = 0;
 
         foreach (var item in qry) {
-            if (!(item.ACWP.Equals("Unknown"))) {
+            if (!(item.ACWP.Equals(EmptyCellText))) {
                 totalAcwp += Convert.ToDouble(item.ACWP);
             }
         }
@@ -165,7 +180,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
 
         lblTotalAcwp.Text = totalAcwp.ToString() + " hours";
         if (totalAcwp == 0) {
-            lblTotalAcwp.Text = "Unknown";
+            lblTotalAcwp.Text = EmptyCellText;
         }
 
         WorkPackageStatusReport wpsr = getExistingReportDetails();
@@ -195,6 +210,25 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
 
     }
 
+    private void getPLevelRate(int empId, DateTime periodStart, DateTime periodEnd) {
+        // determine if their plevel has changed within the reporting period
+
+        // if no, load one value
+
+        // if yes, find calculate total owed
+        
+        // get the most recent date before the plevel
+        var qry = from empPlvl in ffdb.EmployeePersonLevels
+                  join plvl in ffdb.PersonLevels on empPlvl.fiscalYear equals plvl.fiscalYear
+                  where empPlvl.dateUpdated <= periodEnd && empPlvl.empId == empId
+                  select new { empPlvl.pLevel, plvl.rate };
+
+        if (qry.Count() > 1) {
+            // handle multiples
+        }
+
+        //return qry.FirstOrDefault().pLevel;
+    }
 
     private double getPMBudget() {
         var qry = (from wp in ffdb.WorkPackages
@@ -274,7 +308,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
                   where afa.empId == empId
                   select afa.ETC_days).FirstOrDefault().ToString();
        if (s == null || s.Equals("")) {
-           s = "Unknown";
+           s = EmptyCellText;
        }
        return s;
     }
@@ -284,12 +318,12 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         double acwp = 0;
         double eac = 0;
 
-        if (empEtc.Equals("Unknown")) {
-            return "Unknown";
+        if (empEtc.Equals(EmptyCellText)) {
+            return EmptyCellText;
         }
 
-        if (empAcwp.Equals("Unknown") || empAcwp == null) {
-            return "Unknown";
+        if (empAcwp.Equals(EmptyCellText) || empAcwp == null) {
+            return EmptyCellText;
         }
         
         acwp = Convert.ToDouble(empAcwp);
@@ -304,15 +338,15 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         double etc = 0;
         double eac = 0;
 
-        if (!empAcwp.Equals("Unknown")) {
+        if (!empAcwp.Equals(EmptyCellText)) {
             acwp = Convert.ToDouble(empAcwp);
         }
 
-        if (!empEac.Equals("Unknown")) {
+        if (!empEac.Equals(EmptyCellText)) {
             eac = Convert.ToDouble(empEac);
         }
 
-        if (!empEtc.Equals("Unknown")) {
+        if (!empEtc.Equals(EmptyCellText)) {
             etc = Convert.ToDouble(empEtc);
         }
 
@@ -328,12 +362,12 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         double eac = 0;
         double pc = 0;
 
-        if (!empAcwp.Equals("Unknown")) {
+        if (!empAcwp.Equals(EmptyCellText)) {
             acwp = Convert.ToDouble(empAcwp);
         }
 
-        if (empEac.Equals("Unknown")) {
-            return "Unknown";
+        if (empEac.Equals(EmptyCellText)) {
+            return EmptyCellText;
         }
 
         eac = Convert.ToDouble(empEac);
@@ -366,16 +400,51 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     }
 
     private void UpdateETC(String strEtc, String strEac, double acwp, EmployeeWorkPackageETC empWpEtc) {
-        if (strEac.Equals("Unknown")) {
-            if (strEtc.Equals("Unknown")) {
-                empWpEtc.ETC_days = null;
-            } else {
-                empWpEtc.ETC_days = (int)(Convert.ToDouble(strEtc) + acwp);
+        double etc = 0;
+        double eac = 0;
+        
+        if (!strEtc.Equals(EmptyCellText)) {
+            try {
+                etc = Convert.ToDouble(strEtc);
+                if (etc <= 0) {
+                    strEtc = EmptyCellText;
+                }
             }
-        } else {
-            empWpEtc.ETC_days = (int)(Convert.ToDouble(strEac) - acwp);
+            catch (Exception ex) {
+                strEtc = EmptyCellText;
+            }
         }
 
+        if (!strEac.Equals(EmptyCellText)) {
+            try {
+                eac = Convert.ToDouble(strEac);
+                if (eac <= 0) {
+                    strEac = EmptyCellText;
+                }
+                if (eac < (etc + acwp)) {
+                    strEac = EmptyCellText;
+                }
+            }
+            catch (Exception ex) {
+                strEac = EmptyCellText;
+            }
+        }
+
+        // Calculate missing value
+        if (strEac.Equals(EmptyCellText)) {
+            if (strEtc.Equals(EmptyCellText)) {
+                empWpEtc.ETC_days = null;
+            }
+            else {
+                etc = Convert.ToDouble(strEtc);
+                empWpEtc.ETC_days = (int)(etc);
+            }
+        }
+        else {
+            eac = Convert.ToDouble(strEac);
+            empWpEtc.ETC_days = (int)(eac - acwp);
+        }
+        
         ffdb.SubmitChanges();
     }
 
@@ -396,11 +465,11 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         double eac = 0;
 
         if (strEtc == null) {
-            strEtc = "Unknown";
+            strEtc = EmptyCellText;
         }
 
         if (strEac == null) {
-            strEac = "Unknown";
+            strEac = EmptyCellText;
         }
         
         // If no current ETC, create one and exit update
@@ -414,34 +483,34 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
             empWpEtc = new EmployeeWorkPackageETC();
         }
 
-        if (!strEtc.Equals("Unknown")) {
+        if (!strEtc.Equals(EmptyCellText)) {
             try {
                 etc = Convert.ToDouble(strEtc);
                 if (etc <= 0) {
-                    strEtc = "Unknown";
+                    strEtc = EmptyCellText;
                 }
             } catch (Exception ex) {
-                strEtc = "Unknown";
+                strEtc = EmptyCellText;
             }
         }
 
-        if (!strEac.Equals("Unknown")) {
+        if (!strEac.Equals(EmptyCellText)) {
             try {
                 eac = Convert.ToDouble(strEac);
                 if (eac <= 0) {
-                    strEac = "Unknown";
+                    strEac = EmptyCellText;
                 }
                 if (eac < (etc + acwp)) {
-                    strEac = "Unknown";
+                    strEac = EmptyCellText;
                 }
             } catch (Exception ex) {
-                strEac = "Unknown";
+                strEac = EmptyCellText;
             }
         }
 
         // Calculate missing value
-        if (strEac.Equals("Unknown")) {
-            if (strEtc.Equals("Unknown")) {
+        if (strEac.Equals(EmptyCellText)) {
+            if (strEtc.Equals(EmptyCellText)) {
                 empWpEtc.ETC_days = null;
             } else {
                 etc = Convert.ToDouble(strEtc);
