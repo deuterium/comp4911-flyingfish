@@ -1,18 +1,19 @@
-﻿<%@ Master Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="HRMaster.master.cs" Inherits="HR_HRMaster" %>
+﻿<%@ Master Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true"
+    CodeFile="HRMaster.master.cs" Inherits="HR_HRMaster" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
+<asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <div id="DivUserManagementMenu" runat="server">
-            <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="CreateUserLabel"
-                runat="server" PostBackUrl="~/HR/CreateEmployee.aspx">Create New Employee</asp:LinkButton>
-            <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="ManageUserLabel"
-                runat="server" PostBackUrl="~/HR/ManageEmployee.aspx">Edit Employee Information</asp:LinkButton>
-            <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="AssignUserLabel"
-                runat="server" PostBackUrl="~/HR/AssignEmployee.aspx">Assign Employee to Project</asp:LinkButton>
-        </div>
-<asp:ContentPlaceHolder ID="HRContent" runat="server">
-</asp:ContentPlaceHolder>
+        <asp:LinkButton CssClass="DivUserManagementMenu" Width="25%" ID="CreateUserLabel"
+            runat="server" PostBackUrl="~/HR/CreateEmployee.aspx">Create New Employee</asp:LinkButton>
+        <asp:LinkButton CssClass="DivUserManagementMenu" Width="25%" ID="ManageUserLabel"
+            runat="server" PostBackUrl="~/HR/ManageEmployee.aspx">Edit Employee Information</asp:LinkButton>
+        <asp:LinkButton CssClass="DivUserManagementMenu" Width="25%" ID="AssignUserLabel"
+            runat="server" PostBackUrl="~/HR/AssignEmployee.aspx">Assign Employee to Project</asp:LinkButton>
+        <asp:LinkButton CssClass="DivUserManagementMenu" Width="25%" ID="AssignPMLabel" runat="server"
+            PostBackUrl="~/HR/AssignPM.aspx">Assign Project Managers</asp:LinkButton>
+    </div>
+    <asp:ContentPlaceHolder ID="HRContent" runat="server">
+    </asp:ContentPlaceHolder>
 </asp:Content>
-
-
