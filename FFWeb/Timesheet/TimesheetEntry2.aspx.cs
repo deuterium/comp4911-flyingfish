@@ -79,13 +79,13 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
                 ff.TimesheetHeaders.InsertOnSubmit(tmp);
                 ff.SubmitChanges();
             }
-
+        
             TimesheetEntry tmp2 = new TimesheetEntry()
             {
                 tsDate = Convert.ToDateTime(Session["CurrentDate"]),
                 empId = Convert.ToInt32(Session["CurEmpId"]),
                 projId = Convert.ToInt32(ddlProjectId.SelectedValue),
-                wpId = (ddlWpId.SelectedIndex).ToString(),
+                wpId = (ddlWpId.SelectedValue).ToString(),
                 sun = Convert.ToInt32(tbSun.Text),
                 sat = Convert.ToInt32(tbSat.Text),
                 fri = Convert.ToInt32(tbFri.Text),
@@ -117,7 +117,7 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
         catch (Exception myException)
         {
             Label1.Text = myException.Message;
-            Label1.Text = "You have sumbitted the record before, Cannot insert duplicate record into the database!!!";
+           // Label1.Text = "You have sumbitted the record before, Cannot insert duplicate record into the database!!!";
 
         }
         
