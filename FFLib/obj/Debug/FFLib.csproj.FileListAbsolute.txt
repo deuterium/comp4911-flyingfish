@@ -1,9 +1,3 @@
-D:\work\FlyingFish\FFLib\bin\Debug\FFLib.dll
-D:\work\FlyingFish\FFLib\bin\Debug\FFLib.pdb
-D:\work\FlyingFish\FFLib\obj\Debug\ResolveAssemblyReference.cache
-D:\work\FlyingFish\FFLib\obj\Debug\FFLib.dll
-D:\work\FlyingFish\FFLib\obj\Debug\FFLib.pdb
-D:\work\FlyingFish\FFLib\bin\Debug\FFLib.dll.config
 D:\work\comp4911-flyingfish\FFLib\obj\Debug\ResolveAssemblyReference.cache
 D:\work\comp4911-flyingfish\FFLib\obj\Debug\FFLib.dll
 D:\work\comp4911-flyingfish\FFLib\obj\Debug\FFLib.pdb
@@ -40,3 +34,9 @@ C:\Users\Lindsay\Desktop\_RM_Project2\comp4911-flyingfish\comp4911-flyingfish\co
 C:\Users\Lindsay\Desktop\_RM_Project2\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\FFLib\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Lindsay\Desktop\_RM_Project2\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\FFLib\obj\Debug\FFLib.dll
 C:\Users\Lindsay\Desktop\_RM_Project2\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\comp4911-flyingfish\FFLib\obj\Debug\FFLib.pdb
+D:\work\FlyingFish\FFLib\bin\Debug\FFLib.dll.config
+D:\work\FlyingFish\FFLib\bin\Debug\FFLib.dll
+D:\work\FlyingFish\FFLib\bin\Debug\FFLib.pdb
+D:\work\FlyingFish\FFLib\obj\Debug\ResolveAssemblyReference.cache
+D:\work\FlyingFish\FFLib\obj\Debug\FFLib.dll
+D:\work\FlyingFish\FFLib\obj\Debug\FFLib.pdb
