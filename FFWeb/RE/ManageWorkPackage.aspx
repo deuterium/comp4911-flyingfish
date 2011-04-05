@@ -88,10 +88,9 @@
             <tr>
 
                 <td>
-                    <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
-                </td>
+                    &nbsp;</td>
                 <td>
-                    <asp:Label ID="lblBudgetError" runat="server" Text=""></asp:Label>
+                    <asp:Label ID="lblBudgetError" runat="server" ForeColor="Red"></asp:Label>
                 </td>
             </tr>
             </tr>
@@ -108,6 +107,7 @@
         <asp:LinkButton ID="lbParentwp" runat="server" onclick="lbParentwp_Click">Go to parent Work Package</asp:LinkButton>
 
     </div>
+    <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
     <div id="divAssignEmp" runat="server" visible="false">
         <asp:Label ID="lblAEmp" runat="server" Text="Choose an employee to add to work package:"></asp:Label>
         <asp:GridView ID="gvUnassignedEmployees" runat="server" 
@@ -117,7 +117,9 @@
                 <asp:ButtonField ButtonType="Button" Text="Add" CommandName="btnAdd" />
             </Columns>
         </asp:GridView>
-        <asp:Label ID="lblException" runat="server"></asp:Label>
+        
+        <br />
+        <asp:Label ID="lblException" runat="server" ForeColor="Red"></asp:Label>
     </div>
     </ContentTemplate>
     </asp:UpdatePanel>

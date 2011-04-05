@@ -26,6 +26,7 @@
                         <asp:BoundField DataField="manager" HeaderText="Manager" 
                             SortExpression="manager" />
                         <asp:ButtonField CommandName="btnView" Text="View" ButtonType="Button" />
+                        <asp:ButtonField ButtonType="Button" CommandName="btnDelete" Text="Delete" />
                     </Columns>
                     <FooterStyle BackColor="White" ForeColor="#000066" />
                     <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />

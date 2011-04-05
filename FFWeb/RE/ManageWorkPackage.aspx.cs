@@ -23,6 +23,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
             if (Session["wpID"] == null)
                 Response.Redirect("~/PM/ProjectList.aspx");
             String[] wpArray = Session["wpID"].ToString().Split('.');
+
             if (wpArray.Length > 2)
             {
                 for (int i = 0; i < wpArray.Length - 1; i++)
@@ -32,6 +33,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                         parentWpID += ".";
                 }
             }
+
             if (wpArray.Length == 2)
                 parentWpID = null;
 
@@ -129,9 +131,18 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Assign Employee linkbutton event handler
     protected void lbAssignEmp_Click(object sender, EventArgs e)
     {
+        lblError.Text = "";
+        var qry =
+            from wp in ff.WorkPackages
+            where (
+                wp.wpId == lblWPID2.Text
+            )
+            select new { wp.allocated_dollars, wp.unallocated_dollars, wp.name, wp.description, wp.projId };
         divAssignEmp.Visible = true;
         var employees =
             from emp in ff.Employees
+            join ep in ff.EmployeeProjects on emp.empId equals ep.empId
+            where ep.projId == qry.First().projId
             select new { emp.empId, emp.firstName, emp.lastName };
         gvUnassignedEmployees.DataSource = employees;
         gvUnassignedEmployees.DataBind();
@@ -145,6 +156,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Assign Employee gridview add button event handler
     protected void gvUnassignedEmployees_RowCommand(object sender, GridViewCommandEventArgs e)
     {
+        lblBudgetError.Text = "";
         try
         {
             if (parentWpID == null)
@@ -227,6 +239,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         catch (Exception exception)
         {
             lblException.Text = exception.StackTrace;
+            lblError.Text = exception.StackTrace;
         }
     }
     #endregion
@@ -242,7 +255,6 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 join emp in ff.Employees on o.empId equals emp.empId
                 where o.wpId == lblWPID2.Text
                 select new { emp.empId, emp.firstName, emp.lastName };
-
             gvEmployees.DataSource = employees;
             gvEmployees.DataBind();
         }
@@ -256,6 +268,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Save Changes
     protected void btnSave_Click(object sender, EventArgs e)
     {
+        lblError.Text = "";
         try
         {
             if (parentWpID == null)

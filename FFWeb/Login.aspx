@@ -59,5 +59,8 @@
         </LayoutTemplate>
         <TitleTextStyle BackColor="#5ECAE8" Font-Bold="True" ForeColor="#FFFFFF" />
     </asp:Login>
+    <br />
+    <asp:PasswordRecovery ID="PasswordRecovery1" runat="server" CssClass="cent">
+    </asp:PasswordRecovery>
 </asp:Content>
 
