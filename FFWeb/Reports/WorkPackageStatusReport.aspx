@@ -96,7 +96,7 @@
                 <asp:TableCell>
                 
                    <asp:GridView ID="gvStatus" runat="server" AutoGenerateColumns="False" OnRowCancelingEdit="gvStatus_RowCancelingEdit"
-                            OnRowCommand="gvStatus_RowCommand" OnRowEditing="gvStatus_RowEditing" OnRowUpdating="gvStatus_RowUpdating" OnRowUpdated="gvStatus_RowUpdated">
+                            OnRowCommand="gvStatus_RowCommand" OnRowEditing="gvStatus_RowEditing" OnRowUpdating="gvStatus_RowUpdating">
                         <Columns>
                             <asp:TemplateField HeaderText="Employee">
                                 <EditItemTemplate>
