@@ -97,11 +97,11 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
                       ACWP = getAcwpForEmployee(tse.empId, acwpForAll),
                       ETC = getEtcForEmployee(tse.empId, etcForAll),
                       EAC = getEacForEmployee(getEtcForEmployee(tse.empId, etcForAll), getAcwpForEmployee(tse.empId, acwpForAll)),
-                      PercentComplete = getPercentComplete(getAcwpForEmployee(tse.empId, acwpForAll),
-                                        getEacForEmployee(getAcwpForEmployee(tse.empId, acwpForAll),
-                                        getEacForEmployee(getEtcForEmployee(tse.empId, etcForAll), getAcwpForEmployee(tse.empId, acwpForAll)).ToString()))
+                      PercentComplete = getPercentComplete( (getAcwpForEmployee(tse.empId, acwpForAll)),
+                                                            (getEacForEmployee(getEtcForEmployee(tse.empId, etcForAll),
+                                                                getAcwpForEmployee(tse.empId, acwpForAll))) ).ToString()
                   };
-
+        
         if (qry.Count() == 0) {
             gvStatus.DataSource = null;
             gvStatus.DataBind();
@@ -337,6 +337,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         }
 
         eac = Convert.ToDouble(empEac);
+
         pc = (acwp / eac) * 100;
         pc = Math.Round(pc, 1);
         
@@ -361,19 +362,6 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
 
     protected void gvStatus_RowEditing(object sender, GridViewEditEventArgs e) {
         gvStatus.EditIndex = e.NewEditIndex;
-        GetWorkPackageStatusReport();
-    }
-
-    protected void gvStatus_RowUpdated(Object sender, GridViewUpdatedEventArgs e) {
-        // Indicate whether the update operation succeeded.
-        if (e.Exception == null) {
-            lblResults.Text = "Row updated successfully.";
-            lblResults.ForeColor = System.Drawing.Color.Green;
-        } else {
-            e.ExceptionHandled = true;
-            lblResults.Text = "An error occurred while attempting to update the row.";
-            lblResults.ForeColor = System.Drawing.Color.Red;
-        }
         GetWorkPackageStatusReport();
     }
 
