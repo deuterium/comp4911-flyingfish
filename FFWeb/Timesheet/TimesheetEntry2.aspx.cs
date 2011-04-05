@@ -105,18 +105,19 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
             tbFri.Text = String.Empty;
             tbMon.Text = String.Empty;
             tbNote.Text = String.Empty;
-            tbProjectID.Text = String.Empty;
+            //tbProjectID.Text = String.Empty;
             tbSat.Text = String.Empty;
             tbSun.Text = String.Empty;
             tbThu.Text = String.Empty;
             tbTue.Text = String.Empty;
             tbWed.Text = String.Empty;
-            tbWpID.Text = String.Empty;
+            //tbWpID.Text = String.Empty;
 
         }
         catch (Exception myException)
         {
             Label1.Text = myException.Message;
+            Label1.Text = "You have sumbitted the record before, Cannot insert duplicate record into the database!!!";
 
         }
         
