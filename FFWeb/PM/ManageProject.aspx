@@ -1,5 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="ManageProject.aspx.cs" Inherits="PM_ManageProject" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
@@ -9,8 +11,6 @@
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>
             <div align="center">
-                
-                
                     <asp:Label ID="lblProjID" runat="server" Text="Project ID: " Font-Bold="true" Font-Size="Large" />
                     <asp:Label ID="lblProjID2" runat="server" Text="" Font-Bold="true" Font-Size="Large" />
                     <br />
@@ -70,8 +70,9 @@
                                 SortExpression="allocated_dollars" />
                             <asp:BoundField DataField="projId" HeaderText="Project ID" 
                                 SortExpression="projId" Visible="False" />
-                            <asp:ButtonField Text="View Workpackages" CommandName="btnView" 
+                            <asp:ButtonField Text="View" CommandName="btnView" 
                                 ButtonType="Button" />
+                            <asp:ButtonField ButtonType="Button" CommandName="btnDelete" Text="Delete" />
                         </Columns>
                         <FooterStyle BackColor="White" ForeColor="#000066" />
                         <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />

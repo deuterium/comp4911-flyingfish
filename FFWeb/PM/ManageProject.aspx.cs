@@ -40,7 +40,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
             //Get all work packages
             var qry =
                 from wp in ff.WorkPackages
-                where wp.projId == Convert.ToInt32(Session["projID"])
+                where wp.projId == Convert.ToInt32(Session["projID"]) && wp.isActive == 1
                 select wp;
 
             gvWorkPackages.DataSource = qry;
@@ -66,6 +66,16 @@ public partial class PM_ManageProject : System.Web.UI.Page
                 GridViewRow selectedRow = gvWorkPackages.Rows[row];
                 Session["wpID"] = selectedRow.Cells[0].Text;
                 Response.Redirect("~/RE/ManageWorkPackage.aspx");
+            }
+
+            if (e.CommandName == "btnDelete")
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvWorkPackages.Rows[row];
+                WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
+                workpackage.isActive = 0;
+                ff.SubmitChanges();
+                Response.Redirect("~/PM/ManageProject.aspx");
             }
         }
         catch (Exception exception)
