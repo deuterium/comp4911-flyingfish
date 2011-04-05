@@ -6,7 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using FFLib;
 using System.Data;
-
+using System.Text.RegularExpressions;
 
 /* TO DO:
  * Enable Editing of ETC or EAC
@@ -16,17 +16,18 @@ using System.Data;
  * If you change value in form, will affect code (extracts from there, doesn't store it)
  */
 
+/// <summary>
+/// 
+/// </summary>
 public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     FlyingFishClassesDataContext ffdb = new FlyingFishClassesDataContext();
 
     protected void Page_Load(object sender, EventArgs e) {
-        
-
         if (!IsPostBack) {
             populateProjects();
             populateWorkpackages();
         }
-
+        //GetWorkPackageStatusReport();
         // for testing purposes only, so I don't have to fill out the form every time
         //GetWorkPackageStatusReport(4911, "1", Convert.ToDateTime("2011/01/01"), Convert.ToDateTime("2011/03/01"));
     }
@@ -355,11 +356,68 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         GetWorkPackageStatusReport();
     }
 
-    protected void gvStatus_RowUpdated(object sender, GridViewUpdatedEventArgs e) {
-        
-        //GridViewRow row = e.gvStatus.Rows[e.RowIndex];
-        //var newValues = this.GetValues(row);
+    protected void gvStatus_RowUpdated(Object sender, GridViewUpdatedEventArgs e) {
+        // Indicate whether the update operation succeeded.
+        if (e.Exception == null) {
+            lblResults.Text = "Row updated successfully.";
+            lblResults.ForeColor = System.Drawing.Color.Green;
+        } else {
+            e.ExceptionHandled = true;
+            lblResults.Text = "An error occurred while attempting to update the row.";
+            lblResults.ForeColor = System.Drawing.Color.Red;
+        }
+        GetWorkPackageStatusReport();
+    }
 
+    protected void gvStatus_RowUpdating(object sender, GridViewUpdateEventArgs e) {
+        EmployeeWorkPackageETC empWpEtc = new EmployeeWorkPackageETC();
+        GridViewRow row = gvStatus.Rows[e.RowIndex];
+        int empId = extractEmpId(((Label)row.Cells[0].Controls[1]).Text);
+
+        //EmployeeWorkPackageETC etc = from ewetc in ffdb.EmployeeWorkPackageETCs
+        //                             where ewetc.empId == empId
+        //                                && ewetc.dateUpdated.Equals(Convert.ToDateTime(ViewState["endDate"]))
+        //                             select ewetc;
+        
+        String strEtc = ((TextBox)row.Cells[2].Controls[1]).Text;
+        String strEac = ((TextBox)row.Cells[3].Controls[1]).Text;
+        double acwp = Convert.ToDouble(((Label)row.Cells[1].Controls[1]).Text);
+
+        if (strEtc.Equals("Unknown")) {
+            if (strEtc.Equals("Unknown")) {
+                empWpEtc.ETC_days = null;
+            } else {
+                empWpEtc.ETC_days = (int)(Convert.ToDouble(strEac) - acwp);
+            }
+        } else {
+            empWpEtc.ETC_days = (int)(Convert.ToDouble(strEtc));
+        }
+        
+        empWpEtc.empId = empId;
+        empWpEtc.dateUpdated = Convert.ToDateTime(ViewState["endDate"]);
+        empWpEtc.projId = Convert.ToInt16(ViewState["projId"]);
+        empWpEtc.wpId = (String)ViewState["wpId"];
+        
+        ffdb.EmployeeWorkPackageETCs.InsertOnSubmit(empWpEtc);
+        ffdb.SubmitChanges();
+
+        gvStatus.EditIndex = -1;
+        //gvStatus.DataBind();
+        GetWorkPackageStatusReport();
+    }
+
+    private int extractEmpId(String emp) {
+        int empId = -1;
+        String[] tokens = Regex.Split(emp, " "); 
+        String strEmpId = tokens[2].TrimEnd(')').TrimStart('(');
+        try {
+            empId = Convert.ToInt16(strEmpId);
+        }
+        catch (Exception e) {
+            return -1;
+        }
+        return empId;
+            
     }
 
     protected void gvStatus_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e) {
