@@ -12,7 +12,10 @@ public partial class HR_AssignEmployee : System.Web.UI.Page
     //DatabaseContext
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
 
-    protected void Page_Load(object sender, EventArgs e) {
+    protected void Page_Load(object sender, EventArgs e) {}
+
+    protected void ddlAllProjects_Init(object sender, EventArgs e)
+    {
         popluateProjectsDropdown();
     }
 
@@ -34,6 +37,24 @@ public partial class HR_AssignEmployee : System.Web.UI.Page
     {
         AssignLabel.Text = "";
         populateListBoxes();
+        populateProjectManagerUsers();
+        ddlProjectManager.SelectedIndex = (int) ff.Projects
+            .Where(p => p.projId == Convert.ToInt32(ddlAllProjects.SelectedValue))
+            .Select(em => em.manager).First();
+    }
+
+    protected void populateProjectManagerUsers()
+    {
+        DivAssignPM.Visible = true;
+        ddlProjectManager.DataSource = ff.EmployeeProjects
+            .Join(ff.Employees, em => em.empId, c => c.empId, (em, c) => new { em = em, c = c })
+            .Where(x => (x.em.projId == Convert.ToInt32(ddlAllProjects.SelectedValue)))
+            .Select(y => new { EmpID = y.em.empId, EmployeeName = (((((y.c.firstName + " ") + y.c.lastName) + " (") + y.em.empId) + ")") })
+            .ToList();
+        ddlProjectManager.DataTextField = "EmployeeName";
+        ddlProjectManager.DataValueField = "EmpID";
+        ddlProjectManager.DataBind();
+        labelProject.Text = ddlAllProjects.SelectedValue;
     }
 
     protected void populateListBoxes()
