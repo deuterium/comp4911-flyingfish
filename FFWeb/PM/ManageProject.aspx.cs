@@ -89,8 +89,12 @@ public partial class PM_ManageProject : System.Web.UI.Page
     protected void btnChangeAlloc_Click(object sender, EventArgs e)
     {
         tbUnalloc.Text = lblUnalloc2.Text;
-        divOriginalAlloc.Visible = false;
-        divChangeAlloc.Visible = true;
+        //divOriginalAlloc.Visible = false;
+        //divChangeAlloc.Visible = true;
+        tbUnalloc.Visible = true;
+        lblUnalloc2.Visible = false;
+        btnSaveAlloc.Visible = true;
+        btnChangeAlloc.Visible = false;
     }
 
     protected void btnSaveAlloc_Click(object sender, EventArgs e)
@@ -101,7 +105,10 @@ public partial class PM_ManageProject : System.Web.UI.Page
             proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
             ff.SubmitChanges();
             lblUnalloc2.Text = proj.unallocated_dollars.ToString();
-            divOriginalAlloc.Visible = true;
+            //divOriginalAlloc.Visible = true;
+            lblUnalloc2.Visible = true;
+            btnSaveAlloc.Visible = false;
+            btnChangeAlloc.Visible = true;
             Response.Redirect("~/PM/ManageProject.aspx");
         }
         catch (Exception exception)

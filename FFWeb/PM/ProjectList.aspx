@@ -13,7 +13,9 @@
     <div id="divproj">
 
         <asp:Label ID="lblMsg" runat="server" Text="List of Projects:" Font-Bold="true" Font-Size="Large"></asp:Label>
-        <br /><br /><br />
+        <br />
+        <div class="divline" runat="server" />
+        <br />
                 <asp:GridView ID="gvProjects" runat="server" 
                     OnRowCommand="gvProjects_RowCommand" AutoGenerateColumns="False" 
                     BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" 
