@@ -36,26 +36,34 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
     {
         var qry = from th in ff.TimesheetHeaders
                   join tse in ff.TimesheetEntries on new { th.tsDate, th.empId } equals new { tse.tsDate, tse.empId }
+                  join emp in ff.Employees on tse.empId equals emp.empId
                   where th.status != "APPROVED"
                   select new
                   {
+                      EmployeeName = emp.firstName + " " + emp.lastName + "(" + th.empId + ")",
                       EmpID = th.empId,
                       Date = th.tsDate,
                       Project = tse.projId,
                       WorkPackage = tse.wpId,
-                      Mon = tse.mon,
-                      Tue = tse.tue,
-                      Wed = tse.wed,
-                      Thu = tse.thu,
-                      Fri = tse.fri,
-                      Sat = tse.sat,
-                      Sun = tse.sun,
+                      //Mon = tse.mon,
+                      //Tue = tse.tue,
+                      //Wed = tse.wed,
+                      //Thu = tse.thu,
+                      //Fri = tse.fri,
+                      //Sat = tse.sat,
+                      //Sun = tse.sun,
                       Note = tse.notes,
                       Status = th.status,
                       Comments = th.comments
                   };
+
+  
         GridView1.DataSource = qry;
         GridView1.DataBind();
+
+        GridView1.PagerSettings.Mode = PagerButtons.NextPreviousFirstLast;
+        GridView1.PagerSettings.NextPageText = "Click for next page";
+        GridView1.PagerSettings.PreviousPageText = "Click for previous page";
     }
 
 
@@ -101,21 +109,36 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
         btnSubmit.Visible = true;
         GridView2.Visible = true;
 
-        ViewState["empId"] = GridView1.SelectedRow.Cells[1].Text;
-        ViewState["date"] = GridView1.SelectedRow.Cells[2].Text;
-        ViewState["proj"] = GridView1.SelectedRow.Cells[3].Text;
-        ViewState["wp"] = GridView1.SelectedRow.Cells[4].Text;
+        ViewState["empId"] = GridView1.SelectedRow.Cells[2].Text;
+        ViewState["date"] = GridView1.SelectedRow.Cells[3].Text;
+        ViewState["proj"] = GridView1.SelectedRow.Cells[4].Text;
+        ViewState["wp"] = GridView1.SelectedRow.Cells[5].Text;
 
         //Label1.Text = GridView1.SelectedRow.Cells[1].Text + GridView1.SelectedRow.Cells[2].Text + GridView1.SelectedRow.Cells[3].Text + GridView1.SelectedRow.Cells[4].Text; ;
 
-        string empId = GridView1.SelectedRow.Cells[1].Text;
-        DateTime date = Convert.ToDateTime(GridView1.SelectedRow.Cells[2].Text);
-        string proj = GridView1.SelectedRow.Cells[3].Text;
-        string wp = GridView1.SelectedRow.Cells[4].Text;
+        string empId = GridView1.SelectedRow.Cells[2].Text;
+        DateTime date = Convert.ToDateTime(GridView1.SelectedRow.Cells[3].Text);
+        string proj = GridView1.SelectedRow.Cells[4].Text;
+        string wp = GridView1.SelectedRow.Cells[5].Text;
 
         var qry = from t in ff.TimesheetEntries
+                  join emp in ff.Employees on t.empId equals emp.empId
                   where t.empId.Equals(empId) && t.tsDate.Equals(date) && t.projId == Convert.ToInt32(proj) && t.wpId.Equals(wp)
-                  select t;
+                  select new
+                  {
+                      EmployeeName = emp.firstName + " " + emp.lastName + "(" + t.empId + ")",
+                      Date = t.tsDate,
+                      Project = t.projId,
+                      WorkPackage = t.wpId,
+                      Mon = t.mon,
+                      Tue = t.tue,
+                      Wed = t.wed,
+                      Thu = t.thu,
+                      Fri = t.fri,
+                      Sat = t.sat,
+                      Sun = t.sun,
+                      Note = t.notes,
+                  };
         GridView2.DataSource = qry;
         GridView2.DataBind();
 
