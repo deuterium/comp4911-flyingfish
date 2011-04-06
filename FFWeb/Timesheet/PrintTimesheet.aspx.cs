@@ -22,14 +22,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         //needs a session object to hold the empId
         //
 
-        if (tbPeriodStart.Text == string.Empty)
-        {
-            showPreviousWeekTimesheet();
-        }
-        else
-        {
             qryTimesheet();
-        }
 
 
 
@@ -40,7 +33,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         System.DateTime now = System.DateTime.Now.Date;
         System.DateTime pre = now.AddDays(-6);
         var qry = from o in ff.TimesheetEntries
-                  where o.empId == Convert.ToInt32(Session["CurEmpId"]) && o.tsDate <= now && o.tsDate >= pre
+                  where o.empId == Convert.ToInt32(Session["CurEmpId"]) && o.tsDate < now && o.tsDate > pre
                   select new
                   {
                       Project = o.projId,
@@ -68,23 +61,26 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         System.DateTime qryDate = Convert.ToDateTime(tbPeriodStart.Text);
 
 
-        var qry = from o in ff.TimesheetEntries
-                  // code to determine the role or id
-                  where o.tsDate > qryDate && o.empId == Convert.ToInt32(Session["CurEmpId"])
+        var qry = from th in ff.TimesheetHeaders
+                  join tse in ff.TimesheetEntries on new { th.tsDate, th.empId } equals new { tse.tsDate, tse.empId }
+                  join emp in ff.Employees on tse.empId equals emp.empId
+                  where tse.empId == Convert.ToInt32(Session["CurEmpId"])
                   select new
                   {
-                      Project = o.projId,
-                      WP = o.wpId,
-                      total = o.sun + o.mon + o.tue + o.wed + o.thu + o.fri + o.sat,
-                      Sun = o.sun,
-                      Mon = o.mon,
-                      Tue = o.tue,
-                      Wed = o.wed,
-                      Thu = o.thu,
-                      Fri = o.fri,
-                      Sat = o.sat,
-                      Note = o.notes,
-                      Date = o.tsDate
+                      EmployeeName = emp.firstName + " " + emp.lastName + "(" + th.empId + ")",
+                      Date = th.tsDate,
+                      Project = tse.projId,
+                      WorkPackage = tse.wpId,
+                      Mon = tse.mon,
+                      Tue = tse.tue,
+                      Wed = tse.wed,
+                      Thu = tse.thu,
+                      Fri = tse.fri,
+                      Sat = tse.sat,
+                      Sun = tse.sun,
+                      Note = tse.notes,
+                      Status = th.status,
+                      Comments = th.comments
                   };
 
         gvPrintTimesheet.DataSource = qry;

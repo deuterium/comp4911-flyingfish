@@ -25,6 +25,8 @@
  
         <asp:GridView ID="gvPrintTimesheet" runat="server">
         </asp:GridView>
+        <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+        ForeColor="Red" />
         <asp:Button ID="btnGetTimesheet" runat="server" Text="Get Timesheet" OnClick="btnGetTimesheet_Click" />
         <asp:Label ID="Label1" runat="server"></asp:Label>
 </asp:Content>
