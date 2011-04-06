@@ -99,8 +99,8 @@
             </tr>
         </table>
         <br />
-        <asp:UpdatePanel runat="server">
-            <ContentTemplate>
+        <%--<asp:UpdatePanel runat="server">
+            <ContentTemplate>--%>
                 <div id="DivAssignPM" runat="server" visible="false">
                     <table style="background-color: #EFF3FB; border-color: #B5C7DE; border-width: 1px;
                         border-style: Solid; font-family: Verdana; font-size: 0.8em; border-collapse: collapse;
@@ -129,10 +129,10 @@
                         </tr>
                     </table>
                 </div>
-            </ContentTemplate>
+            <%--</ContentTemplate>
             <Triggers>
                 <asp:AsyncPostBackTrigger ControlID="buttonSelectProject" EventName="Click" />
             </Triggers>
-        </asp:UpdatePanel>
+        </asp:UpdatePanel>--%>
     </div>
 </asp:Content>

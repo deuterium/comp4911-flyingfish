@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using FFLib;
 using System.Web.Security;
 
 public partial class HR_ManageEmployee : System.Web.UI.Page
