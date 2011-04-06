@@ -22,7 +22,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         //needs a session object to hold the empId
         //
 
-        if (tbStartDate.Text == string.Empty)
+        if (tbPeriodStart.Text == string.Empty)
         {
             showPreviousWeekTimesheet();
         }
@@ -53,7 +53,8 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
                       Thu = o.thu,
                       Fri = o.fri,
                       Sat = o.sat,
-                      Note = o.notes
+                      Note = o.notes,
+                      Date = o.tsDate
                   };
 
         gvPrintTimesheet.DataSource = qry;
@@ -64,28 +65,12 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
 
     public void qryTimesheet()
     {
-        System.DateTime qryDate = Convert.ToDateTime(tbStartDate.Text);
-        System.DateTime actualQryDate = qryDate;
-        System.DayOfWeek dayOfWeek = qryDate.DayOfWeek;
+        System.DateTime qryDate = Convert.ToDateTime(tbPeriodStart.Text);
 
-        // trying to get the sunday of the week picked by the user
-        switch (dayOfWeek.ToString())
-        {
-            case "Monday": actualQryDate = qryDate.AddDays(-1); break;
-            case "Tuesday": actualQryDate = qryDate.AddDays(-2); break;
-            case "Wednesday": actualQryDate = qryDate.AddDays(-3); break;
-            case "Thursday": actualQryDate = qryDate.AddDays(-4); break;
-            case "Friday": actualQryDate = qryDate.AddDays(-5); break;
-            case "Saturday": actualQryDate = qryDate.AddDays(-6); break;
-            default: break;
-        }
 
-       
-        System.DateTime pre = actualQryDate.AddDays(6);
-        //Label1.Text = actualQryDate + " " + pre;
         var qry = from o in ff.TimesheetEntries
                   // code to determine the role or id
-                  where o.tsDate >= actualQryDate && o.tsDate <= pre && o.empId == Convert.ToInt32(Session["CurEmpId"])
+                  where o.tsDate > qryDate && o.empId == Convert.ToInt32(Session["CurEmpId"])
                   select new
                   {
                       Project = o.projId,
@@ -98,7 +83,8 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
                       Thu = o.thu,
                       Fri = o.fri,
                       Sat = o.sat,
-                      Note = o.notes
+                      Note = o.notes,
+                      Date = o.tsDate
                   };
 
         gvPrintTimesheet.DataSource = qry;
