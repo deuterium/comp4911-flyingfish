@@ -5,55 +5,78 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
-    <asp:ScriptManager ID="sm1" runat="server">
-                </asp:ScriptManager>
-        <br />
+    <asp:ScriptManager ID="sm1" runat="server"></asp:ScriptManager>
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>
-            <div align="center">
-                    <asp:Label ID="lblProjID" runat="server" Text="Project ID: " Font-Bold="true" Font-Size="Large" />
-                    <asp:Label ID="lblProjID2" runat="server" Text="" Font-Bold="true" Font-Size="Large" />
-                    <br />
-                    <asp:Label ID="lblProjName" runat="server" Text="Project Name: " Font-Bold="true" Font-Size="Large" />
-                    <asp:Label ID="lblProjName2" runat="server" Text="" Font-Bold="true" Font-Size="Large" />
-                    <br />
-                    
-                        <asp:Label ID="lblAllocMsg" runat="server" Text="Allocated Budget: " />
-                        <asp:Label ID="lblAlloc2" runat="server" Text=""></asp:Label>
-                        <br />
+            <div>
+                    <asp:Label ID="lblMessage" runat="server" Text="List of work packages:" Font-Bold="true" Font-Size="Large" />
+                    <br /><br />
+                    <table>
+                        <tr>
+                            <td>
+                                <asp:Label ID="lblProjID" runat="server" Text="Project ID: " Font-Bold="true" Font-Size="Large" />
+                            </td>
+                            <td>
+                                <asp:Label ID="lblProjID2" runat="server" Text="" />
+                            </td>
+                            <td>
+                                <asp:Label ID="blank1" Text="&nbsp&nbsp&nbsp&nbsp&nbsp" runat="server" />
+                            </td>
+                            <td>
+                                <asp:Label ID="lblAllocMsg" runat="server" Text="Allocated Budget: " Font-Bold="true" Font-Size="Large" />
+                            </td>
+                            <td>
+                                <asp:Label ID="lblAlloc2" runat="server" Text=""></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <asp:Label ID="lblProjName" runat="server" Text="Project Name: " Font-Bold="true" Font-Size="Large" />
+                            </td>
+                            <td>
+                                <asp:Label ID="lblProjName2" runat="server" Text="" />
+                            </td>
+                            <td>
+                                <asp:Label ID="Label1" Text="&nbsp&nbsp&nbsp&nbsp&nbsp" runat="server" />
+                            </td>
+                            <td>
+                                <asp:Label ID="lblUnallocMsg" runat="server" Text="Unallocated Budget: " Font-Bold="true" Font-Size="Large" />
+                                <asp:Label Visible="false" ID="lblUnallocMsg2" runat="server" Text="Unallocated Budget: " />
+                            </td>
+                            <td>
+                                <asp:Label ID="lblUnalloc2" runat="server" Text="" />
+                                <asp:TextBox ID="tbUnalloc" runat="server" Visible="false" />
+                                <asp:CompareValidator ID="cvUnallocated" runat="server" Visible="false" ControlToValidate="tbUnalloc" 
+                                    ErrorMessage="Invalid Budget." ForeColor="Red" Operator="DataTypeCheck" Type="Integer" />
+                                &nbsp&nbsp&nbsp&nbsp&nbsp
+                                <asp:RangeValidator ID="rvUnalloc" runat="server" ControlToValidate="tbUnalloc" 
+                                    ErrorMessage="Budget must be a positive number." ForeColor="Red" MaximumValue="2147483647" MinimumValue="0" Type="Integer" />
+                            </td>
+                        </tr>
+                    </table>
                     <div id="divOriginalAlloc" runat="server">
-                        <asp:Label ID="lblUnallocMsg" runat="server" Text="Unallocated Budget: " />
-                        <asp:Label ID="lblUnalloc2" runat="server" Text="" />
-                        <br />
-                        <asp:Button ID="btnChangeAlloc" runat="server" Text="Edit Budget" 
-                            onclick="btnChangeAlloc_Click" />
+                    <br />
+                        <asp:Button ID="btnChangeAlloc" runat="server" Text="Edit Budget" onclick="btnChangeAlloc_Click" />
+                        <asp:Button ID="btnSaveAlloc" runat="server" Visible="false" Text="Save Changes" onclick="btnSaveAlloc_Click" />
                     </div>
                     <div id="divChangeAlloc" runat="server" visible="false">
                         <!--<asp:Label ID="lblAllocMsg2" runat="server" Text="Allocated Budget: " />
                         <asp:TextBox ID="tbAlloc" runat="server" />
                         <br />-->
-                        <asp:Label ID="lblUnallocMsg2" runat="server" Text="Unallocated Budget: " />
-                        <asp:TextBox ID="tbUnalloc" runat="server" />
+                        
+
                         <br />
-                        <asp:CompareValidator ID="cvUnallocated" runat="server" 
-                            ControlToValidate="tbUnalloc" ErrorMessage="Invalid Budget." ForeColor="Red" 
-                            Operator="DataTypeCheck" Type="Integer"></asp:CompareValidator>
+
                         <br />
-                        <asp:RangeValidator ID="rvUnalloc" runat="server" ControlToValidate="tbUnalloc" 
-                            ErrorMessage="Budget must be a positive number." ForeColor="Red" 
-                            MaximumValue="2147483647" MinimumValue="0" Type="Integer"></asp:RangeValidator>
-                        <br />
-                        <asp:Button ID="btnSaveAlloc" runat="server" Text="Save Changes" 
-                            onclick="btnSaveAlloc_Click" />
+
                     </div>
                     <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
             </div>
             </ContentTemplate>
             </asp:UpdatePanel>
-                    <br /><br />
-                    <asp:Label ID="lblMessage" runat="server" Text="List of work packages:" Font-Bold="true" Font-Size="Large" />
-                    <br /><br /><br />
-
+                    <br />
+                    <div class="divline" />
+                    <br />
                     <asp:GridView ID="gvWorkPackages" runat="server" 
                         OnRowCommand="gvWorkPackages_RowCommand" AutoGenerateColumns="False" 
                         BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" 
@@ -84,8 +107,8 @@
                         <SortedDescendingCellStyle BackColor="#CAC9C9" />
                         <SortedDescendingHeaderStyle BackColor="#00547E" />
                     </asp:GridView>
-                    
-                    <asp:Button CssClass="buttongrad" ID="lbCreateWP" Text="Create a Work Package" runat="server" onclick="lbCreateWP_Click"></asp:Button>
+                    <br />
+                    <asp:Button ID="lbCreateWP" Text="Create a Work Package" runat="server" onclick="lbCreateWP_Click"></asp:Button>
                     <asp:Button ID="lbProjectList" runat="server" Text="View Project List" onclick="lbProjectList_Click"></asp:Button>
                     <br />
                     <asp:Label ID="lblException" runat="server" Text=""></asp:Label>
