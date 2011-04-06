@@ -99,8 +99,8 @@
             </tr>
         </table>
         <br />
-        <%--<asp:UpdatePanel runat="server">
-            <ContentTemplate>--%>
+        <asp:UpdatePanel runat="server">
+            <ContentTemplate>
                 <div id="DivAssignPM" runat="server" visible="false">
                     <table style="background-color: #EFF3FB; border-color: #B5C7DE; border-width: 1px;
                         border-style: Solid; font-family: Verdana; font-size: 0.8em; border-collapse: collapse;
@@ -109,7 +109,7 @@
                             <td>
                                 Project:
                             </td>
-                            <td align="Right">
+                            <td align="right">
                                 <asp:Label ID="labelProject" runat="server"></asp:Label>
                             </td>
                         </tr>
@@ -117,22 +117,28 @@
                             <td>
                                 Project Manager:
                             </td>
-                            <td align="Right">
+                            <td align="right">
                                 <asp:DropDownList ID="ddlProjectManager" runat="server" Width="150">
                                 </asp:DropDownList>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="Right">
-                                <asp:Button ID="buttonChangePM" runat="server" Text="Change Project Manager" />
+                            <td colspan="2" align="right">
+                                <asp:Button ID="buttonChangePM" runat="server" Text="Change Project Manager" 
+                                    onclick="buttonChangePM_Click" />
                             </td>
+                        </tr>
+                        <tr>
+                        <td colspan="2" align="right">
+                            <asp:Label ID="AssignPMLabel" runat="server"></asp:Label>
+                        </td>
                         </tr>
                     </table>
                 </div>
-            <%--</ContentTemplate>
+            </ContentTemplate>
             <Triggers>
                 <asp:AsyncPostBackTrigger ControlID="buttonSelectProject" EventName="Click" />
             </Triggers>
-        </asp:UpdatePanel>--%>
+        </asp:UpdatePanel>
     </div>
 </asp:Content>
