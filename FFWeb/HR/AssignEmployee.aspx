@@ -14,9 +14,9 @@
         The opposite can be done with the <i>&quot;Unassign from Project&quot;</i> button.
         <br />
         <br />
-        Note: Removing an Employee from a project automatically removes them from any 
-        Work Packages they&#39;ve been assigned to. Responsible Engineers cannot be removed 
-        from a Project; change the RE first before Employee can be removed from Project.<br />
+        Note: Removing an Employee from a project automatically removes them from any Work
+        Packages they&#39;ve been assigned to. Responsible Engineers cannot be removed from
+        a Project; change the RE first before Employee can be removed from Project.<br />
         <br />
         <table style="background-color: #EFF3FB; border-color: #B5C7DE; border-width: 1px;
             border-style: Solid; font-family: Verdana; font-size: 0.8em; border-collapse: collapse;
@@ -24,7 +24,8 @@
             <tr>
                 <td colspan="3">
                     Select a project to manage:
-                    <asp:DropDownList ID="ddlAllProjects" runat="server" />
+                    <asp:DropDownList ID="ddlAllProjects" runat="server" 
+                        oninit="ddlAllProjects_Init" />
                     &nbsp;<asp:Button ID="buttonSelectProject" runat="server" Text="Select Project" OnClick="buttonSelectProject_Click" />
                 </td>
             </tr>
@@ -97,5 +98,47 @@
                 </td>
             </tr>
         </table>
+        <br />
+        <asp:UpdatePanel runat="server">
+            <ContentTemplate>
+                <div id="DivAssignPM" runat="server" visible="false">
+                    <table style="background-color: #EFF3FB; border-color: #B5C7DE; border-width: 1px;
+                        border-style: Solid; font-family: Verdana; font-size: 0.8em; border-collapse: collapse;
+                        margin-left: auto; margin-right: auto;" width="300">
+                        <tr>
+                            <td>
+                                Project:
+                            </td>
+                            <td align="right">
+                                <asp:Label ID="labelProject" runat="server"></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Project Manager:
+                            </td>
+                            <td align="right">
+                                <asp:DropDownList ID="ddlProjectManager" runat="server" Width="150">
+                                </asp:DropDownList>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="right">
+                                <asp:Button ID="buttonChangePM" runat="server" Text="Change Project Manager" 
+                                    onclick="buttonChangePM_Click" />
+                            </td>
+                        </tr>
+                        <tr>
+                        <td colspan="2" align="right">
+                            <asp:Label ID="AssignPMLabel" runat="server"></asp:Label>
+                        </td>
+                        </tr>
+                    </table>
+                </div>
+            </ContentTemplate>
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="buttonSelectProject" EventName="Click" />
+            </Triggers>
+        </asp:UpdatePanel>
     </div>
 </asp:Content>

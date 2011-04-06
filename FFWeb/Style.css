@@ -189,7 +189,7 @@ a:hover
 .divline
 {
     margin-top:10px;
-    border-top:3px solid Grey;
+    border-top:2px solid Grey;
 }
 
 /* Project.aspx */
@@ -205,15 +205,6 @@ a:hover
 .lblcreatenewemp
 {
     padding:5px;
-}
-
-/* ManageProject.aspx */
-
-.buttongrad
-{
-   color:#FF0033;
-   background-color:#0066FF;
-   filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#ff339900',EndColorStr='#ff0033FF');
 }
 
 /* Default.aspx */

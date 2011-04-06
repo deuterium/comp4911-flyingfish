@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using FFLib;
 
 public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
 {
@@ -23,14 +22,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         //needs a session object to hold the empId
         //
 
-        if (tbStartDate.Text == string.Empty)
-        {
-            showPreviousWeekTimesheet();
-        }
-        else
-        {
             qryTimesheet();
-        }
 
 
 
@@ -41,7 +33,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         System.DateTime now = System.DateTime.Now.Date;
         System.DateTime pre = now.AddDays(-6);
         var qry = from o in ff.TimesheetEntries
-                  where o.empId == Convert.ToInt32(Session["CurEmpId"]) && o.tsDate <= now && o.tsDate >= pre
+                  where o.empId == Convert.ToInt32(Session["CurEmpId"]) && o.tsDate < now && o.tsDate > pre
                   select new
                   {
                       Project = o.projId,
@@ -54,7 +46,8 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
                       Thu = o.thu,
                       Fri = o.fri,
                       Sat = o.sat,
-                      Note = o.notes
+                      Note = o.notes,
+                      Date = o.tsDate
                   };
 
         gvPrintTimesheet.DataSource = qry;
@@ -65,41 +58,29 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
 
     public void qryTimesheet()
     {
-        System.DateTime qryDate = Convert.ToDateTime(tbStartDate.Text);
-        System.DateTime actualQryDate = qryDate;
-        System.DayOfWeek dayOfWeek = qryDate.DayOfWeek;
+        System.DateTime qryDate = Convert.ToDateTime(tbPeriodStart.Text);
 
-        // trying to get the sunday of the week picked by the user
-        switch (dayOfWeek.ToString())
-        {
-            case "Monday": actualQryDate = qryDate.AddDays(-1); break;
-            case "Tuesday": actualQryDate = qryDate.AddDays(-2); break;
-            case "Wednesday": actualQryDate = qryDate.AddDays(-3); break;
-            case "Thursday": actualQryDate = qryDate.AddDays(-4); break;
-            case "Friday": actualQryDate = qryDate.AddDays(-5); break;
-            case "Saturday": actualQryDate = qryDate.AddDays(-6); break;
-            default: break;
-        }
 
-       
-        System.DateTime pre = actualQryDate.AddDays(6);
-        //Label1.Text = actualQryDate + " " + pre;
-        var qry = from o in ff.TimesheetEntries
-                  // code to determine the role or id
-                  where o.tsDate >= actualQryDate && o.tsDate <= pre && o.empId == Convert.ToInt32(Session["CurEmpId"])
+        var qry = from th in ff.TimesheetHeaders
+                  join tse in ff.TimesheetEntries on new { th.tsDate, th.empId } equals new { tse.tsDate, tse.empId }
+                  join emp in ff.Employees on tse.empId equals emp.empId
+                  where tse.empId == Convert.ToInt32(Session["CurEmpId"])
                   select new
                   {
-                      Project = o.projId,
-                      WP = o.wpId,
-                      total = o.sun + o.mon + o.tue + o.wed + o.thu + o.fri + o.sat,
-                      Sun = o.sun,
-                      Mon = o.mon,
-                      Tue = o.tue,
-                      Wed = o.wed,
-                      Thu = o.thu,
-                      Fri = o.fri,
-                      Sat = o.sat,
-                      Note = o.notes
+                      EmployeeName = emp.firstName + " " + emp.lastName + "(" + th.empId + ")",
+                      Date = th.tsDate,
+                      Project = tse.projId,
+                      WorkPackage = tse.wpId,
+                      Mon = tse.mon,
+                      Tue = tse.tue,
+                      Wed = tse.wed,
+                      Thu = tse.thu,
+                      Fri = tse.fri,
+                      Sat = tse.sat,
+                      Sun = tse.sun,
+                      Note = tse.notes,
+                      Status = th.status,
+                      Comments = th.comments
                   };
 
         gvPrintTimesheet.DataSource = qry;

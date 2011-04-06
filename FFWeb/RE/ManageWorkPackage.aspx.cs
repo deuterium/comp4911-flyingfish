@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using FFLib;
 using System.Configuration;
 
 public partial class RE_ManageWorkPackage : System.Web.UI.Page
@@ -18,11 +17,16 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Page_Load
     protected void Page_Load(object sender, EventArgs e)
     {
+        populateManageWorkPackage();
+    }
+    protected void populateManageWorkPackage()
+    {
         try
         {
             if (Session["wpID"] == null)
                 Response.Redirect("~/PM/ProjectList.aspx");
             String[] wpArray = Session["wpID"].ToString().Split('.');
+
             if (wpArray.Length > 2)
             {
                 for (int i = 0; i < wpArray.Length - 1; i++)
@@ -32,6 +36,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                         parentWpID += ".";
                 }
             }
+
             if (wpArray.Length == 2)
                 parentWpID = null;
 
@@ -78,6 +83,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     select new { wp.wpId, wp.name, wp.unallocated_dollars, wp.allocated_dollars, wp.description };
                 gvSubWP.DataSource = subwp;
                 gvSubWP.DataBind();
+                if (lblError.Text != "")
+                    populateUnassignEmployeeGV();
             }
             else
             {
@@ -117,6 +124,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 //divAssignRE.Visible = false;
                 allocOriginal = Convert.ToDouble(tbAlloc.Text);
                 unallocOriginal = Convert.ToDouble(tbUnalloc.Text);
+                if (lblError.Text != "")
+                    populateUnassignEmployeeGV();
             }
         }
         catch (Exception exception)
@@ -124,14 +133,29 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
             lblException.Text = exception.StackTrace;
         }
     }
+
     #endregion
 
     #region Assign Employee linkbutton event handler
     protected void lbAssignEmp_Click(object sender, EventArgs e)
     {
+        populateUnassignEmployeeGV();
+    }
+
+    protected void populateUnassignEmployeeGV()
+    {
+        lblError.Text = "";
+        var qry =
+            from wp in ff.WorkPackages
+            where (
+                wp.wpId == lblWPID2.Text
+            )
+            select new { wp.allocated_dollars, wp.unallocated_dollars, wp.name, wp.description, wp.projId };
         divAssignEmp.Visible = true;
         var employees =
             from emp in ff.Employees
+            join ep in ff.EmployeeProjects on emp.empId equals ep.empId
+            where ep.projId == qry.First().projId
             select new { emp.empId, emp.firstName, emp.lastName };
         gvUnassignedEmployees.DataSource = employees;
         gvUnassignedEmployees.DataBind();
@@ -145,6 +169,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Assign Employee gridview add button event handler
     protected void gvUnassignedEmployees_RowCommand(object sender, GridViewCommandEventArgs e)
     {
+        lblBudgetError.Text = "";
         try
         {
             if (parentWpID == null)
@@ -182,6 +207,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                         ff.SubmitChanges();
                         updategvEmployees();
                         lblError.Text = "";
+                        divAssignEmp.Visible = true;
                     }
                 }
             }
@@ -207,6 +233,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     if (qry.ToArray().Length > 0)
                     {
                         lblError.Text = "Employee is already a part of the work package.";
+                        divAssignEmp.Visible = true;
                     }
                     else
                     {
@@ -227,6 +254,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         catch (Exception exception)
         {
             lblException.Text = exception.StackTrace;
+            lblError.Text = exception.StackTrace;
         }
     }
     #endregion
@@ -242,7 +270,6 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 join emp in ff.Employees on o.empId equals emp.empId
                 where o.wpId == lblWPID2.Text
                 select new { emp.empId, emp.firstName, emp.lastName };
-
             gvEmployees.DataSource = employees;
             gvEmployees.DataBind();
         }
@@ -256,6 +283,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Save Changes
     protected void btnSave_Click(object sender, EventArgs e)
     {
+        lblError.Text = "";
         try
         {
             if (parentWpID == null)
@@ -280,7 +308,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     updateProject(Convert.ToInt32(qry.First().projId), Convert.ToDecimal(tbUnalloc2.Text), Convert.ToDecimal(tbAlloc2.Text));
                     tbAlloc.Text = tbAlloc2.Text;
                     tbUnalloc.Text = tbUnalloc2.Text;
-                    Response.Redirect("~/RE/ManageWorkPackage.aspx");
+                    //Response.Redirect("~/RE/ManageWorkPackage.aspx");
+                    populateManageWorkPackage();
                 }
             }
             else
@@ -299,7 +328,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     updateWorkPackage(parentWpID, Convert.ToDecimal(tbUnalloc2.Text), Convert.ToDecimal(tbAlloc2.Text));
                     tbAlloc.Text = tbAlloc2.Text;
                     tbUnalloc.Text = tbUnalloc2.Text;
-                    Response.Redirect("~/RE/ManageWorkPackage.aspx");
+                    //Response.Redirect("~/RE/ManageWorkPackage.aspx");
+                    populateManageWorkPackage();
                 }
             }
         }
@@ -481,7 +511,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                         parentWpID += ".";
                 }
                 Session["wpID"] = parentWpID;
-                Response.Redirect("~/RE/ManageWorkPackage");
+                //Response.Redirect("~/RE/ManageWorkPackage.aspx");
+                populateManageWorkPackage();
             }
             for (int i = 0; i < wp.Length - 1; i++)
             {
@@ -495,7 +526,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     parentWpID += ".";
             }
             Session["wpID"] = parentWpID;
-            Response.Redirect("~/RE/ManageWorkPackage.aspx");
+            //Response.Redirect("~/RE/ManageWorkPackage.aspx");
+            populateManageWorkPackage();
         }
         catch (Exception exception)
         {

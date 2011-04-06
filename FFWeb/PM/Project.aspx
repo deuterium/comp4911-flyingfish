@@ -50,8 +50,13 @@
             </td>
             <td>
                 <asp:TextBox ID="tbUnalloc" runat="server"></asp:TextBox>
+                <asp:CompareValidator ID="cvUnalloc" runat="server" 
+                    ControlToValidate="tbUnalloc" 
+                    ErrorMessage="Unallocated Budget must be a number." ForeColor="Red" 
+                    Operator="DataTypeCheck" Type="Currency">*</asp:CompareValidator>
                 <asp:RangeValidator ID="rvUnalloc" ControlToValidate="tbUnalloc" runat="server" ForeColor="Red" 
-                ErrorMessage="Unallocated Budget cannot be a negative value." MinimumValue="0" MaximumValue="999999999999999">*</asp:RangeValidator>
+                ErrorMessage="Unallocated Budget does not have a valid currency value." 
+                    MinimumValue="0" MaximumValue="79228162514264337593543950335" Type="Currency">*</asp:RangeValidator>
             </td>
         </tr>
     </table>

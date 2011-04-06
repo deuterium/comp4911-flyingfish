@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using FFLib;
 
 public partial class PM_ManageProject : System.Web.UI.Page
 {
@@ -40,7 +39,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
             //Get all work packages
             var qry =
                 from wp in ff.WorkPackages
-                where wp.projId == Convert.ToInt32(Session["projID"])
+                where wp.projId == Convert.ToInt32(Session["projID"]) && wp.isActive == 1
                 select wp;
 
             gvWorkPackages.DataSource = qry;
@@ -67,6 +66,16 @@ public partial class PM_ManageProject : System.Web.UI.Page
                 Session["wpID"] = selectedRow.Cells[0].Text;
                 Response.Redirect("~/RE/ManageWorkPackage.aspx");
             }
+
+            if (e.CommandName == "btnDelete")
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvWorkPackages.Rows[row];
+                WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
+                workpackage.isActive = 0;
+                ff.SubmitChanges();
+                Response.Redirect("~/PM/ManageProject.aspx");
+            }
         }
         catch (Exception exception)
         {
@@ -80,8 +89,12 @@ public partial class PM_ManageProject : System.Web.UI.Page
     protected void btnChangeAlloc_Click(object sender, EventArgs e)
     {
         tbUnalloc.Text = lblUnalloc2.Text;
-        divOriginalAlloc.Visible = false;
-        divChangeAlloc.Visible = true;
+        //divOriginalAlloc.Visible = false;
+        //divChangeAlloc.Visible = true;
+        tbUnalloc.Visible = true;
+        lblUnalloc2.Visible = false;
+        btnSaveAlloc.Visible = true;
+        btnChangeAlloc.Visible = false;
     }
 
     protected void btnSaveAlloc_Click(object sender, EventArgs e)
@@ -92,7 +105,10 @@ public partial class PM_ManageProject : System.Web.UI.Page
             proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
             ff.SubmitChanges();
             lblUnalloc2.Text = proj.unallocated_dollars.ToString();
-            divOriginalAlloc.Visible = true;
+            //divOriginalAlloc.Visible = true;
+            lblUnalloc2.Visible = true;
+            btnSaveAlloc.Visible = false;
+            btnChangeAlloc.Visible = true;
             Response.Redirect("~/PM/ManageProject.aspx");
         }
         catch (Exception exception)

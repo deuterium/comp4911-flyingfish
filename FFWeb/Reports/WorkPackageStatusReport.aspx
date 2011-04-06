@@ -12,7 +12,7 @@
         <table cellpadding="5px" >
             <tr>
                 <td>
-                    <asp:Label ID="lblProjId" runat="server" Text="Choose a Project:"></asp:Label>
+                    <asp:Label ID="lblChooseProjId" runat="server" Text="Choose a Project:"></asp:Label>
                 </td>
                 <td>
                     <asp:DropDownList ID="ddlAllProjects" runat="server" AutoPostBack="True" Width="180"
@@ -22,7 +22,7 @@
             </tr>
             <tr>
                 <td>
-                    <asp:Label ID="lblWp" runat="server" Text="Choose a Workpackage:"></asp:Label>
+                    <asp:Label ID="lblChooseWp" runat="server" Text="Choose a Workpackage:"></asp:Label>
                 </td>
                 <td>
                     <asp:UpdatePanel ID="udpWorkpackageList" runat="server">
@@ -44,10 +44,9 @@
                     <asp:TextBox ID="tbPeriodStart" runat="server" Width="80"></asp:TextBox>
                     <asp:CalendarExtender ID="cexPeriodStart" runat="server" Format="yyyy/MM/dd" TargetControlID="tbPeriodStart" >
                     </asp:CalendarExtender>
-                     to 
-                    <asp:TextBox ID="tbPeriodEnd" runat="server" Width="80"></asp:TextBox>
-                    <asp:CalendarExtender ID="cexPeriodEnd" runat="server" Format="yyyy/MM/dd" TargetControlID="tbPeriodEnd" >
-                    </asp:CalendarExtender>
+                    <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" Text="*" ControlToValidate="tbPeriodStart"
+                        ErrorMessage="Please specifiy a start date." ForeColor="Red">
+                    </asp:RequiredFieldValidator>
                     <asp:RegularExpressionValidator ForeColor="Red" ID="revStartDate" runat="server" 
                         ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbPeriodStart"
                         ErrorMessage="Start date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
@@ -55,6 +54,13 @@
                         ErrorMessage="Start date must be between 2010/01/01 and 2500/01/01."
                         MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*">
                     </asp:RangeValidator>
+                    &nbsp;to&nbsp; 
+                    <asp:TextBox ID="tbPeriodEnd" runat="server" Width="80"></asp:TextBox>
+                    <asp:CalendarExtender ID="cexPeriodEnd" runat="server" Format="yyyy/MM/dd" TargetControlID="tbPeriodEnd" >
+                    </asp:CalendarExtender>
+                    <asp:RequiredFieldValidator ID="rfvPeriodEnd" runat="server" Text="*" ControlToValidate="tbPeriodEnd"
+                        ErrorMessage="Please specifiy an end date." ForeColor="Red">
+                    </asp:RequiredFieldValidator>
                     <asp:RegularExpressionValidator ForeColor="Red" ID="revEndDate" runat="server" 
                         ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbPeriodEnd"
                         ErrorMessage="End date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
@@ -160,18 +166,10 @@
                         </tr>
                         <tr>
                             <td>
-                                Workpackage Id: 
+                                Workpackage: 
                             </td>
                             <td>
-                                <asp:Label ID="lblWpId" runat="server" Text=""></asp:Label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Workpackage Name: 
-                            </td>
-                            <td>
-                                <asp:Label ID="lblWpName" runat="server" Text=""></asp:Label>
+                                <asp:Label ID="lblWp" runat="server" Text=""></asp:Label>
                             </td>
                         </tr>
                         <tr>
@@ -188,14 +186,6 @@
                             </td>
                             <td>
                                  <asp:Label ID="lblPm" runat="server" Text=""></asp:Label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                 Report No: 
-                            </td>
-                            <td>
-                                <asp:Label ID="lblReportNo" runat="server" Text=""></asp:Label>
                             </td>
                         </tr>
                         <tr>

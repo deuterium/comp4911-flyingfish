@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using FFLib;
+using System.Web.Security;
 
 public partial class HR_AssignEmployee : System.Web.UI.Page
 {
@@ -12,7 +12,11 @@ public partial class HR_AssignEmployee : System.Web.UI.Page
     //DatabaseContext
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
 
-    protected void Page_Load(object sender, EventArgs e) {
+    protected void Page_Load(object sender, EventArgs e) { }
+
+    //Fills the projects dropdown list; this is done where instead of pageload due to ajax
+    protected void ddlAllProjects_Init(object sender, EventArgs e)
+    {
         popluateProjectsDropdown();
     }
 
@@ -29,13 +33,36 @@ public partial class HR_AssignEmployee : System.Web.UI.Page
         ddlAllProjects.DataBind();
     }
 
-    //When a new project is selected
+    //When a new project is selected populates unassigned and assigned users as well as sets the index of the PM ddl
     protected void buttonSelectProject_Click(object sender, EventArgs e)
     {
         AssignLabel.Text = "";
         populateListBoxes();
+        populateProjectManagerUsers();
+
+        ddlProjectManager.SelectedIndex = (int)ff.Projects
+            .Where(p => p.projId == Convert.ToInt32(ddlAllProjects.SelectedValue))
+            .Select(em => em.manager).First();
     }
 
+    //Populates the PM DDL and
+    protected void populateProjectManagerUsers()
+    {
+        DivAssignPM.Visible = true;
+        ddlProjectManager.DataSource = ff.vw_AllValid_UserName_EmpIDs
+            .Select(u => new
+            {
+                empID = u.empId,
+                tsa = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
+            })
+            .OrderBy(u => u.tsa);
+        ddlProjectManager.DataTextField = "tsa";
+        ddlProjectManager.DataValueField = "empID";
+        ddlProjectManager.DataBind();
+        labelProject.Text = ddlAllProjects.SelectedValue;
+    }
+
+    //Fills the LBs with unassigned and assigned users as per the selected project
     protected void populateListBoxes()
     {
         //fills assigned users in a proj
@@ -121,5 +148,62 @@ public partial class HR_AssignEmployee : System.Web.UI.Page
             }
         }
         populateListBoxes();
+    }
+
+    //Updates the PM for the selected project when the button is clicked
+    //Also adds selected PM to project if current not in it as well as to PM Role
+    protected void buttonChangePM_Click(object sender, EventArgs e)
+    {
+        //int oldManager = (int)ff.Projects
+        //    .Where(p => p.projId == Convert.ToInt32(ddlAllProjects.SelectedValue))
+        //    .Select(em => em.manager).First();
+        //int newManager = Convert.ToInt32(ddlProjectManager.SelectedValue);
+
+        //#region Add New Manager
+        //if ((ff.EmployeeProjects
+        //    .Where(p => (p.projId == Convert.ToInt32(ddlAllProjects.SelectedValue) && (p.empId == newManager)))
+        //    .Select(q => q).Count()) == 0)
+        //{
+        //    EmployeeProject ep = new EmployeeProject()
+        //    {
+        //        projId = Convert.ToInt32(ddlAllProjects.SelectedValue),
+        //        empId = newManager
+        //    };
+
+        //    ff.EmployeeProjects.InsertOnSubmit(ep);
+
+        //    try
+        //    {
+        //        ff.SubmitChanges();
+        //        Roles.AddUserToRole(ff.aspnet_Users.Where(u => u.UserId == ff.EmployeeMemberships.Where(em => em.empId == newManager).Select(q => q.userId).First()).Select(u => u.UserName).First()
+        //            , "ProjectManager");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        AssignPMLabel.Text = ex.Message;
+        //        AssignPMLabel.ForeColor = System.Drawing.Color.Red;
+        //    }
+        //}
+        //#endregion
+
+        //#region Remove Old Manager
+        //try {
+        //    Roles.RemoveUserFromRole(ff.aspnet_Users.Where(u => u.UserId == ff.EmployeeMemberships.Where(em => em.empId == oldManager).Select(q => q.userId).First()).Select(u => u.UserName).First()
+        //        , "ProjectManager");
+        //}
+        //catch (Exception ex)
+        //{
+        //    AssignPMLabel.Text = ex.Message;
+        //    AssignPMLabel.ForeColor = System.Drawing.Color.Red;
+        //}
+
+        //EmployeeProject oep = ff.EmployeeProjects
+        //    .Where(p => (p.projId == Convert.ToInt32(ddlAllProjects.SelectedValue) && (p.empId == oldManager)))
+        //    .Select(p => new EmployeeProject() { projId = p.projId, empId = p.empId }).First();
+        //ff.EmployeeProjects.Attach(oep);
+        //ff.EmployeeProjects.DeleteOnSubmit(oep);
+
+        //#endregion
+
     }
 }

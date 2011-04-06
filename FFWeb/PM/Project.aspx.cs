@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
-using FFLib;
 
 public partial class PM_Project : System.Web.UI.Page
 {
@@ -23,7 +22,7 @@ public partial class PM_Project : System.Web.UI.Page
 
             if (ff.Projects.Where(te => te.projId == Convert.ToInt32(tbProjectID.Text)).ToArray().Length > 0)
             {
-                lblError.Text = "Project already exists.";
+                lblError.Text = "Project ID already exists.";
             }
             else
             {
@@ -33,6 +32,7 @@ public partial class PM_Project : System.Web.UI.Page
                 //proj.allocated_dollars = Convert.ToDecimal(tbAlloc.Text);
                 proj.allocated_dollars = 0;
                 proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
+                proj.isActive = 1;
                 ff.Projects.InsertOnSubmit(proj);
                 ff.SubmitChanges();
 
