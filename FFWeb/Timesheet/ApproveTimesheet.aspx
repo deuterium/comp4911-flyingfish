@@ -55,11 +55,11 @@
             <RowStyle BackColor="#EFF3FB" />
         </asp:DetailsView>
         &nbsp;</div>
-    <asp:LinqDataSource ID="gvTimesheetHeader" runat="server" ContextTypeName="FFLib.FlyingFishClassesDataContext"
+    <asp:LinqDataSource ID="gvTimesheetHeader" runat="server" ContextTypeName="FlyingFishClassesDataContext"
         EntityTypeName="" Select="new (empId, tsDate, status, comments)" TableName="TimeSheetHeaders"
         OrderBy="status desc">
     </asp:LinqDataSource>
-    <asp:LinqDataSource ID="dvTimesheetHeader" runat="server" ContextTypeName="FFLib.FlyingFishClassesDataContext"
+    <asp:LinqDataSource ID="dvTimesheetHeader" runat="server" ContextTypeName="FlyingFishClassesDataContext"
         EntityTypeName="" Select="new (empId, notes, tsDate, projId, wpId, sat, sun, mon, tue, wed, fri, thu)"
         TableName="TimeSheetEntries" Where="empId == @empId">
         <WhereParameters>

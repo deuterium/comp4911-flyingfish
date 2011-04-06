@@ -43,7 +43,7 @@ input
         </Columns>
     </asp:GridView>
     <asp:LinqDataSource ID="LinqDataSource1" runat="server" 
-        ContextTypeName="FFLib.FlyingFishClassesDataContext" EntityTypeName="" 
+        ContextTypeName="FlyingFishClassesDataContext" EntityTypeName="" 
         TableName="TimesheetEntries" 
         Where="empId == @empId &amp;&amp; tsDate &gt;= @tsDate" 
         EnableUpdate="True">
