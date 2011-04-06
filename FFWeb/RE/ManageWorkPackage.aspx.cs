@@ -18,6 +18,10 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Page_Load
     protected void Page_Load(object sender, EventArgs e)
     {
+        populateManageWorkPackage();
+    }
+    protected void populateManageWorkPackage()
+    {
         try
         {
             if (Session["wpID"] == null)
@@ -80,6 +84,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     select new { wp.wpId, wp.name, wp.unallocated_dollars, wp.allocated_dollars, wp.description };
                 gvSubWP.DataSource = subwp;
                 gvSubWP.DataBind();
+                if (lblError.Text != "")
+                    populateUnassignEmployeeGV();
             }
             else
             {
@@ -119,6 +125,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 //divAssignRE.Visible = false;
                 allocOriginal = Convert.ToDouble(tbAlloc.Text);
                 unallocOriginal = Convert.ToDouble(tbUnalloc.Text);
+                if (lblError.Text != "")
+                    populateUnassignEmployeeGV();
             }
         }
         catch (Exception exception)
@@ -126,10 +134,16 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
             lblException.Text = exception.StackTrace;
         }
     }
+
     #endregion
 
     #region Assign Employee linkbutton event handler
     protected void lbAssignEmp_Click(object sender, EventArgs e)
+    {
+        populateUnassignEmployeeGV();
+    }
+
+    protected void populateUnassignEmployeeGV()
     {
         lblError.Text = "";
         var qry =
@@ -194,6 +208,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                         ff.SubmitChanges();
                         updategvEmployees();
                         lblError.Text = "";
+                        divAssignEmp.Visible = true;
                     }
                 }
             }
@@ -219,6 +234,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     if (qry.ToArray().Length > 0)
                     {
                         lblError.Text = "Employee is already a part of the work package.";
+                        divAssignEmp.Visible = true;
                     }
                     else
                     {
@@ -293,7 +309,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     updateProject(Convert.ToInt32(qry.First().projId), Convert.ToDecimal(tbUnalloc2.Text), Convert.ToDecimal(tbAlloc2.Text));
                     tbAlloc.Text = tbAlloc2.Text;
                     tbUnalloc.Text = tbUnalloc2.Text;
-                    Response.Redirect("~/RE/ManageWorkPackage.aspx");
+                    //Response.Redirect("~/RE/ManageWorkPackage.aspx");
+                    populateManageWorkPackage();
                 }
             }
             else
@@ -312,7 +329,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     updateWorkPackage(parentWpID, Convert.ToDecimal(tbUnalloc2.Text), Convert.ToDecimal(tbAlloc2.Text));
                     tbAlloc.Text = tbAlloc2.Text;
                     tbUnalloc.Text = tbUnalloc2.Text;
-                    Response.Redirect("~/RE/ManageWorkPackage.aspx");
+                    //Response.Redirect("~/RE/ManageWorkPackage.aspx");
+                    populateManageWorkPackage();
                 }
             }
         }
@@ -494,7 +512,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                         parentWpID += ".";
                 }
                 Session["wpID"] = parentWpID;
-                Response.Redirect("~/RE/ManageWorkPackage");
+                //Response.Redirect("~/RE/ManageWorkPackage.aspx");
+                populateManageWorkPackage();
             }
             for (int i = 0; i < wp.Length - 1; i++)
             {
@@ -508,7 +527,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     parentWpID += ".";
             }
             Session["wpID"] = parentWpID;
-            Response.Redirect("~/RE/ManageWorkPackage.aspx");
+            //Response.Redirect("~/RE/ManageWorkPackage.aspx");
+            populateManageWorkPackage();
         }
         catch (Exception exception)
         {

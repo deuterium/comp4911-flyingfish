@@ -54,6 +54,7 @@ public partial class RE_WorkPackage : System.Web.UI.Page
                 wp.name = tbwpName.Text;
                 wp.description = tbDescription.Text;
                 wp.projId = Convert.ToInt32(Session["projID"]);
+                wp.isActive = 1;
                 Session["wpID"] = wp.wpId;
                 ff.WorkPackages.InsertOnSubmit(wp);
                 ff.SubmitChanges();
