@@ -48,6 +48,9 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         ddlAllProjects.DataBind();
     }
 
+
+
+    // ********************* only show projects that YOU are the repsonsible engineer for
     private void populateWorkpackages() {
         ddlWorkpackages.DataSource = ffdb.WorkPackages
                                    .Where(wp => wp.projId == Convert.ToInt16(ddlAllProjects.SelectedValue))

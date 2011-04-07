@@ -1,12 +1,11 @@
 ﻿<%@ Page Title="Account" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="Account.aspx.cs" Inherits="Account" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
+<h2>Account Settings</h2>
 <p class="cent">
-This is your account page. Here, you can view the sick days and vacation 
-leave days you have available as well as change your password. It is 
-recommended that you change your password once in a while to maintain 
-security for your account.
+This page lets you view and edit your account information. You can check how much sick, vacation, and flex time you have used and how much you have remaining. You can change your password, security question, your security answer, and your email address. We recommend changing your password every 2 months to protect your account.
 </p>
+<h4>Editing Account Settings</h4>
 <table class="cent">
     <tr>
         <td>
