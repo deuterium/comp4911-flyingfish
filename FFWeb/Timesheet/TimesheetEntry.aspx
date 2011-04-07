@@ -11,7 +11,7 @@
 
 .notes 
 {
-    width: 100px;
+    width: 140px;
 }
 
 
@@ -123,7 +123,7 @@
     
 
     <asp:Button ID="btnCreateNewRecord" runat="server" Text="Button" 
-        onclick="btnCreateNewRecord_Click" />
+        onclick="btnCreateNewRecord_Click" Width="84px" />
     
     </div>
     <asp:Label ID="Label2" runat="server" Text="" ForeColor="Red"></asp:Label><br />
