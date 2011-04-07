@@ -10,6 +10,22 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
+        // if the user logins in
+        try
+        {
+            var qry = (from o in ff.EmployeeMemberships
+                       join emp in ff.aspnet_Users on o.userId equals emp.UserId
+                       where emp.UserName == User.Identity.Name
+                       select o.empId).Single();
+
+            Session["CurEmpId"] = qry.ToString();
+        }
+        catch
+        {
+            Response.Redirect("~/Login.aspx");
+        }
+
+
         // shows the prvious week timesheet as default
 
         showPreviousWeekTimesheet();
@@ -64,7 +80,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
         var qry = from th in ff.TimesheetHeaders
                   join tse in ff.TimesheetEntries on new { th.tsDate, th.empId } equals new { tse.tsDate, tse.empId }
                   join emp in ff.Employees on tse.empId equals emp.empId
-                  where tse.empId == Convert.ToInt32(Session["CurEmpId"])
+                  where tse.empId == Convert.ToInt32(Session["CurEmpId"]) && tse.tsDate >= qryDate
                   select new
                   {
                       EmployeeName = emp.firstName + " " + emp.lastName + "(" + th.empId + ")",
