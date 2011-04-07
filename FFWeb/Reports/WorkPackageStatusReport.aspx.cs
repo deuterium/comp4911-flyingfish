@@ -89,8 +89,9 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
                   join re in ffdb.Employees on wpre.responsibleEngineer equals re.empId
                   join pm in ffdb.Employees on proj.manager equals pm.empId
                   orderby tse.projId, tse.wpId, tse.empId
-                  where (tse.tsDate >= (DateTime)ViewState["startDate"]) && (tse.tsDate <= (DateTime)ViewState["endDate"])
-                        && (tse.projId == Convert.ToInt16(ViewState["projId"])) && (tse.wpId.Equals(ViewState["wpId"]))
+                  where ((tse.tsDate <= (DateTime)ViewState["cutOffDate"])
+                        && (tse.projId == Convert.ToInt16(ViewState["projId"]))
+                        && (tse.wpId.Equals(ViewState["wpId"])))
                   select new {
                       Proj = proj,
                       PM = pm,
@@ -100,10 +101,13 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
                       Emp = emp.firstName + " " + emp.lastName + " (" + emp.empId + ")",
                       ACWP = getAcwpForEmployee(tse.empId, acwpForAll),
                       ETC = getEtcForEmployee(tse.empId, etcForAll),
-                      EAC = getEacForEmployee(getEtcForEmployee(tse.empId, etcForAll), getAcwpForEmployee(tse.empId, acwpForAll)),
-                      PercentComplete = getPercentComplete( (getAcwpForEmployee(tse.empId, acwpForAll)),
-                                                            (getEacForEmployee(getEtcForEmployee(tse.empId, etcForAll),
-                                                                getAcwpForEmployee(tse.empId, acwpForAll))) ).ToString(),
+                      EAC = getEacForEmployee(getEtcForEmployee(tse.empId, etcForAll),
+                                              getAcwpForEmployee(tse.empId, acwpForAll)),
+                      PercentComplete = getPercentComplete(
+                                            (getAcwpForEmployee(tse.empId, acwpForAll)),
+                                            (getEacForEmployee(getEtcForEmployee(tse.empId, etcForAll),
+                                                getAcwpForEmployee(tse.empId, acwpForAll)))
+                                        ).ToString(),
                       ETC_Dollars = getPDollars(tse.empId)
                   };
         
@@ -147,8 +151,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         lblWp.Text = q.WP.name + " (" + q.WP.wpId + ")";
         lblRe.Text = q.RE.firstName + " " + q.RE.lastName + " (" + q.RE.empId + ")";
         lblPm.Text = q.PM.firstName + " " + q.PM.lastName + " (" + q.PM.empId + ")";
-        lblReportPeriod.Text = ((DateTime)ViewState["startDate"]).ToString("yyyy/MM/dd")
-            + " to " + ((DateTime)ViewState["endDate"]).ToString("yyyy/MM/dd");
+        lblReportPeriod.Text = ((DateTime)ViewState["cutOffDate"]).ToString("yyyy/MM/dd");
         lblPmBac.Text = this.getPMBudget().ToString();
 
         double reBAC = 0;
@@ -211,8 +214,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
                   join plvl in ffdb.PersonLevels on empPlvl.pLevel equals plvl.pLevel
                   where (t.projId == (Convert.ToInt16(ViewState["projId"])))
                             && (t.wpId.Equals(ViewState["wpId"]))
-                            && (t.tsDate <= ((DateTime)ViewState["endDate"]))
-                            && (t.tsDate <= ((DateTime)ViewState["startDate"]))
+                            && (t.tsDate <= ((DateTime)ViewState["cutOffDate"]))
                             && (empPlvl.dateUpdated.Equals(
                                         (DateTime)
                                         (from recent in ffdb.EmployeePersonLevels
@@ -253,8 +255,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
 
     private WorkPackageStatusReport getExistingReportDetails() {
         WorkPackageStatusReport wpsr = (from sr in ffdb.WorkPackageStatusReports
-                                        where sr.endDate.Equals((DateTime)ViewState["endDate"])
-                                            && sr.startDate.Equals((DateTime)ViewState["startDate"])
+                                        where sr.endDate.Equals((DateTime)ViewState["cutOffDate"])
                                             && (sr.projId == (Convert.ToInt16(ViewState["projId"])))
                                             && (sr.wpId.Equals(ViewState["wpId"]))
                                         select sr).FirstOrDefault();
@@ -266,8 +267,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         var qry = from t in ffdb.TimesheetEntries
                   where (t.projId == (Convert.ToInt16(ViewState["projId"])))
                             && (t.wpId.Equals(ViewState["wpId"]))
-                            && (t.tsDate >= ((DateTime)ViewState["startDate"]))
-                            && (t.tsDate <= ((DateTime)ViewState["endDate"]))
+                            && (t.tsDate <= ((DateTime)ViewState["cutOffDate"]))
                     group t by new { t.projId, t.wpId, ID = t.empId } into g
                     select new {
                         empId = g.Key.ID,
@@ -284,8 +284,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         var qry = from etc in ffdb.EmployeeWorkPackageETCs
                   where (etc.projId == (Convert.ToInt16(ViewState["projId"])))
                            && (etc.wpId.Equals(ViewState["wpId"]))
-                           && (etc.dateUpdated >= ((DateTime)ViewState["startDate"]))
-                           && (etc.dateUpdated <= ((DateTime)ViewState["endDate"]))
+                           && (etc.dateUpdated <= ((DateTime)ViewState["cutOffDate"]))
                            && (etc.dateUpdated ==
                                    (from du in ffdb.EmployeeWorkPackageETCs
                                     select du.dateUpdated).Max())
@@ -386,16 +385,14 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
     protected void btnSubmit_Click(object sender, EventArgs e) {
         ViewState["projId"] = Convert.ToInt16(ddlAllProjects.SelectedValue);
         ViewState["wpId"] = ddlWorkpackages.SelectedValue;
-        ViewState["startDate"] = Convert.ToDateTime(tbPeriodStart.Text);
-        ViewState["endDate"] = Convert.ToDateTime(tbPeriodEnd.Text);
+        ViewState["cutOffDate"] = Convert.ToDateTime(tbCutOffDate.Text);
         GetWorkPackageStatusReport();
     }
 
     protected void btnNewReport_Click(object sender, EventArgs e) {
         ViewState["projId"] = Convert.ToInt16(ddlAllProjects.SelectedValue);
         ViewState["wpId"] = ddlWorkpackages.SelectedValue;
-        ViewState["startDate"] = Convert.ToDateTime(tbPeriodStart.Text);
-        ViewState["endDate"] = Convert.ToDateTime(tbPeriodEnd.Text);
+        ViewState["cutOffDate"] = Convert.ToDateTime(tbCutOffDate.Text);
         GetWorkPackageStatusReport();
     }
 
@@ -444,12 +441,12 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
             }
             else {
                 etc = Convert.ToDouble(strEtc);
-                empWpEtc.ETC_days = (int)(etc);
+                empWpEtc.ETC_days = (int)(etc);         // *********************************
             }
         }
         else {
             eac = Convert.ToDouble(strEac);
-            empWpEtc.ETC_days = (int)(eac - acwp);
+            empWpEtc.ETC_days = (int)(eac - acwp);      // *********************************
         }
         
         ffdb.SubmitChanges();
@@ -461,7 +458,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
 
         EmployeeWorkPackageETC empWpEtc = (from ewetc in ffdb.EmployeeWorkPackageETCs
                                            where ewetc.empId == empId
-                                                && ewetc.dateUpdated.Equals(Convert.ToDateTime(ViewState["endDate"]))
+                                                && ewetc.dateUpdated.Equals(Convert.ToDateTime(ViewState["cutOffDate"]))
                                            select ewetc).FirstOrDefault();
 
         String strEtc = e.NewValues["ETC"].ToString();
@@ -533,11 +530,11 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
         empWpEtc.empId = empId;
         empWpEtc.projId = Convert.ToInt16(ViewState["projId"]);
         empWpEtc.wpId = (String)ViewState["wpId"];
-        
-        if (DateTime.Now <= Convert.ToDateTime(ViewState["endDate"])) {
+
+        if (DateTime.Now <= Convert.ToDateTime(ViewState["cutOffDate"])) {
             empWpEtc.dateUpdated = DateTime.Now;
         } else {
-            empWpEtc.dateUpdated = Convert.ToDateTime(ViewState["endDate"]);
+            empWpEtc.dateUpdated = Convert.ToDateTime(ViewState["cutOffDate"]);
         }
 
         ffdb.EmployeeWorkPackageETCs.InsertOnSubmit(empWpEtc);
@@ -563,10 +560,16 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
             
     }
 
+    private void getStartDate() {
+        
+    }
+
     protected void gvStatus_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e) {
         gvStatus.EditIndex = -1;
         GetWorkPackageStatusReport();
     }
+
+    
 
     protected void gvStatus_RowCommand(object sender, GridViewCommandEventArgs e) {
         GetWorkPackageStatusReport();
@@ -585,7 +588,7 @@ public partial class Reports_WorkpackageStatusReport : System.Web.UI.Page {
                 wpsr.projId = Convert.ToInt16(ViewState["projId"]);
                 wpsr.wpId = ddlWorkpackages.SelectedValue;
                 wpsr.startDate = Convert.ToDateTime(ViewState["startDate"]);
-                wpsr.endDate = Convert.ToDateTime(ViewState["endDate"]);
+                wpsr.endDate = Convert.ToDateTime(ViewState["cutOffDate"]);
                 isNewReport = true;
             }
 

@@ -38,39 +38,22 @@
             </tr>
             <tr>
                 <td>
-                    Reporting Period From:
+                    Cut-off Date:
                 </td>
                 <td>
-                    <asp:TextBox ID="tbPeriodStart" runat="server" Width="80"></asp:TextBox>
-                    <asp:CalendarExtender ID="cexPeriodStart" runat="server" Format="yyyy/MM/dd" TargetControlID="tbPeriodStart" >
+                    <asp:TextBox ID="tbCutOffDate" runat="server" Width="80"></asp:TextBox>
+                    <asp:CalendarExtender ID="cexCutOffDate" runat="server" Format="yyyy/MM/dd" TargetControlID="tbCutOffDate" >
                     </asp:CalendarExtender>
-                    <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" Text="*" ControlToValidate="tbPeriodStart"
-                        ErrorMessage="Please specifiy a start date." ForeColor="Red">
-                    </asp:RequiredFieldValidator>
-                    <asp:RegularExpressionValidator ForeColor="Red" ID="revStartDate" runat="server" 
-                        ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbPeriodStart"
-                        ErrorMessage="Start date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
-                    <asp:RangeValidator ForeColor="Red" ID="rgvStartDate" runat="server" ControlToValidate="tbPeriodStart"
-                        ErrorMessage="Start date must be between 2010/01/01 and 2500/01/01."
-                        MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*">
-                    </asp:RangeValidator>
-                    &nbsp;to&nbsp; 
-                    <asp:TextBox ID="tbPeriodEnd" runat="server" Width="80"></asp:TextBox>
-                    <asp:CalendarExtender ID="cexPeriodEnd" runat="server" Format="yyyy/MM/dd" TargetControlID="tbPeriodEnd" >
-                    </asp:CalendarExtender>
-                    <asp:RequiredFieldValidator ID="rfvPeriodEnd" runat="server" Text="*" ControlToValidate="tbPeriodEnd"
+                    <asp:RequiredFieldValidator ID="rfvCutOffDate" runat="server" Text="*" ControlToValidate="tbCutOffDate"
                         ErrorMessage="Please specifiy an end date." ForeColor="Red">
                     </asp:RequiredFieldValidator>
-                    <asp:RegularExpressionValidator ForeColor="Red" ID="revEndDate" runat="server" 
-                        ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbPeriodEnd"
+                    <asp:RegularExpressionValidator ForeColor="Red" ID="revCutOffDate" runat="server" 
+                        ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbCutOffDate"
                         ErrorMessage="End date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
-                    <asp:RangeValidator ForeColor="Red" ID="rgvEndDate" runat="server" ControlToValidate="tbPeriodEnd"
+                    <asp:RangeValidator ForeColor="Red" ID="rgvCutOffDate" runat="server" ControlToValidate="tbCutOffDate"
                         ErrorMessage="End date must be between 2010/01/01 and 2500/01/01."
                         MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*">
                     </asp:RangeValidator>
-                    <asp:CompareValidator ID="cpvEndDate" runat="server" Operator="GreaterThan" ControlToValidate="tbPeriodEnd"
-                        ErrorMessage="End date must come after start date." ControlToCompare="tbPeriodStart" Text="*" ForeColor="Red">
-                    </asp:CompareValidator>
                 </td>
             </tr>
             <tr>
@@ -99,6 +82,73 @@
     <div id="divReportData" runat="server" visible="false">
         <asp:Table ID="tblResults" runat="server" Visible="true" Cellpadding="10">
             <asp:TableRow>
+
+            <asp:TableCell>
+                    <table>
+                        <tr>
+                            <td>
+                                <b>Report Info:</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Workpackage: 
+                            </td>
+                            <td>
+                                <asp:Label ID="lblWp" runat="server" Text=""></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Responsible Engineer: 
+                            </td>
+                            <td>
+                                 <asp:Label ID="lblRe" runat="server" Text=""></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 Project Manager: 
+                            </td>
+                            <td>
+                                 <asp:Label ID="lblPm" runat="server" Text=""></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Report Cut-off Date: 
+                            </td>
+                            <td>
+                                <asp:Label ID="lblReportPeriod" runat="server" Text=""></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                PM BAC:
+                            </td>
+                            <td>
+                                <asp:Label ID="lblPmBac" runat="server" Text=""></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                RE BAC: 
+                            </td>
+                            <td>
+                                <asp:Label ID="lblReBac" runat="server" Text=""></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Total ACWP: 
+                            </td>
+                            <td>
+                                <asp:Label ID="lblTotalAcwp" runat="server" Text=""></asp:Label>
+                            </td>
+                        </tr>
+                    </table>
+                </asp:TableCell>
+
                 <asp:TableCell>
                 
                    <asp:GridView ID="gvStatus" runat="server" AutoGenerateColumns="False" OnRowCancelingEdit="gvStatus_RowCancelingEdit"
@@ -157,71 +207,7 @@
                     </asp:GridView>
                 
                 </asp:TableCell>
-                <asp:TableCell>
-                    <table>
-                        <tr>
-                            <td>
-                                <b>Report Info:</b>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Workpackage: 
-                            </td>
-                            <td>
-                                <asp:Label ID="lblWp" runat="server" Text=""></asp:Label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Responsible Engineer: 
-                            </td>
-                            <td>
-                                 <asp:Label ID="lblRe" runat="server" Text=""></asp:Label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                 Project Manager: 
-                            </td>
-                            <td>
-                                 <asp:Label ID="lblPm" runat="server" Text=""></asp:Label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Reporting Period: 
-                            </td>
-                            <td>
-                                <asp:Label ID="lblReportPeriod" runat="server" Text=""></asp:Label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                PM BAC:
-                            </td>
-                            <td>
-                                <asp:Label ID="lblPmBac" runat="server" Text=""></asp:Label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                RE BAC: 
-                            </td>
-                            <td>
-                                <asp:Label ID="lblReBac" runat="server" Text=""></asp:Label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Total ACWP: 
-                            </td>
-                            <td>
-                                <asp:Label ID="lblTotalAcwp" runat="server" Text=""></asp:Label>
-                            </td>
-                        </tr>
-                    </table>
-                </asp:TableCell>
+                
             </asp:TableRow>
         </asp:Table>
         <br />
