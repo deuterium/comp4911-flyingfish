@@ -79,7 +79,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 unallocOriginal = Convert.ToDouble(tbUnalloc.Text);
                 var subwp =
                     from wp in ff.WorkPackages
-                    where (wp.wpId.ToString().Contains(Session["wpID"].ToString() + "."))
+                    where (wp.wpId.ToString().Contains(Session["wpID"].ToString() + ".")&& wp.isActive == 1)
                     select new { wp.wpId, wp.name, wp.unallocated_dollars, wp.allocated_dollars, wp.description };
                 gvSubWP.DataSource = subwp;
                 gvSubWP.DataBind();
@@ -108,14 +108,12 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     Convert.ToDecimal(tbUnalloc.Text) > Convert.ToDecimal(tbAlloc.Text)))
                 {
                     getTotalBudget2(parentWpID);
-                    //seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbUnalloc.Text);
                 }
                 else if ((Convert.ToDecimal(tbAlloc.Text) > getBudget2(parentWpID) &&
                   Convert.ToDecimal(tbUnalloc.Text) < Convert.ToDecimal(tbAlloc.Text)))
                 {
-                    getTotalBudget2(parentWpID);
-                    //seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbAlloc.Text);
-                }// else
+                    getTotalBudget2(parentWpID);  
+                }
                 seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(getTotalBudget2(parentWpID));
                 lblWPName2.Text = qry.Single().name.ToString();
                 string desc = qry.Single().description.ToString();
@@ -124,6 +122,13 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 //divAssignRE.Visible = false;
                 allocOriginal = Convert.ToDouble(tbAlloc.Text);
                 unallocOriginal = Convert.ToDouble(tbUnalloc.Text);
+                var subwp =
+                    from wp in ff.WorkPackages
+                    where (wp.wpId.ToString().Contains(Session["wpID"].ToString() + "."))
+                    select new { wp.wpId, wp.name, wp.unallocated_dollars, wp.allocated_dollars, wp.description };
+                gvSubWP.DataSource = subwp;
+                gvSubWP.DataBind();
+                lbParentwp.Visible = true;
                 if (lblError.Text != "")
                     populateUnassignEmployeeGV();
             }
@@ -359,6 +364,34 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     }
     #endregion
 
+    protected void gvSubWP_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        try
+        {
+            if (e.CommandName == "btnView")
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvSubWP.Rows[row];
+                Session["wpID"] = selectedRow.Cells[0].Text;
+                populateManageWorkPackage();
+            }
+
+            if (e.CommandName == "btnDelete")
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvSubWP.Rows[row];
+                WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
+                workpackage.isActive = 0;
+                ff.SubmitChanges();
+                populateManageWorkPackage();
+            }
+        }
+        catch (Exception exception)
+        {
+            lblException.Text = exception.StackTrace;
+        }
+    }
+
     protected decimal getTotalBudget(int id)
     {
         try
@@ -450,7 +483,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 from b in ff.WorkPackages
                 where b.wpId == id
                 select b;
-            return Convert.ToDecimal(budget.First().unallocated_dollars);
+            string unalloc = budget.First().unallocated_dollars.ToString() == "" ? "0" : budget.First().unallocated_dollars.ToString();
+            return Convert.ToDecimal(unalloc);
         }
         catch (Exception exception)
         {
@@ -513,6 +547,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 Session["wpID"] = parentWpID;
                 //Response.Redirect("~/RE/ManageWorkPackage.aspx");
                 populateManageWorkPackage();
+                return;
             }
             for (int i = 0; i < wp.Length - 1; i++)
             {
@@ -528,6 +563,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
             Session["wpID"] = parentWpID;
             //Response.Redirect("~/RE/ManageWorkPackage.aspx");
             populateManageWorkPackage();
+            return;
         }
         catch (Exception exception)
         {

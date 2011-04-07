@@ -69,6 +69,9 @@
                     </td>
                     <td>
                         <asp:GridView ID="gvEmployees" runat="server">
+                            <Columns>
+                                <asp:ButtonField ButtonType="Button" CommandName="btnDelete" Text="Delete" />
+                            </Columns>
                         </asp:GridView>
                         <asp:Button ID="btnSave" runat="server" Text="Save Changes" 
                                 onclick="btnSave_Click" PostBackUrl="~/RE/ManageWorkPackage.aspx" />
@@ -80,11 +83,32 @@
                         <asp:Label ID="lblSubWP" runat="server" Text="Sub-Workpackages: "></asp:Label>
                     </td>
                     <td>
-                        <asp:GridView ID="gvSubWP" runat="server" >
+                        <asp:GridView ID="gvSubWP" runat="server" AutoGenerateColumns="False" OnRowCommand="gvSubWP_RowCommand"
+                            CellPadding="4" ForeColor="#333333" GridLines="None">
+                            <AlternatingRowStyle BackColor="White" />
                             <Columns>
+                                <asp:BoundField DataField="wpId" HeaderText="Work Package ID" 
+                                    SortExpression="wpId" />
+                                <asp:BoundField DataField="name" HeaderText="Name" SortExpression="name" />
+                                <asp:BoundField DataField="unallocated_dollars" HeaderText="Unallocated Budget" 
+                                    SortExpression="unallocated_dollars" />
+                                <asp:BoundField DataField="allocated_dollars" HeaderText="Allocated Budget" 
+                                    SortExpression="allocated_dollars" />
+                                <asp:BoundField DataField="description" HeaderText="Description" 
+                                    SortExpression="description" />
                                 <asp:ButtonField ButtonType="Button" CommandName="btnView" Text="View" />
                                 <asp:ButtonField ButtonType="Button" CommandName="btnDelete" Text="Delete" />
                             </Columns>
+                            <EditRowStyle BackColor="#2461BF" />
+                            <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                            <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                            <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+                            <RowStyle BackColor="#EFF3FB" />
+                            <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+                            <SortedAscendingCellStyle BackColor="#F5F7FB" />
+                            <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+                            <SortedDescendingCellStyle BackColor="#E9EBEF" />
+                            <SortedDescendingHeaderStyle BackColor="#4870BE" />
                         </asp:GridView>
 
                     </td>
@@ -121,8 +145,9 @@
                 </Columns>
             </asp:GridView>
             <br />
-            <asp:Label ID="lblException" runat="server" ForeColor="Red"></asp:Label>
         </div>
+        <asp:Label ID="lblException" runat="server" ForeColor="Red"></asp:Label>
+        <br />
         <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
         </ContentTemplate>
     </asp:UpdatePanel>

@@ -10,13 +10,18 @@ public partial class PM_ManageProject : System.Web.UI.Page
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
+        populateManageProject();
+    }
+
+    protected void populateManageProject()
+    {
         try
         {
             if (Session["projID"] == null)
                 Response.Redirect("~/PM/ProjectList.aspx");
             if (Session["wpID"] != null)
                 Session["wpID"] = null;
-            if(divChangeAlloc.Visible == false)
+            if (divChangeAlloc.Visible == false)
                 divOriginalAlloc.Visible = true;
             divChangeAlloc.Visible = false;
             lblProjID2.Text = Session["projID"].ToString();
@@ -50,6 +55,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
             lblException.Text = exception.StackTrace;
         }
     }
+
     protected void lbCreateWP_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/RE/WorkPackage.aspx");
@@ -74,7 +80,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
                 WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
                 workpackage.isActive = 0;
                 ff.SubmitChanges();
-                Response.Redirect("~/PM/ManageProject.aspx");
+                populateManageProject();
             }
         }
         catch (Exception exception)
@@ -111,7 +117,8 @@ public partial class PM_ManageProject : System.Web.UI.Page
             btnSaveAlloc.Visible = false;
             btnCancelAlloc.Visible = false;
             btnChangeAlloc.Visible = true;
-            Response.Redirect("~/PM/ManageProject.aspx");
+            tbUnalloc.Visible = false;
+            populateManageProject();
         }
         catch (Exception exception)
         {
@@ -125,6 +132,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
         btnSaveAlloc.Visible = false;
         btnCancelAlloc.Visible = false;
         btnChangeAlloc.Visible = true;
-        Response.Redirect("~/PM/ManageProject.aspx");
+        tbUnalloc.Visible = false;
+        populateManageProject();
     }
 }
