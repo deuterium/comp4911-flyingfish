@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
 {
+
     protected void Page_Load(object sender, EventArgs e)
     {
         CreateSessionVars();
@@ -14,6 +15,15 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
         {
             divNewRecord.Visible = false;
         }
+        renderLabels();
+    }
+
+    private void renderLabels()
+    {
+
+        lbDate.Text = Session["CurrentDate"].ToString();
+        lbEmpNo.Text = Session["CurEmpId"].ToString();
+     
     }
 
     private void CreateSessionVars()

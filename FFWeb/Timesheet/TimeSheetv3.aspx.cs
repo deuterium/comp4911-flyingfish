@@ -181,6 +181,11 @@ public partial class Timesheet_TimeSheetv3 : System.Web.UI.Page
 
     protected void dvTimeSheet_RowEditing(object sender, GridViewEditEventArgs e)
     {
+        //stackoverflow.com/questions/2429864/gridviews-newvalues-and-oldvalues-empty-in-the-onrowupdating-event
+        GridView gv = (GridView)sender;
+        gv.EditIndex = e.NewEditIndex;
+        gv.DataBind();
+
         // Set the row's index to the event's edit index
         dvTimeSheet.EditIndex = e.NewEditIndex;
 
@@ -195,9 +200,23 @@ public partial class Timesheet_TimeSheetv3 : System.Web.UI.Page
     {
 
         
-        // Get row being updated
+      
+        //GridView gv = (GridView)sender;
+        //for (int i = 0; i < dvTimeSheet.Columns.Count; i++)
+        //{
+        //    DataControlFieldCell cell = gv.Rows[e.RowIndex].Cells[i] as DataControlFieldCell;
+        //    gv.Columns[i].ExtractValuesFromCell(e.NewValues, cell, DataControlRowState.Edit, true);
+        //}
+        
+        //// Get row being updated
         GridViewRow row = dvTimeSheet.Rows[e.RowIndex];
         Object tmp1 = e.NewValues["Mon"];
+
+       // String strEmployee0 = (((Label)row.Cells[3].Controls[1]).Text);
+        //String strEmployee1 = (((Label)row.Cells[4].Controls[1]).Text);
+        String strEmployee2 = (((Label)row.Cells[3].Controls[0]).Text);
+        String strEmployee3 = (((Label)row.Cells[3].Controls[1]).Text);
+
 
         Object tmp2 = e.OldValues["Mon"];
         string ProjID = e.OldValues["ProjID "].ToString();

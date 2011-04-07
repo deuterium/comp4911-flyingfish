@@ -7,6 +7,7 @@
 
     input 
 {
+    width: 30px;
     }
 
 .notes 
@@ -15,18 +16,57 @@
 }
 
 
+    .style1
+    {
+        width: 161px;
+    }
+
+
 </style>
 <div id="divTimeSheet" runat="server" >
-
+    <table style="width: 100%;">
+        <tr>
+            <td class="style1">
+                &nbsp;
+                Name</td>
+            <td>
+                &nbsp;
+                <asp:LoginName ID="LoginName1" runat="server" />
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td class="style1">
+                &nbsp;
+                Employee Number</td>
+            <td>
+                &nbsp;
+                <asp:Label ID="lbEmpNo" runat="server" Text="Label"></asp:Label>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td class="style1">
+                &nbsp;
+                Date</td>
+            <td>
+                &nbsp;
+                <asp:Label ID="lbDate" runat="server" Text="Label"></asp:Label>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+    </table>
     <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" 
         DataKeyNames="empId,tsDate,projId,wpId" DataSourceID="LinqDataSource1" 
         AllowPaging="True" AllowSorting="True">
         <Columns>
-            <asp:CommandField ShowEditButton="True" ShowSelectButton="True" />
-            <asp:BoundField DataField="empId" HeaderText="empId" ReadOnly="True" 
-                SortExpression="empId" />
-            <asp:BoundField DataField="tsDate" HeaderText="tsDate" ReadOnly="True" 
-                SortExpression="tsDate" />
+            <asp:CommandField ShowEditButton="True" />
             <asp:BoundField DataField="projId" HeaderText="projId" ReadOnly="True" 
                 SortExpression="projId" />
             <asp:BoundField DataField="wpId" HeaderText="wpId" ReadOnly="True" 
