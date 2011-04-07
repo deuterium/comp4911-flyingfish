@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using FFLib;
 using System.Data;
 
 public partial class Timesheet_TimeSheetv3 : System.Web.UI.Page
@@ -195,10 +194,11 @@ public partial class Timesheet_TimeSheetv3 : System.Web.UI.Page
     protected void dvTimeSheet_RowUpdating(object sender, GridViewUpdateEventArgs e)
     {
 
-
+        
         // Get row being updated
         GridViewRow row = dvTimeSheet.Rows[e.RowIndex];
         Object tmp1 = e.NewValues["Mon"];
+
         Object tmp2 = e.OldValues["Mon"];
         string ProjID = e.OldValues["ProjID "].ToString();
         string WPID = e.OldValues["WpID"].ToString();
@@ -257,6 +257,6 @@ public partial class Timesheet_TimeSheetv3 : System.Web.UI.Page
     protected void dvTimeSheet_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         // Redraw the grid view (you can call a method that queries the db and sets/binds the data source)
-        populategridview();
+      //  populategridview();
     }
 }

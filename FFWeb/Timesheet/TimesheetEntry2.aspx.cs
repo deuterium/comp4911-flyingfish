@@ -14,38 +14,43 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
         if (!IsPostBack)
         {
 
-            ddlProjectId.DataSource = ff.Projects.Select(p => new
-            {
-                ProjID = p.projId,
-                ProjectName = (p.projName + " (") + p.projId + ")"
-            });
-            ddlProjectId.DataValueField = "ProjId";
-            ddlProjectId.DataTextField = "ProjectName";
-            ddlProjectId.DataBind();
-            // verifies if the user has logged in. If the
-            try
-            {
-
-
-                var qry = (from o in ff.EmployeeMemberships
-                           join emp in ff.aspnet_Users on o.userId equals emp.UserId
-                           where emp.UserName == User.Identity.Name
-                           select o.empId).Single();
-
-                Session["CurEmpId"] = qry.ToString();
-
-                System.DateTime currentDate = System.DateTime.Now;
-
-                Session["CurrentDate"] = currentDate;
-
-            }
-            catch
-            {
-                Response.Redirect("~/Login.aspx");
-            }
+            populateDdl();
 
         }
 
+    }
+
+    private void populateDdl()
+    {
+        ddlProjectId.DataSource = ff.Projects.Select(p => new
+        {
+            ProjID = p.projId,
+            ProjectName = (p.projName + " (") + p.projId + ")"
+        });
+        ddlProjectId.DataValueField = "ProjId";
+        ddlProjectId.DataTextField = "ProjectName";
+        ddlProjectId.DataBind();
+        // verifies if the user has logged in. If the
+        //try
+        //{
+
+
+        //    var qry = (from o in ff.EmployeeMemberships
+        //               join emp in ff.aspnet_Users on o.userId equals emp.UserId
+        //               where emp.UserName == User.Identity.Name
+        //               select o.empId).Single();
+
+        //    Session["CurEmpId"] = qry.ToString();
+
+        //    System.DateTime currentDate = System.DateTime.Now;
+
+        //    Session["CurrentDate"] = currentDate;
+
+        //}
+        //catch
+        //{
+        //    Response.Redirect("~/Login.aspx");
+        //}
     }
     protected void btnCreateNewRecord_Click(object sender, EventArgs e)
     {
@@ -115,8 +120,8 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
         }
         catch (Exception myException)
         {
-            Label1.Text = myException.Message;
-           // Label1.Text = "You have sumbitted the record before, Cannot insert duplicate record into the database!!!";
+           // Label1.Text = myException.Message;
+            Label1.Text = "You have sumbitted the record before, Cannot insert duplicate record into the database!!!";
 
         }
         
@@ -126,7 +131,7 @@ public partial class Timesheet_TimesheetEntry2 : System.Web.UI.Page
     {
 
         int projId = Convert.ToInt32(ddlProjectId.SelectedValue);
-        Label1.Text += projId + " ";
+   
         ddlWpId.DataSource = ff.WorkPackages.Where(p => p.projId == projId).Select(p => new
         {
             text = p.wpId  ,

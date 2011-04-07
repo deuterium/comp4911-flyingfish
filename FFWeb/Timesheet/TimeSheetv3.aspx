@@ -91,7 +91,7 @@
                         <asp:Label ID="lblNote" runat="server" Text='<%# Bind("Notes") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:CommandField ButtonType="Button" ShowEditButton="True" UpdateText="Update" >
+                <asp:CommandField ButtonType="Button" CausesValidation="false" ShowEditButton="True" UpdateText="Update" >
                 
                     <ItemStyle HorizontalAlign="Center" Wrap="False" />
                 </asp:CommandField>
