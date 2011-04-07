@@ -167,6 +167,19 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     }
     #endregion
 
+    protected void gvEmployees_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandName == "btnDelete")
+        {
+            int row = Convert.ToInt32(e.CommandArgument);
+            GridViewRow selectedRow = gvEmployees.Rows[row];
+            EmployeeWorkPackage empwp = ff.EmployeeWorkPackages.Where(emp => emp.empId == (Convert.ToInt32(selectedRow.Cells[0].Text)) && emp.wpId ==lblWPID2.Text).First();
+            ff.EmployeeWorkPackages.DeleteOnSubmit(empwp);
+            ff.SubmitChanges();
+            populateManageWorkPackage();
+        }
+    }
+
     protected void gvUnassignedEmployees_SelectedIndexChanged(object sender, EventArgs e)
     {
     }
