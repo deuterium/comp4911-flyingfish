@@ -50,7 +50,8 @@
                                     ErrorMessage="Invalid Budget." ForeColor="Red" Operator="DataTypeCheck" Type="Integer" />
                                 &nbsp&nbsp&nbsp&nbsp&nbsp
                                 <asp:RangeValidator ID="rvUnalloc" runat="server" ControlToValidate="tbUnalloc" 
-                                    ErrorMessage="Budget must be a positive number." ForeColor="Red" MaximumValue="2147483647" MinimumValue="0" Type="Integer" />
+                                    ErrorMessage="Budget must be a positive number." ForeColor="Red" 
+                                    MaximumValue="2147483647" MinimumValue="0" Type="Currency" />
                             </td>
                         </tr>
                     </table>
@@ -58,6 +59,8 @@
                     <br />
                         <asp:Button ID="btnChangeAlloc" runat="server" Text="Edit Budget" onclick="btnChangeAlloc_Click" />
                         <asp:Button ID="btnSaveAlloc" runat="server" Visible="false" Text="Save Changes" onclick="btnSaveAlloc_Click" />
+                        <asp:Button ID="btnCancelAlloc" runat="server" Visible="false" Text="Cancel" 
+                            CausesValidation="False" onclick="btnCancelAlloc_Click" />
                     </div>
                     <div id="divChangeAlloc" runat="server" visible="false">
                         <!--<asp:Label ID="lblAllocMsg2" runat="server" Text="Allocated Budget: " />

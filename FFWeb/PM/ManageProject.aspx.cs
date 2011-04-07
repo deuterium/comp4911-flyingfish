@@ -89,11 +89,10 @@ public partial class PM_ManageProject : System.Web.UI.Page
     protected void btnChangeAlloc_Click(object sender, EventArgs e)
     {
         tbUnalloc.Text = lblUnalloc2.Text;
-        //divOriginalAlloc.Visible = false;
-        //divChangeAlloc.Visible = true;
         tbUnalloc.Visible = true;
         lblUnalloc2.Visible = false;
         btnSaveAlloc.Visible = true;
+        btnCancelAlloc.Visible = true;
         btnChangeAlloc.Visible = false;
     }
 
@@ -101,6 +100,8 @@ public partial class PM_ManageProject : System.Web.UI.Page
     {
         try
         {
+            if (tbUnalloc.Text == "")
+                tbUnalloc.Text = "0.0";
             Project proj = ff.Projects.Where(p => p.projId == Convert.ToInt32(Session["projID"].ToString())).First();
             proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
             ff.SubmitChanges();
@@ -108,6 +109,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
             //divOriginalAlloc.Visible = true;
             lblUnalloc2.Visible = true;
             btnSaveAlloc.Visible = false;
+            btnCancelAlloc.Visible = false;
             btnChangeAlloc.Visible = true;
             Response.Redirect("~/PM/ManageProject.aspx");
         }
@@ -115,5 +117,14 @@ public partial class PM_ManageProject : System.Web.UI.Page
         {
             lblException.Text = exception.StackTrace;
         }
+    }
+    protected void btnCancelAlloc_Click(object sender, EventArgs e)
+    {
+        tbUnalloc.Text = lblUnalloc2.Text;
+        lblUnalloc2.Visible = true;
+        btnSaveAlloc.Visible = false;
+        btnCancelAlloc.Visible = false;
+        btnChangeAlloc.Visible = true;
+        Response.Redirect("~/PM/ManageProject.aspx");
     }
 }
