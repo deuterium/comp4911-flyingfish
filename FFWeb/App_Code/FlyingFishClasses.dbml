@@ -65,20 +65,6 @@
       <Association Name="TimesheetHeader_DefaultTimesheet" Member="TimesheetHeader" ThisKey="empId,tsDate" OtherKey="empId,tsDate" Type="TimesheetHeader" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.WorkPackageStatusReport" Member="WorkPackageStatusReports">
-    <Type Name="WorkPackageStatusReport">
-      <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="wpId" Type="System.String" DbType="NVarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="startDate" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="endDate" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="comments" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="workAccomplished" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="workPlannedNext" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="problemsEncountered" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="problemsAnticipated" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Association Name="WorkPackage_WorkPackageStatusReport" Member="WorkPackage" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackage" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Employee" Member="Employees">
     <Type Name="Employee">
       <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -226,12 +212,12 @@
       <Column Name="unallocated_dollars" Type="System.Decimal" DbType="Decimal(11,2)" CanBeNull="true" />
       <Column Name="allocated_dollars" Type="System.Decimal" DbType="Decimal(11,2) NOT NULL" CanBeNull="false" />
       <Column Name="isActive" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="WorkPackage_WorkPackageStatusReport" Member="WorkPackageStatusReports" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageStatusReport" />
       <Association Name="WorkPackage_EmployeeWorkPackage" Member="EmployeeWorkPackages" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="EmployeeWorkPackage" />
       <Association Name="WorkPackage_EmployeeWorkPackageETC" Member="EmployeeWorkPackageETCs" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="EmployeeWorkPackageETC" />
       <Association Name="WorkPackage_TimesheetEntry" Member="TimesheetEntries" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="TimesheetEntry" />
       <Association Name="WorkPackage_WorkPackageBudgetPM" Member="WorkPackageBudgetPMs" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageBudgetPM" />
       <Association Name="WorkPackage_WorkPackageEstimateRE" Member="WorkPackageEstimateREs" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageEstimateRE" />
+      <Association Name="WorkPackage_WorkPackageStatusReport" Member="WorkPackageStatusReports" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageStatusReport" />
       <Association Name="Project_WorkPackage" Member="Project" ThisKey="projId" OtherKey="projId" Type="Project" IsForeignKey="true" />
     </Type>
   </Table>
@@ -300,6 +286,19 @@
       <Column Name="sickDays" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="flexHours" Type="System.Decimal" DbType="Decimal(3,1) NOT NULL" CanBeNull="false" />
       <Column Name="isActive" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WorkPackageStatusReport" Member="WorkPackageStatusReports">
+    <Type Name="WorkPackageStatusReport">
+      <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="wpId" Type="System.String" DbType="NVarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="cutOffDate" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="comments" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="workAccomplished" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="workPlannedNext" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="problemsEncountered" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="problemsAnticipated" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Association Name="WorkPackage_WorkPackageStatusReport" Member="WorkPackage" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackage" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
