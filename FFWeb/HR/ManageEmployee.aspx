@@ -96,7 +96,7 @@
                                     Supervisor:
                                 </td>
                                 <td>
-                                    <asp:ListBox ID="lbSupervisors" Width="125" runat="server" />
+                                    <asp:ListBox ID="lbSupervisors" Width="130" runat="server" />
                                     <asp:RequiredFieldValidator ID="SupervisorRequired" runat="server" ErrorMessage="A supervisor is required."
                                         ControlToValidate="lbSupervisors" Text="*" Display="Dynamic" ValidationGroup="vgEditUser"
                                         ForeColor="Red" />
@@ -105,7 +105,7 @@
                                     Timesheet Approver:
                                 </td>
                                 <td>
-                                    <asp:ListBox ID="lbApprovers" Width="125" runat="server" />
+                                    <asp:ListBox ID="lbApprovers" Width="130" runat="server" />
                                     <asp:RequiredFieldValidator ID="ApproverEditRequired" runat="server" ErrorMessage="An approver is required."
                                         ControlToValidate="lbApprovers" Text="*" Display="Dynamic" ValidationGroup="vgEditUser"
                                         ForeColor="Red" />
@@ -199,6 +199,14 @@
                                 </td>
                                 <td>
                                     <asp:CheckBoxList ID="cblUserRoles" runat="server" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Label Text="P-Level:" ID="PLevelLabel" runat="server" />
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="ddlPLevel" runat="server" Width="140" />
                                 </td>
                             </tr>
                         </table>
