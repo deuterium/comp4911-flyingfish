@@ -64,7 +64,6 @@
                         <div id="divDesc1" runat="server">
                                 <asp:TextBox ID="tbDesc" runat="server" TextMode="MultiLine" />
                         </div>
-                        
                     </td>
                 </tr>
                 <tr>
@@ -90,6 +89,7 @@
                             Font-Bold="True"></asp:Label>
                     </td>
                     <td>
+                        <br />
                         <font color="#000066">Click <asp:LinkButton ID="lbAssignEmp" runat="server" onclick="lbAssignEmp_Click">here</asp:LinkButton> to assign employees to this work package.</font>
                         <br />
                         <asp:GridView ID="gvEmployees" runat="server" AutoGenerateColumns="False" 
@@ -115,7 +115,7 @@
                             <SortedDescendingCellStyle BackColor="#E9EBEF" />
                             <SortedDescendingHeaderStyle BackColor="#4870BE" />
                         </asp:GridView>
-                                <br />
+                        <br />
                     </td>
                 </tr>
                 <tr>
@@ -167,14 +167,14 @@
                 
                 
 
+            <asp:LinkButton ID="lbParentwp" runat="server" onclick="lbParentwp_Click">Go to parent Work Package</asp:LinkButton>
+            <br />
             <asp:LinkButton ID="lbBacktoProject" runat="server" 
                 onclick="lbBacktoProject_Click">Go to Project</asp:LinkButton>
-
+            <br />
             <asp:LinkButton ID="lbCreateSubWorkPackage" runat="server" 
                 onclick="lbCreateSubWorkPackage_Click">Create a sub-Work Package</asp:LinkButton>
-
-            <asp:LinkButton ID="lbParentwp" runat="server" onclick="lbParentwp_Click">Go to parent Work Package</asp:LinkButton>
-
+            <br />
         </div>
         <div id="divAssignEmp" runat="server" visible="false">
             <asp:Label ID="lblAEmp" runat="server" Text="Choose an employee to add to work package:"></asp:Label>
@@ -234,7 +234,9 @@
             </asp:GridView>
             <br />
         </div>
-        <asp:Button ID="btnSave" runat="server" Text="Save Changes" onclick="btnSave_Click" PostBackUrl="~/RE/ManageWorkPackage.aspx" />
+        <div align="center">
+            <asp:Button ID="btnSave" runat="server" Text="Save Changes" onclick="btnSave_Click" PostBackUrl="~/RE/ManageWorkPackage.aspx" />
+        </div>
         <br />                        
         <asp:Label ID="lblException" runat="server" ForeColor="Red"></asp:Label>
         <br />
