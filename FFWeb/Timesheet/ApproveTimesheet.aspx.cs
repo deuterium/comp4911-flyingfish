@@ -37,7 +37,7 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
         var qry = from th in ff.TimesheetHeaders
                   join tse in ff.TimesheetEntries on new { th.tsDate, th.empId } equals new { tse.tsDate, tse.empId }
                   join emp in ff.Employees on tse.empId equals emp.empId
-                  where th.status != "APPROVED"
+                  where th.status.Equals("SAVED")
                   select new
                   {
                       EmployeeName = emp.firstName + " " + emp.lastName + "(" + th.empId + ")",

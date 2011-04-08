@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data;
 
 public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
 {
@@ -16,6 +17,147 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
             divNewRecord.Visible = false;
         }
         renderLabels();
+        addTotalRow();
+
+    }
+
+    private void addTotalRow()
+    {
+        FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
+        DateTime CurrentDate = Convert.ToDateTime(Session["CurrentDate"].ToString());
+        int empIdTemp  = Convert.ToInt32(Session["CurEmpId"].ToString());
+
+        var qry2 = from ts in ff.TimesheetEntries
+                   where (ts.tsDate >= CurrentDate) && (ts.empId == Convert.ToInt32(empIdTemp))
+                   select new
+                   {
+                       ProjID = ts.projId,
+                       WpId = ts.wpId,
+                       tsdate = ts.tsDate,
+                       Sun = ts.sun,
+                       Mon = ts.mon,
+                       Tue = ts.tue,
+                       Wed = ts.wed,
+                       Thu = ts.thu,
+                       Fri = ts.fri,
+                       Sat = ts.sat,
+                       Notes = ts.notes
+
+                   };
+
+
+        if (qry2.Count() == 0)
+        {
+            //gvStatus.DataSource = null;
+            //gvStatus.DataBind();
+            //lblResults.Visible = true;
+            //divReportData.Visible = false;
+            //return;
+        }
+
+        DataTable dt = new DataTable();
+        dt.Columns.Add(new DataColumn("ProjID", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("WpID", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("Sat", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("Sun", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("Mon", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("Tue", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("Wed", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("Thur", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("Fri", typeof(System.String)));
+
+       // dt.Columns.Add(new DataColumn("Notes", typeof(System.String)));
+        
+
+
+        foreach (var row in qry2)
+        {
+            DataRow dr = dt.NewRow();
+            dr["ProjID"] = row.ProjID;
+            dr["WpID"] = row.WpId;
+            dr["Mon"] = row.Mon;
+            dr["Tue"] = row.Tue;
+            dr["Wed"] = row.Wed;
+            dr["Thur"] = row.Thu;
+            dr["Fri"] = row.Thu;
+            dr["Sat"] = row.Sat;
+            dr["Sun"] = row.Sun;
+            //dr["Notes"] = row.Notes;
+            
+
+            dt.Rows.Add(dr);
+        }
+
+        double totMon = 0;
+        double totTue = 0;
+        double totWed = 0;
+        double totThu = 0;
+        double totFri = 0;
+        double totSat = 0;
+        double totSun = 0;
+
+
+        for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            var b = dt.Rows[i][4].ToString();
+            totMon += Convert.ToDouble(dt.Rows[i][4].ToString());
+        }
+
+        for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            var b = dt.Rows[i][5].ToString();
+            totTue += Convert.ToDouble(dt.Rows[i][5].ToString());
+        }
+
+        for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            var b = dt.Rows[i][6].ToString();
+            totWed += Convert.ToDouble(dt.Rows[i][6].ToString());
+        }
+        for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            var b = dt.Rows[i][7].ToString();
+            totThu += Convert.ToDouble(dt.Rows[i][7].ToString());
+        }
+
+        for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            var b = dt.Rows[i][8].ToString();
+            totFri += Convert.ToDouble(dt.Rows[i][8].ToString());
+        }
+
+        for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            var b = dt.Rows[i][2].ToString();
+            totSat += Convert.ToDouble(dt.Rows[i][2].ToString());
+        }
+
+        for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            var b = dt.Rows[i][3].ToString();
+            totSun += Convert.ToDouble(dt.Rows[i][3].ToString());
+        }
+
+
+
+        dt.Clear();
+
+        // add the total row
+        DataRow totalRow = dt.NewRow();
+        totalRow["ProjID"] = "Total";
+        totalRow["Mon"] = totMon;
+        totalRow["Tue"] = totThu;
+        totalRow["wed"] = totWed;
+        totalRow["Thur"] = totThu;
+        totalRow["Fri"] = totFri;
+        totalRow["Sat"] = totSat;
+        totalRow["Sun"] = totSun;
+
+        dt.Rows.Add(totalRow);
+
+        gvTotals.DataSource = dt;
+        gvTotals.DataBind();
+       
     }
 
     private void renderLabels()
@@ -57,7 +199,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
             }
             Session["CurrentDate"] = actualQryDate;
 
-            Label1.Text = Session["CurrentDate"].ToString();
+          
 
 
         }
@@ -155,7 +297,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
     {
         FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
         int projId = Convert.ToInt32(ddlProjectId.SelectedValue);
-        Label1.Text += projId + " ";
+       
         ddlWpId.DataSource = ff.WorkPackages.Where(p => p.projId == projId).Select(p => new
         {
             text = p.wpId,
@@ -169,6 +311,10 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
 
 
     }
+    /// <summary>
+    /// populates the drop down list 
+    /// </summary>
+    /// Note the session used be created here 
     private void populateDdl()
     {
         FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
@@ -180,26 +326,6 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
         ddlProjectId.DataValueField = "ProjId";
         ddlProjectId.DataTextField = "ProjectName";
         ddlProjectId.DataBind();
-        // verifies if the user has logged in. If the
-        try
-        {
 
-
-            var qry = (from o in ff.EmployeeMemberships
-                       join emp in ff.aspnet_Users on o.userId equals emp.UserId
-                       where emp.UserName == User.Identity.Name
-                       select o.empId).Single();
-
-            Session["CurEmpId"] = qry.ToString();
-
-            System.DateTime currentDate = System.DateTime.Now;
-
-            Session["CurrentDate"] = currentDate;
-
-        }
-        catch
-        {
-            Response.Redirect("~/Login.aspx");
-        }
     }
 }
