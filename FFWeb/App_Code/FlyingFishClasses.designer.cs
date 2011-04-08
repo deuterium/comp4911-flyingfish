@@ -62,9 +62,6 @@ public partial class FlyingFishClassesDataContext : System.Data.Linq.DataContext
   partial void InsertEmployeeWorkPackage(EmployeeWorkPackage instance);
   partial void UpdateEmployeeWorkPackage(EmployeeWorkPackage instance);
   partial void DeleteEmployeeWorkPackage(EmployeeWorkPackage instance);
-  partial void InsertEmployeeWorkPackageETC(EmployeeWorkPackageETC instance);
-  partial void UpdateEmployeeWorkPackageETC(EmployeeWorkPackageETC instance);
-  partial void DeleteEmployeeWorkPackageETC(EmployeeWorkPackageETC instance);
   partial void InsertHumanResourcesStaff(HumanResourcesStaff instance);
   partial void UpdateHumanResourcesStaff(HumanResourcesStaff instance);
   partial void DeleteHumanResourcesStaff(HumanResourcesStaff instance);
@@ -95,6 +92,9 @@ public partial class FlyingFishClassesDataContext : System.Data.Linq.DataContext
   partial void InsertWorkPackageStatusReport(WorkPackageStatusReport instance);
   partial void UpdateWorkPackageStatusReport(WorkPackageStatusReport instance);
   partial void DeleteWorkPackageStatusReport(WorkPackageStatusReport instance);
+  partial void InsertEmployeeWorkPackageETC(EmployeeWorkPackageETC instance);
+  partial void UpdateEmployeeWorkPackageETC(EmployeeWorkPackageETC instance);
+  partial void DeleteEmployeeWorkPackageETC(EmployeeWorkPackageETC instance);
   #endregion
 	
 	public FlyingFishClassesDataContext() : 
@@ -215,14 +215,6 @@ public partial class FlyingFishClassesDataContext : System.Data.Linq.DataContext
 		}
 	}
 	
-	public System.Data.Linq.Table<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
-	{
-		get
-		{
-			return this.GetTable<EmployeeWorkPackageETC>();
-		}
-	}
-	
 	public System.Data.Linq.Table<HumanResourcesStaff> HumanResourcesStaffs
 	{
 		get
@@ -324,6 +316,14 @@ public partial class FlyingFishClassesDataContext : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<WorkPackageStatusReport>();
+		}
+	}
+	
+	public System.Data.Linq.Table<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
+	{
+		get
+		{
+			return this.GetTable<EmployeeWorkPackageETC>();
 		}
 	}
 }
@@ -1724,8 +1724,6 @@ public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntityRef<EmployeeSignature> _EmployeeSignature;
 	
-	private EntitySet<EmployeeWorkPackageETC> _EmployeeWorkPackageETCs;
-	
 	private EntityRef<HumanResourcesStaff> _HumanResourcesStaff;
 	
 	private EntitySet<Project> _Projects;
@@ -1733,6 +1731,8 @@ public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
 	private EntitySet<TimesheetHeader> _TimesheetHeaders;
 	
 	private EntitySet<TimesheetHeader> _TimesheetHeaders1;
+	
+	private EntitySet<EmployeeWorkPackageETC> _EmployeeWorkPackageETCs;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1765,11 +1765,11 @@ public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
 		this._EmployeeMembership = default(EntityRef<EmployeeMembership>);
 		this._EmployeeProjects = new EntitySet<EmployeeProject>(new Action<EmployeeProject>(this.attach_EmployeeProjects), new Action<EmployeeProject>(this.detach_EmployeeProjects));
 		this._EmployeeSignature = default(EntityRef<EmployeeSignature>);
-		this._EmployeeWorkPackageETCs = new EntitySet<EmployeeWorkPackageETC>(new Action<EmployeeWorkPackageETC>(this.attach_EmployeeWorkPackageETCs), new Action<EmployeeWorkPackageETC>(this.detach_EmployeeWorkPackageETCs));
 		this._HumanResourcesStaff = default(EntityRef<HumanResourcesStaff>);
 		this._Projects = new EntitySet<Project>(new Action<Project>(this.attach_Projects), new Action<Project>(this.detach_Projects));
 		this._TimesheetHeaders = new EntitySet<TimesheetHeader>(new Action<TimesheetHeader>(this.attach_TimesheetHeaders), new Action<TimesheetHeader>(this.detach_TimesheetHeaders));
 		this._TimesheetHeaders1 = new EntitySet<TimesheetHeader>(new Action<TimesheetHeader>(this.attach_TimesheetHeaders1), new Action<TimesheetHeader>(this.detach_TimesheetHeaders1));
+		this._EmployeeWorkPackageETCs = new EntitySet<EmployeeWorkPackageETC>(new Action<EmployeeWorkPackageETC>(this.attach_EmployeeWorkPackageETCs), new Action<EmployeeWorkPackageETC>(this.detach_EmployeeWorkPackageETCs));
 		OnCreated();
 	}
 	
@@ -2044,19 +2044,6 @@ public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackageETCs", ThisKey="empId", OtherKey="empId")]
-	public EntitySet<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
-	{
-		get
-		{
-			return this._EmployeeWorkPackageETCs;
-		}
-		set
-		{
-			this._EmployeeWorkPackageETCs.Assign(value);
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_HumanResourcesStaff", Storage="_HumanResourcesStaff", ThisKey="empId", OtherKey="empId", IsUnique=true, IsForeignKey=false)]
 	public HumanResourcesStaff HumanResourcesStaff
 	{
@@ -2125,6 +2112,19 @@ public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackageETCs", ThisKey="empId", OtherKey="empId")]
+	public EntitySet<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
+	{
+		get
+		{
+			return this._EmployeeWorkPackageETCs;
+		}
+		set
+		{
+			this._EmployeeWorkPackageETCs.Assign(value);
+		}
+	}
+	
 	public event PropertyChangingEventHandler PropertyChanging;
 	
 	public event PropertyChangedEventHandler PropertyChanged;
@@ -2152,18 +2152,6 @@ public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 	
 	private void detach_EmployeeProjects(EmployeeProject entity)
-	{
-		this.SendPropertyChanging();
-		entity.Employee = null;
-	}
-	
-	private void attach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
-	{
-		this.SendPropertyChanging();
-		entity.Employee = this;
-	}
-	
-	private void detach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
 	{
 		this.SendPropertyChanging();
 		entity.Employee = null;
@@ -2203,6 +2191,18 @@ public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		this.SendPropertyChanging();
 		entity.Employee1 = null;
+	}
+	
+	private void attach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
+	{
+		this.SendPropertyChanging();
+		entity.Employee = this;
+	}
+	
+	private void detach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
+	{
+		this.SendPropertyChanging();
+		entity.Employee = null;
 	}
 }
 
@@ -3127,252 +3127,6 @@ public partial class EmployeeWorkPackage : INotifyPropertyChanging, INotifyPrope
 	{
 		this.SendPropertyChanging();
 		entity.EmployeeWorkPackage = null;
-	}
-}
-
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeWorkPackageETC")]
-public partial class EmployeeWorkPackageETC : INotifyPropertyChanging, INotifyPropertyChanged
-{
-	
-	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-	
-	private int _empId;
-	
-	private int _projId;
-	
-	private string _wpId;
-	
-	private System.DateTime _dateUpdated;
-	
-	private System.Nullable<int> _ETC_days;
-	
-	private EntityRef<Employee> _Employee;
-	
-	private EntityRef<WorkPackage> _WorkPackage;
-	
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnempIdChanging(int value);
-    partial void OnempIdChanged();
-    partial void OnprojIdChanging(int value);
-    partial void OnprojIdChanged();
-    partial void OnwpIdChanging(string value);
-    partial void OnwpIdChanged();
-    partial void OndateUpdatedChanging(System.DateTime value);
-    partial void OndateUpdatedChanged();
-    partial void OnETC_daysChanging(System.Nullable<int> value);
-    partial void OnETC_daysChanged();
-    #endregion
-	
-	public EmployeeWorkPackageETC()
-	{
-		this._Employee = default(EntityRef<Employee>);
-		this._WorkPackage = default(EntityRef<WorkPackage>);
-		OnCreated();
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-	public int empId
-	{
-		get
-		{
-			return this._empId;
-		}
-		set
-		{
-			if ((this._empId != value))
-			{
-				if (this._Employee.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnempIdChanging(value);
-				this.SendPropertyChanging();
-				this._empId = value;
-				this.SendPropertyChanged("empId");
-				this.OnempIdChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-	public int projId
-	{
-		get
-		{
-			return this._projId;
-		}
-		set
-		{
-			if ((this._projId != value))
-			{
-				if (this._WorkPackage.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnprojIdChanging(value);
-				this.SendPropertyChanging();
-				this._projId = value;
-				this.SendPropertyChanged("projId");
-				this.OnprojIdChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wpId", DbType="NVarChar(30) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-	public string wpId
-	{
-		get
-		{
-			return this._wpId;
-		}
-		set
-		{
-			if ((this._wpId != value))
-			{
-				if (this._WorkPackage.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnwpIdChanging(value);
-				this.SendPropertyChanging();
-				this._wpId = value;
-				this.SendPropertyChanged("wpId");
-				this.OnwpIdChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dateUpdated", DbType="Date NOT NULL", IsPrimaryKey=true)]
-	public System.DateTime dateUpdated
-	{
-		get
-		{
-			return this._dateUpdated;
-		}
-		set
-		{
-			if ((this._dateUpdated != value))
-			{
-				this.OndateUpdatedChanging(value);
-				this.SendPropertyChanging();
-				this._dateUpdated = value;
-				this.SendPropertyChanged("dateUpdated");
-				this.OndateUpdatedChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ETC_days", DbType="Int")]
-	public System.Nullable<int> ETC_days
-	{
-		get
-		{
-			return this._ETC_days;
-		}
-		set
-		{
-			if ((this._ETC_days != value))
-			{
-				this.OnETC_daysChanging(value);
-				this.SendPropertyChanging();
-				this._ETC_days = value;
-				this.SendPropertyChanged("ETC_days");
-				this.OnETC_daysChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeWorkPackageETC", Storage="_Employee", ThisKey="empId", OtherKey="empId", IsForeignKey=true)]
-	public Employee Employee
-	{
-		get
-		{
-			return this._Employee.Entity;
-		}
-		set
-		{
-			Employee previousValue = this._Employee.Entity;
-			if (((previousValue != value) 
-						|| (this._Employee.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Employee.Entity = null;
-					previousValue.EmployeeWorkPackageETCs.Remove(this);
-				}
-				this._Employee.Entity = value;
-				if ((value != null))
-				{
-					value.EmployeeWorkPackageETCs.Add(this);
-					this._empId = value.empId;
-				}
-				else
-				{
-					this._empId = default(int);
-				}
-				this.SendPropertyChanged("Employee");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackageETC", Storage="_WorkPackage", ThisKey="projId,wpId", OtherKey="projId,wpId", IsForeignKey=true)]
-	public WorkPackage WorkPackage
-	{
-		get
-		{
-			return this._WorkPackage.Entity;
-		}
-		set
-		{
-			WorkPackage previousValue = this._WorkPackage.Entity;
-			if (((previousValue != value) 
-						|| (this._WorkPackage.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._WorkPackage.Entity = null;
-					previousValue.EmployeeWorkPackageETCs.Remove(this);
-				}
-				this._WorkPackage.Entity = value;
-				if ((value != null))
-				{
-					value.EmployeeWorkPackageETCs.Add(this);
-					this._projId = value.projId;
-					this._wpId = value.wpId;
-				}
-				else
-				{
-					this._projId = default(int);
-					this._wpId = default(string);
-				}
-				this.SendPropertyChanged("WorkPackage");
-			}
-		}
-	}
-	
-	public event PropertyChangingEventHandler PropertyChanging;
-	
-	public event PropertyChangedEventHandler PropertyChanged;
-	
-	protected virtual void SendPropertyChanging()
-	{
-		if ((this.PropertyChanging != null))
-		{
-			this.PropertyChanging(this, emptyChangingEventArgs);
-		}
-	}
-	
-	protected virtual void SendPropertyChanged(String propertyName)
-	{
-		if ((this.PropertyChanged != null))
-		{
-			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
 	}
 }
 
@@ -4714,8 +4468,6 @@ public partial class WorkPackage : INotifyPropertyChanging, INotifyPropertyChang
 	
 	private EntitySet<EmployeeWorkPackage> _EmployeeWorkPackages;
 	
-	private EntitySet<EmployeeWorkPackageETC> _EmployeeWorkPackageETCs;
-	
 	private EntitySet<TimesheetEntry> _TimesheetEntries;
 	
 	private EntitySet<WorkPackageBudgetPM> _WorkPackageBudgetPMs;
@@ -4723,6 +4475,8 @@ public partial class WorkPackage : INotifyPropertyChanging, INotifyPropertyChang
 	private EntitySet<WorkPackageEstimateRE> _WorkPackageEstimateREs;
 	
 	private EntitySet<WorkPackageStatusReport> _WorkPackageStatusReports;
+	
+	private EntitySet<EmployeeWorkPackageETC> _EmployeeWorkPackageETCs;
 	
 	private EntityRef<Project> _Project;
 	
@@ -4749,11 +4503,11 @@ public partial class WorkPackage : INotifyPropertyChanging, INotifyPropertyChang
 	public WorkPackage()
 	{
 		this._EmployeeWorkPackages = new EntitySet<EmployeeWorkPackage>(new Action<EmployeeWorkPackage>(this.attach_EmployeeWorkPackages), new Action<EmployeeWorkPackage>(this.detach_EmployeeWorkPackages));
-		this._EmployeeWorkPackageETCs = new EntitySet<EmployeeWorkPackageETC>(new Action<EmployeeWorkPackageETC>(this.attach_EmployeeWorkPackageETCs), new Action<EmployeeWorkPackageETC>(this.detach_EmployeeWorkPackageETCs));
 		this._TimesheetEntries = new EntitySet<TimesheetEntry>(new Action<TimesheetEntry>(this.attach_TimesheetEntries), new Action<TimesheetEntry>(this.detach_TimesheetEntries));
 		this._WorkPackageBudgetPMs = new EntitySet<WorkPackageBudgetPM>(new Action<WorkPackageBudgetPM>(this.attach_WorkPackageBudgetPMs), new Action<WorkPackageBudgetPM>(this.detach_WorkPackageBudgetPMs));
 		this._WorkPackageEstimateREs = new EntitySet<WorkPackageEstimateRE>(new Action<WorkPackageEstimateRE>(this.attach_WorkPackageEstimateREs), new Action<WorkPackageEstimateRE>(this.detach_WorkPackageEstimateREs));
 		this._WorkPackageStatusReports = new EntitySet<WorkPackageStatusReport>(new Action<WorkPackageStatusReport>(this.attach_WorkPackageStatusReports), new Action<WorkPackageStatusReport>(this.detach_WorkPackageStatusReports));
+		this._EmployeeWorkPackageETCs = new EntitySet<EmployeeWorkPackageETC>(new Action<EmployeeWorkPackageETC>(this.attach_EmployeeWorkPackageETCs), new Action<EmployeeWorkPackageETC>(this.detach_EmployeeWorkPackageETCs));
 		this._Project = default(EntityRef<Project>);
 		OnCreated();
 	}
@@ -4915,19 +4669,6 @@ public partial class WorkPackage : INotifyPropertyChanging, INotifyPropertyChang
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackageETCs", ThisKey="projId,wpId", OtherKey="projId,wpId")]
-	public EntitySet<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
-	{
-		get
-		{
-			return this._EmployeeWorkPackageETCs;
-		}
-		set
-		{
-			this._EmployeeWorkPackageETCs.Assign(value);
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_TimesheetEntry", Storage="_TimesheetEntries", ThisKey="projId,wpId", OtherKey="projId,wpId")]
 	public EntitySet<TimesheetEntry> TimesheetEntries
 	{
@@ -4977,6 +4718,19 @@ public partial class WorkPackage : INotifyPropertyChanging, INotifyPropertyChang
 		set
 		{
 			this._WorkPackageStatusReports.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackageETC", Storage="_EmployeeWorkPackageETCs", ThisKey="projId,wpId", OtherKey="projId,wpId")]
+	public EntitySet<EmployeeWorkPackageETC> EmployeeWorkPackageETCs
+	{
+		get
+		{
+			return this._EmployeeWorkPackageETCs;
+		}
+		set
+		{
+			this._EmployeeWorkPackageETCs.Assign(value);
 		}
 	}
 	
@@ -5046,18 +4800,6 @@ public partial class WorkPackage : INotifyPropertyChanging, INotifyPropertyChang
 		entity.WorkPackage = null;
 	}
 	
-	private void attach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
-	{
-		this.SendPropertyChanging();
-		entity.WorkPackage = this;
-	}
-	
-	private void detach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
-	{
-		this.SendPropertyChanging();
-		entity.WorkPackage = null;
-	}
-	
 	private void attach_TimesheetEntries(TimesheetEntry entity)
 	{
 		this.SendPropertyChanging();
@@ -5101,6 +4843,18 @@ public partial class WorkPackage : INotifyPropertyChanging, INotifyPropertyChang
 	}
 	
 	private void detach_WorkPackageStatusReports(WorkPackageStatusReport entity)
+	{
+		this.SendPropertyChanging();
+		entity.WorkPackage = null;
+	}
+	
+	private void attach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
+	{
+		this.SendPropertyChanging();
+		entity.WorkPackage = this;
+	}
+	
+	private void detach_EmployeeWorkPackageETCs(EmployeeWorkPackageETC entity)
 	{
 		this.SendPropertyChanging();
 		entity.WorkPackage = null;
@@ -6506,6 +6260,252 @@ public partial class WorkPackageStatusReport : INotifyPropertyChanging, INotifyP
 				if ((value != null))
 				{
 					value.WorkPackageStatusReports.Add(this);
+					this._projId = value.projId;
+					this._wpId = value.wpId;
+				}
+				else
+				{
+					this._projId = default(int);
+					this._wpId = default(string);
+				}
+				this.SendPropertyChanged("WorkPackage");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeWorkPackageETC")]
+public partial class EmployeeWorkPackageETC : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _empId;
+	
+	private int _projId;
+	
+	private string _wpId;
+	
+	private System.DateTime _dateUpdated;
+	
+	private System.Nullable<decimal> _ETC_days;
+	
+	private EntityRef<Employee> _Employee;
+	
+	private EntityRef<WorkPackage> _WorkPackage;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnempIdChanging(int value);
+    partial void OnempIdChanged();
+    partial void OnprojIdChanging(int value);
+    partial void OnprojIdChanged();
+    partial void OnwpIdChanging(string value);
+    partial void OnwpIdChanged();
+    partial void OndateUpdatedChanging(System.DateTime value);
+    partial void OndateUpdatedChanged();
+    partial void OnETC_daysChanging(System.Nullable<decimal> value);
+    partial void OnETC_daysChanged();
+    #endregion
+	
+	public EmployeeWorkPackageETC()
+	{
+		this._Employee = default(EntityRef<Employee>);
+		this._WorkPackage = default(EntityRef<WorkPackage>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_empId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+	public int empId
+	{
+		get
+		{
+			return this._empId;
+		}
+		set
+		{
+			if ((this._empId != value))
+			{
+				if (this._Employee.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnempIdChanging(value);
+				this.SendPropertyChanging();
+				this._empId = value;
+				this.SendPropertyChanged("empId");
+				this.OnempIdChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_projId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+	public int projId
+	{
+		get
+		{
+			return this._projId;
+		}
+		set
+		{
+			if ((this._projId != value))
+			{
+				if (this._WorkPackage.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnprojIdChanging(value);
+				this.SendPropertyChanging();
+				this._projId = value;
+				this.SendPropertyChanged("projId");
+				this.OnprojIdChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_wpId", DbType="NVarChar(30) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+	public string wpId
+	{
+		get
+		{
+			return this._wpId;
+		}
+		set
+		{
+			if ((this._wpId != value))
+			{
+				if (this._WorkPackage.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnwpIdChanging(value);
+				this.SendPropertyChanging();
+				this._wpId = value;
+				this.SendPropertyChanged("wpId");
+				this.OnwpIdChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dateUpdated", DbType="Date NOT NULL", IsPrimaryKey=true)]
+	public System.DateTime dateUpdated
+	{
+		get
+		{
+			return this._dateUpdated;
+		}
+		set
+		{
+			if ((this._dateUpdated != value))
+			{
+				this.OndateUpdatedChanging(value);
+				this.SendPropertyChanging();
+				this._dateUpdated = value;
+				this.SendPropertyChanged("dateUpdated");
+				this.OndateUpdatedChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ETC_days", DbType="Decimal(11,1)")]
+	public System.Nullable<decimal> ETC_days
+	{
+		get
+		{
+			return this._ETC_days;
+		}
+		set
+		{
+			if ((this._ETC_days != value))
+			{
+				this.OnETC_daysChanging(value);
+				this.SendPropertyChanging();
+				this._ETC_days = value;
+				this.SendPropertyChanged("ETC_days");
+				this.OnETC_daysChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeWorkPackageETC", Storage="_Employee", ThisKey="empId", OtherKey="empId", IsForeignKey=true)]
+	public Employee Employee
+	{
+		get
+		{
+			return this._Employee.Entity;
+		}
+		set
+		{
+			Employee previousValue = this._Employee.Entity;
+			if (((previousValue != value) 
+						|| (this._Employee.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Employee.Entity = null;
+					previousValue.EmployeeWorkPackageETCs.Remove(this);
+				}
+				this._Employee.Entity = value;
+				if ((value != null))
+				{
+					value.EmployeeWorkPackageETCs.Add(this);
+					this._empId = value.empId;
+				}
+				else
+				{
+					this._empId = default(int);
+				}
+				this.SendPropertyChanged("Employee");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkPackage_EmployeeWorkPackageETC", Storage="_WorkPackage", ThisKey="projId,wpId", OtherKey="projId,wpId", IsForeignKey=true)]
+	public WorkPackage WorkPackage
+	{
+		get
+		{
+			return this._WorkPackage.Entity;
+		}
+		set
+		{
+			WorkPackage previousValue = this._WorkPackage.Entity;
+			if (((previousValue != value) 
+						|| (this._WorkPackage.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._WorkPackage.Entity = null;
+					previousValue.EmployeeWorkPackageETCs.Remove(this);
+				}
+				this._WorkPackage.Entity = value;
+				if ((value != null))
+				{
+					value.EmployeeWorkPackageETCs.Add(this);
 					this._projId = value.projId;
 					this._wpId = value.wpId;
 				}

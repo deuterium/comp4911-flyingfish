@@ -80,11 +80,11 @@
       <Association Name="Employee_EmployeeMembership" Member="EmployeeMembership" ThisKey="empId" OtherKey="empId" Type="EmployeeMembership" Cardinality="One" />
       <Association Name="Employee_EmployeeProject" Member="EmployeeProjects" ThisKey="empId" OtherKey="empId" Type="EmployeeProject" />
       <Association Name="Employee_EmployeeSignature" Member="EmployeeSignature" ThisKey="empId" OtherKey="empId" Type="EmployeeSignature" Cardinality="One" />
-      <Association Name="Employee_EmployeeWorkPackageETC" Member="EmployeeWorkPackageETCs" ThisKey="empId" OtherKey="empId" Type="EmployeeWorkPackageETC" />
       <Association Name="Employee_HumanResourcesStaff" Member="HumanResourcesStaff" ThisKey="empId" OtherKey="empId" Type="HumanResourcesStaff" Cardinality="One" />
       <Association Name="Employee_Project" Member="Projects" ThisKey="empId" OtherKey="manager" Type="Project" />
       <Association Name="Employee_TimesheetHeader" Member="TimesheetHeaders" ThisKey="empId" OtherKey="approvedBy" Type="TimesheetHeader" />
       <Association Name="Employee_TimesheetHeader1" Member="TimesheetHeaders1" ThisKey="empId" OtherKey="empId" Type="TimesheetHeader" />
+      <Association Name="Employee_EmployeeWorkPackageETC" Member="EmployeeWorkPackageETCs" ThisKey="empId" OtherKey="empId" Type="EmployeeWorkPackageETC" />
     </Type>
   </Table>
   <Table Name="dbo.EmployeeMembership" Member="EmployeeMemberships">
@@ -129,17 +129,6 @@
       <Association Name="EmployeeWorkPackage_WorkPackageResponsibleEngineer" Member="WorkPackageResponsibleEngineers" ThisKey="empId,projId,wpId" OtherKey="responsibleEngineer,projId,wpId" Type="WorkPackageResponsibleEngineer" />
       <Association Name="EmployeeProject_EmployeeWorkPackage" Member="EmployeeProject" ThisKey="projId,empId" OtherKey="projId,empId" Type="EmployeeProject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="WorkPackage_EmployeeWorkPackage" Member="WorkPackage" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackage" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.EmployeeWorkPackageETC" Member="EmployeeWorkPackageETCs">
-    <Type Name="EmployeeWorkPackageETC">
-      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="wpId" Type="System.String" DbType="NVarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="dateUpdated" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="ETC_days" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Employee_EmployeeWorkPackageETC" Member="Employee" ThisKey="empId" OtherKey="empId" Type="Employee" IsForeignKey="true" />
-      <Association Name="WorkPackage_EmployeeWorkPackageETC" Member="WorkPackage" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackage" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.HumanResourcesStaff" Member="HumanResourcesStaffs">
@@ -213,11 +202,11 @@
       <Column Name="allocated_dollars" Type="System.Decimal" DbType="Decimal(11,2) NOT NULL" CanBeNull="false" />
       <Column Name="isActive" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="WorkPackage_EmployeeWorkPackage" Member="EmployeeWorkPackages" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="EmployeeWorkPackage" />
-      <Association Name="WorkPackage_EmployeeWorkPackageETC" Member="EmployeeWorkPackageETCs" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="EmployeeWorkPackageETC" />
       <Association Name="WorkPackage_TimesheetEntry" Member="TimesheetEntries" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="TimesheetEntry" />
       <Association Name="WorkPackage_WorkPackageBudgetPM" Member="WorkPackageBudgetPMs" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageBudgetPM" />
       <Association Name="WorkPackage_WorkPackageEstimateRE" Member="WorkPackageEstimateREs" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageEstimateRE" />
       <Association Name="WorkPackage_WorkPackageStatusReport" Member="WorkPackageStatusReports" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackageStatusReport" />
+      <Association Name="WorkPackage_EmployeeWorkPackageETC" Member="EmployeeWorkPackageETCs" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="EmployeeWorkPackageETC" />
       <Association Name="Project_WorkPackage" Member="Project" ThisKey="projId" OtherKey="projId" Type="Project" IsForeignKey="true" />
     </Type>
   </Table>
@@ -299,6 +288,17 @@
       <Column Name="problemsEncountered" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="problemsAnticipated" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Association Name="WorkPackage_WorkPackageStatusReport" Member="WorkPackage" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackage" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EmployeeWorkPackageETC" Member="EmployeeWorkPackageETCs">
+    <Type Name="EmployeeWorkPackageETC">
+      <Column Name="empId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="projId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="wpId" Type="System.String" DbType="NVarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="dateUpdated" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ETC_days" Type="System.Decimal" DbType="Decimal(11,1)" CanBeNull="true" />
+      <Association Name="Employee_EmployeeWorkPackageETC" Member="Employee" ThisKey="empId" OtherKey="empId" Type="Employee" IsForeignKey="true" />
+      <Association Name="WorkPackage_EmployeeWorkPackageETC" Member="WorkPackage" ThisKey="projId,wpId" OtherKey="projId,wpId" Type="WorkPackage" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
