@@ -9,8 +9,7 @@
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>
             <div>
-                    <asp:Label ID="lblMessage" runat="server" Text="List of work packages:" Font-Bold="true" Font-Size="Large" />
-                    <br /><br />
+         
                     <table>
                         <tr>
                             <td>
@@ -75,6 +74,10 @@
                     </div>
                     <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
             </div>
+
+            <br /><br />
+            <asp:Label ID="lblMessage" runat="server" Text="List of work packages:" Font-Bold="true" Font-Size="Large" />
+
             </ContentTemplate>
             </asp:UpdatePanel>
                     <br />

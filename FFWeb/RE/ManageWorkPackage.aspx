@@ -83,15 +83,15 @@
                             <asp:LinkButton ID="lbAssignRE" runat="server" onclick="lbAssignRE_Click">here.</asp:LinkButton></font>
                         </div>
                     </td>
-                    <caption>
-                        &gt;
-                    </caption>
                 </tr>
                 <tr>
                     <td align="right">
-                        <asp:Label ID="lblEmployeeList" runat="server" Text="Assigned Employees: "></asp:Label>
+                        <asp:Label ID="lblEmployeeList" runat="server" Text="Assigned Employees: " 
+                            Font-Bold="True"></asp:Label>
                     </td>
                     <td>
+                        <font color="#000066">Click <asp:LinkButton ID="lbAssignEmp" runat="server" onclick="lbAssignEmp_Click">here</asp:LinkButton> to assign employees to this work package.</font>
+                        <br />
                         <asp:GridView ID="gvEmployees" runat="server" AutoGenerateColumns="False" 
                             OnRowCommand="gvEmployees_RowCommand" CellPadding="4" ForeColor="#333333" 
                             GridLines="None">
@@ -115,14 +115,13 @@
                             <SortedDescendingCellStyle BackColor="#E9EBEF" />
                             <SortedDescendingHeaderStyle BackColor="#4870BE" />
                         </asp:GridView>
-                        <asp:Button ID="btnSave" runat="server" Text="Save Changes" 
-                                onclick="btnSave_Click" PostBackUrl="~/RE/ManageWorkPackage.aspx" />
                                 <br />
                     </td>
                 </tr>
                 <tr>
                     <td align="right">
-                        <asp:Label ID="lblSubWP" runat="server" Text="Sub-Workpackages: "></asp:Label>
+                        <asp:Label ID="lblSubWP" runat="server" Text="Sub-Workpackages: " 
+                            Font-Bold="True"></asp:Label>
                     </td>
                     <td>
                         <asp:GridView ID="gvSubWP" runat="server" AutoGenerateColumns="False" OnRowCommand="gvSubWP_RowCommand"
@@ -165,7 +164,7 @@
                 </tr>
                 </tr>
                 </table>
-                <asp:LinkButton ID="lbAssignEmp" runat="server" onclick="lbAssignEmp_Click">Assign a Employee</asp:LinkButton>
+                
                 
 
             <asp:LinkButton ID="lbBacktoProject" runat="server" 
@@ -235,6 +234,8 @@
             </asp:GridView>
             <br />
         </div>
+        <asp:Button ID="btnSave" runat="server" Text="Save Changes" onclick="btnSave_Click" PostBackUrl="~/RE/ManageWorkPackage.aspx" />
+        <br />                        
         <asp:Label ID="lblException" runat="server" ForeColor="Red"></asp:Label>
         <br />
         <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
