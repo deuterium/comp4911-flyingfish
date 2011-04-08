@@ -85,6 +85,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 gvSubWP.DataSource = subwp;
                 gvSubWP.DataBind();
                 getResponsibleEngineer();
+                lblMaxBudget2.Text = getTotalBudget(qry.First().projId).ToString();
                 if (lblError.Text != "")
                     populateUnassignEmployeeGV();
             }
@@ -132,6 +133,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 gvSubWP.DataBind();
                 lbParentwp.Visible = true;
                 getResponsibleEngineer();
+                lblMaxBudget2.Text = getTotalBudget2(parentWpID).ToString();
                 if (lblError.Text != "")
                     populateUnassignEmployeeGV();
             }
@@ -566,16 +568,18 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 populateManageWorkPackage();
                 return;
             }
-            for (int i = 0; i < wp.Length - 1; i++)
+            for (int i = 0; i < wp.Length; i++)
             {
-                subID += wp[i];
+                //subID += wp[i];
                 if (i < wp.Length - 2)
                 {
-                    subID += ".";
+                    //subID += ".";
+                    parentWpID += wp[i] + ".";
+                }
+                if (i == wp.Length - 2)
+                {
                     parentWpID += wp[i];
                 }
-                if (i < wp.Length - 3)
-                    parentWpID += ".";
             }
             Session["wpID"] = parentWpID;
             //Response.Redirect("~/RE/ManageWorkPackage.aspx");

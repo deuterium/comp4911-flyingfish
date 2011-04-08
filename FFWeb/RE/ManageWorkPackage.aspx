@@ -29,6 +29,14 @@
                 </tr>
                 <tr>
                     <td align="right">
+                        <asp:Label ID="lblMaxBudget" runat="server" Font-Bold="True" Text="Maximum Budget: "></asp:Label>
+                    </td>
+                    <td>
+                        <asp:Label ID="lblMaxBudget2" runat="server" Text=""></asp:Label>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
                         <asp:Label ID="lblAlloc" runat="server" Text="Allocated Budget: " 
                             Font-Bold="True"></asp:Label>
                     </td>
