@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Web.Security;
 
 public partial class RE_ManageWorkPackage : System.Web.UI.Page
 {
@@ -83,6 +84,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     select new { wp.wpId, wp.name, wp.unallocated_dollars, wp.allocated_dollars, wp.description };
                 gvSubWP.DataSource = subwp;
                 gvSubWP.DataBind();
+                getResponsibleEngineer();
                 if (lblError.Text != "")
                     populateUnassignEmployeeGV();
             }
@@ -129,6 +131,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 gvSubWP.DataSource = subwp;
                 gvSubWP.DataBind();
                 lbParentwp.Visible = true;
+                getResponsibleEngineer();
                 if (lblError.Text != "")
                     populateUnassignEmployeeGV();
             }
@@ -581,6 +584,100 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         catch (Exception exception)
         {
             lblException.Text = exception.StackTrace;
+        }
+    }
+    protected void lbAssignRE_Click(object sender, EventArgs e)
+    {
+        lblError.Text = "";
+        var qry =
+            from wp in ff.WorkPackages
+            where (
+                wp.wpId == lblWPID2.Text
+            )
+            select new { wp.projId };
+        var employees =
+            from emp in ff.Employees
+            join ep in ff.EmployeeProjects on emp.empId equals ep.empId
+            where ep.projId == qry.First().projId
+            select new { emp.empId, emp.firstName, emp.lastName };
+        gvAssignRE.DataSource = employees;
+        gvAssignRE.DataBind();
+        divAssignRE.Visible = true;
+    }
+    
+    protected void gvAssignRE_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        try
+        {
+            if (e.CommandName == "btnAssign")
+            {
+                var qry =
+                    from wp in ff.WorkPackages
+                    where (
+                        wp.wpId == lblWPID2.Text
+                    )
+                    select new { wp.projId };
+
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvAssignRE.Rows[row];
+
+                EmployeeWorkPackage ewp = new EmployeeWorkPackage();
+                ewp.empId = Convert.ToInt32(selectedRow.Cells[0].Text);
+                ewp.projId = qry.First().projId;
+                ewp.wpId = lblWPID2.Text;
+                
+                var qry2 =
+                    from emp in ff.EmployeeWorkPackages
+                    where (emp.projId == qry.First().projId && emp.empId == ewp.empId)
+                    select emp;
+                if (qry2.ToArray().Length == 0)
+                {
+                    ff.EmployeeWorkPackages.InsertOnSubmit(ewp);
+                }
+                string username = selectedRow.Cells[1].Text + "_" + selectedRow.Cells[2].Text;
+                WorkPackageResponsibleEngineer wpre = new WorkPackageResponsibleEngineer();
+                wpre.projId = qry.First().projId;
+                wpre.wpId = lblWPID2.Text;
+                wpre.responsibleEngineer = Convert.ToInt32(selectedRow.Cells[0].Text);
+                ff.WorkPackageResponsibleEngineers.InsertOnSubmit(wpre);
+                ff.SubmitChanges();
+                divAssignRE.Visible = false;
+                try
+                {
+                    Roles.AddUserToRole(username, "ResponsibleEngineer");
+                }
+                catch (Exception exception)
+                {
+                }
+                populateManageWorkPackage();
+            }
+        }
+        catch (Exception exception)
+        {
+            lblException.Text = exception.StackTrace;
+        }
+    }
+
+    protected void getResponsibleEngineer()
+    {
+        var qry =
+            from re in ff.WorkPackageResponsibleEngineers
+            where re.wpId == lblWPID2.Text
+            select new { re.responsibleEngineer};
+        if (qry.Count() > 0)
+        {
+            var qry2 =
+                from emp in ff.Employees
+                where emp.empId == qry.First().responsibleEngineer
+                select emp;
+            lblRE2.Text = qry2.First().firstName + " " + qry2.First().lastName;
+            divREisAssigned.Visible = true;
+            divREnotAssigned.Visible = false;
+        }
+        else
+        {
+            divREisAssigned.Visible = false;
+            divREnotAssigned.Visible = true;
         }
     }
 }

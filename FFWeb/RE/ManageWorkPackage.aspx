@@ -65,6 +65,25 @@
                 </tr>
                 <tr>
                     <td align="right">
+                        <asp:Label ID="lblRE" runat="server" Text="Responsible Engineer: "></asp:Label>
+                    </td>
+                    <td>
+                        <div id="divREisAssigned" runat="server" visible="false">
+                            <asp:Label ID="lblRE2" runat="server" Text=""></asp:Label>
+                        </div>
+                        <div id="divREnotAssigned" runat="server" visible="false">
+                            There is no Responsible Engineer assigned to this work package.
+                            <br />
+                            If you want to assign a responsible engineer click
+                            <asp:LinkButton ID="lbAssignRE" runat="server" onclick="lbAssignRE_Click">here.</asp:LinkButton>
+                        </div>
+                    </td>
+                    <caption>
+                        &gt;
+                    </caption>
+                </tr>
+                <tr>
+                    <td align="right">
                         <asp:Label ID="lblEmployeeList" runat="server" Text="Assigned Employees: "></asp:Label>
                     </td>
                     <td>
@@ -142,7 +161,7 @@
                 </tr>
                 </table>
                 <asp:LinkButton ID="lbAssignEmp" runat="server" onclick="lbAssignEmp_Click">Assign a Employee</asp:LinkButton>
-                <asp:LinkButton ID="lbAssignRE" runat="server">Assign a Responsible Engineer</asp:LinkButton>
+                
 
             <asp:LinkButton ID="lbBacktoProject" runat="server" 
                 onclick="lbBacktoProject_Click">Go to Project</asp:LinkButton>
@@ -155,11 +174,33 @@
         </div>
         <div id="divAssignEmp" runat="server" visible="false">
             <asp:Label ID="lblAEmp" runat="server" Text="Choose an employee to add to work package:"></asp:Label>
+            <br />
+            ***If no employees appear, there is no employees assigned to project. Go to 
+            <asp:LinkButton ID="lbUM1" runat="server" PostBackUrl="~/HR/AssignEmployee.aspx">User Management</asp:LinkButton> to assign employees to the project.
+            
             <asp:GridView ID="gvUnassignedEmployees" runat="server" 
                 onselectedindexchanged="gvUnassignedEmployees_SelectedIndexChanged" 
                 OnRowCommand="gvUnassignedEmployees_RowCommand" style="margin-left: 0px">
                 <Columns>
                     <asp:ButtonField ButtonType="Button" Text="Add" CommandName="btnAdd" />
+                </Columns>
+            </asp:GridView>
+            <br />
+        </div>
+        <div id="divAssignRE" visible="false" runat="server" >
+            <asp:Label ID="lblAssignRE" runat="server" Text="Assign any of the employees listed below to be a Responsible Engineer:"></asp:Label>
+            <br />
+            ***If no employees appear, there is no employees assigned to project. Go to 
+            <asp:LinkButton ID="lbUM2" runat="server" PostBackUrl="~/HR/AssignEmployee.aspx">User Management</asp:LinkButton> to assign employees to the project.
+            <br />
+            <asp:GridView ID="gvAssignRE" runat="server" OnRowCommand="gvAssignRE_RowCommand" AutoGenerateColumns="false">
+                <Columns>
+                    <asp:BoundField DataField="empId" HeaderText="ID" SortExpression="empId" />
+                    <asp:BoundField DataField="firstName" HeaderText="First Name" 
+                        SortExpression="firstName" />
+                    <asp:BoundField DataField="lastName" HeaderText="Last Name" 
+                        SortExpression="lastName" />
+                    <asp:ButtonField ButtonType="Button" CommandName="btnAssign" Text="Assign" />
                 </Columns>
             </asp:GridView>
             <br />
