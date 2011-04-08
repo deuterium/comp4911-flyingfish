@@ -147,6 +147,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Assign Employee linkbutton event handler
     protected void lbAssignEmp_Click(object sender, EventArgs e)
     {
+        divAssignRE.Visible = false;
         populateUnassignEmployeeGV();
     }
 
