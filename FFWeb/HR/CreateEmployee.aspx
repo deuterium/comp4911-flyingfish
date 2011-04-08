@@ -151,7 +151,7 @@
                                                 <asp:Label ID="SupervisorLabel" runat="server">Supervisor:</asp:Label>
                                             </td>
                                             <td>
-                                                <asp:ListBox ID="SupervisorList" runat="server" oninit="SupervisorList_Init" />
+                                                <asp:ListBox ID="SupervisorList" runat="server" oninit="SupervisorList_Init" Width="140" />
                                                 <asp:RequiredFieldValidator ID="SupervisorRequired" runat="server" ErrorMessage="A suprvisor is required."
                                                     ValidationGroup="cuwCreateUser" ControlToValidate="SupervisorList" ForeColor="Red">*</asp:RequiredFieldValidator>
                                             </td>
@@ -161,9 +161,17 @@
                                                 <asp:Label ID="ApproverLabel" runat="server">Approver:</asp:Label>
                                             </td>
                                             <td>
-                                                <asp:ListBox ID="ApproverList" runat="server" />
+                                                <asp:ListBox ID="ApproverList" runat="server" Width="140" />
                                                 <asp:RequiredFieldValidator ID="ApproverRequired" runat="server" ErrorMessage="A timesheet approver is required."
                                                     ValidationGroup="cuwCreateUser" ControlToValidate="ApproverList" ForeColor="Red">*</asp:RequiredFieldValidator>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <asp:Label Text="P-Level:" ID="PLevelLabel" runat="server" />
+                                            </td>
+                                            <td>
+                                                <asp:DropDownList ID="ddlPLevel" runat="server" oninit="ddlPLevel_Init" Width="140" />
                                             </td>
                                         </tr>
                                         <tr>
@@ -241,7 +249,7 @@
             <SideBarStyle BackColor="#507CD1" Font-Size="0.9em" VerticalAlign="Top" />
             <StepStyle Font-Size="0.8em" />
         </asp:CreateUserWizard>
-        <asp:LinqDataSource ID="RoleSource" runat="server" ContextTypeName="FFLib.FlyingFishClassesDataContext"
+        <asp:LinqDataSource ID="RoleSource" runat="server" ContextTypeName="FlyingFishClassesDataContext"
             EntityTypeName="" Select="new (RoleId, RoleName)" TableName="aspnet_Roles">
         </asp:LinqDataSource>
     </div>

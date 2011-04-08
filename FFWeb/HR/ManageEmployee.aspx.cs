@@ -159,7 +159,7 @@ public partial class HR_ManageEmployee : System.Web.UI.Page
         lblUserEditError.Text = "";
         DivUserDetails.Visible = true;
         DivUserGridView.Visible = false;
-        fillSupervisorApproverListBoxes();
+        fillListBoxesAndDropDowns();
         #region User Information minus Roles
         int empID = Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text);
         Employee ManagedEmployee = ff.Employees.Where(em => em.empId == empID).First();
@@ -198,7 +198,7 @@ public partial class HR_ManageEmployee : System.Web.UI.Page
     }
 
     //Returns a list of all Supervisors ..... List<String> is placeholder for correct type
-    protected void fillSupervisorApproverListBoxes()
+    protected void fillListBoxesAndDropDowns()
     {
         var list = ff.vw_AllValid_UserName_EmpIDs
             .Select(u => new
@@ -217,5 +217,28 @@ public partial class HR_ManageEmployee : System.Web.UI.Page
         lbSupervisors.DataTextField = "tsa";
         lbSupervisors.DataValueField = "empId";
         lbSupervisors.DataBind();
+
+        ddlPLevel.DataSource = ff.PersonLevels
+            .Where(d => d.fiscalYear == DateTime.Now.Year)
+            .Select(p => new
+            {
+                PLevel = p.pLevel + " ($" + p.rate + ")",
+                PLevelID = p.pLevel
+            });
+        ddlPLevel.DataValueField = "PLevelID";
+        ddlPLevel.DataTextField = "PLevel";
+        try
+        {
+            ddlPLevel.DataBind();
+            //var i = ff.EmployeePersonLevels
+            //    .Where(pl => (pl.empId == Convert.ToInt32(lblEmpId.Text)) && (pl.fiscalYear == DateTime.Now.Year))
+            //    .Select(pl => pl.pLevel).First();
+            //foreach( var r in ddlPLevel.Items)
+            //{
+            //    r.
+            //}
+            //ddlPLevel.SelectedIndex = 
+        }
+        catch (Exception ex) { ex.ToString(); }
     }
 }

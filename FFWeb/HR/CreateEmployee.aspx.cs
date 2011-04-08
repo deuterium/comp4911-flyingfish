@@ -11,7 +11,7 @@ public partial class HR_CreateEmployee : System.Web.UI.Page
 
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
 
-    protected void Page_Load(object sender, EventArgs e){}
+    protected void Page_Load(object sender, EventArgs e) { }
 
     //Populates the Supervisor && Approver lists
     protected void SupervisorList_Init(object sender, EventArgs e)
@@ -111,5 +111,25 @@ public partial class HR_CreateEmployee : System.Web.UI.Page
     protected void cuwCreateUser_ContinueButtonClick(object sender, EventArgs e)
     {
         cuwCreateUser.ActiveStepIndex = 0;
+    }
+
+    //Populates PLevel dropdownlist for current year; blank if no PLevels for year
+    protected void ddlPLevel_Init(object sender, EventArgs e)
+    {
+        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ddlPLevel")).DataSource
+            = ff.PersonLevels
+            .Where(d => d.fiscalYear == DateTime.Now.Year)
+            .Select(p => new
+            {
+                PLevel = p.pLevel + " ($" + p.rate + ")",
+                PLevelID = p.pLevel
+            });
+        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ddlPLevel")).DataValueField = "PLevelID";
+        ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ddlPLevel")).DataTextField = "PLevel";
+        try
+        {
+            ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ddlPLevel")).DataBind();
+        }
+        catch (Exception ex) { ex.ToString(); }
     }
 }
