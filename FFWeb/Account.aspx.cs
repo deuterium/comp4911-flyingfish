@@ -27,6 +27,10 @@ public partial class Account : System.Web.UI.Page
             lblSickDaysAmount.Text = sickDays.ToString();
             lblVacationDaysAmount.Text = vacationDays.ToString();
         }
+        else
+        {
+            Response.Redirect("~/Login.aspx");
+        }
     }
     protected void ContinuePushButton_Command(object sender, CommandEventArgs e)
     {

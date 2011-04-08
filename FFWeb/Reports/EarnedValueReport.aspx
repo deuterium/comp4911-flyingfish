@@ -40,13 +40,15 @@
                         ErrorMessage="Start date must be between 2010/01/01 and 2500/01/01."
                         MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*">
                     </asp:RangeValidator>
+                    <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" 
+                        ControlToValidate="tbPeriodStart" ErrorMessage="Start date not selected" 
+                        ForeColor="Red">*</asp:RequiredFieldValidator>
                     <asp:RegularExpressionValidator ForeColor="Red" ID="revEndDate" runat="server" 
                         ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbPeriodEnd"
                         ErrorMessage="End date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
-                    <asp:RangeValidator ForeColor="Red" ID="rgvEndDate" runat="server" ControlToValidate="tbPeriodEnd"
-                        ErrorMessage="End date must be between 2010/01/01 and 2500/01/01."
-                        MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*">
-                    </asp:RangeValidator>
+                    <asp:RequiredFieldValidator ID="rfvEndtDate" runat="server" 
+                        ControlToValidate="tbPeriodEnd" ErrorMessage="End date not selected" 
+                        ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
@@ -68,8 +70,7 @@
 
     <br />
 
-        <asp:GridView ID="gvEarnedValue" runat="server" AutoGenerateColumns="False" OnRowCancelingEdit="gvEarnedValue_RowCancelingEdit"
-            OnRowCommand="gvEarnedValue_RowCommand" OnRowEditing="gvEarnedValue_RowEditing" OnRowUpdated="gvEarnedValue_RowUpdated">
+        <asp:GridView ID="gvEarnedValue" runat="server" AutoGenerateColumns="False">
         <Columns>
             <asp:TemplateField HeaderText="Workpackage">
                 <EditItemTemplate>
@@ -81,18 +82,18 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="PM-Budget">
                 <EditItemTemplate>
-                    <asp:Label ID="Label13" runat="server" Text='<%# Bind("Complete") %>'></asp:Label>
+                    <asp:Label ID="Label13" runat="server" Text='<%# Bind("PMBudget") %>'></asp:Label>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label14" runat="server" Text='<%# Bind("Complete") %>'></asp:Label>
+                    <asp:Label ID="Label14" runat="server" Text='<%# Bind("PMBudget") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="RE-Budget">
+            <asp:TemplateField HeaderText="RE-Estimate">
                 <EditItemTemplate>
-                    <asp:Label ID="Label15" runat="server" Text='<%# Bind("Complete") %>'></asp:Label>
+                    <asp:Label ID="Label15" runat="server" Text='<%# Bind("REBudget") %>'></asp:Label>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label16" runat="server" Text='<%# Bind("Complete") %>'></asp:Label>
+                    <asp:Label ID="Label16" runat="server" Text='<%# Bind("REBudget") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="ACWP">
@@ -105,26 +106,26 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="RE-EAC">
                 <EditItemTemplate>
-                    <asp:TextBox ID="TextBox2" Width="60px" runat="server" Text='<%# Bind("Complete") %>' />
+                    <asp:TextBox ID="TextBox2" Width="60px" runat="server" Text='<%# Bind("REEAC") %>' />
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label6" runat="server" Text='<%# Bind("Complete") %>'></asp:Label>
+                    <asp:Label ID="Label6" runat="server" Text='<%# Bind("REEAC") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="PM-VAR">
                 <EditItemTemplate>
-                    <asp:Label ID="Label7" runat="server" Text='<%# Bind("Complete") %>'></asp:Label>
+                    <asp:Label ID="Label7" runat="server" Text='<%# Bind("PMVAR") %>'></asp:Label>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label8" runat="server" Text='<%# Bind("Complete") %>'></asp:Label>
+                    <asp:Label ID="Label8" runat="server" Text='<%# Bind("PMVAR") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="RE-VAR">
                 <EditItemTemplate>
-                    <asp:Label ID="Label9" runat="server" Text='<%# Bind("Complete") %>'></asp:Label>
+                    <asp:Label ID="Label9" runat="server" Text='<%# Bind("REVAR") %>'></asp:Label>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label10" runat="server" Text='<%# Bind("Complete") %>'></asp:Label>
+                    <asp:Label ID="Label10" runat="server" Text='<%# Bind("REVAR") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Complete">
@@ -135,12 +136,8 @@
                     <asp:Label ID="Label12" runat="server" Text='<%# Bind("Complete") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:CommandField ButtonType="Button" ShowEditButton="True" UpdateText="Save">
-                <ItemStyle HorizontalAlign="Center" Wrap="False" />
-            </asp:CommandField>
         </Columns>
     </asp:GridView>
-
     </center>
 </asp:Content>
 

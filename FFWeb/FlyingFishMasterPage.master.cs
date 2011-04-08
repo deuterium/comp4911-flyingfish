@@ -14,11 +14,18 @@ public partial class FlyingFishMasterPage : System.Web.UI.MasterPage
         {
             divLogin.Visible = false;
             LoginStatus.Visible = true;
+            lbAccount.Text = Page.User.Identity.Name;
+            lbAccount.Visible = true;
         }
         else
         {
             divLogin.Visible = true;
             LoginStatus.Visible = false;
+            lbAccount.Visible = false;
         }
+    }
+    protected void lbAccount_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/Account.aspx");
     }
 }

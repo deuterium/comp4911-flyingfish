@@ -1,26 +1,115 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
+using System.Linq;
 
-public partial class Reports_EarnedValueReport : System.Web.UI.Page {
-    
+public partial class Reports_EarnedValueReport : System.Web.UI.Page
+{
+
+    #region Global Variables
     FlyingFishClassesDataContext ffdb = new FlyingFishClassesDataContext();
+    String unknownValue = "N/A";
+    #endregion
 
+    #region Events / Others
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!IsPostBack) {
+        if (!IsPostBack)
+        {
+            //make and attach DataSource for Drop Down List
             populateProjects();
-            // for testing purposes only, so I don't have to fill out the form every time
-            GetWorkPackageStatusReport(4911, "1", Convert.ToDateTime("2011/01/01"), Convert.ToDateTime("2011/03/01"));
+
+            //gogo make report
+            GetEarnedValueReport(4911, DateTime.Today);
         }
     }
 
-    private void populateProjects() {
-        ddlAllProjects.DataSource = ffdb.Projects.Select(p => new {
+    private void GetEarnedValueReport(int projId, DateTime end)
+    {
+        #region Variables
+        /***************************************
+         * Get the list of all the workpackages
+         * associated with the Project selected
+         **************************************/
+        var workpackages = from wp in ffdb.WorkPackages
+                           where wp.projId.Equals(projId)
+                           join proj in ffdb.Projects on wp.projId equals proj.projId
+                           select wp;
+
+        /*********************************************
+         * Create the table template for the datagrid
+         *********************************************/
+        DataTable dt = makeTable();
+        #endregion
+
+        #region Magically Make Stuff
+        /***********************************************
+         * For each WorkPackage in Project
+         * Generate the Title, PDays and PDays($) rows
+         ***********************************************/
+        foreach (var wp in workpackages)
+        {
+            #region Values
+            //Days            
+            string PMBudgetDays = this.getPMBudgetDays(wp.projId, wp.wpId, end);
+            string REBudgetDays = this.getREBudgetDays(wp.projId, wp.wpId, end);
+            string ACWPDays     = this.getACWPDays(wp.projId, wp.wpId, end);
+            string REEACDays    = this.getREEACDays(wp.projId, wp.wpId, end, ACWPDays);
+            string PMVarDays    = this.getVARDays(PMBudgetDays, REEACDays);
+            string REVarDays    = this.getVARDays(REBudgetDays, REEACDays);
+            string CompleteDays = this.getCompleteDays(REEACDays, ACWPDays);
+
+            //Budget/Estimates
+            string PMBudget = this.getPMBudget(wp.projId, wp.wpId);
+            string REBudget = this.getREBudget(wp.projId, wp.wpId, end);
+            string ACWP     = this.getACWP(wp.projId, wp.wpId, end);
+            string REEAC    = this.getREEAC(wp.projId, wp.wpId, end, ACWP);
+            string PMVar    = this.getVAR(PMBudget, REEAC);
+            string REVar    = this.getVAR(REBudget, REEAC);
+            string Complete = this.getComplete(REEAC, ACWP);
+            #endregion
+
+            #region WorkPackage Row
+            DataRow dr = dt.NewRow();
+            dr["Workpackage"] = wp.wpId + "  " + wp.name;
+            dt.Rows.Add(dr);
+            #endregion
+
+            #region PDays Row
+            dr = dt.NewRow();
+            dr["Workpackage"]   = "PDays";
+            dr["PMBudget"]      = PMBudgetDays;
+            dr["REBudget"]      = REBudgetDays;
+            dr["ACWP"]          = ACWPDays;
+            dr["REEAC"]         = REEACDays;
+            dr["PMVar"]         = PMVarDays;
+            dr["REVar"]         = REVarDays;
+            dr["Complete"]      = CompleteDays;
+            dt.Rows.Add(dr);
+            #endregion
+
+            #region PDays($) Row
+            dr = dt.NewRow();
+            dr["Workpackage"]   = "PDays($)";
+            dr["PMBudget"]      = PMBudget;
+            dr["REBudget"]      = REBudget;
+            dr["ACWP"]          = ACWP;
+            dr["REEAC"]         = REEAC;
+            dr["PMVar"]         = PMVar;
+            dr["REVar"]         = REVar;
+            dr["Complete"]      = Complete;
+            dt.Rows.Add(dr);
+            #endregion
+        }
+        
+        gvEarnedValue.DataSource = dt;
+        gvEarnedValue.DataBind();
+        #endregion
+    }
+
+    private void populateProjects()
+    {
+        ddlAllProjects.DataSource = ffdb.Projects.Select(p => new
+        {
             ProjID = p.projId,
             ProjectName = p.projName + " (" + p.projId + ")"
         });
@@ -29,285 +118,342 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page {
         ddlAllProjects.DataBind();
     }
 
-    protected void btnSubmit_Click(object sender, EventArgs e) {
-        DateTime periodStart = Convert.ToDateTime(tbPeriodStart.Text);
-        DateTime periodEnd = Convert.ToDateTime(tbPeriodEnd.Text);
-        int projId = Convert.ToInt16(ddlAllProjects.SelectedValue);
-        GetWorkPackageStatusReport(projId, "1", periodStart, periodEnd);
-    }
-
-
-    public void GetWorkPackageStatusReport(int projId, String wpId, DateTime start, DateTime end) {
-        // Find out how much work each employee has done on the work package
-        // Calculate the PDays and PDollar value of this work
-        // Calculate the EAC from the ACWP and ETC
-        // Calculate the percent complete
-        // Calculate the total
-
-        List<KeyValuePair<int, double>> acwpForAll = getAcwpForAll(projId, wpId, start, end);
-        List<EmployeeWorkPackageETC> etcForAll = getEtcForAll(projId, wpId, start, end);
-
-        var qry = from tse in ffdb.TimesheetEntries
-                  join proj in ffdb.Projects on tse.projId equals proj.projId
-                  join wp in ffdb.WorkPackages on (tse.projId + tse.wpId) equals (wp.projId + wp.wpId)
-                  join emp in ffdb.Employees on tse.empId equals emp.empId
-                  join wpre in ffdb.WorkPackageResponsibleEngineers on (tse.projId + tse.wpId) equals (wpre.projId + wpre.wpId)
-                  join re in ffdb.Employees on wpre.responsibleEngineer equals re.empId
-                  join pm in ffdb.Employees on proj.manager equals pm.empId
-                  orderby tse.projId, tse.wpId, tse.empId
-                  where (tse.tsDate >= start) && (tse.tsDate <= end)
-                        && (tse.projId == projId) && (tse.wpId == wpId)
-                  select new {
-                      Proj = proj,
-                      PM = pm,
-                      WP = wp,
-                      WPRE = wpre,
-                      RE = re,
-                      Emp = emp.firstName + " " + emp.lastName + " (" + emp.empId + ")",
-                      ACWP = getAcwpForEmployee(tse.empId, acwpForAll),
-                      ETC = getEtcForEmployee(tse.empId, etcForAll),
-                      EAC = getEacForEmployee(getAcwpForEmployee(tse.empId, acwpForAll), getEtcForEmployee(tse.empId, etcForAll)),
-                      PercentComplete = getPercentComplete(getAcwpForEmployee(tse.empId, acwpForAll),
-                                        getEacForEmployee(getAcwpForEmployee(tse.empId, acwpForAll),
-                                                getEtcForEmployee(tse.empId, etcForAll)).ToString())
-                  };
-
-        var workpackages = from wp in ffdb.WorkPackages
-                           where wp.wpId.Equals(wpId) && wp.projId.Equals(projId)
-                           join proj in ffdb.Projects on wp.projId equals proj.projId
-                           select wp;
-
-        if (qry.Count() == 0) {
-            gvEarnedValue.DataSource = null;
-            gvEarnedValue.DataBind();
-            //lblResults.Visible = true;
-            return;
-        }
-
-
-        double totalAcwp = 0;
-
-        foreach (var item in qry) {
-            if (!(item.ACWP.Equals("Unknown"))) {
-                totalAcwp += Convert.ToDouble(item.ACWP);
-            }
-        }
-
-
-        String strTotalAcwp = (totalAcwp / 8).ToString();
-        if (totalAcwp == 0) {
-            strTotalAcwp = "Unknown";
-        }
-
+    private DataTable makeTable()
+    {
         DataTable dt = new DataTable();
         dt.Columns.Add(new DataColumn("Workpackage", typeof(System.String)));
-        dt.Columns.Add(new DataColumn("PM-Budget", typeof(System.String)));
-        dt.Columns.Add(new DataColumn("RE-Budget", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("PMBudget", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("REBudget", typeof(System.String)));
         dt.Columns.Add(new DataColumn("ACWP", typeof(System.String)));
-        dt.Columns.Add(new DataColumn("RE-EAC", typeof(System.String)));
-        dt.Columns.Add(new DataColumn("PM-Var", typeof(System.String)));
-        dt.Columns.Add(new DataColumn("RE-Var", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("REEAC", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("PMVar", typeof(System.String)));
+        dt.Columns.Add(new DataColumn("REVar", typeof(System.String)));
         dt.Columns.Add(new DataColumn("Complete", typeof(System.String)));
 
-        foreach (var wp in workpackages) {
-            DataRow dr = dt.NewRow();
-            dr["Workpackage"] = wp.wpId + "  " + wp.name;
-            dr["PM-Budget"] = this.getPMBudget(wp.projId, wp.wpId);
-            dr["RE-Budget"] = "?";
-            dr["ACWP"] = strTotalAcwp;
-            dr["RE-EAC"] = ""; //row.EAC;
-            dr["PM-Var"] = "";
-            dr["RE-Var"] = "?";
-            dr["Complete"] = ""; //row.PercentComplete;
-            dt.Rows.Add(dr);
+        return dt;
+    }
+
+    protected void btnSubmit_Click(object sender, EventArgs e) {
+        DateTime periodEnd = Convert.ToDateTime(tbPeriodEnd.Text);
+        int projId = Convert.ToInt16(ddlAllProjects.SelectedValue);
+        GetEarnedValueReport(projId, periodEnd);
+    }
+    #endregion
+
+    #region Business Logic & Calculations
+
+    #region Days
+    private String getPMBudgetDays(int projId, String wpId, DateTime end)
+    {
+        try
+        {
+            double days = 0;
+
+            var qry = from wp in ffdb.WorkPackageBudgetPMs
+                      where (wp.projId == projId) && wp.wpId.Equals(wpId) && wp.dateUpdated <= end
+                      select wp into b
+                      group b by new { b.projId, b.wpId, b.pLevel } into g
+                      select new { g.Key.projId, g.Key.wpId, g.Key.pLevel, Days = g.First().allocated_days, Date = g.Max(t => t.dateUpdated) };
+
+            foreach (var i in qry)
+                days += Convert.ToDouble(i.Days);
+
+            if (days != 0)
+                return days.ToString();
+            else
+                return unknownValue;
         }
+        catch (Exception ex)
+        {
+            return unknownValue;
+        }
+    }
 
-        gvEarnedValue.DataSource = dt;
-        gvEarnedValue.DataBind();
+    private String getREBudgetDays(int projId, String wpId, DateTime end)
+    {
+        try
+        {
+            double days = 0;
 
-        double reBAC = 0;
+            var qry = from wp in ffdb.WorkPackageEstimateREs
+                      where (wp.projId == projId) && wp.wpId.Equals(wpId) && wp.dateUpdated <= end
+                      select wp.estimated_days;
 
-        foreach (var item in qry) {
-            if (!(item.EAC.Equals("Unknown"))) {
-                reBAC += Convert.ToDouble(item.EAC);
+            foreach (var i in qry)
+                days += Convert.ToDouble(i);
+
+            if (days != 0)
+                return days.ToString();
+            else
+                return unknownValue;
+        }
+        catch (Exception ex)
+        {
+            return unknownValue;
+        }
+    }
+
+    private String getACWPDays(int projId, String wpId, DateTime end)
+    {
+        try
+        {
+            double days = 0;
+
+            var qry = from t in ffdb.TimesheetEntries
+                      join tsh in ffdb.TimesheetHeaders on (t.empId.ToString() + t.tsDate.ToString()) equals (tsh.empId.ToString() + tsh.tsDate.ToString())
+                      where t.projId == projId && t.wpId == wpId && tsh.status.Equals("APPROVED")
+                      select new { days = (double)t.totalHours / (double)8 };
+
+            foreach (var i in qry)
+                days += i.days;
+
+            if (days != 0)
+                return (days).ToString();
+            else
+                return "0";
+        }
+        catch (Exception ex)
+        {
+            return unknownValue;
+        }
+    }
+
+    private String getREEACDays(int projId, String wpId, DateTime end, string acwpDays)
+    {
+        try
+        {
+            double etcDays = 0;
+
+            var qry = from e in ffdb.EmployeeWorkPackageETCs
+                      where e.projId.Equals(projId) && e.wpId.Equals(wpId) && e.dateUpdated <= end
+                      group e by new { e.projId, e.wpId, e.empId } into g
+                      select new
+                      {
+                          g.Key.projId,
+                          g.Key.wpId,
+                          g.Key.empId,
+                          days = g.Sum(t => t.ETC_days),
+                          Date = g.Max(t => t.dateUpdated)
+                      };
+
+            foreach (var i in qry)
+                etcDays += Convert.ToDouble(i.days);
+
+            if (etcDays == 0)
+                return unknownValue;
+            else
+                return (Convert.ToDouble(acwpDays) + etcDays).ToString();
+        }
+        catch (Exception ex)
+        {
+            return unknownValue;
+        }
+    }
+
+    private String getVARDays(string BAC, string EAC)
+    {
+        try
+        {
+            if (BAC == unknownValue || EAC == unknownValue)
+                return unknownValue;
+            else
+            {
+                return ((Convert.ToDouble(BAC) - Convert.ToDouble(EAC)) / Convert.ToDouble(BAC)).ToString("0.00%");
             }
         }
-
-        //lblReBac.Text = reBAC.ToString();
-        if (reBAC == 0) {
-            //lblReBac.Text = "Unknown";
+        catch (Exception ex)
+        {
+            return unknownValue;
         }
-
-        //lblResults.Visible = false;
-        //divReportData.Visible = true;
-
     }
 
-    private void createNewReport() {
-
+    private String getCompleteDays(string EAC, string ACW)
+    {
+        try
+        {
+            if (EAC == unknownValue)
+                return unknownValue;
+            else
+            {
+                return (Convert.ToDouble(ACW) / Convert.ToDouble(EAC)).ToString("0.00%");
+            }
+        }
+        catch (Exception ex)
+        {
+            return unknownValue;
+        }
     }
+    #endregion
 
-
+    #region Budget
     private String getPMBudget(int projId, String wpId) {
-        var qry = (from wp in ffdb.WorkPackages
-                   where (wp.projId == projId) && wp.wpId.Equals(wpId)
-                   select wp).FirstOrDefault();
-        if (qry.unallocated_dollars == null) {
-            return "Unknown";
-        } else {
-            return (qry.unallocated_dollars + qry.allocated_dollars).ToString();
+
+        try
+        {
+            double estimate = 0;
+
+            var qry = (from wp in ffdb.WorkPackageBudgetPMs
+                       join p in ffdb.PersonLevels on wp.pLevel equals p.pLevel
+                       where (wp.projId == projId) && wp.wpId.Equals(wpId) && p.fiscalYear.Equals(wp.fiscalYear)
+                       select new { allocated_days = wp.allocated_days, rate = p.rate });
+
+            foreach (var i in qry)
+                estimate += (Convert.ToDouble(i.allocated_days * i.rate));
+
+            if (estimate != 0)
+                return "$" + estimate.ToString();
+            else
+            {
+
+                var qry2 = (from wp in ffdb.WorkPackages
+                            where (wp.projId == projId) && wp.wpId.Equals(wpId)
+                            select wp).FirstOrDefault();
+
+                if (qry2.unallocated_dollars == null || (qry2.unallocated_dollars + qry2.allocated_dollars) == 0)
+                    return unknownValue;
+                else
+                    return "$" + (qry2.unallocated_dollars + qry2.allocated_dollars).ToString();
+            }
+        }
+        catch (Exception ex)
+        {
+            return unknownValue;
         }
     }
 
-    private double getREBudget(int projId, String wpId) {
-        var qry = (from wp in ffdb.WorkPackages
-                   where (wp.projId == projId) && wp.wpId.Equals(wpId)
-                   select wp).FirstOrDefault();
-        return (Double)(qry.unallocated_dollars + qry.allocated_dollars);
+    private String getREBudget(int projId, String wpId, DateTime end) {
+
+        try
+        {
+            double estimate = 0;
+
+            var data = from wp in ffdb.WorkPackageEstimateREs
+                       join p in ffdb.PersonLevels on wp.pLevel equals p.pLevel
+                       where (wp.projId == projId) && wp.wpId.Equals(wpId)
+                             && wp.fiscalYear.Equals(p.fiscalYear)
+                             && wp.dateUpdated <= end
+                       select new { wp.estimated_days, p.rate, wp.pLevel, wp.dateUpdated, wp.projId, wp.wpId } into b
+                       group b by new { b.projId, b.wpId, b.pLevel, b.rate } into g
+                       select new { g.Key.projId, g.Key.wpId, g.Key.pLevel, g.Key.rate, Date = g.Max(t => t.dateUpdated) };
+
+            var qry = from wp in ffdb.WorkPackageEstimateREs
+                      join d in data on (wp.wpId + wp.projId + wp.pLevel + wp.dateUpdated) equals (d.wpId + d.projId + d.pLevel + d.Date)
+                      select new { d.wpId, d.projId, d.pLevel, d.Date, d.rate, wp.estimated_days };
+
+            foreach (var i in qry)
+            {
+                estimate += (Convert.ToDouble(i.estimated_days * i.rate));
+            }
+
+            if (estimate != 0)
+                return "$" + estimate.ToString();
+            else
+                return unknownValue;
+        }
+        catch (Exception ex)
+        {
+            return unknownValue;
+        }
     }
+        
+    private String getACWP(int projId, String wpId, DateTime end)
+    {
+        try
+        {
+            double ACWP = 0;
 
+            var qry = from t in ffdb.TimesheetEntries
+                      join tsh in ffdb.TimesheetHeaders on (t.empId.ToString() + t.tsDate.ToString()) equals (tsh.empId.ToString() + tsh.tsDate.ToString())
+                      where t.projId == projId && t.wpId == wpId && tsh.status.Equals("APPROVED") && t.tsDate <= end
+                      select new { t.empId, t.tsDate, t.projId, t.wpId, days = (double)t.totalHours / (double)8 } into t
+                      join e in ffdb.EmployeePersonLevels on t.empId equals e.empId
+                      join p in ffdb.PersonLevels on (e.pLevel + e.fiscalYear) equals (p.pLevel + p.fiscalYear)
+                      where e.dateUpdated <= t.tsDate
+                      select new { t.empId, t.tsDate, t.projId, t.wpId, t.days, p.pLevel, p.rate, e.dateUpdated } into t
+                      orderby t.dateUpdated descending
+                      group t by new { t.empId, t.tsDate, t.projId, t.wpId } into p
+                      select new { acwp = (double)p.First().days * (double)p.First().rate };
+                      //group t by new { t.empId, t.tsDate, t.projId, t.wpId } into g
+                      //select new { g.Key.empId, g.Key.tsDate, g.Key.projId, g.Key.wpId, days = (double)g.Sum(s => (s.mon + s.tue + s.wed + s.thu + s.fri + s.sat + s.sun)) / (double)8 };
+            foreach (var i in qry)
+                ACWP += i.acwp;
 
-
-    private WorkPackageStatusReport getExistingReportDetails(int projId, String wpId, DateTime start, DateTime end) {
-        WorkPackageStatusReport wpsr = (from sr in ffdb.WorkPackageStatusReports
-                                        where sr.endDate.Equals(end)
-                                                && sr.startDate.Equals(start)
-                                                && (sr.projId == projId)
-                                                && (sr.wpId == wpId)
-                                        select sr).FirstOrDefault();
-
-        return wpsr;
+            if (ACWP != 0)
+                return "$" + ACWP.ToString();
+            else
+                return "$0";
+        }
+        catch (Exception ex)
+        {
+            return unknownValue;
+        }
     }
+    
+    private String getREEAC(int projId, String wpId, DateTime end, string acwp)
+    {
+        try
+        {
+            double etc = 0;
 
-    private List<KeyValuePair<int, double>> getAcwpForAll(int projId, String wpId, DateTime start, DateTime end) {
-        var qry = from t in ffdb.TimesheetEntries
-                  where (t.projId == projId)
-                          && (t.wpId == wpId)
-                          && (t.tsDate >= start)
-                          && (t.tsDate <= end)
-                  group t by new { t.projId, t.wpId, ID = t.empId } into g
-                  select new {
-                      empId = g.Key.ID,
-                      hours = (double)g.Sum(s => (s.mon + s.tue + s.wed + s.thu + s.fri + s.sat + s.sun))
-                  };
-        List<KeyValuePair<int, double>> listAcwp = new List<KeyValuePair<int, double>>();
-        foreach (var acwp in qry) {
-            listAcwp.Add(new KeyValuePair<int, double>(acwp.empId, acwp.hours));
+            var qry = from e in ffdb.EmployeeWorkPackageETCs
+                      join ep in ffdb.EmployeePersonLevels on e.empId equals ep.empId
+                      join p in ffdb.PersonLevels on (ep.pLevel + ep.fiscalYear) equals (p.pLevel + p.fiscalYear)
+                      where e.projId.Equals(projId) && e.wpId.Equals(wpId)
+                              && ep.dateUpdated <= end && e.dateUpdated <= end
+                      select new { e.empId, e.ETC_days, epDateUpdated = ep.dateUpdated, p.rate} into a
+                      orderby a.epDateUpdated descending
+                      group a by new { a.empId } into g
+                      select new { subTotal = Convert.ToDouble(g.First().rate * g.First().ETC_days) };
+
+            foreach (var i in qry)
+                etc += i.subTotal;
+
+            if (etc == 0)
+                return unknownValue;
+            else
+                return "$" + (Convert.ToDouble(acwp.Substring(1)) + etc).ToString();
         }
-        return listAcwp;
-    }
-
-    private List<EmployeeWorkPackageETC> getEtcForAll(int projId, String wpId, DateTime start, DateTime end) {
-        var qry = from etc in ffdb.EmployeeWorkPackageETCs
-                  where (etc.projId == projId)
-                          && (etc.wpId == wpId)
-                          && (etc.dateUpdated >= start)
-                          && (etc.dateUpdated <= end)
-                          && (etc.dateUpdated ==
-                                  (from du in ffdb.EmployeeWorkPackageETCs
-                                   select du.dateUpdated).Max())
-                  select etc;
-
-        List<EmployeeWorkPackageETC> listEtc = new List<EmployeeWorkPackageETC>();
-        foreach (var etc in qry) {
-            listEtc.Add(etc);
-        }
-        return listEtc;
-    }
-
-    private String getAcwpForEmployee(int empId, List<KeyValuePair<int, double>> list) {
-        String s = (from afa in list
-                    where afa.Key == empId
-                    select afa.Value).FirstOrDefault().ToString();
-        if (s == null || s.Equals("")) {
-            s = "0";
-        }
-        return s;
-    }
-
-    private String getEtcForEmployee(int empId, List<EmployeeWorkPackageETC> list) {
-        String s = (from afa in list
-                    where afa.empId == empId
-                    select afa.ETC_days).FirstOrDefault().ToString();
-        if (s == null || s.Equals("")) {
-            s = "Unknown";
-        }
-        return s;
-    }
-
-    private String getEacForEmployee(String empEtc, String empAcwp) {
-        double etc = 0;
-        double acwp = 0;
-
-        if (!empEtc.Equals("Unknown")) {
-            return "Unknown";
-        }
-
-        if (!empAcwp.Equals("Unknown")) {
-            acwp = Convert.ToDouble(empAcwp);
-        }
-
-        return (etc + acwp).ToString();
-    }
-
-    private Double calculateEstimate(String empAcwp, String empEtc, String empEac, Boolean calculateEac) {
-        double acwp = 0;
-        double etc = 0;
-        double eac = 0;
-
-        if (!empAcwp.Equals("Unknown")) {
-            acwp = Convert.ToDouble(empAcwp);
-        }
-
-        if (!empEac.Equals("Unknown")) {
-            eac = Convert.ToDouble(empEac);
-        }
-
-        if (!empEtc.Equals("Unknown")) {
-            etc = Convert.ToDouble(empEtc);
-        }
-
-        if (calculateEac) {
-            return acwp + etc;
-        }
-        else {
-            return eac - acwp;
+        catch (Exception ex)
+        {
+            return unknownValue;
         }
     }
 
-    private String getPercentComplete(String empAcwp, String empEac) {
-        double acwp = 0;
-        double eac = 0;
-
-        if (!empAcwp.Equals("Unknown")) {
-            acwp = Convert.ToDouble(empAcwp);
+    private String getVAR(string BAC, string EAC )
+    {
+        try
+        {
+            if (BAC == unknownValue || EAC == unknownValue)
+                return unknownValue;
+            else
+            {
+                return ((Convert.ToDouble(BAC.Substring(1)) - Convert.ToDouble(EAC.Substring(1))) / Convert.ToDouble(BAC.Substring(1))).ToString("0.00%");
+            }
         }
-
-        if (!empEac.Equals("Unknown")) {
-            eac = Convert.ToDouble(empEac);
-            return ((acwp / eac) * 100).ToString();
-        }
-        else {
-            return "Unknown";
+        catch (Exception ex)
+        {
+            return unknownValue;
         }
     }
 
-    protected void gvEarnedValue_RowEditing(object sender, GridViewEditEventArgs e) {
-        gvEarnedValue.EditIndex = e.NewEditIndex;
-        gvEarnedValue.DataBind();
+    private String getComplete(string EAC, string ACW)
+    {
+        try
+        {
+            if (EAC == unknownValue )
+                return unknownValue;
+            else
+            {
+                return (Convert.ToDouble(ACW.Substring(1)) / Convert.ToDouble(EAC.Substring(1))).ToString("0.00%");
+            }
+        }
+        catch (Exception ex)
+        {
+            return unknownValue;
+        }
     }
+    #endregion
 
-    protected void gvEarnedValue_RowUpdated(object sender, GridViewUpdatedEventArgs e) {
-        // handle row updated
-    }
-
-    protected void gvEarnedValue_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e) {
-        gvEarnedValue.EditIndex = -1;
-        gvEarnedValue.DataBind();
-    }
-
-    protected void gvEarnedValue_RowCommand(object sender, GridViewCommandEventArgs e) {
-        // handle row command
-    }
-
+    #endregion
+        
 }

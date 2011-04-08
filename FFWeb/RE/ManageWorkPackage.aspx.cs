@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Web.Security;
 
 public partial class RE_ManageWorkPackage : System.Web.UI.Page
 {
@@ -79,10 +80,11 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 unallocOriginal = Convert.ToDouble(tbUnalloc.Text);
                 var subwp =
                     from wp in ff.WorkPackages
-                    where (wp.wpId.ToString().Contains(Session["wpID"].ToString() + "."))
+                    where (wp.wpId.ToString().Contains(Session["wpID"].ToString() + ".")&& wp.isActive == 1)
                     select new { wp.wpId, wp.name, wp.unallocated_dollars, wp.allocated_dollars, wp.description };
                 gvSubWP.DataSource = subwp;
                 gvSubWP.DataBind();
+                getResponsibleEngineer();
                 if (lblError.Text != "")
                     populateUnassignEmployeeGV();
             }
@@ -108,14 +110,12 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     Convert.ToDecimal(tbUnalloc.Text) > Convert.ToDecimal(tbAlloc.Text)))
                 {
                     getTotalBudget2(parentWpID);
-                    //seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbUnalloc.Text);
                 }
                 else if ((Convert.ToDecimal(tbAlloc.Text) > getBudget2(parentWpID) &&
                   Convert.ToDecimal(tbUnalloc.Text) < Convert.ToDecimal(tbAlloc.Text)))
                 {
-                    getTotalBudget2(parentWpID);
-                    //seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbAlloc.Text);
-                }// else
+                    getTotalBudget2(parentWpID);  
+                }
                 seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(getTotalBudget2(parentWpID));
                 lblWPName2.Text = qry.Single().name.ToString();
                 string desc = qry.Single().description.ToString();
@@ -124,6 +124,14 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 //divAssignRE.Visible = false;
                 allocOriginal = Convert.ToDouble(tbAlloc.Text);
                 unallocOriginal = Convert.ToDouble(tbUnalloc.Text);
+                var subwp =
+                    from wp in ff.WorkPackages
+                    where (wp.wpId.ToString().Contains(Session["wpID"].ToString() + "."))
+                    select new { wp.wpId, wp.name, wp.unallocated_dollars, wp.allocated_dollars, wp.description };
+                gvSubWP.DataSource = subwp;
+                gvSubWP.DataBind();
+                lbParentwp.Visible = true;
+                getResponsibleEngineer();
                 if (lblError.Text != "")
                     populateUnassignEmployeeGV();
             }
@@ -139,6 +147,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     #region Assign Employee linkbutton event handler
     protected void lbAssignEmp_Click(object sender, EventArgs e)
     {
+        divAssignRE.Visible = false;
         populateUnassignEmployeeGV();
     }
 
@@ -161,6 +170,19 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         gvUnassignedEmployees.DataBind();
     }
     #endregion
+
+    protected void gvEmployees_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandName == "btnDelete")
+        {
+            int row = Convert.ToInt32(e.CommandArgument);
+            GridViewRow selectedRow = gvEmployees.Rows[row];
+            EmployeeWorkPackage empwp = ff.EmployeeWorkPackages.Where(emp => emp.empId == (Convert.ToInt32(selectedRow.Cells[0].Text)) && emp.wpId ==lblWPID2.Text).First();
+            ff.EmployeeWorkPackages.DeleteOnSubmit(empwp);
+            ff.SubmitChanges();
+            populateManageWorkPackage();
+        }
+    }
 
     protected void gvUnassignedEmployees_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -359,6 +381,34 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     }
     #endregion
 
+    protected void gvSubWP_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        try
+        {
+            if (e.CommandName == "btnView")
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvSubWP.Rows[row];
+                Session["wpID"] = selectedRow.Cells[0].Text;
+                populateManageWorkPackage();
+            }
+
+            if (e.CommandName == "btnDelete")
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvSubWP.Rows[row];
+                WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
+                workpackage.isActive = 0;
+                ff.SubmitChanges();
+                populateManageWorkPackage();
+            }
+        }
+        catch (Exception exception)
+        {
+            lblException.Text = exception.StackTrace;
+        }
+    }
+
     protected decimal getTotalBudget(int id)
     {
         try
@@ -450,7 +500,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 from b in ff.WorkPackages
                 where b.wpId == id
                 select b;
-            return Convert.ToDecimal(budget.First().unallocated_dollars);
+            string unalloc = budget.First().unallocated_dollars.ToString() == "" ? "0" : budget.First().unallocated_dollars.ToString();
+            return Convert.ToDecimal(unalloc);
         }
         catch (Exception exception)
         {
@@ -513,6 +564,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 Session["wpID"] = parentWpID;
                 //Response.Redirect("~/RE/ManageWorkPackage.aspx");
                 populateManageWorkPackage();
+                return;
             }
             for (int i = 0; i < wp.Length - 1; i++)
             {
@@ -528,10 +580,105 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
             Session["wpID"] = parentWpID;
             //Response.Redirect("~/RE/ManageWorkPackage.aspx");
             populateManageWorkPackage();
+            return;
         }
         catch (Exception exception)
         {
             lblException.Text = exception.StackTrace;
+        }
+    }
+    protected void lbAssignRE_Click(object sender, EventArgs e)
+    {
+        lblError.Text = "";
+        var qry =
+            from wp in ff.WorkPackages
+            where (
+                wp.wpId == lblWPID2.Text
+            )
+            select new { wp.projId };
+        var employees =
+            from emp in ff.Employees
+            join ep in ff.EmployeeProjects on emp.empId equals ep.empId
+            where ep.projId == qry.First().projId
+            select new { emp.empId, emp.firstName, emp.lastName };
+        gvAssignRE.DataSource = employees;
+        gvAssignRE.DataBind();
+        divAssignRE.Visible = true;
+    }
+    
+    protected void gvAssignRE_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        try
+        {
+            if (e.CommandName == "btnAssign")
+            {
+                var qry =
+                    from wp in ff.WorkPackages
+                    where (
+                        wp.wpId == lblWPID2.Text
+                    )
+                    select new { wp.projId };
+
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvAssignRE.Rows[row];
+
+                EmployeeWorkPackage ewp = new EmployeeWorkPackage();
+                ewp.empId = Convert.ToInt32(selectedRow.Cells[0].Text);
+                ewp.projId = qry.First().projId;
+                ewp.wpId = lblWPID2.Text;
+                
+                var qry2 =
+                    from emp in ff.EmployeeWorkPackages
+                    where (emp.projId == qry.First().projId && emp.empId == ewp.empId)
+                    select emp;
+                if (qry2.ToArray().Length == 0)
+                {
+                    ff.EmployeeWorkPackages.InsertOnSubmit(ewp);
+                }
+                string username = selectedRow.Cells[1].Text + "_" + selectedRow.Cells[2].Text;
+                WorkPackageResponsibleEngineer wpre = new WorkPackageResponsibleEngineer();
+                wpre.projId = qry.First().projId;
+                wpre.wpId = lblWPID2.Text;
+                wpre.responsibleEngineer = Convert.ToInt32(selectedRow.Cells[0].Text);
+                ff.WorkPackageResponsibleEngineers.InsertOnSubmit(wpre);
+                ff.SubmitChanges();
+                divAssignRE.Visible = false;
+                try
+                {
+                    Roles.AddUserToRole(username, "ResponsibleEngineer");
+                }
+                catch (Exception exception)
+                {
+                }
+                populateManageWorkPackage();
+            }
+        }
+        catch (Exception exception)
+        {
+            lblException.Text = exception.StackTrace;
+        }
+    }
+
+    protected void getResponsibleEngineer()
+    {
+        var qry =
+            from re in ff.WorkPackageResponsibleEngineers
+            where re.wpId == lblWPID2.Text
+            select new { re.responsibleEngineer};
+        if (qry.Count() > 0)
+        {
+            var qry2 =
+                from emp in ff.Employees
+                where emp.empId == qry.First().responsibleEngineer
+                select emp;
+            lblRE2.Text = qry2.First().firstName + " " + qry2.First().lastName;
+            divREisAssigned.Visible = true;
+            divREnotAssigned.Visible = false;
+        }
+        else
+        {
+            divREisAssigned.Visible = false;
+            divREnotAssigned.Visible = true;
         }
     }
 }
