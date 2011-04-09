@@ -32,6 +32,10 @@ public partial class PM_ManageProject : System.Web.UI.Page
                 where p.projId == Convert.ToInt32(Session["projID"])
                 select p;
             lblProjName2.Text = proj.First().projName;
+            lblProjectManager2.Text = ff.Employees
+                .Where(a => a.empId == proj.First().manager).First().firstName + " " +
+                ff.Employees
+                .Where(a => a.empId == proj.First().manager).First().lastName;
             if (proj.First().allocated_dollars == null)
                 lblAlloc2.Text = "UNDEFINED";
             else

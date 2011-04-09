@@ -53,6 +53,14 @@
                                     MaximumValue="2147483647" MinimumValue="0" Type="Currency" />
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="1">
+                                <asp:Label ID="lblProjectManager" runat="server" Text="Project Manager:" Font-Bold="true" Font-Size="Large" />
+                            </td>
+                            <td colspan="1">
+                                <asp:Label ID="lblProjectManager2" runat="server" Text="" />
+                            </td>
+                        </tr>
                     </table>
                     <div id="divOriginalAlloc" runat="server">
                     <br />

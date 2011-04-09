@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Web.Security;
 
 public partial class PM_Project : System.Web.UI.Page
 {
@@ -12,8 +13,24 @@ public partial class PM_Project : System.Web.UI.Page
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        if (!IsPostBack)
+            populateProjectManagerUsers();
     }
+
+    protected void populateProjectManagerUsers()
+    {
+        ddlProjectManager.DataSource = ff.vw_AllValid_UserName_EmpIDs
+            .Select(u => new
+            {
+                empID = u.empId,
+                tsa = ((((u.firstName + " ") + u.lastName) + " (") + u.empId + ")")
+            })
+            .OrderBy(u => u.tsa);
+        ddlProjectManager.DataTextField = "tsa";
+        ddlProjectManager.DataValueField = "empID";
+        ddlProjectManager.DataBind();
+    }
+
     protected void btnCreateProject_Click(object sender, EventArgs e)
     {
         try
@@ -28,7 +45,7 @@ public partial class PM_Project : System.Web.UI.Page
             {
                 proj.projId = Convert.ToInt32(tbProjectID.Text);
                 proj.projName = tbProjectName.Text;
-                proj.manager = 1; //it will be the manager that is logged in but for now default is 1
+                proj.manager = Convert.ToInt32(ddlProjectManager.SelectedValue);
                 proj.allocated_dollars = 0;
                 proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
                 proj.isActive = 1;
@@ -39,17 +56,32 @@ public partial class PM_Project : System.Web.UI.Page
 
                 divCreateSuccess.Visible = true;
                 divCreateProject.Visible = false;
+
+                try
+                {
+                    Roles.AddUserToRole(
+                        ff.Employees.Where(a => a.empId == Convert.ToInt32(ddlProjectManager.SelectedValue))
+                        .Select(a => a.firstName).Single().ToString() + "_" + 
+                        ff.Employees.Where(a => a.empId == Convert.ToInt32(ddlProjectManager.SelectedValue))
+                        .Select(a => a.lastName).Single().ToString(), "ProjectManager");
+                }
+                catch (Exception alreadyPM)
+                {
+                }
             }
         }
         catch (Exception exception)
         {
             lblException.Text = exception.StackTrace;
         }
+            
     }
+
     protected void btnCreate_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/PM/ManageProject.aspx");
     }
+
     protected void btnViewProjects_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/PM/ProjectList.aspx");
