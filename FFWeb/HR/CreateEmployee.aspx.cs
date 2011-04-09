@@ -78,6 +78,18 @@ public partial class HR_CreateEmployee : System.Web.UI.Page
                 .Where(u => u.UserName == ((TextBox)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("UserName")).Text)
                 .ToArray()[0].UserId
         });
+
+        //PLevel Entry Created and submitted
+        EmployeePersonLevel epl = new EmployeePersonLevel() 
+        { 
+            dateUpdated = DateTime.Now.Date,
+            empId = Convert.ToInt32(tmpEmpID),
+            fiscalYear = DateTime.Now.Year,
+            pLevel = ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ddlPLevel")).SelectedValue,
+        };
+
+        ff.EmployeePersonLevels.InsertOnSubmit(epl);
+
         ff.SubmitChanges();
 
         //Adds selected Approver to the TSApprover Role if they are not in it already
