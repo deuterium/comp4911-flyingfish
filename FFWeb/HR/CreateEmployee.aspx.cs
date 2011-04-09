@@ -84,6 +84,7 @@ public partial class HR_CreateEmployee : System.Web.UI.Page
         { 
             dateUpdated = DateTime.Now.Date,
             empId = Convert.ToInt32(tmpEmpID),
+            //Fiscal Year is not DateTime.Now.Year but for lack of time it will be
             fiscalYear = DateTime.Now.Year,
             pLevel = ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ddlPLevel")).SelectedValue,
         };
@@ -130,6 +131,7 @@ public partial class HR_CreateEmployee : System.Web.UI.Page
     {
         ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ddlPLevel")).DataSource
             = ff.PersonLevels
+            //Fiscal Year is not DateTime.Now.Year but for lack of time it will be
             .Where(d => d.fiscalYear == DateTime.Now.Year)
             .Select(p => new
             {

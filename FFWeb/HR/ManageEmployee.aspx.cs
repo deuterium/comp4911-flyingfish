@@ -171,6 +171,11 @@ public partial class HR_ManageEmployee : System.Web.UI.Page
         lblEmail.Text = ff.aspnet_Memberships.Where(use => use.UserId == userID).Select(use => use.Email).First();
         lbSupervisors.SelectedValue = ManagedEmployee.supervisor.ToString();
         lbApprovers.SelectedValue = ManagedEmployee.approver.ToString();
+        //Fiscal Year is not DateTime.Now.Year but for lack of time it will be
+        ddlPLevel.SelectedValue = ff.EmployeePersonLevels
+            .Where(ep => (ep.empId == empID) && ep.fiscalYear==DateTime.Now.Year)
+            .OrderByDescending(ep => ep.dateUpdated)
+            .Select(ep => ep.pLevel).First();
         tbMinHours.Text = ManagedEmployee.minHoursPerWeek.ToString();
         tbVacation.Text = ManagedEmployee.vacationLeave.ToString();
         tbSickDays.Text = ManagedEmployee.sickDays.ToString();
@@ -227,18 +232,6 @@ public partial class HR_ManageEmployee : System.Web.UI.Page
             });
         ddlPLevel.DataValueField = "PLevelID";
         ddlPLevel.DataTextField = "PLevel";
-        try
-        {
-            ddlPLevel.DataBind();
-            //var i = ff.EmployeePersonLevels
-            //    .Where(pl => (pl.empId == Convert.ToInt32(lblEmpId.Text)) && (pl.fiscalYear == DateTime.Now.Year))
-            //    .Select(pl => pl.pLevel).First();
-            //foreach( var r in ddlPLevel.Items)
-            //{
-            //    r.
-            //}
-            //ddlPLevel.SelectedIndex = 
-        }
-        catch (Exception ex) { ex.ToString(); }
+        ddlPLevel.DataBind();
     }
 }

@@ -5,12 +5,14 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <div id="DivUserManagementMenu" runat="server">
-        <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="CreateUserLabel"
+        <asp:LinkButton CssClass="DivUserManagementMenu" Width="22%" ID="CreateUserLabel"
             runat="server" PostBackUrl="~/HR/CreateEmployee.aspx">Create New Employee</asp:LinkButton>
-        <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="ManageUserLabel"
+        <asp:LinkButton CssClass="DivUserManagementMenu" Width="22%" ID="ManageUserLabel"
             runat="server" PostBackUrl="~/HR/ManageEmployee.aspx">Edit Employee Information</asp:LinkButton>
-        <asp:LinkButton CssClass="DivUserManagementMenu" Width="33%" ID="AssignUserLabel"
+        <asp:LinkButton CssClass="DivUserManagementMenu" Width="22%" ID="AssignUserLabel"
             runat="server" PostBackUrl="~/HR/AssignEmployee.aspx">Assign Employee to Project</asp:LinkButton>
+        <asp:LinkButton CssClass="DivUserManagementMenu" Width="22%" ID="PLevelManagementLabel" runat="server"
+            PostBackUrl="~/HR/PLevelManagement.aspx">Manage P-Levels</asp:LinkButton>
     </div>
     <asp:ContentPlaceHolder ID="HRContent" runat="server">
     </asp:ContentPlaceHolder>
