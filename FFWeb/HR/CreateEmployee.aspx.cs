@@ -144,6 +144,7 @@ public partial class HR_CreateEmployee : System.Web.UI.Page
         {
             ((DropDownList)wsEmployeeAccountInfo.ContentTemplateContainer.FindControl("ddlPLevel")).DataBind();
         }
+        //Will fail is there are no PLevels for the current fiscal year
         catch (Exception ex) { ex.ToString(); }
     }
 }
