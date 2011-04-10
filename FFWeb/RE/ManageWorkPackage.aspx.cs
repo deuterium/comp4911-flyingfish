@@ -134,6 +134,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 lbParentwp.Visible = true;
                 getResponsibleEngineer();
                 lblMaxBudget2.Text = getTotalBudget2(parentWpID).ToString();
+                populateParentWPs(wpArray);
                 if (lblError.Text != "")
                     populateUnassignEmployeeGV();
             }
@@ -146,6 +147,43 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
 
     #endregion
 
+    protected void populateParentWPs(String[] wpArray)
+    {
+        try
+        {
+            List<WorkPackage> l = new List<WorkPackage>();
+            string s = "";
+            for (int j = wpArray.Length - 1; j > 1; j--)
+            {
+                for (int i = 0; i < j; i++)
+                {
+                    if (i == j - 1)
+                        s += wpArray[i];
+                    else
+                        s += wpArray[i] + ".";
+                }
+                var subwp =
+                            from wp in ff.WorkPackages
+                            where (wp.wpId.ToString() == s && !wp.wpId.ToString().Contains(Session["wpID"].ToString()) && wp.isActive == 1)
+                            select new { wp.wpId, wp.name, wp.unallocated_dollars, wp.allocated_dollars, wp.description };
+                WorkPackage temp = new WorkPackage();
+                temp.wpId = s;
+                temp.unallocated_dollars = subwp.First().unallocated_dollars;
+                temp.allocated_dollars = subwp.First().allocated_dollars;
+                temp.name = subwp.First().name;
+                l.Add(temp);
+                s = "";
+            }
+            l.Reverse();
+            gvParentsWP.DataSource = l;
+            gvParentsWP.DataBind();
+        }
+        catch (Exception e)
+        {
+            //They are in an inactive workpackage
+        }
+        
+    }
     #region Assign Employee linkbutton event handler
     protected void lbAssignEmp_Click(object sender, EventArgs e)
     {
@@ -392,6 +430,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 int row = Convert.ToInt32(e.CommandArgument);
                 GridViewRow selectedRow = gvSubWP.Rows[row];
                 Session["wpID"] = selectedRow.Cells[0].Text;
+                parentWpID = "";
                 populateManageWorkPackage();
             }
 
@@ -401,6 +440,16 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 GridViewRow selectedRow = gvSubWP.Rows[row];
                 WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
                 workpackage.isActive = 0;
+                var wps =
+                    from wp in ff.WorkPackages
+                    where (wp.wpId.ToString().Contains(workpackage.wpId))
+                    select wp;
+                foreach (var wp in wps)
+                {
+                    wp.isActive = 0;
+                    string s2 = wp.wpId;
+                    ff.SubmitChanges();
+                }
                 ff.SubmitChanges();
                 populateManageWorkPackage();
             }
@@ -502,6 +551,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 from b in ff.WorkPackages
                 where b.wpId == id
                 select b;
+            
             string unalloc = budget.First().unallocated_dollars.ToString() == "" ? "0" : budget.First().unallocated_dollars.ToString();
             return Convert.ToDecimal(unalloc);
         }
@@ -684,5 +734,44 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
             divREisAssigned.Visible = false;
             divREnotAssigned.Visible = true;
         }
+    }
+
+    protected void gvParentsWP_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        //try
+        //{
+            if (e.CommandName == "btnView")
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvParentsWP.Rows[row];
+                Session["wpID"] = selectedRow.Cells[0].Text;
+                parentWpID = "";
+                populateManageWorkPackage();
+            }
+
+            if (e.CommandName == "btnDelete")// should not delete because it would make the workpackage they are currently looking at inactive.
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvParentsWP.Rows[row];
+                WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
+                workpackage.isActive = 0;
+                var wps =
+                    from wp in ff.WorkPackages
+                    where (wp.wpId.ToString().Contains(workpackage.wpId))
+                    select wp;
+                foreach (var wp in wps)
+                {
+                    wp.isActive = 0;
+                    string s2 = wp.wpId;
+                    ff.SubmitChanges();
+                }
+                ff.SubmitChanges();
+                populateManageWorkPackage();
+            }
+        //}
+        //catch (Exception exception)
+        //{
+          //  lblException.Text = exception.StackTrace;
+        //}
     }
 }

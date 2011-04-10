@@ -32,10 +32,17 @@ public partial class PM_ManageProject : System.Web.UI.Page
                 where p.projId == Convert.ToInt32(Session["projID"])
                 select p;
             lblProjName2.Text = proj.First().projName;
-            lblProjectManager2.Text = ff.Employees
-                .Where(a => a.empId == proj.First().manager).First().firstName + " " +
-                ff.Employees
-                .Where(a => a.empId == proj.First().manager).First().lastName;
+            try
+            {
+                lblProjectManager2.Text = ff.Employees
+                    .Where(a => a.empId == proj.First().manager).First().firstName + " " +
+                    ff.Employees
+                    .Where(a => a.empId == proj.First().manager).First().lastName;
+            }
+            catch (Exception e)
+            {
+                lblProjectManager2.Text = "";
+            }
             if (proj.First().allocated_dollars == null)
                 lblAlloc2.Text = "UNDEFINED";
             else
@@ -45,19 +52,36 @@ public partial class PM_ManageProject : System.Web.UI.Page
             else
                 lblUnalloc2.Text = proj.First().unallocated_dollars.ToString();
 
-            //Get all work packages
-            var qry =
-                from wp in ff.WorkPackages
-                where wp.projId == Convert.ToInt32(Session["projID"]) && wp.isActive == 1
-                select wp;
+            getAllActiveWP();
+            getAllUnactiveWP();
 
-            gvWorkPackages.DataSource = qry;
-            gvWorkPackages.DataBind();
         }
         catch (Exception exception)
         {
             lblException.Text = exception.StackTrace;
         }
+    }
+
+    protected void getAllActiveWP()
+    {
+        var qry =
+            from wp in ff.WorkPackages
+            where wp.projId == Convert.ToInt32(Session["projID"]) && wp.isActive == 1
+            select wp;
+
+        gvWorkPackages.DataSource = qry;
+        gvWorkPackages.DataBind();
+    }
+
+    protected void getAllUnactiveWP()
+    {
+        var qry =
+            from wp in ff.WorkPackages
+            where wp.projId == Convert.ToInt32(Session["projID"]) && wp.isActive == 0
+            select wp;
+
+        gvUnactiveWP.DataSource = qry;
+        gvUnactiveWP.DataBind();
     }
 
     protected void lbCreateWP_Click(object sender, EventArgs e)
@@ -77,12 +101,22 @@ public partial class PM_ManageProject : System.Web.UI.Page
                 Response.Redirect("~/RE/ManageWorkPackage.aspx");
             }
 
-            if (e.CommandName == "btnDelete")
+            if (e.CommandName == "btnDeactivate")
             {
                 int row = Convert.ToInt32(e.CommandArgument);
                 GridViewRow selectedRow = gvWorkPackages.Rows[row];
                 WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
                 workpackage.isActive = 0;
+                var wps =
+                    from wp in ff.WorkPackages
+                    where (wp.wpId.ToString().Contains(workpackage.wpId))
+                    select wp;
+                foreach (var wp in wps)
+                {
+                    wp.isActive = 0;
+                    string s2 = wp.wpId;
+                    ff.SubmitChanges();
+                }
                 ff.SubmitChanges();
                 populateManageProject();
             }
@@ -92,6 +126,56 @@ public partial class PM_ManageProject : System.Web.UI.Page
             lblException.Text = exception.StackTrace;
         }
     }
+
+    protected void gvUnactiveWP_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        try
+        {
+            if (e.CommandName == "btnView")
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvUnactiveWP.Rows[row];
+                Session["wpID"] = selectedRow.Cells[0].Text;
+                Response.Redirect("~/RE/ManageWorkPackage.aspx");
+            }
+
+            if (e.CommandName == "btnActivate")
+            {
+                int row = Convert.ToInt32(e.CommandArgument);
+                GridViewRow selectedRow = gvUnactiveWP.Rows[row];
+                WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
+                workpackage.isActive = 1;
+
+                string[] wpArray = workpackage.wpId.Split('.');
+                string s = "";
+                for (int j = wpArray.Length - 1; j > 1; j--)
+                {
+                    for (int i = 0; i < j; i++)
+                    {
+                        if (i == j - 1)
+                            s += wpArray[i];
+                        else
+                            s += wpArray[i] + ".";
+                    }
+                    var subwp =
+                                (from wp in ff.WorkPackages
+                                where (wp.wpId == s)
+                                 select wp);
+                    string s2 = subwp.First().wpId;
+                    subwp.First().isActive = 1;
+                    ff.SubmitChanges();
+                    s = "";
+                }
+                ff.SubmitChanges();
+                populateManageProject();
+            }
+        }
+        catch (Exception exception)
+        {
+            //lblException.Text = exception.StackTrace;
+        }
+    }
+
     protected void lbProjectList_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/PM/ProjectList.aspx");
