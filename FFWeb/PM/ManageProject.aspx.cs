@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Security;
 
 public partial class PM_ManageProject : System.Web.UI.Page
 {
@@ -11,6 +12,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         populateManageProject();
+        identifyRole();
     }
 
     protected void populateManageProject()
@@ -54,6 +56,29 @@ public partial class PM_ManageProject : System.Web.UI.Page
 
             getAllActiveWP();
             getAllUnactiveWP();
+
+            string[] name = lblProjectManager2.Text.Split(' ');
+            var query =
+                (from emp in ff.Employees
+                    where emp.firstName == name[0] && emp.lastName == name[1]
+                    select new { emp.empId }).First();
+            try
+            {
+            Roles.AddUserToRole(name[0].ToLower() + "_" + name[1].ToLower(), "ProjectManager");
+            }
+            catch (Exception exception)
+            {
+            }
+            try
+            {
+                EmployeeProject ep = new EmployeeProject();
+                ep.projId = Convert.ToInt32(lblProjID2.Text);
+                ep.empId = query.empId;
+                ff.EmployeeProjects.InsertOnSubmit(ep);
+                ff.SubmitChanges();
+            }
+            catch (Exception exception) {
+            }
 
         }
         catch (Exception exception)
@@ -222,5 +247,44 @@ public partial class PM_ManageProject : System.Web.UI.Page
         btnChangeAlloc.Visible = true;
         tbUnalloc.Visible = false;
         populateManageProject();
+    }
+
+    protected void pmRoleFunctionality()
+    {
+        gvUnactiveWP.Columns[5].Visible = true;
+        gvWorkPackages.Columns[6].Visible = true;
+        lbCreateWP.Visible = true;
+    }
+
+    protected void hrRoleFunctionality()
+    {
+        gvUnactiveWP.Columns[5].Visible = false;
+        gvWorkPackages.Columns[6].Visible = false;
+        lbCreateWP.Visible = false;
+    }
+
+    protected void identifyRole()
+    {
+        if(User.IsInRole("HRStaff"))
+            hrRoleFunctionality();
+
+        if (User.IsInRole("ProjectManager"))
+        {
+
+            var qry =
+                            from username in ff.aspnet_Users
+                            join em in ff.EmployeeMemberships on username.UserId equals em.userId
+                            join ep in ff.EmployeeProjects on em.empId equals ep.empId
+                            where username.UserName == User.Identity.Name && ep.projId == Convert.ToInt32(lblProjID2.Text)
+                            select ep ;
+
+            if (qry.ToList().Count > 0)
+                pmRoleFunctionality();
+            else
+                Response.Redirect(Request.UrlReferrer.ToString());
+        }
+
+        if (User.Identity.IsAuthenticated == false)
+            Response.Redirect(Request.UrlReferrer.ToString());
     }
 }

@@ -19,6 +19,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         populateManageWorkPackage();
+        inspectRole();
     }
     protected void populateManageWorkPackage()
     {
@@ -56,6 +57,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 string unalloc = qry.First().unallocated_dollars.ToString() == "" ? "0" : qry.First().unallocated_dollars.ToString();
                 tbUnalloc.Text = unalloc;
                 tbAlloc.Text = alloc;
+                tbAlloc2.Text = tbAlloc.Text;
+                tbAlloc2.Visible = false;
                 if (!IsPostBack)
                     tbDesc.Text = qry.First().description;
 
@@ -71,7 +74,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                     getTotalBudget(qry.First().projId);
                     //seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(tbAlloc.Text);
                 }// else
-                seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(getTotalBudget(qry.First().projId));
+                seUnalloc.Maximum = Convert.ToDouble(getTotalBudget(qry.First().projId));
                 lblWPName2.Text = qry.Single().name.ToString();
                 updategvEmployees();
                 divAssignEmp.Visible = false;
@@ -105,6 +108,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 string unalloc = qry.First().unallocated_dollars.ToString() == "" ? "0" : qry.First().unallocated_dollars.ToString();
                 tbUnalloc.Text = unalloc;
                 tbAlloc.Text = alloc;
+                tbAlloc2.Text = tbAlloc.Text;
+                tbAlloc2.Visible = false;
                 if (!IsPostBack)
                     tbDesc.Text = qry.First().description;
                 if ((Convert.ToDecimal(tbUnalloc.Text) > getBudget2(parentWpID) &&
@@ -117,7 +122,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 {
                     getTotalBudget2(parentWpID);  
                 }
-                seAlloc.Maximum = seUnalloc.Maximum = Convert.ToDouble(getTotalBudget2(parentWpID));
+                seUnalloc.Maximum = Convert.ToDouble(getTotalBudget2(parentWpID));
                 lblWPName2.Text = qry.Single().name.ToString();
                 string desc = qry.Single().description.ToString();
                 updategvEmployees();
@@ -738,8 +743,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
 
     protected void gvParentsWP_RowCommand(object sender, GridViewCommandEventArgs e)
     {
-        //try
-        //{
+        try
+        {
             if (e.CommandName == "btnView")
             {
                 int row = Convert.ToInt32(e.CommandArgument);
@@ -768,10 +773,71 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                 ff.SubmitChanges();
                 populateManageWorkPackage();
             }
-        //}
-        //catch (Exception exception)
-        //{
-          //  lblException.Text = exception.StackTrace;
-        //}
+        }
+        catch (Exception exception)
+        {
+            lblException.Text = exception.StackTrace;
+        }
+    }
+
+    protected void employeeRoleFunctionality()
+    {
+        divtbUnalloc1.Visible = false;
+        tbUnalloc2.Text = tbUnalloc.Text;
+        tbUnalloc2.ReadOnly = true;
+        tbDesc.ReadOnly = true;
+        lblREnotAssigned.Visible = true;
+        divREnotAssigned2.Visible = false;
+        divAssignEmpLink.Visible = false;
+        lbCreateSubWorkPackage.Visible = false;
+        gvEmployees.Columns[3].Visible = false;
+        gvSubWP.Columns[6].Visible = false;
+        btnSave.Visible = false;
+    }
+
+    protected void pmRoleFunctionality()
+    {
+        divtbUnalloc1.Visible = true;
+        tbUnalloc2.ReadOnly = false;
+        tbDesc.ReadOnly = false;
+        lblREnotAssigned.Visible = false;
+        divREnotAssigned2.Visible = true;
+        divAssignEmpLink.Visible = true;
+        lbCreateSubWorkPackage.Visible = true;
+        gvEmployees.Columns[3].Visible = true;
+        gvSubWP.Columns[6].Visible = false;
+        btnSave.Visible = true;
+    }
+
+    protected void inspectRole()
+    {
+        if (User.IsInRole("HRStaff"))
+        {
+            User.Identity.Name.ToString();
+            employeeRoleFunctionality();
+        }
+
+        if (User.IsInRole("Employee") && !User.IsInRole("HRStaff") && !User.IsInRole("ProjectManager"))
+        {
+            var qry =
+                from username in ff.aspnet_Users
+                join em in ff.EmployeeMemberships on username.UserId equals em.userId
+                join ep in ff.EmployeeProjects on em.empId equals ep.empId
+                where username.UserName == User.Identity.Name.ToString() && ep.projId == Convert.ToInt32(Session["projID"])
+                select username;
+            if(qry.ToList().Count > 0)
+                employeeRoleFunctionality();
+            else
+                Response.Redirect(Request.UrlReferrer.ToString());
+        }
+
+        if (User.IsInRole("ProjectManager"))
+        {
+            pmRoleFunctionality();
+        }
+
+        if(User.Identity.IsAuthenticated == false)
+            Response.Redirect(Request.UrlReferrer.ToString());
+
     }
 }

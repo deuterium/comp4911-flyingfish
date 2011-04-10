@@ -10,6 +10,8 @@ public partial class PM_ProjectList : System.Web.UI.Page
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (User.Identity.IsAuthenticated == false)
+            Response.Redirect("~/Default.aspx");
         populateProjectList();
     }
 

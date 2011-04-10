@@ -43,10 +43,8 @@
                     <td>
                         <div id="divtbAlloc1" runat="server">
                             <asp:TextBox ID="tbAlloc" runat="server" ReadOnly="True"></asp:TextBox>
-                            <asp:SliderExtender ID="seAlloc" runat="server" TargetControlID="tbAlloc" 
-                                BoundControlID="tbAlloc2" Decimals="2" BehaviorID="tbAlloc2" />
-                            <asp:TextBox ID="tbAlloc2" runat="server" style="margin-bottom: 0px"></asp:TextBox>
                         </div>
+                        <asp:TextBox ID="tbAlloc2" runat="server" style="margin-bottom: 0px"></asp:TextBox>
                     </td>
                 </tr>
                 <tr>
@@ -56,10 +54,10 @@
                     </td>
                     <td>
                         <div id="divtbUnalloc1" runat="server"><asp:TextBox ID="tbUnalloc" runat="server" ReadOnly="True"></asp:TextBox>
-                        </div>
-                        <asp:SliderExtender ID="seUnalloc" runat="server" TargetControlID="tbUnalloc" 
+                            <asp:SliderExtender ID="seUnalloc" runat="server" TargetControlID="tbUnalloc" 
                             BoundControlID="tbUnalloc2" Decimals="2">
-                        </asp:SliderExtender>
+                            </asp:SliderExtender>
+                        </div>
                         <asp:TextBox ID="tbUnalloc2" runat="server"></asp:TextBox>
                     </td>
                 </tr>
@@ -84,10 +82,13 @@
                             <asp:Label ID="lblRE2" runat="server" Text=""></asp:Label>
                         </div>
                         <div id="divREnotAssigned" runat="server" visible="false">
+                            <asp:Label ID="lblREnotAssigned" runat="server" Visible="false" Text="No Responsible Engineer assigned."></asp:Label>
+                            <div id="divREnotAssigned2" runat="server">
                             <font color="#000066"  >There is no Responsible Engineer assigned to this work package.
                             <br />
                             If you want to assign a responsible engineer click
                             <asp:LinkButton ID="lbAssignRE" runat="server" onclick="lbAssignRE_Click">here.</asp:LinkButton></font>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -97,9 +98,11 @@
                             Font-Bold="True"></asp:Label>
                     </td>
                     <td>
-                        <br />
-                        <font color="#000066">Click <asp:LinkButton ID="lbAssignEmp" runat="server" onclick="lbAssignEmp_Click">here</asp:LinkButton> to assign employees to this work package.</font>
-                        <br />
+                        <div id="divAssignEmpLink" runat="server">
+                            <br />
+                            <font color="#000066">Click <asp:LinkButton ID="lbAssignEmp" runat="server" onclick="lbAssignEmp_Click">here</asp:LinkButton> to assign employees to this work package.</font>
+                            <br />
+                        </div>
                         <asp:GridView ID="gvEmployees" runat="server" AutoGenerateColumns="False" 
                             OnRowCommand="gvEmployees_RowCommand" CellPadding="4" ForeColor="#333333" 
                             GridLines="None">

@@ -13,6 +13,9 @@ public partial class PM_Project : System.Web.UI.Page
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
+        if(!User.IsInRole("HRStaff"))
+            Response.Redirect(Request.UrlReferrer.ToString());
+
         if (!IsPostBack)
             populateProjectManagerUsers();
     }
