@@ -17,11 +17,28 @@ using System.Text.RegularExpressions;
  * Validation with better user messages
  */
 
+
+/// <summary>
+/// Business logic (code behind) for the Work Package Status Report page.
+/// </summary>
 public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
+    /// <summary>
+    /// The datacontext, contains all the classes created from the database.
+    /// </summary>
     private FlyingFishClassesDataContext ffdb = new FlyingFishClassesDataContext();
+    /// <summary>
+    /// The filler for unknown columns.
+    /// </summary>
     public const String UnknownValue = "Unknown";
 
+    private List<TimesheetEntry> allTimesheetEntries = new List<TimesheetEntry>();
+
+    /// <summary>
+    /// What to do when the page first loads. Dynamically populates the drop down lists from the database.
+    /// </summary>
+    /// <param name="sender">The object that requested the page load.</param>
+    /// <param name="e">The page load event.</param>
     protected void Page_Load(object sender, EventArgs e) {
         if (!IsPostBack) {
             populateProjects();
@@ -35,6 +52,11 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         //GetWorkPackageStatusReport();
     }
 
+    /// <summary>
+    /// Populates the Projects drop down list.
+    /// If a PM visits this page, he or she only sees the projects he or she is working on.
+    /// If a RE visits this page, he or she only sees the projects he or she is working as an RE on.
+    /// </summary>
     private void populateProjects() {
         ddlAllProjects.DataSource = ffdb.Projects.Select(p => new {
             ProjID = p.projId,
@@ -48,6 +70,13 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
 
     // ********************* only show projects that YOU are the repsonsible engineer for
+
+
+    /// <summary>
+    /// Populates the WorkPackages drop down list.
+    /// If a PM visits the page, shows all WPs.
+    /// If an RE visits the page, shows only the WPs he or she is an RE for.
+    /// </summary>
     private void populateWorkpackages() {
         ddlWorkpackages.DataSource = ffdb.WorkPackages
                                    .Where(wp => wp.projId == Convert.ToInt16(ddlAllProjects.SelectedValue))
@@ -55,17 +84,28 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                                        WpID = wp.wpId,
                                        WpName = wp.name + " (" + wp.wpId + ")"
                                    });
-        ddlWorkpackages.DataValueField = "WpId";
+        ddlWorkpackages.DataValueField = "WpID";
         ddlWorkpackages.DataTextField = "WpName";
         ddlWorkpackages.DataBind();
     }
 
+    /// <summary>
+    /// Called when a project is selected.
+    /// Loads the WorkPackage list for that project.
+    /// Filters the list based on who is logged in (their role).
+    /// </summary>
+    /// <param name="sender">The object that triggered the event.</param>
+    /// <param name="e">The event.</param>
     protected void ddlAllProjects_SelectedIndexChanged(object sender, EventArgs e) {
         populateWorkpackages();
     }
 
     // NEED DAYS! NOT HOURS! DIVIDE IT BY 8!!!
 
+    /// <summary>
+    /// Populates the GridView.
+    /// Calculates two sets of data for each employee on the selected WorkPackage (the days and the dollars).
+    /// </summary>
     public void GetWorkPackageStatusReport() {
         // Find out how much work each employee has done on the work package
         // Calculate the PDays and PDollar value of this work
@@ -77,6 +117,14 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         List<EmployeeWorkPackageETC> etcForAll = getEtcForAll();
 
         // logic needs to factor in plevels per timesheet (in case change, can't use bulk)
+
+        allTimesheetEntries = (from tse in ffdb.TimesheetEntries
+                               where (tse.tsDate <= (DateTime)ViewState["cutOffDate"])
+                                     && (tse.projId == Convert.ToInt16(ViewState["projId"]))
+                                     && (tse.wpId.Equals(ViewState["wpId"]))
+                               select tse).ToList<TimesheetEntry>();
+        String blah = "";
+        //allTimesheetEntries
 
         var qry = (from tse in ffdb.TimesheetEntries
                   join proj in ffdb.Projects on tse.projId equals proj.projId
@@ -94,7 +142,8 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                         && (empPlvl.dateUpdated.Equals(
                                         (DateTime)
                                         (from recent in ffdb.EmployeePersonLevels
-                                         where recent.dateUpdated <= (DateTime)ViewState["cutOffDate"] && recent.empId == tse.empId
+                                         where recent.dateUpdated <= (DateTime)ViewState["cutOffDate"]
+                                            && (recent.empId == tse.empId)
                                          select recent.dateUpdated).Max())))
                   select new {
                       Proj = proj,
@@ -102,6 +151,9 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                       WP = wp,
                       WPRE = wpre,
                       RE = re,
+                      empFirstName = emp.firstName,
+                      empLastName = emp.lastName,
+                      empId = emp.empId,
                       Emp = emp.firstName + " " + emp.lastName + " (" + emp.empId + ")",
                       ACWP = getAcwpForEmployee(tse.empId, acwpForAll),
                       ETC = getEtcForEmployee(tse.empId, etcForAll),
@@ -113,7 +165,6 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                                                 getAcwpForEmployee(tse.empId, acwpForAll)))
                                         ).ToString(),
                       ETC_Dollars = getPDollars(tse.empId),
-                      //PLvlRate = plvl.rate
                   }).Distinct();
 
         if (qry.Count() == 0) {
@@ -124,6 +175,8 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             return;
         }
 
+        
+
         DataTable dt = new DataTable();
         dt.Columns.Add(new DataColumn("Employee", typeof(System.String)));
         dt.Columns.Add(new DataColumn("ACWP", typeof(System.String)));
@@ -133,7 +186,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         foreach (var row in qry) {
             DataRow drDays = dt.NewRow();
-            drDays["Employee"] = row.Emp;
+            drDays["Employee"] = row.empFirstName + " " + row.empLastName + " (" + row.empId + ")";
             drDays["ACWP"] = row.ACWP;
             drDays["ETC"] = row.ETC;
             drDays["EAC"] = row.EAC;
@@ -142,11 +195,14 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             DataRow drDollars = dt.NewRow();
             drDollars["Employee"] = row.Emp;
             drDollars["ACWP"] = String.Format("{0:C}", Convert.ToDecimal(row.ETC_Dollars));
-            drDollars["ETC"] = "";// calculatePDollars(row.ETC.ToString(), row.PLvlRate.ToString());
-            drDollars["EAC"] = row.EAC;
+            drDollars["ETC"] = calculatePDollars(row.ETC.ToString(), getMaxPLvl(row.empId).ToString());
+            drDollars["EAC"] = calculatePDollars(row.EAC.ToString(), getMaxPLvl(row.empId).ToString());
             drDollars["PercentComplete"] = row.PercentComplete;
             dt.Rows.Add(drDollars);
         }
+
+        lblResults.Text = getMaxPLvl(1).ToString();
+        lblResults.Visible = true;
 
         gvStatus.DataSource = dt;
         gvStatus.DataBind();
@@ -214,6 +270,14 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
     }
 
+    /// <summary>
+    /// Calculates the dollars for the given days and given rate.
+    /// Handles the case where either days or the rate is Unknown.
+    /// Returns a String of formatted currency or the UnknownValue.
+    /// </summary>
+    /// <param name="strDays">The person days to calculate.</param>
+    /// <param name="strRate">The person level rate to use.</param>
+    /// <returns></returns>
     private String calculatePDollars(String strDays, String strRate) {
         decimal days = 0;
         decimal rate = 0;
@@ -225,35 +289,56 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         }
         days = Convert.ToDecimal(strDays);
         rate = Convert.ToDecimal(strRate);
-        return (days * rate).ToString();
+        return String.Format("{0:C}", (days * rate));
     }
 
+    /// <summary>
+    /// Gets the most recent p-level rate (up to the cutt off date) for an employee.
+    /// </summary>
+    /// <param name="empId">The employee ID.</param>
+    /// <returns>The p-level rate or 0 if nothing found.</returns>
+    private decimal getMaxPLvl(int empId) {
+        DateTime mostRecentEmpPLevel = (from ep in ffdb.EmployeePersonLevels
+                                    where ep.dateUpdated <= Convert.ToDateTime(ViewState["cutOffDate"])
+                                        && (ep.empId == empId)
+                                        && (ep.fiscalYear == Convert.ToDateTime(ViewState["cutOffDate"]).Year)
+                                    select ep.dateUpdated).Max();
+
+        var qry = (from p in ffdb.PersonLevels
+                   join ep in ffdb.EmployeePersonLevels on (p.pLevel + p.fiscalYear) equals (ep.pLevel + ep.fiscalYear)
+                   where (ep.empId == empId) && ep.dateUpdated.Equals(mostRecentEmpPLevel)
+                   select p.rate);
+
+        return qry.FirstOrDefault();
+    }
+
+    /// <summary>
+    /// Calculates the actual cost of work an employee has done in dollars up to the cut-off date.
+    /// This is based on their p-level at the time the work was done.
+    /// </summary>
+    /// <param name="empId">The Employee's ID</param>
+    /// <returns>The total dollar value of the employee's work, up to the cut off date, as a decimal</returns>
     private decimal getPDollars(int empId) {
         var qry = from t in ffdb.TimesheetEntries
                   join empPlvl in ffdb.EmployeePersonLevels on t.empId equals empPlvl.empId
-                  join plvl in ffdb.PersonLevels on empPlvl.pLevel equals plvl.pLevel
+                  join plvl in ffdb.PersonLevels on (empPlvl.pLevel + empPlvl.fiscalYear) equals (plvl.pLevel + plvl.fiscalYear)
                   where (t.projId == (Convert.ToInt16(ViewState["projId"])))
                             && (t.wpId.Equals(ViewState["wpId"]))
                             && (t.tsDate <= ((DateTime)ViewState["cutOffDate"]))
+                            && (t.tsDate.Year == empPlvl.fiscalYear)
+                            && (t.tsDate.Year == plvl.fiscalYear)
                             && (t.empId == empId)
                             && (empPlvl.dateUpdated.Equals(
                                         (DateTime)
                                         (from ep in ffdb.EmployeePersonLevels
                                          where ep.dateUpdated <= t.tsDate && ep.empId == empId
                                          select ep.dateUpdated).Max()))
-                            && (empPlvl.fiscalYear.Equals(from p in ffdb.PersonLevels
-                                                          where (p.fiscalYear.Equals(empPlvl.dateUpdated.Year))
-                                                            && (p.pLevel.Equals(empPlvl.pLevel))
-                                                          select p.fiscalYear))
+                            
                   select new {
-                      t.projId,
-                      t.wpId,
                       ID = t.empId,
                       t.totalHours,
                       plvl.rate
                   };
-        var test = (from p in ffdb.PersonLevels
-                    select p.fiscalYear).Max();
         decimal totalPDollars = 0;
         foreach (var result in qry) {
             totalPDollars += (decimal)(result.totalHours * result.rate);
@@ -262,6 +347,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         return totalPDollars;
     }
 
+    ///
     private decimal getPMBudget() {
         var qry = (from wp in ffdb.WorkPackages
                    where (wp.projId == (Convert.ToInt16(ViewState["projId"]))) && wp.wpId.Equals(ViewState["wpId"])
