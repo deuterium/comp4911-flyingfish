@@ -70,7 +70,7 @@
         <div class="divmastermenubar">
             <div class="divmastermenu">
                 <div class="status">
-                    <asp:LinkButton ID="lbAccount" runat="server" onclick="lbAccount_Click" Visible="false" Width="130px"></asp:LinkButton>
+                    <asp:LinkButton ID="lbAccount" runat="server" onclick="lbAccount_Click" Visible="false" Width="130px" ValidationGroup="omgNone"></asp:LinkButton>
                     <asp:LoginStatus ID="LoginStatus" runat="server" 
                         LogoutPageUrl="~/Default.aspx" Width="80px" />
                 </div>
