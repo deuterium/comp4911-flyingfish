@@ -12,7 +12,8 @@
         </asp:LinqDataSource>
         <asp:LinqDataSource ID="ldsPLevels" runat="server" ContextTypeName="FlyingFishClassesDataContext"
             EnableDelete="True" EnableInsert="True" EnableUpdate="True" EntityTypeName=""
-            OrderBy="pLevel" TableName="PersonLevels" Where="fiscalYear == @fiscalYear" OnUpdating="ldsPLevels_Updating">
+            OrderBy="pLevel" TableName="PersonLevels" 
+            Where="fiscalYear == @fiscalYear">
             <WhereParameters>
                 <asp:ControlParameter ControlID="ddlFiscalYear" Name="fiscalYear" PropertyName="SelectedValue"
                     Type="Int32" />
@@ -38,7 +39,7 @@
                                     <asp:UpdatePanel ID="upPLevels" runat="server">
                                         <ContentTemplate>
                                             <asp:GridView ID="gvPLevels" runat="server" AutoGenerateColumns="False" DataKeyNames="pLevel,fiscalYear"
-                                                DataSourceID="ldsPLevels">
+                                                DataSourceID="ldsPLevels" onrowupdated="gvPLevels_RowUpdated">
                                                 <Columns>
                                                     <asp:BoundField DataField="pLevel" HeaderText="P-Level" ReadOnly="True" SortExpression="pLevel" />
                                                     <asp:BoundField DataField="rate" HeaderText="Rate" SortExpression="rate" />

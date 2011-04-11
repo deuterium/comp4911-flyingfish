@@ -38,18 +38,19 @@ public partial class HR_PLevelManagement : System.Web.UI.Page
         }
     }
 
-    protected void ldsPLevels_Updating(object sender, LinqDataSourceUpdateEventArgs e)
+    protected void gvPLevels_RowUpdated(object sender, GridViewUpdatedEventArgs e)
     {
-        if (e.Exception != null)
-        {
-            foreach (KeyValuePair<string, Exception> innerException in
-                 e.Exception.InnerExceptions)
-            {
-                lblPLevelError.Text += innerException.Key + ": " +
-                    innerException.Value.Message + "<br />";
-            }
-            lblPLevelError.ForeColor = System.Drawing.Color.Red;
+        if (e.Exception != null) {
+            lblError.Text = "An exception occurred. " +
+                "Please correct any invalid data " +
+                "and try again.<br /><br />" +
+                "Message: " + e.Exception.Message;
             e.ExceptionHandled = true;
-        }
+            e.KeepInEditMode = true;
+        } else if (e.AffectedRows == 0)
+            lblError.Text = "No rows were updated. " +
+                "Another user may have updated that category." +
+                "<br />Please try again.";
+        lblPLevelError.ForeColor = System.Drawing.Color.Red;
     }
 }
