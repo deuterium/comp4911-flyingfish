@@ -7,6 +7,11 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Text.RegularExpressions;
 
+
+// NOT GETTING LINDSAY! ERROR! WTF!
+
+
+
 /* TO DO:
  * Calculate PDays and PDollars
  * Turns hours into Days
@@ -48,7 +53,6 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     private decimal subtotalEacDollars = 0;
     private decimal subtotalPercentCompleteDollars = 0;
 
-    private List<TimesheetEntry> allTimesheetEntries = new List<TimesheetEntry>();
     private List<EmployeeWorkPackageETC> allEmployeeWpETCs = new List<EmployeeWorkPackageETC>();
 
     /// <summary>
@@ -169,14 +173,6 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     /// Calculates two sets of data for each employee on the selected WorkPackage (the days and the dollars).
     /// </summary>
     public void GetWorkPackageStatusReport() {
-        
-        // Get all Timesheets that match the selection criteria (project, wp, date)
-        allTimesheetEntries = (from tse in ffdb.TimesheetEntries
-                               where (tse.tsDate <= (DateTime)ViewState["cutOffDate"])
-                                     && (tse.projId == Convert.ToInt16(ViewState["projId"]))
-                                     && (tse.wpId.Equals(ViewState["wpId"]))
-                               select tse).ToList<TimesheetEntry>();
-        
         // Store the ACWP for each employee
         List<KeyValuePair<int, decimal>> acwpForAll = getAcwpForAll();
         // Store the ETC for each employee
@@ -198,15 +194,15 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                        select e).FirstOrDefault();
 
         // Get the data for each employee
-        var qry = from tse in allTimesheetEntries
-                  join e in ffdb.Employees on tse.empId equals e.empId
+        var qry = (from ewp in ffdb.EmployeeWorkPackages
+                  join e in ffdb.Employees on ewp.empId equals e.empId
                   select new {
                       e.firstName,
                       e.lastName,
                       e.empId,
-                      ACWP = getAcwpForEmployee(tse.empId, acwpForAll),
-                      ETC = getEtcForEmployee(tse.empId, allEmployeeWpETCs)
-                  };
+                      ACWP = getAcwpForEmployee(ewp.empId, acwpForAll),
+                      ETC = getEtcForEmployee(ewp.empId, allEmployeeWpETCs)
+                  }).Distinct();
 
         // Check if no results found
         if (qry.Count() == 0) {
@@ -234,8 +230,8 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             // P-Days
             DataRow drDays = dt.NewRow();
             drDays["Employee"] = "Days:";
-            drDays["ACWP"] = employee.ACWP; // NOT formatting to 1 decimal place!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            drDays["ETC"] = employee.ETC;   // NOT formatting to 1 decimal place!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            drDays["ACWP"] = employee.ACWP;
+            drDays["ETC"] = employee.ETC;
             drDays["EAC"] = calculateEac(employee.ACWP.ToString(), employee.ETC.ToString(), "{0:0.0}");
             drDays["PercentComplete"] = getPercentComplete(employee.ACWP, drDays["EAC"].ToString());
             dt.Rows.Add(drDays);
@@ -248,10 +244,30 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             drDollars["PercentComplete"] = getPercentComplete(drDollars["ACWP"].ToString(), drDollars["EAC"].ToString());
             dt.Rows.Add(drDollars);
         }
+
+        
         
         // Populate the Grid View with the formatted data
         gvStatus.DataSource = dt;
         gvStatus.DataBind();
+
+        // skip header row
+        for (int i = 1; i <= gvStatus.Rows.Count; ) {
+            gvStatus.Rows[i - 1].Cells[1].Visible = false;
+            gvStatus.Rows[i - 1].Cells[2].Visible = false;
+            gvStatus.Rows[i - 1].Cells[3].Visible = false;
+            gvStatus.Rows[i - 1].Cells[4].Visible = false;
+            
+            gvStatus.Rows[i - 1].Cells[5].Text = String.Empty;
+            gvStatus.Rows[i - 1].Cells[5].Enabled = false;
+
+            gvStatus.Rows[i - 1].Cells[0].ColumnSpan = 5;
+
+            gvStatus.Rows[i + 1].Cells[5].Text = String.Empty;
+            gvStatus.Rows[i + 1].Cells[5].Enabled = false;
+            
+            i += 3; // skip 3 rows
+        }
 
         // Populate the Report Details
         //lblProject.Text = ViewState["Project"].ToString();
@@ -399,7 +415,12 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     /// <param name="empId">The Employee's ID</param>
     /// <returns>The total dollar value of the employee's work, up to the cut off date, as a decimal</returns>
     private String getAcwpDollars(int empId) {
-        var qry = from t in allTimesheetEntries
+        var qry = from t in ffdb.TimesheetEntries
+                  join tsh in ffdb.TimesheetHeaders on (t.empId + t.tsDate.ToString()) equals (tsh.empId + tsh.tsDate.ToString())
+                  where (t.tsDate <= (DateTime)ViewState["cutOffDate"])
+                            && (t.projId == Convert.ToInt16(ViewState["projId"]))
+                            && (t.wpId.Equals(ViewState["wpId"]))
+                            && (tsh.status.Equals("APPROVED"))
                   join empPlvl in ffdb.EmployeePersonLevels on t.empId equals empPlvl.empId
                   join plvl in ffdb.PersonLevels on (empPlvl.pLevel + empPlvl.fiscalYear) equals (plvl.pLevel + plvl.fiscalYear)
                   where (t.projId == (Convert.ToInt16(ViewState["projId"])))
@@ -462,7 +483,12 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     /// </summary>
     /// <returns>A list of key value pairs, employee ID to days worked.</returns>
     private List<KeyValuePair<int, decimal>> getAcwpForAll() {
-        var qry = from t in allTimesheetEntries
+        var qry = from t in ffdb.TimesheetEntries
+                  join tsh in ffdb.TimesheetHeaders on (t.empId + t.tsDate.ToString()) equals (tsh.empId + tsh.tsDate.ToString())
+                  where (t.tsDate <= (DateTime)ViewState["cutOffDate"])
+                        && (t.projId == Convert.ToInt16(ViewState["projId"]))
+                        && (t.wpId.Equals(ViewState["wpId"]))
+                        && (tsh.status.Equals("APPROVED"))
                   group t by new { t.projId, t.wpId, ID = t.empId } into g
                   select new {
                       empId = g.Key.ID,
@@ -507,7 +533,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         String s = (from afa in list
                     where afa.Key == empId
                     select afa.Value).FirstOrDefault().ToString();
-        if (!(s == null || s.Equals(""))) {
+        if (!((s == null) || s.Equals(""))) {
             acwp = Convert.ToDecimal(s);
             subtotalAcwpDays += acwp;
         }
@@ -525,10 +551,11 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         String s = (from afa in list
                     where afa.empId == empId
                     select afa.ETC_days).FirstOrDefault().ToString();
-        if (!(s == null || s.Equals(""))) {
-            etc = Convert.ToDecimal(s);
-            subtotalEtcDays += etc;
+        if ((s == null) || s.Equals(String.Empty)) {
+            return UnknownValue;
         }
+        etc = Convert.ToDecimal(s);
+        subtotalEtcDays += etc;
         return String.Format(decimalFormat, etc);
     }
 
