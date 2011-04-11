@@ -128,6 +128,7 @@
                                 Font-Bold="True" Font-Size="Large" />
                         <br />
                         <div class="divline" />
+                        <br />
                         <asp:GridView ID="gvUnactiveWP" runat="server" 
                         OnRowCommand="gvUnactiveWP_RowCommand" AutoGenerateColumns="False" 
                         BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" 
@@ -162,7 +163,7 @@
                     <asp:Button ID="lbProjectList" runat="server" Text="View Project List" onclick="lbProjectList_Click"></asp:Button>
                     <br />
                     <asp:Label ID="lblException" runat="server" Text=""></asp:Label>
-                    
+                    <br />
             </ContentTemplate>
             </asp:UpdatePanel>
         </asp:Content>

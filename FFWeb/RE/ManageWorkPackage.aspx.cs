@@ -25,6 +25,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     {
         try
         {
+            parentWpID = "";
             if (Session["wpID"] == null)
                 Response.Redirect("~/PM/ProjectList.aspx");
             String[] wpArray = Session["wpID"].ToString().Split('.');
@@ -362,7 +363,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
                         )
                         select new { wp.projId };
                 if ((Convert.ToDecimal(tbUnalloc2.Text) + Convert.ToDecimal(tbAlloc2.Text)) > getTotalBudget(qry.First().projId))
-                    lblBudgetError.Text = "Please change the values of Allocated Budget and Unallocated Budget to have a sum below " + getTotalBudget(qry.First().projId);
+                    lblBudgetError.Text = "Please change the values of the Unallocated Budget to have a sum with the allocated budget to be between 0 and  " + getTotalBudget(qry.First().projId);
                 else
                 {
                     lblBudgetError.Text = "";
@@ -382,7 +383,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
             else
             {
                 if ((Convert.ToDecimal(tbUnalloc2.Text) + Convert.ToDecimal(tbAlloc2.Text)) > getTotalBudget2(parentWpID))
-                    lblBudgetError.Text = "Please change the values of Allocated Budget and Unallocated Budget to have a sum below " + getTotalBudget2(parentWpID);
+                    lblBudgetError.Text = "Please change the values of the Unallocated Budget to have a sum with the allocated budget to be between 0 and  " + getTotalBudget2(parentWpID);
                 else
                 {
                     lblBudgetError.Text = "";
