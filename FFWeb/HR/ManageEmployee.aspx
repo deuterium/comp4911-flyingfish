@@ -19,7 +19,6 @@
                 AutoGenerateColumns="False" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None"
                 BorderWidth="1px" CellPadding="3" PageSize="15">
                 <Columns>
-                    <asp:CommandField ShowSelectButton="True" />
                     <asp:BoundField DataField="empId" HeaderText="Employee ID" SortExpression="empId" />
                     <asp:BoundField DataField="firstName" HeaderText="First Name" SortExpression="firstName" />
                     <asp:BoundField DataField="lastName" HeaderText="Last Name" SortExpression="lastName" />
@@ -27,6 +26,7 @@
                     <asp:BoundField DataField="sickDays" HeaderText="Sick Days" SortExpression="sickDays" />
                     <asp:BoundField DataField="flexHours" HeaderText="Flex Hours" SortExpression="flexHours" />
                     <asp:BoundField DataField="isActive" HeaderText="Active" SortExpression="isActive" />
+                    <asp:CommandField ShowSelectButton="True" ButtonType="Button" />
                 </Columns>
                 <FooterStyle BackColor="White" ForeColor="#000066" />
                 <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />

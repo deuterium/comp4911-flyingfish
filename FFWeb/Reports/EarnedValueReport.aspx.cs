@@ -72,6 +72,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
             DataRow dr = dt.NewRow();
             dr["Workpackage"] = wp.wpId + "  " + wp.name;
             dt.Rows.Add(dr);
+            
             #endregion
 
             #region PDays Row
@@ -104,15 +105,32 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
         gvEarnedValue.DataSource = dt;
         gvEarnedValue.DataBind();
         #endregion
+
+        #region Make me pretty
+        for (int i = 0; i < gvEarnedValue.Rows.Count; i++)
+        {
+            gvEarnedValue.Rows[i].CssClass = "evrPretty";
+            i = i + 2;
+        }
+        #endregion
     }
 
     private void populateProjects()
     {
-        ddlAllProjects.DataSource = ffdb.Projects.Select(p => new
-        {
-            ProjID = p.projId,
-            ProjectName = p.projName + " (" + p.projId + ")"
-        });
+        var qry = from a in ffdb.aspnet_Users
+                  where a.UserName.Equals(User.Identity.Name)
+                  join m in ffdb.EmployeeMemberships on a.UserId equals m.userId
+                  join ep in ffdb.EmployeeProjects on m.empId equals ep.empId
+                  join p in ffdb.Projects on ep.projId equals p.projId
+                  select new { ProjID = p.projId, ProjectName = p.projName + " (" + p.projId + ")" };
+
+        ddlAllProjects.DataSource = qry;
+
+        //ddlAllProjects.DataSource = ffdb.Projects.Select(p => new
+        //{
+        //    ProjID = p.projId,
+        //    ProjectName = p.projName + " (" + p.projId + ")"
+        //});
         ddlAllProjects.DataValueField = "ProjId";
         ddlAllProjects.DataTextField = "ProjectName";
         ddlAllProjects.DataBind();
