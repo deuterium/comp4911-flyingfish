@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="EarnedValueReport.aspx.cs" Inherits="Reports_EarnedValueReport" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="EarnedValueReport.aspx.cs" Inherits="Reports_EarnedValueReport" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
@@ -6,16 +6,12 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
     <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server"></asp:ToolkitScriptManager>   
-    
+    <center>
 
     <div id="divInputForm" runat="server">
-
-    <asp:Label ID="EVRTitle" runat="server" Text="Earned Value Report" Font-Bold="true" Font-Size="Large" />
-    <br />
-    <div class="divline" />
-    <br />
-        <table>
+        <table cellpadding="5px" >
             <tr>
+              
                 <td>
                     <asp:Label ID="lblProjId" runat="server" Text="Choose a Project:"></asp:Label>
                 </td>
@@ -24,37 +20,29 @@
                     </asp:DropDownList>
                 </td>
             </tr>
+
             <tr>
                 <td>
-                    Reporting Period From:
+                    Cut-off Date:
                 </td>
                 <td>
-                    <asp:TextBox ID="tbPeriodStart" runat="server" Width="80"></asp:TextBox>
-                    <asp:CalendarExtender ID="cexPeriodStart" runat="server" Format="yyyy/MM/dd" TargetControlID="tbPeriodStart" >
-                    </asp:CalendarExtender>
-                     to 
-                    <asp:TextBox ID="tbPeriodEnd" runat="server" Width="80"></asp:TextBox>
+                    <asp:TextBox ID="tbPeriodEnd" runat="server" Width="80px"></asp:TextBox>
                     <asp:CalendarExtender ID="cexPeriodEnd" runat="server" Format="yyyy/MM/dd" TargetControlID="tbPeriodEnd" >
                     </asp:CalendarExtender>
-                    <asp:RegularExpressionValidator ForeColor="Red" ID="revStartDate" runat="server" 
-                        ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbPeriodStart"
-                        ErrorMessage="Start date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
-                    <asp:RangeValidator ForeColor="Red" ID="rgvStartDate" runat="server" ControlToValidate="tbPeriodStart"
-                        ErrorMessage="Start date must be between 2010/01/01 and 2500/01/01."
-                        MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*">
-                    </asp:RangeValidator>
-                    <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" 
-                        ControlToValidate="tbPeriodStart" ErrorMessage="Start date not selected" 
-                        ForeColor="Red">*</asp:RequiredFieldValidator>
+                    <asp:RangeValidator ForeColor="Red" ID="rgvStartDate" runat="server" ControlToValidate="tbPeriodEnd"
+                        ErrorMessage="Cut-off-date must be between 2010/01/01 and 2500/01/01."
+                        MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*"></asp:RangeValidator>
                     <asp:RegularExpressionValidator ForeColor="Red" ID="revEndDate" runat="server" 
                         ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbPeriodEnd"
-                        ErrorMessage="End date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
+                        ErrorMessage="Cut-off Date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
                     <asp:RequiredFieldValidator ID="rfvEndtDate" runat="server" 
-                        ControlToValidate="tbPeriodEnd" ErrorMessage="End date not selected" 
+                        ControlToValidate="tbPeriodEnd" ErrorMessage="Cut-off Date not selected" 
                         ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
+                <td align="right">
+                </td>
                 <td align="left">
                     <asp:Button ID="btnSubmit" runat="server" Text="Submit" 
                         onclick="btnSubmit_Click" />
@@ -70,10 +58,7 @@
     </div>
 
     <br />
-    <center>
-        <asp:GridView ID="gvEarnedValue" runat="server" AutoGenerateColumns="False" 
-            BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" 
-            CellPadding="3">
+        <asp:GridView ID="gvEarnedValue" runat="server" AutoGenerateColumns="False">
         <Columns>
             <asp:TemplateField HeaderText="Workpackage">
                 <EditItemTemplate>
@@ -140,16 +125,8 @@
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>
-            <FooterStyle BackColor="White" ForeColor="#000066" />
-            <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
-            <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />
-            <RowStyle ForeColor="#000066" />
-            <SelectedRowStyle BackColor="#669999" Font-Bold="True" ForeColor="White" />
-            <SortedAscendingCellStyle BackColor="#F1F1F1" />
-            <SortedAscendingHeaderStyle BackColor="#007DBB" />
-            <SortedDescendingCellStyle BackColor="#CAC9C9" />
-            <SortedDescendingHeaderStyle BackColor="#00547E" />
     </asp:GridView>
+    Note: This report will only generate from all APPROVED timesheet entries
     </center>
 </asp:Content>
 

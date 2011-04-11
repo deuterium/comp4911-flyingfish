@@ -117,11 +117,20 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
 
     private void populateProjects()
     {
-        ddlAllProjects.DataSource = ffdb.Projects.Select(p => new
-        {
-            ProjID = p.projId,
-            ProjectName = p.projName + " (" + p.projId + ")"
-        });
+        var qry = from a in ffdb.aspnet_Users
+                  where a.UserName.Equals(User.Identity.Name)
+                  join m in ffdb.EmployeeMemberships on a.UserId equals m.userId
+                  join ep in ffdb.EmployeeProjects on m.empId equals ep.empId
+                  join p in ffdb.Projects on ep.projId equals p.projId
+                  select new { ProjID = p.projId, ProjectName = p.projName + " (" + p.projId + ")" };
+
+        ddlAllProjects.DataSource = qry;
+
+        //ddlAllProjects.DataSource = ffdb.Projects.Select(p => new
+        //{
+        //    ProjID = p.projId,
+        //    ProjectName = p.projName + " (" + p.projId + ")"
+        //});
         ddlAllProjects.DataValueField = "ProjId";
         ddlAllProjects.DataTextField = "ProjectName";
         ddlAllProjects.DataBind();
