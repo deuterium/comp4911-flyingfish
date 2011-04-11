@@ -11,7 +11,7 @@
                 <asp:Label ID="lblProjectTitle" runat="server" Font-Bold="true" Font-Size="Large"
                     Text="Project Creation" />
                 <br />
-                <div class="divline" />
+                <div class="divline"></div>
                 <br />
                 <asp:Label ID="lblMsg" runat="server" Text="Fill in the following fields below to create a project." />
                 <br /><br />

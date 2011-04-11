@@ -6,7 +6,7 @@
         <asp:Label ID="lblMsg2" runat="server" Text="Work Package Creation" Font-Bold="true"
             Font-Size="Large" />
         <br />
-        <div class="divline" />
+        <div class="divline"></div>
         <br />
         <asp:Label ID="lblMsg" runat="server" Text="Fill in the following information below to create a work package." />
         <br />

@@ -10,8 +10,10 @@
     <div id="divInputForm" runat="server">
         <asp:Label ID="evrTitle" runat="server" Font-Bold="true" Font-Size="Large" Text="Earned Value Report" />
         <br />
-        <div class="divline" />
+        <div class="divline"></div>
         <br />
+        <asp:Label ID="evrNotes" runat="server" Text="This report will only generate from all APPROVED timesheet entries" />
+        <br /><br />
         <table>
             <tr>
                 <td>
@@ -130,8 +132,6 @@
             <SortedAscendingHeaderStyle BackColor="#007DBB" />
             <SortedDescendingCellStyle BackColor="#CAC9C9" />
             <SortedDescendingHeaderStyle BackColor="#00547E" />
-        </asp:GridView>
-        <br />
-        <asp:Label ID="evrNotes" runat="server" Text="Note: This report will only generate from all APPROVED timesheet entries" />
+        </asp:GridView>  
     </center>
 </asp:Content>
