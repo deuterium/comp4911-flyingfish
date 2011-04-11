@@ -75,12 +75,13 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
     public void qryTimesheet()
     {
         System.DateTime qryDate = Convert.ToDateTime(tbPeriodStart.Text);
+        System.DateTime endDate = Convert.ToDateTime(tbPeriodEnd.Text);
 
 
         var qry = from th in ff.TimesheetHeaders
                   join tse in ff.TimesheetEntries on new { th.tsDate, th.empId } equals new { tse.tsDate, tse.empId }
                   join emp in ff.Employees on tse.empId equals emp.empId
-                  where tse.empId == Convert.ToInt32(Session["CurEmpId"]) && tse.tsDate >= qryDate
+                  where tse.empId == Convert.ToInt32(Session["CurEmpId"]) && tse.tsDate >= qryDate && tse.tsDate <= endDate
                   select new
                   {
                       EmployeeName = emp.firstName + " " + emp.lastName + "(" + th.empId + ")",

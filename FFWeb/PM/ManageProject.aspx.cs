@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Security;
+using System.Windows.Forms;
 
 public partial class PM_ManageProject : System.Web.UI.Page
 {
@@ -54,6 +56,29 @@ public partial class PM_ManageProject : System.Web.UI.Page
 
             getAllActiveWP();
             getAllUnactiveWP();
+            identifyRole();
+            string[] name = lblProjectManager2.Text.Split(' ');
+            var query =
+                (from emp in ff.Employees
+                    where emp.firstName == name[0] && emp.lastName == name[1]
+                    select new { emp.empId }).First();
+            try
+            {
+            Roles.AddUserToRole(name[0].ToLower() + "_" + name[1].ToLower(), "ProjectManager");
+            }
+            catch (Exception exception)
+            {
+            }
+            try
+            {
+                EmployeeProject ep = new EmployeeProject();
+                ep.projId = Convert.ToInt32(lblProjID2.Text);
+                ep.empId = query.empId;
+                ff.EmployeeProjects.InsertOnSubmit(ep);
+                ff.SubmitChanges();
+            }
+            catch (Exception exception) {
+            }
 
         }
         catch (Exception exception)
@@ -69,7 +94,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
             where wp.projId == Convert.ToInt32(Session["projID"]) && wp.isActive == 1
             select wp;
 
-        gvWorkPackages.DataSource = qry;
+        gvWorkPackages.DataSource = qry.Distinct();
         gvWorkPackages.DataBind();
     }
 
@@ -80,7 +105,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
             where wp.projId == Convert.ToInt32(Session["projID"]) && wp.isActive == 0
             select wp;
 
-        gvUnactiveWP.DataSource = qry;
+        gvUnactiveWP.DataSource = qry.Distinct();
         gvUnactiveWP.DataBind();
     }
 
@@ -93,6 +118,16 @@ public partial class PM_ManageProject : System.Web.UI.Page
     {
         try
         {
+            string fullname2 = "";
+            try
+            {
+                string[] fullname = lblProjectManager2.Text.Split(' ');
+                fullname2 = fullname[0].ToLower() + "_" + fullname[1].ToLower();
+            }
+            catch (Exception exception)
+            {
+                fullname2 = "";
+            } 
             if (e.CommandName == "btnView")
             {
                 int row = Convert.ToInt32(e.CommandArgument);
@@ -103,22 +138,27 @@ public partial class PM_ManageProject : System.Web.UI.Page
 
             if (e.CommandName == "btnDeactivate")
             {
-                int row = Convert.ToInt32(e.CommandArgument);
-                GridViewRow selectedRow = gvWorkPackages.Rows[row];
-                WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
-                workpackage.isActive = 0;
-                var wps =
-                    from wp in ff.WorkPackages
-                    where (wp.wpId.ToString().Contains(workpackage.wpId))
-                    select wp;
-                foreach (var wp in wps)
+                if (User.Identity.Name == fullname2)
                 {
-                    wp.isActive = 0;
-                    string s2 = wp.wpId;
+                    int row = Convert.ToInt32(e.CommandArgument);
+                    GridViewRow selectedRow = gvWorkPackages.Rows[row];
+                    WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
+                    workpackage.isActive = 0;
+                    var wps =
+                        from wp in ff.WorkPackages
+                        where (wp.wpId.ToString().Contains(workpackage.wpId))
+                        select wp;
+                    foreach (var wp in wps)
+                    {
+                        wp.isActive = 0;
+                        string s2 = wp.wpId;
+                        ff.SubmitChanges();
+                    }
                     ff.SubmitChanges();
+                    populateManageProject();
                 }
-                ff.SubmitChanges();
-                populateManageProject();
+                else
+                    MessageBox.Show("You are not the project manager.");
             }
         }
         catch (Exception exception)
@@ -131,6 +171,17 @@ public partial class PM_ManageProject : System.Web.UI.Page
     {
         try
         {
+            string fullname2 = "";
+            try
+            {
+                string[] fullname = lblProjectManager2.Text.Split(' ');
+                fullname2 = fullname[0].ToLower() + "_" + fullname[1].ToLower();
+            }
+            catch (Exception exception)
+            {
+                fullname2 = "";
+            } 
+            
             if (e.CommandName == "btnView")
             {
                 int row = Convert.ToInt32(e.CommandArgument);
@@ -141,33 +192,38 @@ public partial class PM_ManageProject : System.Web.UI.Page
 
             if (e.CommandName == "btnActivate")
             {
-                int row = Convert.ToInt32(e.CommandArgument);
-                GridViewRow selectedRow = gvUnactiveWP.Rows[row];
-                WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
-                workpackage.isActive = 1;
-
-                string[] wpArray = workpackage.wpId.Split('.');
-                string s = "";
-                for (int j = wpArray.Length - 1; j > 1; j--)
+                if (User.Identity.Name == fullname2)
                 {
-                    for (int i = 0; i < j; i++)
+                    int row = Convert.ToInt32(e.CommandArgument);
+                    GridViewRow selectedRow = gvUnactiveWP.Rows[row];
+                    WorkPackage workpackage = ff.WorkPackages.Where(wp => wp.wpId == selectedRow.Cells[0].Text).First();
+                    workpackage.isActive = 1;
+
+                    string[] wpArray = workpackage.wpId.Split('.');
+                    string s = "";
+                    for (int j = wpArray.Length - 1; j > 1; j--)
                     {
-                        if (i == j - 1)
-                            s += wpArray[i];
-                        else
-                            s += wpArray[i] + ".";
+                        for (int i = 0; i < j; i++)
+                        {
+                            if (i == j - 1)
+                                s += wpArray[i];
+                            else
+                                s += wpArray[i] + ".";
+                        }
+                        var subwp =
+                                    (from wp in ff.WorkPackages
+                                     where (wp.wpId == s)
+                                     select wp);
+                        string s2 = subwp.First().wpId;
+                        subwp.First().isActive = 1;
+                        ff.SubmitChanges();
+                        s = "";
                     }
-                    var subwp =
-                                (from wp in ff.WorkPackages
-                                where (wp.wpId == s)
-                                 select wp);
-                    string s2 = subwp.First().wpId;
-                    subwp.First().isActive = 1;
                     ff.SubmitChanges();
-                    s = "";
+                    populateManageProject();
                 }
-                ff.SubmitChanges();
-                populateManageProject();
+                else
+                    MessageBox.Show("You are not the project manager.");
             }
         }
         catch (Exception exception)
@@ -222,5 +278,133 @@ public partial class PM_ManageProject : System.Web.UI.Page
         btnChangeAlloc.Visible = true;
         tbUnalloc.Visible = false;
         populateManageProject();
+    }
+
+    protected void pmRoleFunctionality()
+    {
+        gvUnactiveWP.Columns[5].Visible = true;
+        gvWorkPackages.Columns[6].Visible = true;
+        lbCreateWP.Visible = true;
+        divOriginalAlloc.Visible = true;
+    }
+
+    protected void hrRoleFunctionality()
+    {
+        lbCreateWP.Visible = false;
+        divOriginalAlloc.Visible = true;
+
+    }
+
+    protected void employeeRoleFunctionality()
+    {
+        lbCreateWP.Visible = false;
+        divOriginalAlloc.Visible = false;
+        var qry =
+                from username in ff.aspnet_Users
+                join em in ff.EmployeeMemberships on username.UserId equals em.userId
+                join ep in ff.EmployeeProjects on em.empId equals ep.empId
+                where username.UserName == User.Identity.Name && ep.projId == Convert.ToInt32(lblProjID2.Text)
+                select ep;
+        var activewp =
+            from wp in ff.WorkPackages
+            join emp in ff.EmployeeWorkPackages on wp.wpId equals emp.wpId
+            where emp.wpId == wp.wpId && wp.isActive == 1
+            select wp;
+        gvWorkPackages.DataSource = activewp.ToList().Distinct();
+        gvWorkPackages.DataBind();
+
+        var unactivewp =
+            from wp in ff.WorkPackages
+            join emp in ff.EmployeeWorkPackages on wp.wpId equals emp.wpId
+            where emp.wpId == wp.wpId && wp.isActive == 0
+            select wp;
+        gvUnactiveWP.DataSource = unactivewp.ToList().Distinct();
+        gvUnactiveWP.DataBind();
+
+        //gvUnactiveWP.Columns[5].Visible = false;
+        //gvWorkPackages.Columns[6].Visible = false;
+    }
+
+    protected void identifyRole()
+    {
+        if (User.IsInRole("HRStaff"))
+        {
+
+            getAllActiveWP();
+            getAllUnactiveWP();
+            hrRoleFunctionality();
+
+            return;
+        }
+
+        if (User.IsInRole("Employee"))
+        {
+            string fullname2 = "";
+            try
+            {
+                string[] fullname = lblProjectManager2.Text.Split(' ');
+                fullname2 = fullname[0].ToLower() + "_" + fullname[1].ToLower();
+            }
+            catch (Exception exception)
+            {
+                fullname2 = "";
+            }
+            if (User.Identity.Name != fullname2)
+            {
+                var qry =
+                    from username in ff.aspnet_Users
+                    join em in ff.EmployeeMemberships on username.UserId equals em.userId
+                    join ep in ff.EmployeeProjects on em.empId equals ep.empId
+                    where username.UserName == User.Identity.Name && ep.projId == Convert.ToInt32(lblProjID2.Text)
+                    select ep;
+
+                if (qry.ToList().Count > 0)
+                {
+                    employeeRoleFunctionality();
+
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("You are not an employee of this project.1");
+                    Response.Redirect(Request.UrlReferrer.ToString());
+                }
+            }
+            
+        }
+        if (User.IsInRole("ProjectManager"))
+        {
+            string fullname2 = "";
+            try
+            {
+                string[] fullname = lblProjectManager2.Text.Split(' ');
+                fullname2 = fullname[0].ToLower() + "_" + fullname[1].ToLower();
+            }
+            catch (Exception exception)
+            {
+                fullname2 = "";
+            } 
+            if (User.Identity.Name == fullname2)
+            {
+                getAllActiveWP();
+                getAllUnactiveWP();
+                var qry =
+                        from username in ff.aspnet_Users
+                        join em in ff.EmployeeMemberships on username.UserId equals em.userId
+                        join ep in ff.EmployeeProjects on em.empId equals ep.empId
+                        where username.UserName == User.Identity.Name && ep.projId == Convert.ToInt32(lblProjID2.Text)
+                        select ep;
+                if (qry.ToList().Count > 0)
+                    pmRoleFunctionality();
+                else
+                {
+                    MessageBox.Show("You are not a project manager of this project.2");
+                    Response.Redirect(Request.UrlReferrer.ToString());
+                }
+            }
+        }
+
+        if (User.Identity.IsAuthenticated == false)
+            Response.Redirect(Request.UrlReferrer.ToString());
     }
 }

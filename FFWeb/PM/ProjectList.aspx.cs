@@ -10,6 +10,8 @@ public partial class PM_ProjectList : System.Web.UI.Page
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (User.Identity.IsAuthenticated == false)
+            Response.Redirect("~/Default.aspx");
         populateProjectList();
     }
 
@@ -17,8 +19,7 @@ public partial class PM_ProjectList : System.Web.UI.Page
     {
         if (Session["wpID"] != null)
             Session["wpID"] = null;
-        populateActiveProj();
-        populateInactiveProj();
+        identifyRole();
     }
 
     protected void populateActiveProj()
@@ -109,5 +110,46 @@ public partial class PM_ProjectList : System.Web.UI.Page
         {
             lblException.Text = exception.StackTrace;
         }
+    }
+
+    protected void identifyRole()
+    {
+        gvProjects.DataSource = null;
+        gvProjects.DataBind();
+        gvUnassignedProj.DataSource = null;
+        gvUnassignedProj.DataBind();
+        if (User.IsInRole("ProjectManager") || User.IsInRole("Employee"))
+        {
+            var active =
+                from proj in ff.Projects
+                join ep in ff.EmployeeProjects on proj.projId equals ep.projId
+                join em in ff.EmployeeMemberships on ep.empId equals em.empId
+                join username in ff.aspnet_Users on em.userId equals username.UserId
+                where username.UserName == User.Identity.Name && proj.isActive == 1
+                select proj;
+            gvProjects.DataSource = active;
+            gvProjects.DataBind();
+
+            var inactive =
+                from proj in ff.Projects
+                join ep in ff.EmployeeProjects on proj.projId equals ep.projId
+                join em in ff.EmployeeMemberships on ep.empId equals em.empId
+                join username in ff.aspnet_Users on em.userId equals username.UserId
+                where username.UserName == User.Identity.Name && proj.isActive == 0
+                select proj;
+            gvUnassignedProj.DataSource = inactive;
+            gvUnassignedProj.DataBind();
+            gvUnassignedProj.Columns[3].Visible = false;
+            gvProjects.Columns[4].Visible = false;
+        }
+
+        if (User.IsInRole("HRStaff"))
+        {
+            populateActiveProj();
+            populateInactiveProj();
+            gvUnassignedProj.Columns[3].Visible = true;
+            gvProjects.Columns[4].Visible = true;
+        }
+
     }
 }

@@ -15,6 +15,11 @@ public partial class RE_WorkPackage : System.Web.UI.Page
     {
         try
         {
+            if (!User.IsInRole("ProjectManager"))
+            {
+                Response.Redirect(Request.UrlReferrer.ToString());
+            }
+
             if (Session["projID"] == null)
                 Response.Redirect("~/PM/ProjectList.aspx");
             if (Session["wpID"] == null)

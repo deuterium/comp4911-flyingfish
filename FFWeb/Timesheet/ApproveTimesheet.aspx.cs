@@ -52,7 +52,7 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
                       //Fri = tse.fri,
                       //Sat = tse.sat,
                       //Sun = tse.sun,
-                      Note = tse.notes,
+                      //Note = tse.notes,
                       Status = th.status,
                       Comments = th.comments
                   };
@@ -138,6 +138,7 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
                       Sat = t.sat,
                       Sun = t.sun,
                       Note = t.notes,
+                      Total = t.mon + t.tue + t.wed + t.thu + t.fri + t.sat + t.sun
                   };
         GridView2.DataSource = qry;
         GridView2.DataBind();
