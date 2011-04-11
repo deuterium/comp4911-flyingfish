@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CustomGridView_Sample.aspx.cs" Inherits="Reports_CustomGridView_Sample" %>
+﻿<%@ Page Language="C#" Title="" AutoEventWireup="true" CodeFile="CustomGridView_Sample.aspx.cs" Inherits="Reports_CustomGridView_Sample" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" Title="New WorkPackage" MasterPageFile="~/FlyingFishMasterPage.master"
+﻿<%@ Page Language="C#" Title="" MasterPageFile="~/FlyingFishMasterPage.master"
     AutoEventWireup="true" CodeFile="WorkPackage.aspx.cs" Inherits="RE_WorkPackage" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">

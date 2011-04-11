@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" Title="Project" MasterPageFile="~/FlyingFishMasterPage.master"
+﻿<%@ Page Language="C#" Title="" MasterPageFile="~/FlyingFishMasterPage.master"
     AutoEventWireup="true" CodeFile="Project.aspx.cs" Inherits="PM_Project" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
