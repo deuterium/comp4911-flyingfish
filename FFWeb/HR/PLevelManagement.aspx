@@ -6,19 +6,16 @@
     <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server">
     </asp:ToolkitScriptManager>
     <div>
-        <asp:LinqDataSource ID="ldsFiscalYear" runat="server" 
-            ContextTypeName="FlyingFishClassesDataContext" EntityTypeName="" 
-            GroupBy="fiscalYear" OrderGroupsBy="key desc" 
-            Select="new (key as fiscalYear, it as PersonLevels)" TableName="PersonLevels">
+        <asp:LinqDataSource ID="ldsFiscalYear" runat="server" ContextTypeName="FlyingFishClassesDataContext"
+            EntityTypeName="" GroupBy="fiscalYear" OrderGroupsBy="key desc" Select="new (key as fiscalYear, it as PersonLevels)"
+            TableName="PersonLevels">
         </asp:LinqDataSource>
-        <asp:LinqDataSource ID="ldsPLevels" runat="server" 
-            ContextTypeName="FlyingFishClassesDataContext" EnableDelete="True" 
-            EnableInsert="True" EnableUpdate="True" EntityTypeName="" OrderBy="pLevel" 
-            TableName="PersonLevels" Where="fiscalYear == @fiscalYear">
-            <%--OnUpdating="ldsPLevels_Updating"--%>
+        <asp:LinqDataSource ID="ldsPLevels" runat="server" ContextTypeName="FlyingFishClassesDataContext"
+            EnableDelete="True" EnableInsert="True" EnableUpdate="True" EntityTypeName=""
+            OrderBy="pLevel" TableName="PersonLevels" Where="fiscalYear == @fiscalYear" OnUpdating="ldsPLevels_Updating">
             <WhereParameters>
-                <asp:ControlParameter ControlID="ddlFiscalYear" Name="fiscalYear" 
-                    PropertyName="SelectedValue" Type="Int32" />
+                <asp:ControlParameter ControlID="ddlFiscalYear" Name="fiscalYear" PropertyName="SelectedValue"
+                    Type="Int32" />
             </WhereParameters>
         </asp:LinqDataSource>
         <br />
@@ -31,9 +28,8 @@
                                 <td align="left">
                                     Fiscal Year:
                                     <asp:DropDownList ID="ddlFiscalYear" runat="server" OnSelectedIndexChanged="ddlFiscalYear_SelectedIndexChanged"
-                                        AutoPostBack="True" OnDataBound="ddlFiscalYear_DataBound" 
-                                        DataSourceID="ldsFiscalYear" DataTextField="fiscalYear" 
-                                        DataValueField="fiscalYear" />
+                                        AutoPostBack="True" OnDataBound="ddlFiscalYear_DataBound" DataSourceID="ldsFiscalYear"
+                                        DataTextField="fiscalYear" DataValueField="fiscalYear" />
                                     <br />
                                 </td>
                             </tr>
@@ -41,11 +37,10 @@
                                 <td>
                                     <asp:UpdatePanel ID="upPLevels" runat="server">
                                         <ContentTemplate>
-                                            <asp:GridView ID="gvPLevels" runat="server" AutoGenerateColumns="False" 
-                                                DataKeyNames="pLevel,fiscalYear" DataSourceID="ldsPLevels">
+                                            <asp:GridView ID="gvPLevels" runat="server" AutoGenerateColumns="False" DataKeyNames="pLevel,fiscalYear"
+                                                DataSourceID="ldsPLevels">
                                                 <Columns>
-                                                    <asp:BoundField DataField="pLevel" HeaderText="P-Level" ReadOnly="True" 
-                                                        SortExpression="pLevel" />
+                                                    <asp:BoundField DataField="pLevel" HeaderText="P-Level" ReadOnly="True" SortExpression="pLevel" />
                                                     <asp:BoundField DataField="rate" HeaderText="Rate" SortExpression="rate" />
                                                     <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" />
                                                 </Columns>
@@ -60,14 +55,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <asp:UpdatePanel runat="server">
-                                        <ContentTemplate>
-                                            <asp:Label ID="lblPLevelError" runat="server" />
-                                        </ContentTemplate>
-                                        <Triggers>
-                                            <asp:AsyncPostBackTrigger ControlID="ldsPLevels" EventName="Updating" />
-                                        </Triggers>
-                                    </asp:UpdatePanel>
+                                    <asp:Label ID="lblPLevelError" runat="server" />
                                 </td>
                             </tr>
                         </table>
@@ -102,6 +90,9 @@
                                                 <asp:CompareValidator ID="PLevelFormatRequired" runat="server" ErrorMessage="PLevel must be letters and numbers."
                                                     Display="Dynamic" Text="*" Font-Strikeout="False" ControlToValidate="tbPLevelID"
                                                     ForeColor="Red" Operator="DataTypeCheck" ValidationGroup="PLevelValid"></asp:CompareValidator>
+                                                <asp:RangeValidator ID="PLevelRangeCheck" runat="server" ErrorMessage="P-Level must be in format P#."
+                                                    Text="*" Display="Dynamic" MinimumValue="2" MaximumValue="2" ValidationGroup="PLevelValid"
+                                                    ControlToValidate="tbPLevelID" ForeColor="Red"></asp:RangeValidator>
                                             </td>
                                         </tr>
                                         <tr>
@@ -116,6 +107,9 @@
                                                 <asp:CompareValidator ID="RateFormatRequired" runat="server" ValidationGroup="PLevelValid"
                                                     Operator="DataTypeCheck" Type="Currency" Text="*" Display="Dynamic" ErrorMessage="Rate must be a currency value."
                                                     ForeColor="Red" ControlToValidate="tbRate"></asp:CompareValidator>
+                                                <asp:RangeValidator ID="RateRangeCheck" runat="server" ErrorMessage="Rate must be between 0 and $999.99."
+                                                    Text="*" Display="Dynamic" MinimumValue="0" MaximumValue="999.99" ValidationGroup="PLevelValid"
+                                                    ControlToValidate="tbRate" Type="Currency" ForeColor="Red"></asp:RangeValidator>
                                             </td>
                                         </tr>
                                         <tr>
@@ -126,14 +120,14 @@
                                         </tr>
                                         <tr>
                                             <td colspan="2">
-                                                <%--<asp:UpdatePanel runat="server">
-                                                    <ContentTemplate>--%>
+                                                <asp:UpdatePanel runat="server">
+                                                    <ContentTemplate>
                                                         <asp:Label ID="lblError" runat="server" />
-                                                    <%--</ContentTemplate>
+                                                    </ContentTemplate>
                                                     <Triggers>
                                                         <asp:AsyncPostBackTrigger ControlID="buttonPlevel" EventName="Click" />
                                                     </Triggers>
-                                                </asp:UpdatePanel>--%>
+                                                </asp:UpdatePanel>
                                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" DisplayMode="List"
                                                     ValidationGroup="PLevelValid" />
                                             </td>

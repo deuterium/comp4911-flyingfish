@@ -38,13 +38,18 @@ public partial class HR_PLevelManagement : System.Web.UI.Page
         }
     }
 
-    //protected void ldsPLevels_Updating(object sender, LinqDataSourceUpdateEventArgs e)
-    //{
-    //    if (e.Exception != null)
-    //    {
-    //        lblPLevelError.Text = "P-Level in use; cannot delete.";
-    //        lblPLevelError.ForeColor = System.Drawing.Color.Red;
-    //        e.ExceptionHandled = true;
-    //    }
-    //}
+    protected void ldsPLevels_Updating(object sender, LinqDataSourceUpdateEventArgs e)
+    {
+        if (e.Exception != null)
+        {
+            foreach (KeyValuePair<string, Exception> innerException in
+                 e.Exception.InnerExceptions)
+            {
+                lblPLevelError.Text += innerException.Key + ": " +
+                    innerException.Value.Message + "<br />";
+            }
+            lblPLevelError.ForeColor = System.Drawing.Color.Red;
+            e.ExceptionHandled = true;
+        }
+    }
 }
