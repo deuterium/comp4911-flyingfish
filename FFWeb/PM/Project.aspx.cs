@@ -14,7 +14,7 @@ public partial class PM_Project : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         if(!User.IsInRole("HRStaff"))
-            Response.Redirect(Request.UrlReferrer.ToString());
+            Response.Redirect("~/Default.aspx");
 
         if (!IsPostBack)
             populateProjectManagerUsers();
