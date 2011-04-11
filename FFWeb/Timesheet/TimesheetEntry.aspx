@@ -4,106 +4,106 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
-    <style type="text/css">
-        input
-        {
-            width: 30px;
-        }
-        
-        .notes
-        {
-            width: 100px;
-        }
-        
-        
-        .style1
-        {
-            width: 161px;
-        }
-        
-        .newRecord input
-        {
-           width: 100px;
-        }
-        
-        
-        .style2
-        {
-            width: 30%;
-        }
-        
-        
-        </style>
     <div id="divTimeSheet" runat="server">
-        <table style="width: 100%;">
+        <asp:Label ID="lblteTitle" runat="server" Text="Timesheet Management" Font-Bold="true"
+            Font-Size="Large" />
+        <br />
+        <div class="divline">
+        </div>
+        <br />
+        <table>
             <tr>
-                <td class="style1">
-                    &nbsp; Name
+                <td class="tableTE1">
+                    <asp:Label ID="lblteName" runat="server" Text="Name: " Font-Bold="true" />
                 </td>
                 <td>
-                    &nbsp;
                     <asp:LoginName ID="LoginName1" runat="server" />
                 </td>
+            </tr>
+            <tr>
+                <td class="tableTE1">
+                    <asp:Label ID="lblteEmpNo" runat="server" Text="Employee Number: " Font-Bold="true" />
+                </td>
                 <td>
-                    &nbsp;
+                    <asp:Label ID="lbEmpNo" runat="server" Text="Label" />
                 </td>
             </tr>
             <tr>
-                <td class="style1">
-                    &nbsp; Employee Number
+                <td class="tableTE1">
+                    <asp:Label ID="lblteDate" runat="server" Font-Bold="true" Text="Date: " />
                 </td>
                 <td>
-                    &nbsp;
-                    <asp:Label ID="lbEmpNo" runat="server" Text="Label"></asp:Label>
-                </td>
-                <td>
-                    &nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td class="style1">
-                    &nbsp; Date
-                </td>
-                <td>
-                    &nbsp;
-                    <asp:Label ID="lbDate" runat="server" Text="Label"></asp:Label>
-                </td>
-                <td>
-                    &nbsp;
+                    <asp:Label ID="lbDate" runat="server" Text="Label" />
                 </td>
             </tr>
         </table>
-        <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="empId,tsDate,projId,wpId"
-            DataSourceID="LinqDataSource1" AllowPaging="True" AllowSorting="True" 
-            CellPadding="3" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" 
-            BorderWidth="1px">
-            <Columns>
-                <asp:CommandField ShowEditButton="True" />
-                <asp:BoundField DataField="projId" HeaderText="projId" ReadOnly="True" SortExpression="projId" />
-                <asp:BoundField DataField="wpId" HeaderText="wpId" ReadOnly="True" SortExpression="wpId" />
-                <asp:BoundField DataField="sat" HeaderText="sat" SortExpression="sat" />
-                <asp:BoundField DataField="sun" HeaderText="sun" SortExpression="sun" />
-                <asp:BoundField DataField="mon" HeaderText="mon" SortExpression="mon" />
-                <asp:BoundField DataField="tue" HeaderText="tue" SortExpression="tue" />
-                <asp:BoundField DataField="wed" HeaderText="wed" SortExpression="wed" />
-                <asp:BoundField DataField="thu" HeaderText="thu" SortExpression="thu" />
-                <asp:BoundField DataField="fri" HeaderText="fri" SortExpression="fri" />
-                <asp:BoundField DataField="notes" HeaderText="notes" SortExpression="notes">
-                    <ControlStyle CssClass="notes" />
-                </asp:BoundField>
-            </Columns>
-            <FooterStyle BackColor="White" ForeColor="#000066" />
-            <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
-            <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />
-            <RowStyle ForeColor="#000066" />
-            <SelectedRowStyle BackColor="#669999" Font-Bold="True" ForeColor="White" />
-            <SortedAscendingCellStyle BackColor="#F1F1F1" />
-            <SortedAscendingHeaderStyle BackColor="#007DBB" />
-            <SortedDescendingCellStyle BackColor="#CAC9C9" />
-            <SortedDescendingHeaderStyle BackColor="#00547E" />
-        </asp:GridView>
-        <asp:GridView ID="gvTotals" runat="server">
-        </asp:GridView>
+        <br />
+        <asp:Label ID="lbltesublblList" runat="server" Text="Submitted Timesheets" Font-Bold="true" />
+        <br />
+        <div class="divline">
+        </div>
+        <br />
+        <center>
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="empId,tsDate,projId,wpId"
+                DataSourceID="LinqDataSource1" AllowPaging="True" AllowSorting="True" CellPadding="3"
+                BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px">
+                <Columns>
+                    <asp:BoundField DataField="projId" HeaderText="projId" ReadOnly="True" SortExpression="projId" />
+                    <asp:BoundField DataField="wpId" HeaderText="wpId" ReadOnly="True" SortExpression="wpId" />
+                    <asp:BoundField DataField="sat" HeaderText="sat" SortExpression="sat" />
+                    <asp:BoundField DataField="sun" HeaderText="sun" SortExpression="sun" />
+                    <asp:BoundField DataField="mon" HeaderText="mon" SortExpression="mon" />
+                    <asp:BoundField DataField="tue" HeaderText="tue" SortExpression="tue" />
+                    <asp:BoundField DataField="wed" HeaderText="wed" SortExpression="wed" />
+                    <asp:BoundField DataField="thu" HeaderText="thu" SortExpression="thu" />
+                    <asp:BoundField DataField="fri" HeaderText="fri" SortExpression="fri" />
+                    <asp:BoundField DataField="notes" HeaderText="notes" SortExpression="notes">
+                        <ControlStyle CssClass="notes" />
+                    </asp:BoundField>
+                    <asp:CommandField ShowEditButton="True" ButtonType="Button" />
+                </Columns>
+                <FooterStyle BackColor="White" ForeColor="#000066" />
+                <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
+                <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />
+                <RowStyle ForeColor="#000066" />
+                <SelectedRowStyle BackColor="#669999" Font-Bold="True" ForeColor="White" />
+                <SortedAscendingCellStyle BackColor="#F1F1F1" />
+                <SortedAscendingHeaderStyle BackColor="#007DBB" />
+                <SortedDescendingCellStyle BackColor="#CAC9C9" />
+                <SortedDescendingHeaderStyle BackColor="#00547E" />
+            </asp:GridView>
+        </center>
+        <br />
+    </div>
+    <div id="divtotal" runat="server">
+        <asp:Label ID="lbltesublblTotal" runat="server" Text="Total" Font-Bold="true" />
+        <br />
+        <div class="divline">
+        </div>
+        <br />
+        <center>
+            <asp:GridView ID="gvTotals" runat="server" BackColor="White" AutoGenerateColumns="false"
+                BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3">
+                <Columns>
+                    <asp:BoundField DataField="sat" HeaderText="Sat" SortExpression="sat" />
+                    <asp:BoundField DataField="sun" HeaderText="Sun" SortExpression="sun" />
+                    <asp:BoundField DataField="mon" HeaderText="Mon" SortExpression="mon" />
+                    <asp:BoundField DataField="tue" HeaderText="Tue" SortExpression="tue" />
+                    <asp:BoundField DataField="wed" HeaderText="Wed" SortExpression="wed" />
+                    <asp:BoundField DataField="thur" HeaderText="Thur" SortExpression="thur" />
+                    <asp:BoundField DataField="fri" HeaderText="Fri" SortExpression="fri" />
+                </Columns>
+                <FooterStyle BackColor="White" ForeColor="#000066" />
+                <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
+                <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />
+                <RowStyle ForeColor="#000066" />
+                <SelectedRowStyle BackColor="#669999" Font-Bold="True" ForeColor="White" />
+                <SortedAscendingCellStyle BackColor="#F1F1F1" />
+                <SortedAscendingHeaderStyle BackColor="#007DBB" />
+                <SortedDescendingCellStyle BackColor="#CAC9C9" />
+                <SortedDescendingHeaderStyle BackColor="#00547E" />
+            </asp:GridView>
+        </center>
         <asp:LinqDataSource ID="LinqDataSource1" runat="server" ContextTypeName="FlyingFishClassesDataContext"
             EntityTypeName="" TableName="TimesheetEntries" Where="empId == @empId &amp;&amp; tsDate &gt;= @tsDate"
             EnableUpdate="True">
@@ -112,119 +112,133 @@
                 <asp:SessionParameter Name="tsDate" SessionField="CurrentDate" Type="DateTime" />
             </WhereParameters>
         </asp:LinqDataSource>
-        <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
-        <asp:Button ID="btnNewRecord" runat="server" Text="NewRecord" OnClick="btnNewRecord_Click"
-            Width="141px" />
+        <asp:Label ID="lblteSubmitSuccess" runat="server" Text="" />
+        <br />
+        <asp:Button ID="btnNewRecord" runat="server" Text="New Record" OnClick="btnNewRecord_Click" />
     </div>
     <div id="divNewRecord" runat="server" class="newRecord">
-        &nbsp;<br />
-        <table class="style2">
+
+    <asp:Label ID="lblteNewEntTitle" runat="server" Text="Create New Timesheet Entry" Font-Bold="true" />
+    <br />
+    <div class="divline"></div>
+    <br />
+        <table>
             <tr>
                 <td>
-        Project ID:</td>
+                    <asp:Label ID="lblteProjId" runat="server" Text="Project ID: " />
+                </td>
                 <td>
-        <asp:DropDownList ID="ddlProjectId" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlProjectId_SelectedIndexChanged">
-        </asp:DropDownList>
+                    <asp:DropDownList ID="ddlProjectId" CssClass="ddlProjectId" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlProjectId_SelectedIndexChanged">
+                    </asp:DropDownList>
+                </td>
+                <td>
+                    &nbsp&nbsp&nbsp&nbsp&nbsp
+                </td>
+                <td>
+                    <asp:Label ID="lbltewpID" runat="server" Text="Work Package ID: " />
+                </td>
+                <td>
+                    <asp:DropDownList ID="ddlWpId" CssClass="ddlProjectId" runat="server" AutoPostBack="True">
+                    </asp:DropDownList>
                 </td>
             </tr>
             <tr>
                 <td>
-        WP ID:</td>
+                    <asp:Label ID="lblteSun" runat="server" Text="Sunday: " />
+                </td>
                 <td>
-        <asp:DropDownList ID="ddlWpId" runat="server" AutoPostBack="True">
-        </asp:DropDownList>
+                    <asp:TextBox ID="tbSun" runat="server"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="tbSun"
+                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                    <asp:RangeValidator ID="RangeValidator1" runat="server" ControlToValidate="tbSun"
+                        ErrorMessage="You worked too hard!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        Type="Integer">*</asp:RangeValidator>
                 </td>
             </tr>
             <tr>
                 <td>
-        Sunday:</td>
+                    <asp:Label ID="lblteMon" runat="server" Text="Monday: " />
+                </td>
                 <td>
-        <asp:TextBox ID="tbSun" runat="server"></asp:TextBox>
-        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="tbSun"
-            ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
-        <asp:RangeValidator ID="RangeValidator1" runat="server" ControlToValidate="tbSun"
-            ErrorMessage="You worked too hard!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
-            Type="Integer">*</asp:RangeValidator>
+                    <asp:TextBox ID="tbMon" runat="server"></asp:TextBox>
+                    <asp:RangeValidator ID="RangeValidator2" runat="server" ControlToValidate="tbMon"
+                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        Type="Integer">*</asp:RangeValidator>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="tbMon"
+                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
                 <td>
-        Monday:</td>
+                    <asp:Label ID="lblteTues" runat="server" Text="Tuesday: " />
+                </td>
                 <td>
-        <asp:TextBox ID="tbMon" runat="server"></asp:TextBox>
-        <asp:RangeValidator ID="RangeValidator2" runat="server" ControlToValidate="tbMon"
-            ErrorMessage="You worked too hard!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
-            Type="Integer">*</asp:RangeValidator>
-        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="tbMon"
-            ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                    <asp:TextBox ID="tbTue" runat="server"></asp:TextBox>
+                    <asp:RangeValidator ID="RangeValidator3" runat="server" ControlToValidate="tbThu"
+                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        Type="Integer">*</asp:RangeValidator>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="tbThu"
+                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
                 <td>
-        Tuesday:</td>
+                    <asp:Label ID="lblteWed" runat="server" Text="Wednesday: " />
+                </td>
                 <td>
-        <asp:TextBox ID="tbTue" runat="server"></asp:TextBox>
-        <asp:RangeValidator ID="RangeValidator3" runat="server" ControlToValidate="tbThu"
-            ErrorMessage="You worked too hard!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
-            Type="Integer">*</asp:RangeValidator>
-        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="tbThu"
-            ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                    <asp:TextBox ID="tbWed" runat="server"></asp:TextBox>
+                    <asp:RangeValidator ID="RangeValidator4" runat="server" ControlToValidate="tbWed"
+                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        Type="Integer">*</asp:RangeValidator>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="tbWed"
+                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
                 <td>
-        Wednesday:</td>
+                    <asp:Label ID="lblteThur" runat="server" Text="Thursday: " />
+                </td>
                 <td>
-        <asp:TextBox ID="tbWed" runat="server"></asp:TextBox>
-        <asp:RangeValidator ID="RangeValidator4" runat="server" ControlToValidate="tbWed"
-            ErrorMessage="You worked too hard!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
-            Type="Integer">*</asp:RangeValidator>
-        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="tbWed"
-            ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                    <asp:TextBox ID="tbThu" runat="server"></asp:TextBox>
+                    <asp:RangeValidator ID="RangeValidator5" runat="server" ControlToValidate="tbThu"
+                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        Type="Integer">*</asp:RangeValidator>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="tbThu"
+                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
                 <td>
-        Thursday:</td>
+                    <asp:Label ID="lblteFri" runat="server" Text="Friday: " />
+                </td>
                 <td>
-        <asp:TextBox ID="tbThu" runat="server"></asp:TextBox>
-        <asp:RangeValidator ID="RangeValidator5" runat="server" ControlToValidate="tbThu"
-            ErrorMessage="You worked too hard!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
-            Type="Integer">*</asp:RangeValidator>
-        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="tbThu"
-            ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                    <asp:TextBox ID="tbFri" runat="server"></asp:TextBox>
+                    <asp:RangeValidator ID="RangeValidator6" runat="server" ControlToValidate="tbFri"
+                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        Type="Integer">*</asp:RangeValidator>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="tbFri"
+                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
                 <td>
-        Friday:</td>
+                    <asp:Label ID="lblteSat" runat="server" Text="Saturday: " />
+                </td>
                 <td>
-        <asp:TextBox ID="tbFri" runat="server"></asp:TextBox>
-        <asp:RangeValidator ID="RangeValidator6" runat="server" ControlToValidate="tbFri"
-            ErrorMessage="You worked too hard!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
-            Type="Integer">*</asp:RangeValidator>
-        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="tbFri"
-            ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                    <asp:TextBox ID="tbSat" runat="server"></asp:TextBox>
+                    <asp:RangeValidator ID="RangeValidator7" runat="server" ControlToValidate="tbSat"
+                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        Type="Integer">*</asp:RangeValidator>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="tbSat"
+                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
                 <td>
-        Saturday:</td>
-                <td>
-        <asp:TextBox ID="tbSat" runat="server"></asp:TextBox>
-        <asp:RangeValidator ID="RangeValidator7" runat="server" ControlToValidate="tbSat"
-            ErrorMessage="You worked too hard!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
-            Type="Integer">*</asp:RangeValidator>
-        <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="tbSat"
-            ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
-                </td>
-            </tr>
-            <tr>
-                <td>
-        Note:
+                    <asp:Label ID="lblteNotes" runat="server" Text="Note: " />
                 </td>
                 <td>
-        <asp:TextBox ID="tbNote" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="tbNote" runat="server"></asp:TextBox>
                 </td>
             </tr>
         </table>
