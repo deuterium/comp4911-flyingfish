@@ -15,6 +15,7 @@
             ContextTypeName="FlyingFishClassesDataContext" EnableDelete="True" 
             EnableInsert="True" EnableUpdate="True" EntityTypeName="" OrderBy="pLevel" 
             TableName="PersonLevels" Where="fiscalYear == @fiscalYear">
+            <%--OnUpdating="ldsPLevels_Updating"--%>
             <WhereParameters>
                 <asp:ControlParameter ControlID="ddlFiscalYear" Name="fiscalYear" 
                     PropertyName="SelectedValue" Type="Int32" />
@@ -27,7 +28,7 @@
                     <td>
                         <table>
                             <tr>
-                                <td>
+                                <td align="left">
                                     Fiscal Year:
                                     <asp:DropDownList ID="ddlFiscalYear" runat="server" OnSelectedIndexChanged="ddlFiscalYear_SelectedIndexChanged"
                                         AutoPostBack="True" OnDataBound="ddlFiscalYear_DataBound" 
@@ -53,6 +54,18 @@
                                         <Triggers>
                                             <asp:AsyncPostBackTrigger ControlID="ddlFiscalYear" EventName="SelectedIndexChanged" />
                                             <asp:AsyncPostBackTrigger ControlID="buttonPlevel" EventName="Click" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:UpdatePanel runat="server">
+                                        <ContentTemplate>
+                                            <asp:Label ID="lblPLevelError" runat="server" />
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="ldsPLevels" EventName="Updating" />
                                         </Triggers>
                                     </asp:UpdatePanel>
                                 </td>
@@ -113,14 +126,14 @@
                                         </tr>
                                         <tr>
                                             <td colspan="2">
-                                                <asp:UpdatePanel runat="server">
-                                                    <ContentTemplate>
+                                                <%--<asp:UpdatePanel runat="server">
+                                                    <ContentTemplate>--%>
                                                         <asp:Label ID="lblError" runat="server" />
-                                                    </ContentTemplate>
+                                                    <%--</ContentTemplate>
                                                     <Triggers>
                                                         <asp:AsyncPostBackTrigger ControlID="buttonPlevel" EventName="Click" />
                                                     </Triggers>
-                                                </asp:UpdatePanel>
+                                                </asp:UpdatePanel>--%>
                                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" DisplayMode="List"
                                                     ValidationGroup="PLevelValid" />
                                             </td>
