@@ -115,7 +115,6 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                       where (String.Compare(firstName, emp.firstName, true) == 0)
                          && (String.Compare(lastName, emp.lastName, true) == 0)
                       select emp).FirstOrDefault();
-
         return e;
     }
          
