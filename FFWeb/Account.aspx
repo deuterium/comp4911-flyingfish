@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Account" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="Account.aspx.cs" Inherits="Account" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/FlyingFishMasterPage.master" AutoEventWireup="true" CodeFile="Account.aspx.cs" Inherits="Account" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
 <h2>Account Settings</h2>

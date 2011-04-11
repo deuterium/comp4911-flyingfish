@@ -40,7 +40,7 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
                   where th.status.Equals("SAVED")
                   select new
                   {
-                      EmployeeName = emp.firstName + " " + emp.lastName + "(" + th.empId + ")",
+                      EmployeeName = emp.firstName + " " + emp.lastName + " (" + th.empId + ")",
                       EmpID = th.empId,
                       Date = th.tsDate,
                       Project = tse.projId,
@@ -109,18 +109,18 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
         btnSubmit.Visible = true;
         GridView2.Visible = true;
 
-        ViewState["empId"] = GridView1.SelectedRow.Cells[2].Text;
-        ViewState["date"] = GridView1.SelectedRow.Cells[3].Text;
-        ViewState["proj"] = GridView1.SelectedRow.Cells[4].Text;
-        ViewState["wp"] = GridView1.SelectedRow.Cells[5].Text;
+        ViewState["empId"] = GridView1.SelectedRow.Cells[1].Text;
+        ViewState["date"] = GridView1.SelectedRow.Cells[2].Text;
+        ViewState["proj"] = GridView1.SelectedRow.Cells[3].Text;
+        ViewState["wp"] = GridView1.SelectedRow.Cells[4].Text;
 
-        //Label1.Text = GridView1.SelectedRow.Cells[1].Text + GridView1.SelectedRow.Cells[2].Text + GridView1.SelectedRow.Cells[3].Text + GridView1.SelectedRow.Cells[4].Text; ;
+        string empId = GridView1.SelectedRow.Cells[1].Text;
+        DateTime date = Convert.ToDateTime(GridView1.SelectedRow.Cells[2].Text);
+        string proj = GridView1.SelectedRow.Cells[3].Text;
+        string wp = GridView1.SelectedRow.Cells[4].Text;
 
-        string empId = GridView1.SelectedRow.Cells[2].Text;
-        DateTime date = Convert.ToDateTime(GridView1.SelectedRow.Cells[3].Text);
-        string proj = GridView1.SelectedRow.Cells[4].Text;
-        string wp = GridView1.SelectedRow.Cells[5].Text;
-
+        Trace.Write(empId + " " +date + " " + proj + " " + wp);
+        
         var qry = from t in ff.TimesheetEntries
                   join emp in ff.Employees on t.empId equals emp.empId
                   where t.empId.Equals(empId) && t.tsDate.Equals(date) && t.projId == Convert.ToInt32(proj) && t.wpId.Equals(wp)
