@@ -50,18 +50,73 @@
                 <Columns>
                     <asp:BoundField DataField="projId" HeaderText="projId" ReadOnly="True" SortExpression="projId" />
                     <asp:BoundField DataField="wpId" HeaderText="wpId" ReadOnly="True" SortExpression="wpId" />
-                    <asp:BoundField DataField="sat" HeaderText="sat" SortExpression="sat" />
-                    <asp:BoundField DataField="sun" HeaderText="sun" SortExpression="sun" />
-                    <asp:BoundField DataField="mon" HeaderText="mon" SortExpression="mon" />
-                    <asp:BoundField DataField="tue" HeaderText="tue" SortExpression="tue" />
-                    <asp:BoundField DataField="wed" HeaderText="wed" SortExpression="wed" />
-                    <asp:BoundField DataField="thu" HeaderText="thu" SortExpression="thu" />
-                    <asp:BoundField DataField="fri" HeaderText="fri" SortExpression="fri" />
-                    <asp:BoundField DataField="notes" HeaderText="notes" SortExpression="notes">
-                        <ControlStyle CssClass="notes" />
-                    </asp:BoundField>
+                    <asp:TemplateField HeaderText="Sat">
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("sat") %>' Width="20px" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:Label ID="Label3" runat="server" Text='<%# Bind("sat") %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Sun">
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("sun") %>' Width="20px" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:Label ID="Label4" runat="server" Text='<%# Bind("sun") %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Mon">
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBox3" runat="server" Text='<%# Bind("mon") %>' Width="20px" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:Label ID="Label5" runat="server" Text='<%# Bind("mon") %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Tue">
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBox4" runat="server" Text='<%# Bind("tue") %>' Width="20px" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:Label ID="Label6" runat="server" Text='<%# Bind("tue") %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Wed">
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBox5" runat="server" Text='<%# Bind("wed") %>' Width="20px" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:Label ID="Label7" runat="server" Text='<%# Bind("wed") %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Thu">
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBox6" runat="server" Text='<%# Bind("thu") %>' Width="20px" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:Label ID="Label8" runat="server" Text='<%# Bind("thu") %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Fri">
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBox7" runat="server" Text='<%# Bind("fri") %>' Width="20px" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:Label ID="Label9" runat="server" Text='<%# Bind("fri") %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Notes">
+                        <EditItemTemplate>
+                            <asp:TextBox ID="TextBox8" runat="server" Text='<%# Bind("notes") %>' Width="100px" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:Label ID="Label10" runat="server" Text='<%# Bind("notes") %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
                     <asp:CommandField ShowEditButton="True" ButtonType="Button" />
                 </Columns>
+                <EditRowStyle Width="20px" />
                 <FooterStyle BackColor="White" ForeColor="#000066" />
                 <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
                 <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />
