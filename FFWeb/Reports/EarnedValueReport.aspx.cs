@@ -107,7 +107,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
         #endregion
 
         #region Make me pretty
-        for (int i = 0; i < gvEarnedValue.Rows.Count; i++ )
+        for (int i = 0; i < gvEarnedValue.Rows.Count; i++)
         {
             gvEarnedValue.Rows[i].CssClass = "evrPretty";
             i = i + 2;
