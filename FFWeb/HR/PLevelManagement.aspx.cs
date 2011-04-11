@@ -31,7 +31,10 @@ public partial class HR_PLevelManagement : System.Web.UI.Page
                 fiscalYear = Convert.ToInt32(lblFiscalYear.Text)
             };
             ff.PersonLevels.InsertOnSubmit(pl);
-            //ff.SubmitChanges();
+            ff.SubmitChanges();
+
+            lblError.Text = "P-Level added. Refresh page to see changes.";
+            lblError.ForeColor = System.Drawing.Color.Green;
         }
     }
 }
