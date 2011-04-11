@@ -192,7 +192,7 @@
                                 <ControlStyle Width="75px" />
                                 <ItemStyle Width="75px" />
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Percent Complete">
+                            <asp:TemplateField HeaderText="Complete">
                                 <EditItemTemplate>
                                     <asp:Label ID="lblPercentComplete1" runat="server" Text='<%# Bind("PercentComplete") %>'></asp:Label>
                                 </EditItemTemplate>
