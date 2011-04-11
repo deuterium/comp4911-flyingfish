@@ -238,3 +238,10 @@ a:hover
 {
     text-align:center;
 }
+
+/* EarnedValueReport.aspx */
+
+.evrPretty
+{
+    background-color:#A2D9E8;
+}

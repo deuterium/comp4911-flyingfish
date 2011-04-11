@@ -6,12 +6,16 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
     <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server"></asp:ToolkitScriptManager>   
-    <center>
+    
 
     <div id="divInputForm" runat="server">
-        <table cellpadding="5px" >
+
+    <asp:Label ID="EVRTitle" runat="server" Text="Earned Value Report" Font-Bold="true" Font-Size="Large" />
+    <br />
+    <div class="divline" />
+    <br />
+        <table>
             <tr>
-              
                 <td>
                     <asp:Label ID="lblProjId" runat="server" Text="Choose a Project:"></asp:Label>
                 </td>
@@ -20,7 +24,6 @@
                     </asp:DropDownList>
                 </td>
             </tr>
-
             <tr>
                 <td>
                     Reporting Period From:
@@ -52,8 +55,6 @@
                 </td>
             </tr>
             <tr>
-                <td align="right">
-                </td>
                 <td align="left">
                     <asp:Button ID="btnSubmit" runat="server" Text="Submit" 
                         onclick="btnSubmit_Click" />
@@ -69,8 +70,10 @@
     </div>
 
     <br />
-
-        <asp:GridView ID="gvEarnedValue" runat="server" AutoGenerateColumns="False">
+    <center>
+        <asp:GridView ID="gvEarnedValue" runat="server" AutoGenerateColumns="False" 
+            BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" 
+            CellPadding="3">
         <Columns>
             <asp:TemplateField HeaderText="Workpackage">
                 <EditItemTemplate>
@@ -137,6 +140,15 @@
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>
+            <FooterStyle BackColor="White" ForeColor="#000066" />
+            <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
+            <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />
+            <RowStyle ForeColor="#000066" />
+            <SelectedRowStyle BackColor="#669999" Font-Bold="True" ForeColor="White" />
+            <SortedAscendingCellStyle BackColor="#F1F1F1" />
+            <SortedAscendingHeaderStyle BackColor="#007DBB" />
+            <SortedDescendingCellStyle BackColor="#CAC9C9" />
+            <SortedDescendingHeaderStyle BackColor="#00547E" />
     </asp:GridView>
     </center>
 </asp:Content>

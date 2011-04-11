@@ -72,6 +72,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
             DataRow dr = dt.NewRow();
             dr["Workpackage"] = wp.wpId + "  " + wp.name;
             dt.Rows.Add(dr);
+            
             #endregion
 
             #region PDays Row
@@ -103,6 +104,14 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
         
         gvEarnedValue.DataSource = dt;
         gvEarnedValue.DataBind();
+        #endregion
+
+        #region Make me pretty
+        for (int i = 0; i < gvEarnedValue.Rows.Count; i++ )
+        {
+            gvEarnedValue.Rows[i].CssClass = "evrPretty";
+            i = i + 2;
+        }
         #endregion
     }
 
