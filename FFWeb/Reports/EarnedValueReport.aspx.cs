@@ -19,7 +19,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
             populateProjects();
 
             //gogo make report
-            GetEarnedValueReport(4911, DateTime.Today);
+            GetEarnedValueReport(Convert.ToInt16(ddlAllProjects.SelectedValue), DateTime.Today);
         }
     }
 
@@ -177,7 +177,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
                 days += Convert.ToDouble(i.Days);
 
             if (days != 0)
-                return days.ToString();
+                return String.Format("{0:0.0}", days);
             else
                 return unknownValue;
         }
@@ -201,7 +201,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
                 days += Convert.ToDouble(i);
 
             if (days != 0)
-                return days.ToString();
+                return String.Format("{0:0.0}", days);
             else
                 return unknownValue;
         }
@@ -226,7 +226,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
                 days += i.days;
 
             if (days != 0)
-                return (days).ToString();
+                return String.Format("{0:0.0}", days);
             else
                 return "0";
         }
@@ -260,7 +260,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
             if (etcDays == 0)
                 return unknownValue;
             else
-                return (Convert.ToDouble(acwpDays) + etcDays).ToString();
+                return String.Format("{0:0.0}", (Convert.ToDouble(acwpDays) + etcDays));
         }
         catch (Exception ex)
         {
@@ -276,7 +276,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
                 return unknownValue;
             else
             {
-                return ((Convert.ToDouble(BAC) - Convert.ToDouble(EAC)) / Convert.ToDouble(BAC)).ToString("0.00%");
+                return ((Convert.ToDouble(BAC) - Convert.ToDouble(EAC)) / Convert.ToDouble(BAC)).ToString("0.0%");
             }
         }
         catch (Exception ex)
@@ -293,7 +293,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
                 return unknownValue;
             else
             {
-                return (Convert.ToDouble(ACW) / Convert.ToDouble(EAC)).ToString("0.00%");
+                return (Convert.ToDouble(ACW) / Convert.ToDouble(EAC)).ToString("0.0%");
             }
         }
         catch (Exception ex)
@@ -330,7 +330,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
                 if (qry2.unallocated_dollars == null || (qry2.unallocated_dollars + qry2.allocated_dollars) == 0)
                     return unknownValue;
                 else
-                    return "$" + (qry2.unallocated_dollars + qry2.allocated_dollars).ToString();
+                    return String.Format("{0:C}", (qry2.unallocated_dollars + qry2.allocated_dollars));
             }
         }
         catch (Exception ex)
@@ -364,7 +364,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
             }
 
             if (estimate != 0)
-                return "$" + estimate.ToString();
+                return String.Format("{0:C}", estimate);
             else
                 return unknownValue;
         }
@@ -397,7 +397,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
                 ACWP += i.acwp;
 
             if (ACWP != 0)
-                return "$" + ACWP.ToString();
+                return String.Format("{0:C}", ACWP);
             else
                 return "$0";
         }
@@ -417,9 +417,9 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
                       join ep in ffdb.EmployeePersonLevels on e.empId equals ep.empId
                       join p in ffdb.PersonLevels on (ep.pLevel + ep.fiscalYear) equals (p.pLevel + p.fiscalYear)
                       where e.projId.Equals(projId) && e.wpId.Equals(wpId)
-                              && ep.dateUpdated <= end && e.dateUpdated <= end
-                      select new { e.empId, e.ETC_days, epDateUpdated = ep.dateUpdated, p.rate} into a
-                      orderby a.epDateUpdated descending
+                              //&& ep.dateUpdated <= end && e.dateUpdated <= end
+                      select new { e.empId, e.ETC_days, epDateUpdated = ep.dateUpdated, eDateUpdated = e.dateUpdated, p.rate } into a
+                      orderby a.eDateUpdated descending, a.epDateUpdated descending
                       group a by new { a.empId } into g
                       select new { subTotal = Convert.ToDouble(g.First().rate * g.First().ETC_days) };
 
@@ -429,7 +429,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
             if (etc == 0)
                 return unknownValue;
             else
-                return "$" + (Convert.ToDouble(acwp.Substring(1)) + etc).ToString();
+                return String.Format("{0:C}", (Convert.ToDouble(acwp.Substring(1)) + etc));
         }
         catch (Exception ex)
         {
@@ -445,7 +445,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
                 return unknownValue;
             else
             {
-                return ((Convert.ToDouble(BAC.Substring(1)) - Convert.ToDouble(EAC.Substring(1))) / Convert.ToDouble(BAC.Substring(1))).ToString("0.00%");
+                return ((Convert.ToDouble(BAC.Substring(1)) - Convert.ToDouble(EAC.Substring(1))) / Convert.ToDouble(BAC.Substring(1))).ToString("0.0%");
             }
         }
         catch (Exception ex)
@@ -462,7 +462,7 @@ public partial class Reports_EarnedValueReport : System.Web.UI.Page
                 return unknownValue;
             else
             {
-                return (Convert.ToDouble(ACW.Substring(1)) / Convert.ToDouble(EAC.Substring(1))).ToString("0.00%");
+                return (Convert.ToDouble(ACW.Substring(1)) / Convert.ToDouble(EAC.Substring(1))).ToString("0.0%");
             }
         }
         catch (Exception ex)
