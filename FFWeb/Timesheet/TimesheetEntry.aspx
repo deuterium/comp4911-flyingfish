@@ -139,7 +139,7 @@
                 <td>
         Sunday:</td>
                 <td>
-        <asp:TextBox ID="tbSun" runat="server" Height="22px" Width="107px"></asp:TextBox>
+        <asp:TextBox ID="tbSun" runat="server"></asp:TextBox>
         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="tbSun"
             ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
         <asp:RangeValidator ID="RangeValidator1" runat="server" ControlToValidate="tbSun"

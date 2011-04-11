@@ -40,7 +40,7 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
                   where th.status.Equals("SAVED")
                   select new
                   {
-                      EmployeeName = emp.firstName + " " + emp.lastName + "(" + th.empId + ")",
+                      EmployeeName = emp.firstName + " " + emp.lastName + " (" + th.empId + ")",
                       EmpID = th.empId,
                       Date = th.tsDate,
                       Project = tse.projId,
