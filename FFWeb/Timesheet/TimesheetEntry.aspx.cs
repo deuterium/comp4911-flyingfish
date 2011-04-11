@@ -25,7 +25,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
     {
         FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
         DateTime CurrentDate = Convert.ToDateTime(Session["CurrentDate"].ToString());
-        int empIdTemp  = Convert.ToInt32(Session["CurEmpId"].ToString());
+        int empIdTemp = Convert.ToInt32(Session["CurEmpId"].ToString());
 
         var qry2 = from ts in ff.TimesheetEntries
                    where (ts.tsDate >= CurrentDate) && (ts.empId == Convert.ToInt32(empIdTemp))
@@ -66,8 +66,8 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
         dt.Columns.Add(new DataColumn("Thur", typeof(System.String)));
         dt.Columns.Add(new DataColumn("Fri", typeof(System.String)));
 
-       // dt.Columns.Add(new DataColumn("Notes", typeof(System.String)));
-        
+        // dt.Columns.Add(new DataColumn("Notes", typeof(System.String)));
+
 
 
         foreach (var row in qry2)
@@ -83,7 +83,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
             dr["Sat"] = row.Sat;
             dr["Sun"] = row.Sun;
             //dr["Notes"] = row.Notes;
-            
+
 
             dt.Rows.Add(dr);
         }
@@ -138,8 +138,6 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
             totSun += Convert.ToDouble(dt.Rows[i][3].ToString());
         }
 
-
-
         dt.Clear();
 
         // add the total row
@@ -157,7 +155,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
 
         gvTotals.DataSource = dt;
         gvTotals.DataBind();
-       
+
     }
 
     private void renderLabels()
@@ -165,7 +163,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
 
         lbDate.Text = Session["CurrentDate"].ToString();
         lbEmpNo.Text = Session["CurEmpId"].ToString();
-     
+
     }
 
     private void CreateSessionVars()
@@ -199,7 +197,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
             }
             Session["CurrentDate"] = actualQryDate;
 
-          
+
 
 
         }
@@ -213,7 +211,8 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
     protected void btnNewRecord_Click(object sender, EventArgs e)
     {
         divNewRecord.Visible = true;
-       
+        divtotal.Visible = false;
+        btnNewRecord.Visible = false;
         populateDdl();
     }
 
@@ -269,9 +268,10 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
 
             ff.TimesheetEntries.InsertOnSubmit(tmp2);
             ff.SubmitChanges();
-
-            Label1.Text = "Sumbit has been saved.";
+            lblteSubmitSuccess.Text = "Sumbit has been saved.";
             divNewRecord.Visible = false;
+            btnNewRecord.Visible = true;
+            divtotal.Visible = true;
             tbFri.Text = String.Empty;
             tbMon.Text = String.Empty;
             tbNote.Text = String.Empty;
@@ -286,7 +286,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
         }
         catch (Exception myException)
         {
-            Label1.Text = myException.Message;
+            lblteSubmitSuccess.Text = myException.Message;
             // Label1.Text = "You have sumbitted the record before, Cannot insert duplicate record into the database!!!";
 
         }
@@ -297,7 +297,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
     {
         FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
         int projId = Convert.ToInt32(ddlProjectId.SelectedValue);
-       
+
         ddlWpId.DataSource = ff.WorkPackages.Where(p => p.projId == projId).Select(p => new
         {
             text = p.wpId,

@@ -245,3 +245,26 @@ a:hover
 {
     background-color:#A2D9E8;
 }
+
+/* TimesheetEntry.aspx */
+        
+.notes
+{
+    width: 100px;
+}
+        
+        
+.tableTE1
+{
+    width: 161px;
+}
+        
+.newRecord input
+{
+    width: 100px;
+}
+
+.ddlProjectId
+{
+    width:120px;
+}
