@@ -2,12 +2,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="content" Runat="Server">
 
     <div id="divCreateWorkPackage" runat="server">
+    <asp:Label ID="lblMsg2" runat="server" Text="Work Package Creation" Font-Bold="true" Font-Size="Large" />
+    <br />
+    <div class="divline" />
+    <br />
+    <asp:Label ID="lblMsg" runat="server" Text="Fill in the following information below to create a work package." />
+    <br /><br />
         <table>
-            <tr>
-                <td colspan="2">
-                    <asp:Label ID="lblMsg" runat="server" Text="Fill in the following information below to create a work package." />
-                </td>
-            </tr>
             <tr>
                 <td align="right">
                     <asp:Label ID="lblwpID" runat="server" Text="Work Package ID: " />
@@ -25,8 +26,6 @@
                         ErrorMessage="Work Package ID must be a positive integer." ForeColor="Red" 
                         MaximumValue="2147483647" MinimumValue="1" Type="Integer">*</asp:RangeValidator>
                 </td>
-            </tr>
-            <tr>
                 <td align="right">
                     <asp:Label ID="lblwpName" runat="server" Text="Work Package Name: " />
                 </td>
@@ -42,32 +41,31 @@
                 </td>
             </tr>
             <tr>
-                <td align="right">
+                <td align="left">
                     <asp:Label ID="lblDescription" runat="server" Text="Description: " />
                 </td>
-                <td>
-                    <asp:TextBox ID="tbDescription" runat="server" Rows="10" TextMode="MultiLine" />
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <asp:TextBox ID="tbDescription" runat="server" Rows="10" Width="515px" TextMode="MultiLine" />
                 </td>
             </tr>
             <tr>
                 <td align="center" colspan="2">
-                    <asp:Button ID="btnCreateWorkPackage" runat="server" Text="Create Work Package" 
-                        onclick="btnCreateWorkPackage_Click" />
-                    <br />
                     <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
                     <asp:ValidationSummary ID="vsSummary" runat="server" ForeColor="Red" />
                     <br />
                 </td>
             </tr>
-            <tr>
-                <td align="center" colspan="2">
-                    <asp:LinkButton ID="lbProjectList" runat="server" onclick="lbProjectList_Click" 
-                        CausesValidation="False">Go to Project List</asp:LinkButton>
-                    <asp:LinkButton ID="lbProject" runat="server" CausesValidation="False" 
-                        onclick="lbProject_Click">Go to Project</asp:LinkButton>
-                </td>
-            </tr>
         </table>
+
+        <asp:Button ID="btnCreateWorkPackage" runat="server" Text="Create Work Package" onclick="btnCreateWorkPackage_Click" />
+        <br />
+        <br />
+        <asp:LinkButton ID="lbProjectList" runat="server" onclick="lbProjectList_Click" CausesValidation="False">Go to Project List</asp:LinkButton>
+        <br />
+        <asp:LinkButton ID="lbProject" runat="server" CausesValidation="False" onclick="lbProject_Click">Go to Project</asp:LinkButton>
+        <br />
     </div>
     <div id="divCreateSuccess" runat="server" visible="false">
         <asp:Label ID="lblSuccessMsg" runat="server" 

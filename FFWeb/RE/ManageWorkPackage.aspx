@@ -130,8 +130,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td algin="right">
-                        <asp:Label ID="lblParentsWP" runat="server" Text="Preceding Workpackages: "></asp:Label>
+                    <td align="right">
+                        <asp:Label ID="lblParentsWP" runat="server" Text="Preceding Workpackages: " Font-Bold="true" ></asp:Label>
                     </td>
                     <td>
                         <asp:GridView ID="gvParentsWP" runat="server" AutoGenerateColumns="False" OnRowCommand="gvParentsWP_RowCommand"
