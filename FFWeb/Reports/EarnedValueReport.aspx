@@ -23,31 +23,20 @@
 
             <tr>
                 <td>
-                    Reporting Period From:
+                    Cut-off Date:
                 </td>
                 <td>
-                    <asp:TextBox ID="tbPeriodStart" runat="server" Width="80"></asp:TextBox>
-                    <asp:CalendarExtender ID="cexPeriodStart" runat="server" Format="yyyy/MM/dd" TargetControlID="tbPeriodStart" >
-                    </asp:CalendarExtender>
-                     to 
-                    <asp:TextBox ID="tbPeriodEnd" runat="server" Width="80"></asp:TextBox>
+                    <asp:TextBox ID="tbPeriodEnd" runat="server" Width="80px"></asp:TextBox>
                     <asp:CalendarExtender ID="cexPeriodEnd" runat="server" Format="yyyy/MM/dd" TargetControlID="tbPeriodEnd" >
                     </asp:CalendarExtender>
-                    <asp:RegularExpressionValidator ForeColor="Red" ID="revStartDate" runat="server" 
-                        ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbPeriodStart"
-                        ErrorMessage="Start date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
-                    <asp:RangeValidator ForeColor="Red" ID="rgvStartDate" runat="server" ControlToValidate="tbPeriodStart"
-                        ErrorMessage="Start date must be between 2010/01/01 and 2500/01/01."
-                        MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*">
-                    </asp:RangeValidator>
-                    <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" 
-                        ControlToValidate="tbPeriodStart" ErrorMessage="Start date not selected" 
-                        ForeColor="Red">*</asp:RequiredFieldValidator>
+                    <asp:RangeValidator ForeColor="Red" ID="rgvStartDate" runat="server" ControlToValidate="tbPeriodEnd"
+                        ErrorMessage="Cut-off-date must be between 2010/01/01 and 2500/01/01."
+                        MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*"></asp:RangeValidator>
                     <asp:RegularExpressionValidator ForeColor="Red" ID="revEndDate" runat="server" 
                         ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbPeriodEnd"
-                        ErrorMessage="End date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
+                        ErrorMessage="Cut-off Date must be in format 'YYYY/MM/DD'" >*</asp:RegularExpressionValidator>
                     <asp:RequiredFieldValidator ID="rfvEndtDate" runat="server" 
-                        ControlToValidate="tbPeriodEnd" ErrorMessage="End date not selected" 
+                        ControlToValidate="tbPeriodEnd" ErrorMessage="Cut-off Date not selected" 
                         ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
@@ -69,7 +58,6 @@
     </div>
 
     <br />
-
         <asp:GridView ID="gvEarnedValue" runat="server" AutoGenerateColumns="False">
         <Columns>
             <asp:TemplateField HeaderText="Workpackage">
@@ -138,6 +126,7 @@
             </asp:TemplateField>
         </Columns>
     </asp:GridView>
+    Note: This report will only generate from all APPROVED timesheet entries
     </center>
 </asp:Content>
 
