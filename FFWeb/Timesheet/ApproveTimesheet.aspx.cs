@@ -22,6 +22,15 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
         {
             Response.Redirect("~/Login.aspx");
         }
+        else
+        {
+            var qry = (from o in ff.EmployeeMemberships
+                       join emp in ff.aspnet_Users on o.userId equals emp.UserId
+                       where emp.UserName == User.Identity.Name
+                       select o.empId).Single();
+
+            Session["CurEmpId"] = qry.ToString();
+        }
 
         if (!IsPostBack)
         {
@@ -34,10 +43,11 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
 
     protected void populateGridView()
     {
+        int approver = Convert.ToInt32(Session["CurEmpId"]);
         var qry = from th in ff.TimesheetHeaders
                   join tse in ff.TimesheetEntries on new { th.tsDate, th.empId } equals new { tse.tsDate, tse.empId }
                   join emp in ff.Employees on tse.empId equals emp.empId
-                  where th.status.Equals("SAVED")
+                  where th.status.Equals("SAVED") && emp.approver == approver
                   select new
                   {
                       EmployeeName = emp.firstName + " " + emp.lastName + " (" + th.empId + ")",
@@ -69,11 +79,15 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
+        ViewState["empId"] = GridView1.SelectedRow.Cells[1].Text;
+        ViewState["date"] = GridView1.SelectedRow.Cells[2].Text;
+        ViewState["proj"] = GridView1.SelectedRow.Cells[3].Text;
+        ViewState["wp"] = GridView1.SelectedRow.Cells[4].Text;
 
         var selectedStatus = (from th in ff.TimesheetHeaders
                               join tse in ff.TimesheetEntries on new { th.tsDate, th.empId } equals new { tse.tsDate, tse.empId }
                               where th.empId == Convert.ToInt32(ViewState["empId"]) && th.tsDate == Convert.ToDateTime(ViewState["date"]) &&
-                                    tse.wpId == Convert.ToString(ViewState["wp"]) && tse.projId == Convert.ToInt32(ViewState["proj"])
+                                    tse.projId == Convert.ToInt32(ViewState["proj"])
                               select th).Single();
 
         

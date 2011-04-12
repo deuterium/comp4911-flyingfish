@@ -147,7 +147,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
 
@@ -321,8 +321,8 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
-            lblError.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
+            //lblError.Text = exception.StackTrace;
         }
     }
     #endregion
@@ -343,7 +343,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
     #endregion
@@ -403,7 +403,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
     #endregion
@@ -422,7 +422,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
     #endregion
@@ -462,7 +462,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
 
@@ -474,7 +474,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
             return 0;
         }
     }
@@ -491,7 +491,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
             return 0;
         }
     }
@@ -526,7 +526,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
 
@@ -544,7 +544,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
             return 0;
         }
     }
@@ -563,7 +563,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
             return 0;
         }
     }
@@ -598,7 +598,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
     #endregion
@@ -644,7 +644,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
     protected void lbAssignRE_Click(object sender, EventArgs e)
@@ -715,7 +715,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+          //  lblException.Text = exception.StackTrace;
         }
     }
 
@@ -777,7 +777,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
 
@@ -840,5 +840,19 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         if(User.Identity.IsAuthenticated == false)
             Response.Redirect(Request.UrlReferrer.ToString());
 
+    }
+    protected void btnRemove_Click(object sender, EventArgs e)
+    {
+        var qry =
+            from re in ff.WorkPackageResponsibleEngineers
+            where re.wpId == lblWPID2.Text
+            select re;
+        if (qry.Count() > 0)
+        {
+            ff.WorkPackageResponsibleEngineers.DeleteOnSubmit(qry.First());
+            ff.SubmitChanges();
+            divREisAssigned.Visible = false;
+            divREnotAssigned.Visible = true;
+        }
     }
 }
