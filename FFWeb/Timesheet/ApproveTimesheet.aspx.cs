@@ -87,10 +87,10 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
         var selectedStatus = (from th in ff.TimesheetHeaders
                               join tse in ff.TimesheetEntries on new { th.tsDate, th.empId } equals new { tse.tsDate, tse.empId }
                               where th.empId == Convert.ToInt32(ViewState["empId"]) && th.tsDate == Convert.ToDateTime(ViewState["date"]) &&
-                                    tse.projId == Convert.ToInt32(ViewState["proj"])
+                                    tse.wpId == Convert.ToString(ViewState["wp"]) && tse.projId == Convert.ToInt32(ViewState["proj"])
                               select th).Single();
 
-        
+
         if (DropDownList1.SelectedValue == "Approve")
         {
             selectedStatus.status = "APPROVED";
