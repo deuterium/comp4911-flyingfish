@@ -48,7 +48,7 @@
     </asp:RangeValidator>
     <br /><br />
     <center>
-    <asp:GridView ID="gvPrintTimesheet" runat="server" BackColor="White" AutoGenerateColumns="false"
+    <asp:GridView ID="gvPrintTimesheet" runat="server" BackColor="White" AutoGenerateColumns="False"
         BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3">
         <Columns>
             <asp:BoundField DataField="Project" HeaderText="Project ID" 

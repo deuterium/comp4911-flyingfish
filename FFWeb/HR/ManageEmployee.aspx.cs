@@ -90,7 +90,7 @@ public partial class HR_ManageEmployee : System.Web.UI.Page
         DivUserGridView.Visible = false;
         fillListBoxesAndDropDowns();
         #region User Information minus Roles
-        int empID = Convert.ToInt32(gvManageUsers.SelectedRow.Cells[1].Text);
+        int empID = Convert.ToInt32(gvManageUsers.SelectedRow.Cells[0].Text);
         Employee ManagedEmployee = ff.Employees.Where(em => em.empId == empID).First();
         System.Guid userID = ff.EmployeeMemberships.Where(emp => emp.empId == empID).Select(emp => emp.userId).First();
         tbFirstName.Text = ManagedEmployee.firstName;

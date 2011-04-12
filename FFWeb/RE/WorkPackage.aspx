@@ -66,7 +66,7 @@
     </div>
     <div id="divCreateSuccess" runat="server" visible="false">
         <asp:Label ID="lblSuccessMsg" runat="server" Text="Work Package is successfully created."
-            ForeColor="Lime"></asp:Label>
+            ForeColor="Green"></asp:Label>
         <br />
         <asp:Button ID="btnManage" runat="server" Text="Manage Work Package" OnClick="btnManage_Click" />
     </div>
