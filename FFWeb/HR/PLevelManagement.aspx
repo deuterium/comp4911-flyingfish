@@ -12,8 +12,7 @@
         </asp:LinqDataSource>
         <asp:LinqDataSource ID="ldsPLevels" runat="server" ContextTypeName="FlyingFishClassesDataContext"
             EnableDelete="True" EnableInsert="True" EnableUpdate="True" EntityTypeName=""
-            OrderBy="pLevel" TableName="PersonLevels" 
-            Where="fiscalYear == @fiscalYear">
+            OrderBy="pLevel" TableName="PersonLevels" Where="fiscalYear == @fiscalYear">
             <WhereParameters>
                 <asp:ControlParameter ControlID="ddlFiscalYear" Name="fiscalYear" PropertyName="SelectedValue"
                     Type="Int32" />
@@ -39,7 +38,7 @@
                                     <asp:UpdatePanel ID="upPLevels" runat="server">
                                         <ContentTemplate>
                                             <asp:GridView ID="gvPLevels" runat="server" AutoGenerateColumns="False" DataKeyNames="pLevel,fiscalYear"
-                                                DataSourceID="ldsPLevels" onrowupdated="gvPLevels_RowUpdated">
+                                                DataSourceID="ldsPLevels" OnRowDeleted="gvPLevels_RowDeleted">
                                                 <Columns>
                                                     <asp:BoundField DataField="pLevel" HeaderText="P-Level" ReadOnly="True" SortExpression="pLevel" />
                                                     <asp:BoundField DataField="rate" HeaderText="Rate" SortExpression="rate" />
@@ -56,7 +55,15 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <asp:Label ID="lblPLevelError" runat="server" />
+                                    <asp:UpdatePanel runat="server">
+                                        <ContentTemplate>
+                                            <asp:Label ID="lblPLevelError" runat="server" />
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="gvPLevels" EventName="RowDeleted" />
+                                            <asp:AsyncPostBackTrigger ControlID="ddlFiscalYear" EventName="SelectedIndexChanged" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
                                 </td>
                             </tr>
                         </table>
@@ -91,9 +98,8 @@
                                                 <asp:CompareValidator ID="PLevelFormatRequired" runat="server" ErrorMessage="PLevel must be letters and numbers."
                                                     Display="Dynamic" Text="*" Font-Strikeout="False" ControlToValidate="tbPLevelID"
                                                     ForeColor="Red" Operator="DataTypeCheck" ValidationGroup="PLevelValid"></asp:CompareValidator>
-                                                <asp:RangeValidator ID="PLevelRangeCheck" runat="server" ErrorMessage="P-Level must be in format P#."
-                                                    Text="*" Display="Dynamic" MinimumValue="2" MaximumValue="2" ValidationGroup="PLevelValid"
-                                                    ControlToValidate="tbPLevelID" ForeColor="Red"></asp:RangeValidator>
+                                                <asp:RegularExpressionValidator ID="PLevelRegExCheck" ForeColor="Red" ControlToValidate="tbPLevelID"
+                                                    ValidationGroup="PLevelValid" runat="server" ErrorMessage="P-Level must be in format P#." Display="Dynamic" ValidationExpression="[A-Z0-9]{2}" Text="*"></asp:RegularExpressionValidator>
                                             </td>
                                         </tr>
                                         <tr>
