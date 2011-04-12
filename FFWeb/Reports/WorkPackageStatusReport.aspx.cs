@@ -6,11 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
 using System.Text.RegularExpressions;
-
-
-// NOT GETTING LINDSAY! ERROR! WTF!
-
-
+using System.Drawing;
 
 /* TO DO:
  * Calculate PDays and PDollars
@@ -37,6 +33,9 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     /// </summary>
     public const String UnknownValue = "Unknown";
 
+    public static Color FailColour = Color.Red;
+    public static Color SuccessColour = Color.Green;
+
     public const Decimal HoursPerWorkDay = 8;
     // format for 2 decimal places
     public const String decimalFormat = "{0:0.0}";
@@ -54,6 +53,8 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         if (!IsPostBack) {
             populateProjects();
             populateWorkpackages();
+            tbCutOffDate.Text = DateTime.Now.ToString("yyyy/MM/dd");
+            btnSave.Visible = true;
         }
     }
 
@@ -67,21 +68,21 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         // Get all projects where this employee is a manager or a responsible engineer
         if (User.IsInRole("ProjectManager") || User.IsInRole("ResponsibleEngineer")) {
-            var qry = from wp in ffdb.WorkPackages
+            var qry = (from wp in ffdb.WorkPackages
                       join p in ffdb.Projects on wp.projId equals p.projId
                       join wpre in ffdb.WorkPackageResponsibleEngineers on (wp.projId + wp.wpId) equals (wpre.projId + wpre.wpId)
                       where (wpre.responsibleEngineer == user.empId) || (p.manager == user.empId)
                       select new {
                           ProjID = p.projId,
                           ProjectName = p.projName + " (" + p.projId + ")"
-                      };
+                      }).Distinct();
+            ddlAllProjects.DataSource = qry;
             ddlAllProjects.DataValueField = "ProjID";
             ddlAllProjects.DataTextField = "ProjectName";
             ddlAllProjects.DataBind();
         } else {
             Response.Redirect("~/Login.aspx");
         }
-        
     }
 
     private Employee getUser() {
@@ -109,14 +110,15 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         // Get all projects where this employee is a manager or a responsible engineer
         if (User.IsInRole("ProjectManager") || User.IsInRole("ResponsibleEngineer")) {
-            var qry = from wp in ffdb.WorkPackages
+            var qry = (from wp in ffdb.WorkPackages
                       join p in ffdb.Projects on wp.projId equals p.projId
                       join wpre in ffdb.WorkPackageResponsibleEngineers on (wp.projId + wp.wpId) equals (wpre.projId + wpre.wpId)
                       where (wpre.responsibleEngineer == user.empId) || (p.manager == user.empId)
                       select new {
                            WpID = wp.wpId,
                            WpName = wp.name + " (" + wp.wpId + ")"
-                      };
+                      }).Distinct();
+            ddlWorkpackages.DataSource = qry;
             ddlWorkpackages.DataValueField = "WpID";
             ddlWorkpackages.DataTextField = "WpName";
             ddlWorkpackages.DataBind();
@@ -124,7 +126,6 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         } else {
             Response.Redirect("~/Login.aspx");
         }
-       
     }
 
     /// <summary>
@@ -147,23 +148,23 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         decimal eac = 0;
         decimal acwp = 0;
 
-        if (!(strEac.Equals(String.Empty) || strEac.Equals(UnknownValue))) {
-            eac = Convert.ToDecimal(eac);
+        if (strEac.Equals(String.Empty) || strEac.Equals(UnknownValue)) {
+            args.IsValid = false;
+            return;
+        }
+        
+        eac = Convert.ToDecimal(eac);
+        
+        if (strAcwp.Equals(String.Empty) || strAcwp.Equals(UnknownValue)) {
             args.IsValid = false;
             return;
         }
 
-        if (!strAcwp.Equals(String.Empty)) {
-            acwp = Convert.ToDecimal(acwp);
-            args.IsValid = false;
-            return;
-        }
+        acwp = Convert.ToDecimal(acwp);
 
         if (eac >= acwp) {
             args.IsValid = true;
         }
-
-        // Page.IsValid = false;??
     }
 
     protected void cuvUnknownValue_ServerValidate(object source, ServerValidateEventArgs args) {
@@ -191,7 +192,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         // Store the ETC for each employee
         allEmployeeWpETCs = getEtcForAll();
 
-        SetResults(String.Empty, false);
+        SetResults(String.Empty, false, SuccessColour);
 
         // Get the WP's responsible engineer
         Employee respEng = (Employee)
@@ -222,7 +223,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                    }).Distinct();
 
         if (qry.Count() == 0) {
-            SetResults("No employees are assigned to this workpackage.", false);
+            SetResults("No employees are assigned to this workpackage.", false, FailColour);
         }
 
         // Format the data for the Grid View
@@ -382,7 +383,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             tbWorkPlannedNext.Text = "";
             tbProblemsEncountered.Text = "";
             tbProblemsAncticipatedNext.Text = "";
-            SetResults("No reports found.\nCreating a blank report.\n", true);
+            SetResults("This report does not exist. Creating a blank report for you.\n", true, SuccessColour);
         }
         // Populate WorkPackageStatusReport details
         else {
@@ -650,8 +651,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         if (strEtc.Equals(UnknownValue) || strEtc == null || strEtc.Equals(String.Empty)) {
             return UnknownValue;
-        }
-        else {
+        } else {
             strEtc = this.stripFormatting(strEtc);
             strAcwp = this.stripFormatting(strAcwp);
             etc = Convert.ToDecimal(strEtc);
@@ -673,8 +673,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         if (strEac.Equals(UnknownValue) || strEac == null || strEac.Equals(String.Empty)) {
             return UnknownValue;
-        }
-        else {
+        } else {
             strEac = this.stripFormatting(strEac);
             strAcwp = this.stripFormatting(strAcwp);
             eac = Convert.ToDecimal(strEac);
@@ -689,13 +688,14 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         }
     }
 
-    private void SetResults(String newResults, Boolean append) {
+    private void SetResults(String newResults, Boolean append, System.Drawing.Color fontColour) {
         lblResults.Visible = true;
         if (append) {
             lblResults.Text += newResults;
         } else {
             lblResults.Text = newResults;
         }
+        lblResults.ForeColor = fontColour;
     }
 
     /// <summary>
@@ -736,69 +736,18 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e) {
-        btnSave.Visible = false;
         ViewState["projId"] = Convert.ToInt32(ddlAllProjects.SelectedValue);
         ViewState["wpId"] = ddlWorkpackages.SelectedValue;
         ViewState["cutOffDate"] = Convert.ToDateTime(tbCutOffDate.Text);
         ViewState["WorkPackage"] = ddlWorkpackages.SelectedItem.Text;
         ViewState["Project"] = ddlAllProjects.SelectedItem.Text;
         GetWorkPackageStatusReport();
+        btnSave.Visible = true;
     }
 
     protected void gvStatus_RowEditing(object sender, GridViewEditEventArgs e) {
         gvStatus.EditIndex = e.NewEditIndex;
         GetWorkPackageStatusReport();
-    }
-
-    private void UpdateETC(String strEtc, String strEac, decimal acwp, EmployeeWorkPackageETC empWpEtc) {
-        decimal etc = 0;
-        decimal eac = 0;
-
-        if (!strEtc.Equals(UnknownValue)) {
-            try {
-                etc = Convert.ToDecimal(strEtc);
-                if (etc <= 0) {
-                    strEtc = UnknownValue;
-                }
-            }
-            catch (Exception ex) {
-                ex.ToString();
-                strEtc = UnknownValue;
-            }
-        }
-
-        if (!strEac.Equals(UnknownValue)) {
-            try {
-                eac = Convert.ToDecimal(strEac);
-                if (eac <= 0) {
-                    strEac = UnknownValue;
-                }
-                if (eac < (etc + acwp)) {
-                    strEac = UnknownValue;
-                }
-            }
-            catch (Exception ex) {
-                ex.ToString();
-                strEac = UnknownValue;
-            }
-        }
-
-        // Calculate missing value
-        if (strEac.Equals(UnknownValue)) {
-            if (strEtc.Equals(UnknownValue)) {
-                empWpEtc.ETC_days = null;
-            }
-            else {
-                etc = Convert.ToDecimal(strEtc);
-                empWpEtc.ETC_days = (decimal)etc;
-            }
-        }
-        else {
-            eac = Convert.ToDecimal(strEac);
-            empWpEtc.ETC_days = (decimal)(eac - acwp);
-        }
-
-        ffdb.SubmitChanges();
     }
 
     protected void gvStatus_RowUpdating(object sender, GridViewUpdateEventArgs e) {
@@ -817,11 +766,30 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         // Get the new values.
         if (e.NewValues["ETC"] != null) {
-            strEtc = e.NewValues["ETC"].ToString();
+            if (!(e.NewValues["ETC"].Equals(String.Empty))) {
+                strEtc = e.NewValues["ETC"].ToString();
+            }
         }
 
         if (e.NewValues["EAC"] != null) {
-            strEtc = e.NewValues["EAC"].ToString();
+            if (!(e.NewValues["EAC"].Equals(String.Empty))) {
+                strEac = e.NewValues["EAC"].ToString();
+            }
+        }
+
+        if (Regex.IsMatch(strEac, "^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$")) {
+            SetResults("* EAC can only contain a dollar sign, comma, period, positive numbers, or 'Unknown'.", false, FailColour);
+            return;
+        }
+
+        if (Regex.IsMatch(strEtc, "^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$")) {
+            SetResults("* ETC can only contain a dollar sign, comma, period, positive numbers, or 'Unknown'.", false, FailColour);
+            return;
+        }
+        
+        if (!(strEac.Equals(UnknownValue) && strEtc.Equals(UnknownValue))) {
+            SetResults("* At least one value must be 'Unknown' or blank. Please change one value to 'Unknown' or blank.", false, FailColour);
+            return;
         }
 
         // Check for existing empWPEtc for the cut off date.
@@ -835,16 +803,30 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             strAcwp = this.stripFormatting(strAcwp);
             acwp = Convert.ToDecimal(strAcwp);
             etc = eac - acwp;
-        }
-        else if (!((result = calculateEtc(strAcwp, strEac, format)).Equals(UnknownValue))) {
+        } else if (!((result = calculateEtc(strAcwp, strEac, format)).Equals(UnknownValue))) {
             etc = Convert.ToDecimal(result);
-        }
-        else {
+            strAcwp = this.stripFormatting(strAcwp);
+            acwp = Convert.ToDecimal(strAcwp);
+            eac = etc + acwp;
+            if (eac < acwp) {
+                SetResults("* The EAC '" + strEac + "' is less than the ACWP. Please use a higher EAC or click cancel.", false, FailColour);
+                return;
+            }
+            if (eac == 0) {
+                SetResults("* The EAC must be greater than 0. Please use a different EAC or click cancel.", false, FailColour);
+                return;
+            }
+        } else {
+            if (empWpEtc != null) {
+                SetResults("* Cannot set both existing estimates to 'Unknown' or blank values. Please give at least 1 value.", false, FailColour);
+                return;
+            }
             // Error, exit method and redraw grid view normally
-            ffdb.SubmitChanges();
             gvStatus.EditIndex = -1;
             e.Cancel = true;
             GetWorkPackageStatusReport();
+            SetResults("* An error has occured, we've exited edit mode.", false, FailColour);
+            return;
         }
 
         // If ETC exists, update it
@@ -864,8 +846,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             // Otherwise, use the cut-off date
             if (DateTime.Now <= Convert.ToDateTime(ViewState["cutOffDate"])) {
                 empWpEtc.dateUpdated = DateTime.Now;
-            }
-            else {
+            } else {
                 empWpEtc.dateUpdated = Convert.ToDateTime(ViewState["cutOffDate"]);
             }
 
@@ -877,6 +858,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         gvStatus.EditIndex = -1;
         e.Cancel = true;
         GetWorkPackageStatusReport();
+        SetResults("The report updated successfully.", false, SuccessColour);
 
     }
 
@@ -918,7 +900,6 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     /// <param name="e">The event.</param>
     protected void btnSave_Click(object sender, EventArgs e) {
         if (Page.IsValid) {
-            SetResults(String.Empty, false);
             Boolean isNewReport = false;
 
             WorkPackageStatusReport wpsr = getExistingReportDetails();
@@ -927,7 +908,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                 wpsr = new WorkPackageStatusReport();
                 wpsr.projId = Convert.ToInt32(ViewState["projId"]);
                 wpsr.wpId = ddlWorkpackages.SelectedValue;
-                wpsr.cutOffDate.Equals(ViewState["cutOffDate"]);
+                wpsr.cutOffDate = (DateTime)(ViewState["cutOffDate"]);
                 isNewReport = true;
             }
 
@@ -943,15 +924,14 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
             try {
                 ffdb.SubmitChanges();
-                lblResults.ForeColor = System.Drawing.Color.Green;
-                lblResults.Text = "Report successfully saved!<br />";
+                SetResults("The report details were successfully saved.", false, SuccessColour);
             }
             catch (Exception ex) {
-                lblResults.ForeColor = System.Drawing.Color.Red;
-                lblResults.Text = "Unable to save report at this time.<br />";
+                SetResults("The report details could not be saved at this time.", false, FailColour);
                 Trace.Write(ex.Message);
+                return;
             }
-
+            GetWorkPackageStatusReport();
         }
     }
 }
