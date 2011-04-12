@@ -86,11 +86,6 @@ body
     clear: left;
 }
 
-textarea
-{
-    resize:none;
-}
-
 /* Menu Styling */
 
 .divmastermenu a:link, .divmastermenu a:visited, .divmastermenu a:active
@@ -176,6 +171,11 @@ a:hover
 .content
 {
     padding: 20px
+}
+
+.footer
+{
+    
 }
 
 .header
