@@ -16,7 +16,7 @@
         <siteMapNode url="~/Timesheet/PrintTimesheet.aspx" title="Print Timesheet" />
         <siteMapNode url="~/Timesheet/ApproveTimesheet.aspx" title="Approve Timesheet" />
       </siteMapNode>
-      <siteMapNode url="~/HR/Default.aspx" title="User Management">
+      <siteMapNode url="www.meatspin.com" title="User Management">
       </siteMapNode>
     </siteMapNode>
 </siteMap>
