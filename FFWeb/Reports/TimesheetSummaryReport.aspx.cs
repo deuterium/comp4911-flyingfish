@@ -5,14 +5,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-/**
- * Possible features to implement:
- * DropDownList to filter by workpackage.
- * Sorting and paging of GridView.
- * Searching for a specific employee.
- * Dropdownlist resets.
- **/
-
 /// <summary>
 /// Code behind for teh TimesheetSummaryReport.
 /// Dynamically populates the Projects DropDownList.
@@ -123,7 +115,7 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
                                     && w1.tsDate.Year.Equals(dateFor.AddMonths(-3).Year)
                                     && (w1.projId == g.Key.projId)
                                     && (w1.wpId.Equals(g.Key.wp.wpId))
-                                select w1.totalHours).FirstOrDefault(),
+                                select w1.totalHours).FirstOrDefault()
                       //TotalHours = (from t in ffdb.TimesheetEntries
                       //              join tsh in ffdb.TimesheetHeaders on (t.empId + t.tsDate.ToString()) equals (tsh.empId + tsh.tsDate.ToString())
                       //              where (t.tsDate <= (DateTime)ViewState["cutOffDate"])
