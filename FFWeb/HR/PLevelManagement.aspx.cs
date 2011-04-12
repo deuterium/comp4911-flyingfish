@@ -31,7 +31,7 @@ public partial class HR_PLevelManagement : System.Web.UI.Page
         using (FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext()) {
             PersonLevel pl = new PersonLevel() 
             { 
-                rate = Convert.ToInt32(tbRate.Text),
+                rate = Convert.ToDecimal(tbRate.Text),
                 pLevel = tbPLevelID.Text,
                 fiscalYear = Convert.ToInt32(lblFiscalYear.Text)
             };
