@@ -172,21 +172,47 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         populateWorkpackages();
     }
 
-
-
-    protected void cuvEac_ServerValidate(object source, ServerValidateEventArgs args) {
-
-
+    protected void cuvEacAcwp_ServerValidate(object source, ServerValidateEventArgs args) {
         GridViewRow row = gvStatus.Rows[gvStatus.EditIndex];
-        String strEtc = ((TextBox)row.FindControl("tbEtc")).Text;
-        String strEac = ((TextBox)row.FindControl("tbEac")).Text;
-        String strAcwp = ((Label)row.Cells[1].Controls[1]).Text;
+        TextBox tbEac = (TextBox)row.FindControl("tbEac");
+        Label lblAcwp = (Label)row.Cells[1].Controls[1];
+        String strEac = tbEac.Text;
+        String strAcwp = lblAcwp.Text;
+        decimal eac = 0;
+        decimal acwp = 0;
 
+        if (!(strEac.Equals(String.Empty) || strEac.Equals(UnknownValue))) {
+            eac = Convert.ToDecimal(eac);
+            args.IsValid = false;
+            return;
+        }
 
+        if (!strAcwp.Equals(String.Empty)) {
+            acwp = Convert.ToDecimal(acwp);
+            args.IsValid = false;
+            return;
+        }
 
-        //args.IsValid = false;
-        //Page.IsValid = true;
+        if (eac >= acwp) {
+            args.IsValid = true;
+        }
 
+        // Page.IsValid = false;??
+    }
+
+    protected void cuvUnknownValue_ServerValidate(object source, ServerValidateEventArgs args) {
+        GridViewRow row = gvStatus.Rows[gvStatus.EditIndex];
+        TextBox tbEac = (TextBox)row.FindControl("tbEac");
+        TextBox tbEtc = (TextBox)row.FindControl("tbEtc");
+        String strEac = tbEac.Text;
+        String strEtc = tbEtc.Text;
+
+        args.IsValid = true;
+
+        if ((strEac.Equals(UnknownValue.ToLower()) || strEac.Equals(String.Empty))
+                && (strEtc.Equals(UnknownValue.ToLower()) || strEtc.Equals(String.Empty))) {
+            args.IsValid = false;
+        }
     }
 
     /// <summary>
@@ -266,13 +292,83 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             dt.Rows.Add(drDollars);
         }
 
+        decimal totalAcwpDays = 0;
+        decimal totalEtcDays = 0;
+        decimal totalEacDays = 0;
+        decimal totalPercentCompleteDays = 0;
 
+        decimal totalAcwpDollars = 0;
+        decimal totalEtcDollars = 0;
+        decimal totalEacDollars = 0;
+        decimal totalPercentCompleteDollars = 0;
+
+        for (int i = 1; i <= gvStatus.Rows.Count; i++) {
+            String acwp = gvStatus.Rows[i - 1].Cells[1].Text;
+            String etc = gvStatus.Rows[i - 1].Cells[2].Text;
+            String eac = gvStatus.Rows[i - 1].Cells[3].Text;
+            String pc = gvStatus.Rows[i - 1].Cells[4].Text;
+            
+            if (!(acwp.Equals(String.Empty) || acwp.Equals(UnknownValue))) {
+                totalAcwpDays += Convert.ToDecimal(acwp);
+            }
+            if (!(etc.Equals(String.Empty) || etc.Equals(UnknownValue))) {
+                totalEtcDays += Convert.ToDecimal(etc);
+            }
+            if (!(eac.Equals(String.Empty) || eac.Equals(UnknownValue))) {
+                totalEacDays += Convert.ToDecimal(eac);
+            }
+            if (!(pc.Equals(String.Empty) || pc.Equals(UnknownValue))) {
+                totalPercentCompleteDollars += Convert.ToDecimal(stripFormatting(pc));
+            }
+
+            acwp = gvStatus.Rows[i + 1].Cells[1].Text;
+            etc = gvStatus.Rows[i + 1].Cells[2].Text;
+            eac = gvStatus.Rows[i + 1].Cells[3].Text;
+            pc = gvStatus.Rows[i + 1].Cells[4].Text;
+            
+            if (!(acwp.Equals(String.Empty) || acwp.Equals(UnknownValue))) {
+                totalAcwpDollars += Convert.ToDecimal(stripFormatting(acwp));
+            }
+            if (!(etc.Equals(String.Empty) || etc.Equals(UnknownValue))) {
+                totalEtcDollars += Convert.ToDecimal(stripFormatting(etc));
+            }
+            if (!(eac.Equals(String.Empty) || eac.Equals(UnknownValue))) {
+                totalEacDollars += Convert.ToDecimal(stripFormatting(eac));
+            }
+            if (!(pc.Equals(String.Empty) || pc.Equals(UnknownValue))) {
+                totalPercentCompleteDollars += Convert.ToDecimal(stripFormatting(pc));
+            }
+
+            i += 3;
+        }
+
+        DataRow drTotalHeader = dt.NewRow();
+        drTotalHeader["Employee"] = "Total";
+        dt.Rows.Add(drTotalHeader);
+        
+        // P-Days
+        DataRow drTotalDays = dt.NewRow();
+        drTotalDays["Employee"] = "Days:";
+        drTotalDays["ACWP"] = String.Format(decimalFormat, totalAcwpDays);
+        drTotalDays["ETC"] = String.Format(decimalFormat, totalEtcDays);
+        drTotalDays["EAC"] = String.Format(decimalFormat, totalEacDays);
+        drTotalDays["PercentComplete"] = String.Format(decimalFormat, totalPercentCompleteDays);
+        dt.Rows.Add(drTotalDays);
+        
+        // P-Dollars
+        DataRow drTotalDollars = dt.NewRow();
+        drTotalDollars["Employee"] = "Dollars:";
+        drTotalDollars["ACWP"] = String.Format(currencyFormat, totalAcwpDollars);
+        drTotalDollars["ETC"] = String.Format(currencyFormat, totalEtcDollars);
+        drTotalDollars["EAC"] = String.Format(currencyFormat, totalEacDollars);
+        drTotalDollars["PercentComplete"] = String.Format(percentFormat, totalPercentCompleteDollars);
+        dt.Rows.Add(drTotalDollars);
 
         // Populate the Grid View with the formatted data
         gvStatus.DataSource = dt;
         gvStatus.DataBind();
 
-        // skip header row
+        // Customize the views
         for (int i = 1; i <= gvStatus.Rows.Count; ) {
             gvStatus.Rows[i - 1].Cells[1].Visible = false;
             gvStatus.Rows[i - 1].Cells[2].Visible = false;
@@ -289,7 +385,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
             i += 3; // skip 3 rows
         }
-
+               
         // Populate the Report Details
         //lblProject.Text = ViewState["Project"].ToString();
         lblWp.Text = ViewState["WorkPackage"].ToString();

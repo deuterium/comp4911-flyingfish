@@ -5,27 +5,31 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
     <script type="text/javascript">
-        function validateEtc(source, args) {
+        function cuvUnknownValue_ClientValidate(source, args) {
             var strEac = document.getElementById("tbEac");
             var strEtc = document.getElementById("tbEtc");
+           
+            if ( ((strEtc == "Unknown") || (!strEtc))
+                    && ((strEac == "Unknown") || (!strEac)) ) {
+                args.IsValid = false;
+            } else {
+                args.IsValid = true;
+            }
+        }
 
-            // if both have a value
-            if (strEtc && strEac) {
+        function cuvEacAcwp_ClientValidate(source, args) {
+            var strEac = document.getElementById("tbEac");
+            var strAcwp = document.getElementById("lblAcwp2");
+
+            // if strEac has a value
+            if (strEac) {
                 // if at least 1 is the Unknown Value
-                if (((strEtc == "Unknown") || (strEac == "Unknown"))
-                        || ((strEtc == "unknown") || (strEac == "unknown"))) {
+                if (strEac >= strAcwp) {
                     args.IsValid = true;
                 } else {
                     args.IsValid = false;
                 }
             }
-
-            // etc can't be greater than eac    X
-            // eac can't be less than acwp      X 
-            // eac can't be less than 0         X
-            // etc can't be less than 0         X
-            // only 1 can be blank
-
         }
     </script>
 
@@ -201,12 +205,14 @@
                                 <EditItemTemplate>
                                     <asp:TextBox ID="tbEtc" Width="75px" MaxLength="11" runat="server" Text='<%# Bind("ETC") %>' />
 
+                                    <%-- ETC must be Unknown, Blank, or a Decimal --%>
                                     <asp:RegularExpressionValidator ID="revEtc" runat="server" ErrorMessage="ETC can only contain a dollar sign, comma, period, and positive numbers."
-                                            ControlToValidate="tbEtc" ValidationExpression="^([Uu]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1})|[0-9]*([.]+[0-9]*)?$" Text="*" 
+                                            ControlToValidate="tbEtc" ValidationExpression="^([U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1})|[0-9]*([.]+[0-9]*)?$" Text="*" 
                                             ForeColor="Red" >
                                     </asp:RegularExpressionValidator>
-                                    <asp:CompareValidator ID="cpvEtcEac" runat="server" ErrorMessage="ETC must be less than EAC." ForeColor="Red"
-                                            ControlToValidate="tbEtc" ControlToCompare="tbEac" Text="*" Operator="LessThanEqual">
+                                    <%-- ETC >= 0 --%>
+                                    <asp:CompareValidator ID="cpvEtcZero" runat="server" ErrorMessage="ETC must be a positive number."
+                                        Text="*" ForeColor="Red" ValueToCompare="0" Type="Double" Operator="GreaterThanEqual" ControlToValidate="tbEtc">
                                     </asp:CompareValidator>
 
                                 </EditItemTemplate>
@@ -219,21 +225,29 @@
                                 <EditItemTemplate>
                                     <asp:TextBox ID="tbEac" Width="75px" MaxLength="11" runat="server" Text='<%# Bind("EAC") %>' />
                                     
-<%--                                    <asp:CustomValidator ID="cuvEac" runat="server" ErrorMessage="One value must be blank or 'Unknown'."
-                                        Text="*" OnServerValidate="cuvEac_ServerValidate" ClientValidationFunction="validateEtc"
-                                        ControlToValidate="tbEac" ForeColor="Red" ValidateEmptyText="False">
-                                    </asp:CustomValidator>
+                                    <%-- EAC must be Unknown, Blank, or a Decimal --%>
                                     <asp:RegularExpressionValidator ID="revEac" runat="server" ErrorMessage="EAC can only contain a dollar sign, comma, period, and numbers."
                                             ControlToValidate="tbEac" ValidationExpression="^([Uu]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1})|[0-9]*([.]+[0-9]*)?$" Text="*"
                                             ForeColor="Red" >
                                     </asp:RegularExpressionValidator>
+                                    
+                                    <%-- Only 1 "known" value is specified --%>
+                                    <asp:CustomValidator ID="cuvUnknownValue" runat="server" ErrorMessage="One value must be blank or 'Unknown'."
+                                        Text="*" OnServerValidate="cuvUnknownValue_ServerValidate" ClientValidationFunction="cuvUnknownValue_ClientValidate"
+                                        ControlToValidate="tbEac" ForeColor="Red" ValidateEmptyText="False">
+                                    </asp:CustomValidator>
+
+                                    <%-- EAC >= ACWP --%>
+                                    <asp:CustomValidator ID="cuvEacAcwp" runat="server" ErrorMessage="EAC must be greater than or equal to ACWP."
+                                        Text="*" OnServerValidate="cuvEacAcwp_ServerValidate" ClientValidationFunction="cuvEacAcwp_ClientValidate"
+                                        ControlToValidate="tbEac" ForeColor="Red" ValidateEmptyText="False">
+                                    </asp:CustomValidator>
+
+                                    <%-- EAC > 0 --%>
                                     <asp:CompareValidator ID="cpvEacZero" runat="server" ErrorMessage="EAC must be greater than 0."
-                                        Text="*" ForeColor="Red" ValueToCompare="0" Operator="GreaterThan" ControlToValidate="tbEac">
-                                    </asp:CompareValidator>--%>
-                                    <%--<asp:CompareValidator ID="cpvEacAcwp" runat="server" ErrorMessage="EAC must be greater than or equal to ACWP."
-                                        Text="*" ForeColor="Red" ControlToValidate="tbEac" ControlToCompare="lblAcwp2" Operator="GreaterThanEqual">
+                                        Text="*" ForeColor="Red" ValueToCompare="0" Type="Double" Operator="GreaterThan" ControlToValidate="tbEac">
                                     </asp:CompareValidator>
---%>
+
                                 </EditItemTemplate>
                                 <ItemTemplate>
                                     <asp:Label ID="lblEac" runat="server" Text='<%# Bind("EAC") %>'></asp:Label>
