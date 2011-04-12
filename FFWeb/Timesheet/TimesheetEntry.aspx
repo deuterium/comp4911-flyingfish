@@ -65,6 +65,10 @@
                     <asp:TemplateField HeaderText="Sun">
                         <EditItemTemplate>
                             <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("sun") %>' Width="20px" />
+                            <asp:RangeValidator ID="rgvSun" runat="server" ForeColor="Red" Text="*"
+                                ErrorMessage="Sun must be a number between between 0 and 24." ControlToValidate="TextBox2"
+                                Type="Double" MaximumValue="24" MinimumValue="0">
+                            </asp:RangeValidator>
                         </EditItemTemplate>
                         <ItemTemplate>
                             <asp:Label ID="Label4" runat="server" Text='<%# Bind("sun") %>' />
@@ -73,6 +77,10 @@
                     <asp:TemplateField HeaderText="Mon">
                         <EditItemTemplate>
                             <asp:TextBox ID="TextBox3" runat="server" Text='<%# Bind("mon") %>' Width="20px" />
+                            <asp:RangeValidator ID="rgvMon" runat="server" ForeColor="Red" Text="*"
+                                ErrorMessage="Mon must be a number between between 0 and 24." ControlToValidate="TextBox3"
+                                Type="Double" MaximumValue="24" MinimumValue="0">
+                            </asp:RangeValidator>
                         </EditItemTemplate>
                         <ItemTemplate>
                             <asp:Label ID="Label5" runat="server" Text='<%# Bind("mon") %>' />
@@ -81,6 +89,10 @@
                     <asp:TemplateField HeaderText="Tue">
                         <EditItemTemplate>
                             <asp:TextBox ID="TextBox4" runat="server" Text='<%# Bind("tue") %>' Width="20px" />
+                            <asp:RangeValidator ID="rgvTue" runat="server" ForeColor="Red" Text="*"
+                                ErrorMessage="Tue must be a number between between 0 and 24." ControlToValidate="TextBox4"
+                                Type="Double" MaximumValue="24" MinimumValue="0">
+                            </asp:RangeValidator>
                         </EditItemTemplate>
                         <ItemTemplate>
                             <asp:Label ID="Label6" runat="server" Text='<%# Bind("tue") %>' />
@@ -89,6 +101,10 @@
                     <asp:TemplateField HeaderText="Wed">
                         <EditItemTemplate>
                             <asp:TextBox ID="TextBox5" runat="server" Text='<%# Bind("wed") %>' Width="20px" />
+                            <asp:RangeValidator ID="rgvWed" runat="server" ForeColor="Red" Text="*"
+                                ErrorMessage="Wed must be a number between between 0 and 24." ControlToValidate="TextBox5"
+                                Type="Double" MaximumValue="24" MinimumValue="0">
+                            </asp:RangeValidator>
                         </EditItemTemplate>
                         <ItemTemplate>
                             <asp:Label ID="Label7" runat="server" Text='<%# Bind("wed") %>' />
@@ -97,6 +113,10 @@
                     <asp:TemplateField HeaderText="Thu">
                         <EditItemTemplate>
                             <asp:TextBox ID="TextBox6" runat="server" Text='<%# Bind("thu") %>' Width="20px" />
+                            <asp:RangeValidator ID="rgvThu" runat="server" ForeColor="Red" Text="*"
+                                ErrorMessage="Thu must be a number between between 0 and 24." ControlToValidate="TextBox6"
+                                Type="Double" MaximumValue="24" MinimumValue="0">
+                            </asp:RangeValidator>
                         </EditItemTemplate>
                         <ItemTemplate>
                             <asp:Label ID="Label8" runat="server" Text='<%# Bind("thu") %>' />
@@ -105,6 +125,10 @@
                     <asp:TemplateField HeaderText="Fri">
                         <EditItemTemplate>
                             <asp:TextBox ID="TextBox7" runat="server" Text='<%# Bind("fri") %>' Width="20px" />
+                            <asp:RangeValidator ID="rgvFri" runat="server" ForeColor="Red" Text="*"
+                                ErrorMessage="Sat must be a number between between 0 and 24." ControlToValidate="TextBox7"
+                                Type="Double" MaximumValue="24" MinimumValue="0">
+                            </asp:RangeValidator>
                         </EditItemTemplate>
                         <ItemTemplate>
                             <asp:Label ID="Label9" runat="server" Text='<%# Bind("fri") %>' />
