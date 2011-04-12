@@ -12,6 +12,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
     FlyingFishClassesDataContext ff = new FlyingFishClassesDataContext();
     protected void Page_Load(object sender, EventArgs e)
     {
+        ff.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues);
         populateManageProject();
     }
 
@@ -83,7 +84,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
 
@@ -163,7 +164,7 @@ public partial class PM_ManageProject : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
 
@@ -250,11 +251,13 @@ public partial class PM_ManageProject : System.Web.UI.Page
     {
         try
         {
+            FlyingFishClassesDataContext gg = new FlyingFishClassesDataContext();
             if (tbUnalloc.Text == "")
                 tbUnalloc.Text = "0.0";
-            Project proj = ff.Projects.Where(p => p.projId == Convert.ToInt32(Session["projID"].ToString())).First();
+
+            Project proj = gg.Projects.Where(p => p.projId == Convert.ToInt32(Session["projID"].ToString())).First();
             proj.unallocated_dollars = Convert.ToDecimal(tbUnalloc.Text);
-            ff.SubmitChanges();
+            gg.SubmitChanges();
             lblUnalloc2.Text = proj.unallocated_dollars.ToString();
             //divOriginalAlloc.Visible = true;
             lblUnalloc2.Visible = true;
@@ -262,11 +265,10 @@ public partial class PM_ManageProject : System.Web.UI.Page
             btnCancelAlloc.Visible = false;
             btnChangeAlloc.Visible = true;
             tbUnalloc.Visible = false;
-            populateManageProject();
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+          //  lblException.Text = exception.StackTrace;
         }
     }
     protected void btnCancelAlloc_Click(object sender, EventArgs e)
