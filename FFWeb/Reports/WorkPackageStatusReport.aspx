@@ -7,26 +7,24 @@
         function cuvUnknownValue_ClientValidate(source, args) {
             var strEac = document.getElementById("tbEac").value;
             var strEtc = document.getElementById("tbEtc").value;
+            args.IsValid = true;
 
             if (((strEtc == "Unknown") || (!strEtc))
                     && ((strEac == "Unknown") || (!strEac))) {
                 args.IsValid = false;
-            } else {
-                args.IsValid = true;
             }
         }
 
         function cuvEacAcwp_ClientValidate(source, args) {
             var strEac = document.getElementById("tbEac");
             var strAcwp = document.getElementById("lblAcwp2");
+            args.IsValid = false;
 
             // if strEac has a value
             if (strEac) {
                 // if at least 1 is the Unknown Value
                 if (strEac >= strAcwp) {
                     args.IsValid = true;
-                } else {
-                    args.IsValid = false;
                 }
             }
         }
@@ -116,36 +114,38 @@
                     <table>
                         <tr>
                             <td>
-                                <asp:Label Text="Workpackage: " ID="lblwprWP" runat="server" Font-Bold="true" />
+                                <asp:Label ID="lblProjectLabel" runat="server" Font-Bold="True" 
+                                    Text="Project" />
+                            </td>
+                            <td>
+                                <asp:Label ID="lblProject" runat="server"></asp:Label>
+                            </td>
+                            <td>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp
+                            </td>
+                            <td>
+                                <asp:Label ID="lblwprWP" runat="server" Font-Bold="true" Text="Workpackage: "></asp:Label>
                             </td>
                             <td>
                                 <asp:Label ID="lblWp" runat="server" Text=""></asp:Label>
                             </td>
-                            <td>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp
-                            </td>
-                            <td>
-                                <asp:Label Text="Report Cut-off Date: " ID="lblwprReportCut" runat="server" Font-Bold="true" />
-                            </td>
-                            <td>
-                                <asp:Label ID="lblReportPeriod" runat="server" Text=""></asp:Label>
-                            </td>
                         </tr>
                         <tr>
                             <td>
-                                <asp:Label Text="Responsible Engineer: " ID="lblwprRE" runat="server" Font-Bold="true" />
-                            </td>
-                            <td>
-                                <asp:Label ID="lblRe" runat="server" Text=""></asp:Label>
-                            </td>
-                            <td>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp
-                            </td>
-                            <td>
-                                <asp:Label Text="Project Manager: " ID="lblwprPM" runat="server" Font-Bold="true" />
+                                <asp:Label ID="lblwprPM" runat="server" Font-Bold="true" 
+                                    Text="Project Manager: " />
                             </td>
                             <td>
                                 <asp:Label ID="lblPm" runat="server" Text=""></asp:Label>
+                            </td>
+                            <td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td>
+                                <asp:Label Text="Responsible Engineer: " ID="lblwprRE" runat="server" 
+                                    Font-Bold="true" />
+                            </td>
+                            <td>
+                                <asp:Label ID="lblRe" runat="server" Text=""></asp:Label>
                             </td>
                         </tr>
                         <tr>
@@ -167,10 +167,11 @@
                         </tr>
                         <tr>
                             <td>
-                                <asp:Label Text="Total ACWP: " ID="lblwprACWP" runat="server" Font-Bold="true" />
+                                <asp:Label ID="lblwprReportCut" runat="server" Font-Bold="true" 
+                                    Text="Report Cut-off Date: " />
                             </td>
                             <td>
-                                <asp:Label ID="lblTotalAcwp" runat="server" Text=""></asp:Label>
+                                <asp:Label ID="lblReportPeriod" runat="server" Text=""></asp:Label>
                             </td>
                         </tr>
                     </table>
@@ -199,17 +200,18 @@
                             <asp:TemplateField HeaderText="ETC">
                                 <EditItemTemplate>
                                     <asp:TextBox ID="tbEtc" Width="75px" MaxLength="11" runat="server" Text='<%# Bind("ETC") %>' />
-
-                                    <%-- ETC must be Unknown, Blank, or a Decimal --%>
-                                    <asp:RegularExpressionValidator ID="revEtc" runat="server" ErrorMessage="ETC can only contain a dollar sign, comma, period, and positive numbers."
-                                            ControlToValidate="tbEtc" ValidationExpression="^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$" Text="*" 
-                                            ForeColor="Red" >
-                                    </asp:RegularExpressionValidator>
+                                                                        
                                     <%-- ETC > 0 --%>
                                     <asp:CompareValidator ID="cpvEtcZero" runat="server" ErrorMessage="ETC must be greater than 0."
                                         Text="*" ForeColor="Red" ValueToCompare="0" Type="String" Operator="GreaterThan" ControlToValidate="tbEtc">
                                     </asp:CompareValidator>
                                     
+                                    <%-- ETC must be Unknown, Blank, or a Decimal --%>
+                                    <asp:RegularExpressionValidator ID="revEtc" runat="server" ErrorMessage="ETC can only contain a dollar sign, comma, period, and positive numbers."
+                                            ControlToValidate="tbEtc" ValidationExpression="^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$" Text="*" 
+                                            ForeColor="Red" >
+                                    </asp:RegularExpressionValidator>
+
                                 </EditItemTemplate>
                                 <ItemTemplate>
                                     <asp:Label ID="lblEtc" runat="server" Text='<%# Bind("ETC") %>'></asp:Label>
@@ -219,28 +221,28 @@
                                 <EditItemTemplate>
                                     <asp:TextBox ID="tbEac" Width="75px" MaxLength="11" runat="server" Text='<%# Bind("EAC") %>' />
 
-                                    <%-- EAC must be Unknown, Blank, or a Decimal --%>
-                                    <asp:RegularExpressionValidator ID="revEac" runat="server" ErrorMessage="EAC can only contain a dollar sign, comma, period, and numbers."
-                                            ControlToValidate="tbEac" ValidationExpression="^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$" Text="*"
-                                            ForeColor="Red" >
-                                    </asp:RegularExpressionValidator>
-                                    
-                                    <%-- Only 1 "known" value is specified --%>
-                                    <asp:CustomValidator ID="cuvUnknownValue" runat="server" ErrorMessage="Exactly one value must be blank or 'Unknown'. The missing value will be calculated for you."
-                                        Text="*" OnServerValidate="cuvUnknownValue_ServerValidate" ClientValidationFunction="cuvUnknownValue_ClientValidate"
-                                        ControlToValidate="tbEac" ForeColor="Red" ValidateEmptyText="False">
-                                    </asp:CustomValidator>
-
                                     <%-- EAC >= ACWP --%>
                                     <asp:CustomValidator ID="cuvEacAcwp" runat="server" ErrorMessage="EAC must be greater than or equal to ACWP."
                                         Text="*" OnServerValidate="cuvEacAcwp_ServerValidate" ClientValidationFunction="cuvEacAcwp_ClientValidate"
                                         ControlToValidate="tbEac" ForeColor="Red" ValidateEmptyText="False">
                                     </asp:CustomValidator>
-
+                                     
+                                    <%-- Only 1 "known" value is specified --%>
+                                    <asp:CustomValidator ID="cuvUnknownValue" runat="server" ErrorMessage="Exactly one value must be blank or 'Unknown'. The missing value will be calculated for you."
+                                        Text="*" OnServerValidate="cuvUnknownValue_ServerValidate" ClientValidationFunction="cuvUnknownValue_ClientValidate"
+                                        ControlToValidate="tbEac" ForeColor="Red" ValidateEmptyText="False">
+                                    </asp:CustomValidator>
+                                   
                                     <%-- EAC > 0 --%>
                                     <asp:CompareValidator ID="cpvEacZero" runat="server" ErrorMessage="EAC must be greater than 0."
                                         Text="*" ForeColor="Red" ValueToCompare="0" Type="Double" Operator="GreaterThan" ControlToValidate="tbEac">
                                     </asp:CompareValidator>
+                                     
+                                    <%-- EAC must be Unknown, Blank, or a Decimal --%>
+                                    <asp:RegularExpressionValidator ID="revEac" runat="server" ErrorMessage="EAC can only contain a dollar sign, comma, period, and numbers."
+                                            ControlToValidate="tbEac" ValidationExpression="^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$" Text="*"
+                                            ForeColor="Red" >
+                                    </asp:RegularExpressionValidator>
 
                                 </EditItemTemplate>
                                 <ItemTemplate>

@@ -43,16 +43,6 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     public const String currencyFormat = "{0:C}";
     public const String percentFormat = decimalFormat + "%";
 
-    private decimal subtotalAcwpDays = 0;
-    private decimal subtotalEtcDays = 0;
-    private decimal subtotalEacDays = 0;
-    private decimal subtotalPercentCompleteDays = 0;
-
-    private decimal subtotalAcwpDollars = 0;
-    private decimal subtotalEtcDollars = 0;
-    private decimal subtotalEacDollars = 0;
-    private decimal subtotalPercentCompleteDollars = 0;
-
     private List<EmployeeWorkPackageETC> allEmployeeWpETCs = new List<EmployeeWorkPackageETC>();
 
     /// <summary>
@@ -228,7 +218,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         Employee respEng = (Employee)
                            (from re in ffdb.WorkPackageResponsibleEngineers
                             join e in ffdb.Employees on re.responsibleEngineer equals e.empId
-                            where (re.projId == Convert.ToInt16(ViewState["projId"]))
+                            where (re.projId == Convert.ToInt32(ViewState["projId"]))
                                 && re.wpId.Equals(ViewState["wpId"])
                             select e).FirstOrDefault();
 
@@ -236,18 +226,20 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         var projMan = (Employee)
                       (from pm in ffdb.Projects
                        join e in ffdb.Employees on pm.manager equals e.empId
-                       where (pm.projId == Convert.ToInt16(ViewState["projId"]))
+                       where (pm.projId == Convert.ToInt32(ViewState["projId"]))
                        select e).FirstOrDefault();
 
-        // Get the data for each employee
-        var qry = (from ewp in ffdb.EmployeeWorkPackages
-                   join e in ffdb.Employees on ewp.empId equals e.empId
+        // Get the data for each employee who's worked on the timesheet at some point
+        var qry = (from tse in ffdb.TimesheetEntries
+                   join e in ffdb.Employees on tse.empId equals e.empId
+                   where (tse.projId == Convert.ToInt32(ViewState["projId"]))
+                           && (tse.wpId.Equals(ViewState["wpId"]))
                    select new {
                        e.firstName,
                        e.lastName,
                        e.empId,
-                       ACWP = getAcwpForEmployee(ewp.empId, acwpForAll),
-                       ETC = getEtcForEmployee(ewp.empId, allEmployeeWpETCs)
+                       ACWP = getAcwpForEmployee(tse.empId, acwpForAll),
+                       ETC = getEtcForEmployee(tse.empId, allEmployeeWpETCs)
                    }).Distinct();
 
         // Check if no results found
@@ -396,7 +388,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         }
                
         // Populate the Report Details
-        //lblProject.Text = ViewState["Project"].ToString();
+        lblProject.Text = ViewState["Project"].ToString();
         lblWp.Text = ViewState["WorkPackage"].ToString();
         lblRe.Text = respEng.firstName + " " + respEng.lastName + " (" + respEng.empId + ")";
         lblPm.Text = projMan.firstName + " " + projMan.lastName + " (" + projMan.empId + ")";
@@ -405,34 +397,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         // Get most recent RE budget for this workpackage.
         lblReBac.Text = getResponsibleEngineerBudget();
-
-        //// Calculate the Total ACWP for the WorkPackage
-        //foreach (var item in qry) {
-        //    if (!(item.EAC.Equals(UnknownValue))) {
-        //        reBAC += Convert.ToDecimal(item.EAC);
-        //    }
-        //}
-
-        //// Get the RE's estimated budget
-        //lblReBac.Text = reBAC.ToString();
-        //if (reBAC == 0) {
-        //    lblReBac.Text = UnknownValue;
-        //}
-
-        //decimal totalAcwp = 0;
-
-        //foreach (var item in qry) {
-        //    if (!(item.ACWP.Equals(UnknownValue))) {
-        //        totalAcwp += Convert.ToDecimal(item.ACWP);
-        //    }
-        //}
-
-
-        //lblTotalAcwp.Text = totalAcwp.ToString() + " hours";
-        //if (totalAcwp == 0) {
-        //    lblTotalAcwp.Text = UnknownValue;
-        //}
-
+        
         // Get the WorkPackageStatusReport details
         WorkPackageStatusReport wpsr = getExistingReportDetails();
         ViewState["isNewReport"] = false;
@@ -467,7 +432,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         var reBudget = from ree in ffdb.WorkPackageEstimateREs
                        join p in ffdb.PersonLevels on (ree.pLevel + ree.fiscalYear) equals (p.pLevel + p.fiscalYear)
-                       where (ree.projId == Convert.ToInt16(ViewState["projId"]))
+                       where (ree.projId == Convert.ToInt32(ViewState["projId"]))
                                 && ree.wpId.Equals(ViewState["wpId"].ToString())
                                 && ree.dateUpdated.Equals(
                                         (DateTime)
@@ -544,12 +509,12 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         var qry = from t in ffdb.TimesheetEntries
                   join tsh in ffdb.TimesheetHeaders on (t.empId + t.tsDate.ToString()) equals (tsh.empId + tsh.tsDate.ToString())
                   where (t.tsDate <= (DateTime)ViewState["cutOffDate"])
-                            && (t.projId == Convert.ToInt16(ViewState["projId"]))
+                            && (t.projId == Convert.ToInt32(ViewState["projId"]))
                             && (t.wpId.Equals(ViewState["wpId"]))
                             && (tsh.status.Equals("APPROVED"))
                   join empPlvl in ffdb.EmployeePersonLevels on t.empId equals empPlvl.empId
                   join plvl in ffdb.PersonLevels on (empPlvl.pLevel + empPlvl.fiscalYear) equals (plvl.pLevel + plvl.fiscalYear)
-                  where (t.projId == (Convert.ToInt16(ViewState["projId"])))
+                  where (t.projId == (Convert.ToInt32(ViewState["projId"])))
                             && (t.wpId.Equals(ViewState["wpId"]))
                             && (t.tsDate <= ((DateTime)ViewState["cutOffDate"]))
                             && (t.tsDate.Year == empPlvl.fiscalYear)
@@ -580,14 +545,14 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     /// <returns></returns>
     private decimal getPMBudget() {
         var qry = (from wp in ffdb.WorkPackages
-                   where (wp.projId == (Convert.ToInt16(ViewState["projId"]))) && wp.wpId.Equals(ViewState["wpId"])
+                   where (wp.projId == (Convert.ToInt32(ViewState["projId"]))) && wp.wpId.Equals(ViewState["wpId"])
                    select wp).FirstOrDefault();
         return (decimal)(qry.unallocated_dollars + qry.allocated_dollars);
     }
 
     private decimal getREBudget() {
         var qry = (from wp in ffdb.WorkPackages
-                   where (wp.projId == (Convert.ToInt16(ViewState["projId"]))) && wp.wpId.Equals(ViewState["wpId"])
+                   where (wp.projId == (Convert.ToInt32(ViewState["projId"]))) && wp.wpId.Equals(ViewState["wpId"])
                    select wp).FirstOrDefault();
         return (decimal)(qry.unallocated_dollars + qry.allocated_dollars);
     }
@@ -597,7 +562,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     private WorkPackageStatusReport getExistingReportDetails() {
         WorkPackageStatusReport wpsr = (from sr in ffdb.WorkPackageStatusReports
                                         where sr.cutOffDate.Equals((DateTime)ViewState["cutOffDate"])
-                                            && (sr.projId == (Convert.ToInt16(ViewState["projId"])))
+                                            && (sr.projId == (Convert.ToInt32(ViewState["projId"])))
                                             && (sr.wpId.Equals(ViewState["wpId"]))
                                         select sr).FirstOrDefault();
 
@@ -612,7 +577,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         var qry = from t in ffdb.TimesheetEntries
                   join tsh in ffdb.TimesheetHeaders on (t.empId + t.tsDate.ToString()) equals (tsh.empId + tsh.tsDate.ToString())
                   where (t.tsDate <= (DateTime)ViewState["cutOffDate"])
-                        && (t.projId == Convert.ToInt16(ViewState["projId"]))
+                        && (t.projId == Convert.ToInt32(ViewState["projId"]))
                         && (t.wpId.Equals(ViewState["wpId"]))
                         && (tsh.status.Equals("APPROVED"))
                   group t by new { t.projId, t.wpId, ID = t.empId } into g
@@ -633,12 +598,12 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     /// <returns>A list of the most recent ETC in days, for all employees, up to the cut-off date.</returns>
     private List<EmployeeWorkPackageETC> getEtcForAll() {
         var qry = from etc in ffdb.EmployeeWorkPackageETCs
-                  where (etc.projId == (Convert.ToInt16(ViewState["projId"])))
+                  where (etc.projId == (Convert.ToInt32(ViewState["projId"])))
                            && (etc.wpId.Equals(ViewState["wpId"]))
                            && (etc.dateUpdated <= ((DateTime)ViewState["cutOffDate"]))
                            && (etc.dateUpdated.Equals(
                                    (from du in ffdb.EmployeeWorkPackageETCs
-                                    where (etc.projId == (Convert.ToInt16(ViewState["projId"])))
+                                    where (etc.projId == (Convert.ToInt32(ViewState["projId"])))
                                            && (du.wpId.Equals(ViewState["wpId"]))
                                            && (du.dateUpdated <= ((DateTime)ViewState["cutOffDate"]))
                                     select du.dateUpdated).Max()))
@@ -664,7 +629,6 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                     select afa.Value).FirstOrDefault().ToString();
         if ((s != null) && !(s.Equals(String.Empty))) {
             acwp = Convert.ToDecimal(s);
-            subtotalAcwpDays += acwp;
         }
         return String.Format(decimalFormat, acwp);
     }
@@ -684,7 +648,6 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             return UnknownValue;
         }
         etc = Convert.ToDecimal(s);
-        subtotalEtcDays += etc;
         return String.Format(decimalFormat, etc);
     }
 
@@ -723,14 +686,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             acwp = Convert.ToDecimal(strAcwp);
             eac = acwp + etc;
 
-            if (format.Equals(decimalFormat)) {
-                subtotalEacDays += eac;
-            }
-            else if (format.Equals(currencyFormat)) {
-                subtotalEacDollars += eac;
-            }
-            else if (format == null) {
-                subtotalEacDays += etc;
+            if (format == null) {
                 return eac.ToString();
             }
 
@@ -753,14 +709,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             acwp = Convert.ToDecimal(strAcwp);
             etc = eac - acwp;
 
-            if (format.Equals(decimalFormat)) {
-                subtotalEtcDays += eac;
-            }
-            else if (format.Equals(currencyFormat)) {
-                subtotalEtcDollars += etc;
-            }
-            else if (format == null) {
-                subtotalEtcDays += etc;
+            if (format == null) {
                 return eac.ToString();
             }
 
@@ -806,7 +755,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e) {
-        ViewState["projId"] = Convert.ToInt16(ddlAllProjects.SelectedValue);
+        ViewState["projId"] = Convert.ToInt32(ddlAllProjects.SelectedValue);
         ViewState["wpId"] = ddlWorkpackages.SelectedValue;
         ViewState["cutOffDate"] = Convert.ToDateTime(tbCutOffDate.Text);
         ViewState["WorkPackage"] = ddlWorkpackages.SelectedItem.Text;
@@ -815,7 +764,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     }
 
     protected void btnNewReport_Click(object sender, EventArgs e) {
-        ViewState["projId"] = Convert.ToInt16(ddlAllProjects.SelectedValue);
+        ViewState["projId"] = Convert.ToInt32(ddlAllProjects.SelectedValue);
         ViewState["wpId"] = ddlWorkpackages.SelectedValue;
         ViewState["cutOffDate"] = Convert.ToDateTime(tbCutOffDate.Text);
         GetWorkPackageStatusReport();
@@ -933,7 +882,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
             empWpEtc.ETC_days = etc;
             empWpEtc.empId = empId;
-            empWpEtc.projId = Convert.ToInt16(ViewState["projId"]);
+            empWpEtc.projId = Convert.ToInt32(ViewState["projId"]);
             empWpEtc.wpId = (String)ViewState["wpId"];
 
             // If the current date is earlier than the cut off date, use the current date
@@ -966,7 +915,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         String[] tokens = Regex.Split(emp, " ");
         String strEmpId = tokens[2].TrimEnd(')').TrimStart('(');
         try {
-            empId = Convert.ToInt16(strEmpId);
+            empId = Convert.ToInt32(strEmpId);
         }
         catch (Exception e) {
             return -1;
@@ -1002,7 +951,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
             if (wpsr == null) {
                 wpsr = new WorkPackageStatusReport();
-                wpsr.projId = Convert.ToInt16(ViewState["projId"]);
+                wpsr.projId = Convert.ToInt32(ViewState["projId"]);
                 wpsr.wpId = ddlWorkpackages.SelectedValue;
                 wpsr.cutOffDate.Equals(ViewState["cutOffDate"]);
                 isNewReport = true;
