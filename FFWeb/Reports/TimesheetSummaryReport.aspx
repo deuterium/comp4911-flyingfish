@@ -26,14 +26,14 @@
                       <asp:TextBox ID="tbForDate" runat="server"></asp:TextBox>
                       <asp:CalendarExtender ID="cexForDate" runat="server" TargetControlID="tbForDate" Format="yyyy/MM/dd" >
                       </asp:CalendarExtender>
-                      <asp:RegularExpressionValidator ForeColor="Red" ID="revDate" runat="server"
-                        ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$"
-                        ErrorMessage="Date must be in format 'YYYY/MM/DD'" ControlToValidate="tbForDate" Text="*">
+                      <asp:RegularExpressionValidator ForeColor="Red" ID="revCutOffDate" runat="server"
+                        ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbForDate"
+                        ErrorMessage="End date must be in format 'YYYY/MM/DD'" Text="*">
                       </asp:RegularExpressionValidator>
-                      <asp:RangeValidator ForeColor="Red" ID="rgvDate" runat="server"
-                        ErrorMessage="Date must be between 2010/01/01 and 2500/01/01." ControlToValidate="tbForDate"
-                        MaximumValue="2500/01/01" MinimumValue="2010/01/01" Text="*">
-                      </asp:RangeValidator>
+                      <asp:RangeValidator ForeColor="Red" ID="rgvCutOffDate" runat="server" ControlToValidate="tbForDate"
+                        ErrorMessage="End date must be between 2010/01/01 and 2500/01/01." MaximumValue="2500/01/01"
+                        MinimumValue="2010/01/01" Text="*">
+                    </asp:RangeValidator>
                 </td>
             </tr>
             <tr>

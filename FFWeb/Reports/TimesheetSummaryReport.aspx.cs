@@ -70,40 +70,71 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
                       WorkPackage = g.Key.wp.name + " (" + g.Key.wp.wpId + ")",
                       Employee = g.Key.emp.firstName + " " + g.Key.emp.lastName + " (" + g.Key.emp.empId + ")",
                       Week1 = (from w1 in ffdb.TimesheetEntries
-                               where (w1.empId == g.Key.emp.empId) && w1.tsDate >= dateFor.AddDays(-7) && w1.tsDate <= dateFor
+                               where (w1.empId == g.Key.emp.empId)
+                                    && w1.tsDate >= dateFor.AddDays(-7)
+                                    && w1.tsDate <= dateFor
+                                    && (w1.projId == g.Key.projId)
+                                    && (w1.wpId.Equals(g.Key.wp.wpId))
                                select w1.totalHours).FirstOrDefault(),
                       Week2 = (from w1 in ffdb.TimesheetEntries
-                               where (w1.empId == g.Key.emp.empId) && w1.tsDate >= dateFor.AddDays(-14) && w1.tsDate <= dateFor.AddDays(-7)
+                               where (w1.empId == g.Key.emp.empId)
+                                    && w1.tsDate >= dateFor.AddDays(-14)
+                                    && w1.tsDate <= dateFor.AddDays(-7)
+                                    && (w1.projId == g.Key.projId)
+                                    && (w1.wpId.Equals(g.Key.wp.wpId))
                                select w1.totalHours).FirstOrDefault(),
                       Week3 = (from w1 in ffdb.TimesheetEntries
-                               where (w1.empId == g.Key.emp.empId) && w1.tsDate >= dateFor.AddDays(-21) && w1.tsDate <= dateFor.AddDays(-14)
+                               where (w1.empId == g.Key.emp.empId)
+                                    && w1.tsDate >= dateFor.AddDays(-21)
+                                    && w1.tsDate <= dateFor.AddDays(-14)
+                                    && (w1.projId == g.Key.projId)
+                                    && (w1.wpId.Equals(g.Key.wp.wpId))
                                select w1.totalHours).FirstOrDefault(),
                       Week4 = (from w1 in ffdb.TimesheetEntries
-                               where (w1.empId == g.Key.emp.empId) && w1.tsDate >= dateFor.AddDays(-28) && w1.tsDate <= dateFor.AddDays(-21)
+                               where (w1.empId == g.Key.emp.empId)
+                                    && w1.tsDate >= dateFor.AddDays(-28)
+                                    && w1.tsDate <= dateFor.AddDays(-21)
+                                    && (w1.projId == g.Key.projId)
+                                    && (w1.wpId.Equals(g.Key.wp.wpId))
                                select w1.totalHours).FirstOrDefault(),
                       Month1 = (from w1 in ffdb.TimesheetEntries
-                                where (w1.empId == g.Key.emp.empId) && w1.tsDate.Month == dateFor.Month
+                                where (w1.empId == g.Key.emp.empId)
+                                    && w1.tsDate.Month == dateFor.Month
                                     && w1.tsDate.Year.Equals(dateFor.Year)
+                                    && (w1.projId == g.Key.projId) && (w1.wpId.Equals(g.Key.wp.wpId))
                                 select w1.totalHours).FirstOrDefault(),
                       Month2 = (from w1 in ffdb.TimesheetEntries
-                                where (w1.empId == g.Key.emp.empId) && w1.tsDate.Month == dateFor.AddMonths(-1).Month
+                                where (w1.empId == g.Key.emp.empId)
+                                    && w1.tsDate.Month == dateFor.AddMonths(-1).Month
                                     && w1.tsDate.Year.Equals(dateFor.AddMonths(-1).Year)
+                                    && (w1.projId == g.Key.projId)
+                                    && (w1.wpId.Equals(g.Key.wp.wpId))
                                 select w1.totalHours).FirstOrDefault(),
                       Month3 = (from w1 in ffdb.TimesheetEntries
-                                where (w1.empId == g.Key.emp.empId) && w1.tsDate.Month.Equals(dateFor.AddMonths(-2).Month)
+                                where (w1.empId == g.Key.emp.empId)
+                                    && w1.tsDate.Month.Equals(dateFor.AddMonths(-2).Month)
                                     && w1.tsDate.Year.Equals(dateFor.AddMonths(-2).Year)
+                                    && (w1.projId == g.Key.projId)
+                                    && (w1.wpId.Equals(g.Key.wp.wpId))
                                 select w1.totalHours).FirstOrDefault(),
                       Month4 = (from w1 in ffdb.TimesheetEntries
-                                where (w1.empId == g.Key.emp.empId) && w1.tsDate.Month == dateFor.AddMonths(-3).Month
+                                where (w1.empId == g.Key.emp.empId)
+                                    && w1.tsDate.Month == dateFor.AddMonths(-3).Month
                                     && w1.tsDate.Year.Equals(dateFor.AddMonths(-3).Year)
+                                    && (w1.projId == g.Key.projId)
+                                    && (w1.wpId.Equals(g.Key.wp.wpId))
                                 select w1.totalHours).FirstOrDefault(),
-                      TotalHours = (from t in ffdb.TimesheetEntries
-                                    where (t.empId == g.Key.emp.empId) && t.tsDate <= dateFor
-                                    group t by new { t.projId, t.wpId, t.empId } into g2
-                                    select new
-                                    {
-                                        hours = g2.Sum(s => (s.totalHours))
-                                    }).First().hours
+                      //TotalHours = (from t in ffdb.TimesheetEntries
+                      //              join tsh in ffdb.TimesheetHeaders on (t.empId + t.tsDate.ToString()) equals (tsh.empId + tsh.tsDate.ToString())
+                      //              where (t.tsDate <= (DateTime)ViewState["cutOffDate"])
+                      //                  && (t.projId == Convert.ToInt32(ViewState["projId"]))
+                      //                  && (t.wpId.Equals(ViewState["wpId"]))
+                      //                  && (tsh.status.Equals("APPROVED"))
+                      //                  && (t.projId == g.Key.projId) && (t.wpId.Equals(g.Key.wp.wpId))
+                      //              group t by new { t.projId, t.wpId, ID = t.empId } into gp
+                      //              select new {
+                      //                  hours = (decimal)gp.Sum(s => (s.mon + s.tue + s.wed + s.thu + s.fri + s.sat + s.sun))
+                      //              })
                   };
 
         // Binds the query data to the Grid View.
@@ -130,7 +161,7 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
         gvSummary.HeaderRow.Cells[8].Text = dateFor.AddMonths(-2).ToString("MMM");
         // month 4
         gvSummary.HeaderRow.Cells[9].Text = dateFor.AddMonths(-3).ToString("MMM");
-        gvSummary.HeaderRow.Cells[10].Text = "Total Hours to Date";
+        //gvSummary.HeaderRow.Cells[10].Text = "Total Hours to Date";
 
         // gvSummary.EmptyDataText = "-"; // does not work
     }
