@@ -221,6 +221,7 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
     {
         if (e.CommandName == "btnDelete")
         {
+            ff.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues);
             int row = Convert.ToInt32(e.CommandArgument);
             GridViewRow selectedRow = gvEmployees.Rows[row];
             EmployeeWorkPackage empwp = ff.EmployeeWorkPackages.Where(emp => emp.empId == (Convert.ToInt32(selectedRow.Cells[0].Text)) && emp.wpId ==lblWPID2.Text).First();

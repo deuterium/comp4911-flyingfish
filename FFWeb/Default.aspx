@@ -39,55 +39,6 @@
     
     </div>
 
-    <asp:ScriptManager ID="ScriptManager1" runat="server">
-    </asp:ScriptManager>
-    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-        <ContentTemplate>
-            <div id="ajaxkeygen" runat="server" visible="false" class="ajaxkeygen">
-            </div>
-            <div id="ajaxkeygenwindow" class="keygenwindow" visible="false" runat="server">
-                    <asp:Label ID="lblKey" runat="server" Text="You must enter a password for your Timesheet Digital Signature"></asp:Label>
-                    <br />
-                    <table class="cent" runat="server" id="tblKeygenForm">
-                        <tr>
-                            <td>
-                                <asp:Label ID="lblPassword" runat="server" Text="Password: "></asp:Label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="tbPassword" runat="server" TextMode="Password"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
-                                    ErrorMessage="Password required." ForeColor="Red" ControlToValidate="tbPassword">*</asp:RequiredFieldValidator>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <asp:Label ID="lblPasswordConfirm" runat="server" Text="Confirm Password: "></asp:Label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="tbPasswordConfirm" runat="server" TextMode="Password"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Confirm password required." 
-                                    ForeColor="Red" ControlToValidate="tbPasswordConfirm">*</asp:RequiredFieldValidator>
-                                <asp:CompareValidator ID="cvPasswordConfirm" runat="server" ErrorMessage="Passwords do not match." 
-                                    ForeColor="Red" ControlToValidate="tbPasswordConfirm" ControlToCompare="tbPassword">*</asp:CompareValidator>
-                            </td>
-                        </tr>
-                    </table>
-                    <br />
-                    <asp:Button ID="btnPasswordConfirm" runat="server" Text="Submit" 
-                        onclick="btnPasswordConfirm_Click" />
-                    <br /><br />
-                    <asp:Button ID="btnDownload" runat="server" Text="Download Key" 
-                        onclick="btnDownload_Click" Visible="false" />
-                    <asp:Button ID="btnClose" runat="server" 
-                        Text="Close (I have downloaded my key)" Visible="false" 
-                        onclick="btnClose_Click" />
-                </div>
-        </ContentTemplate>
-        <Triggers>
-            <asp:AsyncPostBackTrigger ControlID="btnPasswordConfirm" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnClose" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnDownload" EventName="Click" />
-        </Triggers>
-    </asp:UpdatePanel>
+    
 </asp:Content>
 
