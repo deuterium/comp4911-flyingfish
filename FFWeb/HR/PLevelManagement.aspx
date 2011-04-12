@@ -30,7 +30,7 @@
                                     <asp:DropDownList ID="ddlFiscalYear" runat="server" OnSelectedIndexChanged="ddlFiscalYear_SelectedIndexChanged"
                                         AutoPostBack="True" OnDataBound="ddlFiscalYear_DataBound" DataSourceID="ldsFiscalYear"
                                         DataTextField="fiscalYear" DataValueField="fiscalYear" />
-                                    <br />
+                                    <br /><br />
                                 </td>
                             </tr>
                             <tr>
@@ -38,12 +38,24 @@
                                     <asp:UpdatePanel ID="upPLevels" runat="server">
                                         <ContentTemplate>
                                             <asp:GridView ID="gvPLevels" runat="server" AutoGenerateColumns="False" DataKeyNames="pLevel,fiscalYear"
-                                                DataSourceID="ldsPLevels" OnRowDeleted="gvPLevels_RowDeleted">
+                                                DataSourceID="ldsPLevels" OnRowDeleted="gvPLevels_RowDeleted" 
+                                                BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" 
+                                                CellPadding="3">
                                                 <Columns>
                                                     <asp:BoundField DataField="pLevel" HeaderText="P-Level" ReadOnly="True" SortExpression="pLevel" />
                                                     <asp:BoundField DataField="rate" HeaderText="Rate" SortExpression="rate" />
-                                                    <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" />
+                                                    <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" 
+                                                        ButtonType="Button" />
                                                 </Columns>
+                                                <FooterStyle BackColor="White" ForeColor="#000066" />
+                                                <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
+                                                <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />
+                                                <RowStyle ForeColor="#000066" />
+                                                <SelectedRowStyle BackColor="#669999" Font-Bold="True" ForeColor="White" />
+                                                <SortedAscendingCellStyle BackColor="#F1F1F1" />
+                                                <SortedAscendingHeaderStyle BackColor="#007DBB" />
+                                                <SortedDescendingCellStyle BackColor="#CAC9C9" />
+                                                <SortedDescendingHeaderStyle BackColor="#00547E" />
                                             </asp:GridView>
                                         </ContentTemplate>
                                         <Triggers>
