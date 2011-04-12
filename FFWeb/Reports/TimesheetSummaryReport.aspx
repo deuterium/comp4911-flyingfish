@@ -20,7 +20,7 @@
             </tr>
             <tr>
                 <td>
-                    <asp:Label ID="lblDateFor" runat="server" Text="Report Date:"></asp:Label>
+                    <asp:Label ID="lblDateFor" runat="server" Text="Cut-off Date:"></asp:Label>
                 </td>
                 <td>
                       <asp:TextBox ID="tbForDate" runat="server"></asp:TextBox>
@@ -49,6 +49,7 @@
         <center>
         <asp:UpdatePanel ID="upGridView" runat="server">
             <ContentTemplate>
+                <asp:Label ID="lblResults" runat="server" Text="" ForeColor="Green"></asp:Label>
                 <asp:GridView ID="gvSummary" runat="server" BackColor="White" 
                     BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3" >
                     <FooterStyle BackColor="White" ForeColor="#000066" />

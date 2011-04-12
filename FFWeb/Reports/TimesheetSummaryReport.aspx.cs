@@ -71,8 +71,7 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
     /// <param name="projId">The ID of the project to get data for.</param>
     /// <param name="dateFor">The last date to get data for. Data beyond this date will excluded.</param>
     public void GetTimesheetSummaryReport(int projId, DateTime dateFor) {
-        ViewState["ProjectID"] = Convert.ToInt32(ddlAllProjects.SelectedValue);
-
+        lblResults.Visible = false;
         /*
          * A giant database query calculates the hours worked on each workpackage by each employee of the specified project
          * for the past 4 weeks and the past 4 months, and the total hours spent on the work package.
@@ -84,7 +83,7 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
                   join wp in ffdb.WorkPackages on tse.wpId equals wp.wpId
                   orderby tse.projId, tse.wpId, tse.empId
                   where tse.TimesheetHeader.status.Equals("APPROVED")
-                        && tse.projId == Convert.ToInt32(ViewState["ProjectID"])
+                        && (tse.projId == projId)
                   group tse by new { tse.projId, wp, emp } into g
                   select new {
                       WorkPackage = g.Key.wp.name + " (" + g.Key.wp.wpId + ")",
@@ -130,8 +129,15 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
                                         && (w1.projId == g.Key.projId)
                                         && (w1.wpId.Equals(g.Key.wp.wpId))
                                         && (w1.TimesheetHeader.status.Equals("APPROVED"))
+                                        && (w1.tsDate <= dateFor)
                                     select w1.totalHours).Sum()
                   };
+
+        if ((qry == null) || (qry.Count() == 0)) {
+            lblResults.Text = "No reports found for the specified project and date.";
+            lblResults.Visible = true;
+            return;
+        }
 
         gvSummary.DataSource = qry;
         gvSummary.DataBind();
@@ -156,7 +162,7 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
         gvSummary.HeaderRow.Cells[8].Text = dateFor.AddMonths(-2).ToString("MMM");
         // month 4
         gvSummary.HeaderRow.Cells[9].Text = dateFor.AddMonths(-3).ToString("MMM");
-        gvSummary.HeaderRow.Cells[10].Text = "Total Hours to Date";
+        gvSummary.HeaderRow.Cells[10].Text = "Total Hours up to Cut-off Date";
 
     }
 
@@ -187,7 +193,7 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
     /// <param name="sender">Object that called the event</param>
     /// <param name="e">the action event</param>
     protected void btnSubmit_Click(object sender, EventArgs e) {
-        GetTimesheetSummaryReport(Convert.ToInt16(ddlAllProjects.SelectedValue),
+        GetTimesheetSummaryReport(Convert.ToInt32(ddlAllProjects.SelectedValue),
                                   Convert.ToDateTime(tbForDate.Text));
     }
 }
