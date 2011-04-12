@@ -53,6 +53,10 @@
                     <asp:TemplateField HeaderText="Sat">
                         <EditItemTemplate>
                             <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("sat") %>' Width="20px" />
+                            <asp:RangeValidator ID="rgvSat" runat="server" ForeColor="Red" Text="*"
+                                ErrorMessage="Sat must be a number between between 0 and 24." ControlToValidate="TextBox1"
+                                Type="Double" MaximumValue="24" MinimumValue="0">
+                            </asp:RangeValidator>
                         </EditItemTemplate>
                         <ItemTemplate>
                             <asp:Label ID="Label3" runat="server" Text='<%# Bind("sat") %>' />
@@ -127,6 +131,7 @@
                 <SortedDescendingCellStyle BackColor="#CAC9C9" />
                 <SortedDescendingHeaderStyle BackColor="#00547E" />
             </asp:GridView>
+            <asp:ValidationSummary ID="vdsTimesheet" runat="server" ForeColor="Red" DisplayMode="List" />
         </center>
         <br />
         <asp:Label ID="lblteSubmitSuccess" runat="server" Text="" />
