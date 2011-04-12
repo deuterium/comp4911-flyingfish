@@ -5,7 +5,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <div id="divTimeSheet" runat="server">
-        <asp:Label ID="lblteTitle" runat="server" Text="Timesheet Management" Font-Bold="true"
+            <asp:Label ID="lblteTitle" runat="server" Text="Timesheet Management" Font-Bold="true"
             Font-Size="Large" />
         <br />
         <div class="divline">
@@ -129,6 +129,7 @@
             </asp:GridView>
         </center>
         <br />
+        <asp:Label ID="lblteSubmitSuccess" runat="server" Text="" />
     </div>
     <div id="divtotal" runat="server">
         <asp:Label ID="lbltesublblTotal" runat="server" Text="Total" Font-Bold="true" />
@@ -167,7 +168,7 @@
                 <asp:SessionParameter Name="tsDate" SessionField="CurrentDate" Type="DateTime" />
             </WhereParameters>
         </asp:LinqDataSource>
-        <asp:Label ID="lblteSubmitSuccess" runat="server" Text="" />
+        <%--<asp:Label ID="lblteSubmitSuccess" runat="server" Text="" />--%>
         <br />
         <asp:Button ID="btnNewRecord" runat="server" Text="New Record" OnClick="btnNewRecord_Click" />
     </div>

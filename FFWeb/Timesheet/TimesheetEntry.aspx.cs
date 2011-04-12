@@ -268,7 +268,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
 
             ff.TimesheetEntries.InsertOnSubmit(tmp2);
             ff.SubmitChanges();
-            lblteSubmitSuccess.Text = "Sumbit has been saved.";
+            lblteSubmitSuccess.Text = "Submit has been saved.";
             divNewRecord.Visible = false;
             btnNewRecord.Visible = true;
             divtotal.Visible = true;
@@ -286,7 +286,7 @@ public partial class Timesheet_TimesheetEntry : System.Web.UI.Page
         }
         catch (Exception myException)
         {
-            lblteSubmitSuccess.Text = myException.Message;
+            lblteSubmitSuccess.Text = "ENTRY ALREADY EXISTS";
             // Label1.Text = "You have sumbitted the record before, Cannot insert duplicate record into the database!!!";
 
         }
