@@ -5,8 +5,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <script type="text/javascript">
         function cuvUnknownValue_ClientValidate(source, args) {
-            var strEac = document.getElementById("tbEac");
-            var strEtc = document.getElementById("tbEtc");
+            var strEac = document.getElementById("tbEac").value;
+            var strEtc = document.getElementById("tbEtc").value;
 
             if (((strEtc == "Unknown") || (!strEtc))
                     && ((strEac == "Unknown") || (!strEac))) {
@@ -202,14 +202,14 @@
 
                                     <%-- ETC must be Unknown, Blank, or a Decimal --%>
                                     <asp:RegularExpressionValidator ID="revEtc" runat="server" ErrorMessage="ETC can only contain a dollar sign, comma, period, and positive numbers."
-                                            ControlToValidate="tbEtc" ValidationExpression="^([U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1})|[0-9]*([.]+[0-9]*)?$" Text="*" 
+                                            ControlToValidate="tbEtc" ValidationExpression="^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$" Text="*" 
                                             ForeColor="Red" >
                                     </asp:RegularExpressionValidator>
-                                    <%-- ETC >= 0 --%>
-                                    <asp:CompareValidator ID="cpvEtcZero" runat="server" ErrorMessage="ETC must be a positive number."
-                                        Text="*" ForeColor="Red" ValueToCompare="0" Type="Double" Operator="GreaterThanEqual" ControlToValidate="tbEtc">
+                                    <%-- ETC > 0 --%>
+                                    <asp:CompareValidator ID="cpvEtcZero" runat="server" ErrorMessage="ETC must be greater than 0."
+                                        Text="*" ForeColor="Red" ValueToCompare="0" Type="String" Operator="GreaterThan" ControlToValidate="tbEtc">
                                     </asp:CompareValidator>
-
+                                    
                                 </EditItemTemplate>
                                 <ItemTemplate>
                                     <asp:Label ID="lblEtc" runat="server" Text='<%# Bind("ETC") %>'></asp:Label>
@@ -221,12 +221,12 @@
 
                                     <%-- EAC must be Unknown, Blank, or a Decimal --%>
                                     <asp:RegularExpressionValidator ID="revEac" runat="server" ErrorMessage="EAC can only contain a dollar sign, comma, period, and numbers."
-                                            ControlToValidate="tbEac" ValidationExpression="^([U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1})|[0-9]*([.]+[0-9]*)?$" Text="*"
+                                            ControlToValidate="tbEac" ValidationExpression="^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$" Text="*"
                                             ForeColor="Red" >
                                     </asp:RegularExpressionValidator>
                                     
                                     <%-- Only 1 "known" value is specified --%>
-                                    <asp:CustomValidator ID="cuvUnknownValue" runat="server" ErrorMessage="One value must be blank or 'Unknown'."
+                                    <asp:CustomValidator ID="cuvUnknownValue" runat="server" ErrorMessage="Exactly one value must be blank or 'Unknown'. The missing value will be calculated for you."
                                         Text="*" OnServerValidate="cuvUnknownValue_ServerValidate" ClientValidationFunction="cuvUnknownValue_ClientValidate"
                                         ControlToValidate="tbEac" ForeColor="Red" ValidateEmptyText="False">
                                     </asp:CustomValidator>

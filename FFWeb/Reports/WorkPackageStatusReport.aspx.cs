@@ -131,7 +131,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         if (User.IsInRole("ProjectManager")) {
             ddlWorkpackages.DataSource = ffdb.WorkPackages
-                                         .Where(wp => wp.projId == Convert.ToInt16(ddlAllProjects.SelectedValue))
+                                         .Where(wp => wp.projId == Convert.ToInt32(ddlAllProjects.SelectedValue))
                                          .Select(wp => new {
                                              WpID = wp.wpId,
                                              WpName = wp.name + " (" + wp.wpId + ")"
@@ -145,11 +145,10 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                                              WpID = wp.wpId,
                                              WpName = wp.name + " (" + wp.wpId + ")"
                                          };
-        }
-        else {
+        } else {
             // Load all workpackages for now.
             ddlWorkpackages.DataSource = ffdb.WorkPackages
-                                         .Where(wp => wp.projId == Convert.ToInt16(ddlAllProjects.SelectedValue))
+                                         .Where(wp => wp.projId == Convert.ToInt32(ddlAllProjects.SelectedValue))
                                          .Select(wp => new {
                                              WpID = wp.wpId,
                                              WpName = wp.name + " (" + wp.wpId + ")"
@@ -209,8 +208,8 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         args.IsValid = true;
 
-        if ((strEac.Equals(UnknownValue.ToLower()) || strEac.Equals(String.Empty))
-                && (strEtc.Equals(UnknownValue.ToLower()) || strEtc.Equals(String.Empty))) {
+        if ((strEac.Equals(UnknownValue) || strEac.Equals(String.Empty))
+                && (strEtc.Equals(UnknownValue) || strEtc.Equals(String.Empty))) {
             args.IsValid = false;
         }
     }
