@@ -63,37 +63,25 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     /// If a RE visits this page, he or she only sees the projects he or she is working as an RE on.
     /// </summary>
     private void populateProjects() {
-        Employee e = getUser();
+        Employee user = getUser();
 
-        if (User.IsInRole("ProjectManager")) {
-            ddlAllProjects.DataSource = from p in ffdb.Projects
-                                        where (p.manager == e.empId)
-                                        select new {
-                                            ProjID = p.projId,
-                                            ProjectName = p.projName + " (" + p.projId + ")"
-                                        };
+        // Get all projects where this employee is a manager or a responsible engineer
+        if (User.IsInRole("ProjectManager") || User.IsInRole("ResponsibleEngineer")) {
+            var qry = from wp in ffdb.WorkPackages
+                      join p in ffdb.Projects on wp.projId equals p.projId
+                      join wpre in ffdb.WorkPackageResponsibleEngineers on (wp.projId + wp.wpId) equals (wpre.projId + wpre.wpId)
+                      where (wpre.responsibleEngineer == user.empId) || (p.manager == user.empId)
+                      select new {
+                          ProjID = p.projId,
+                          ProjectName = p.projName + " (" + p.projId + ")"
+                      };
+            ddlAllProjects.DataValueField = "ProjID";
+            ddlAllProjects.DataTextField = "ProjectName";
+            ddlAllProjects.DataBind();
+        } else {
+            Response.Redirect("~/Login.aspx");
         }
-        else if (User.IsInRole("ResponsibleEngineer")) {
-            ddlAllProjects.DataSource = from re in ffdb.WorkPackageResponsibleEngineers
-                                        join p in ffdb.Projects on re.projId equals p.projId
-                                        where (re.responsibleEngineer == e.empId)
-                                        select new {
-                                            ProjID = p.projId,
-                                            ProjectName = p.projName + " (" + p.projId + ")"
-                                        };
-        }
-        else {
-            // Load all projects for now.
-            ddlAllProjects.DataSource = from p in ffdb.Projects
-                                        select new {
-                                            ProjID = p.projId,
-                                            ProjectName = p.projName + " (" + p.projId + ")"
-                                        };
-        }
-
-        ddlAllProjects.DataValueField = "ProjId";
-        ddlAllProjects.DataTextField = "ProjectName";
-        ddlAllProjects.DataBind();
+        
     }
 
     private Employee getUser() {
@@ -117,37 +105,26 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     /// If an RE visits the page, shows only the WPs he or she is an RE for.
     /// </summary>
     private void populateWorkpackages() {
-        Employee e = getUser();
+        Employee user = getUser();
 
-        if (User.IsInRole("ProjectManager")) {
-            ddlWorkpackages.DataSource = ffdb.WorkPackages
-                                         .Where(wp => wp.projId == Convert.ToInt32(ddlAllProjects.SelectedValue))
-                                         .Select(wp => new {
-                                             WpID = wp.wpId,
-                                             WpName = wp.name + " (" + wp.wpId + ")"
-                                         });
-        }
-        else if (User.IsInRole("ResponsibleEngineer")) {
-            ddlWorkpackages.DataSource = from re in ffdb.WorkPackageResponsibleEngineers
-                                         join wp in ffdb.WorkPackages on (re.projId + re.wpId) equals (wp.projId + wp.wpId)
-                                         where (re.responsibleEngineer == e.empId)
-                                         select new {
-                                             WpID = wp.wpId,
-                                             WpName = wp.name + " (" + wp.wpId + ")"
-                                         };
+        // Get all projects where this employee is a manager or a responsible engineer
+        if (User.IsInRole("ProjectManager") || User.IsInRole("ResponsibleEngineer")) {
+            var qry = from wp in ffdb.WorkPackages
+                      join p in ffdb.Projects on wp.projId equals p.projId
+                      join wpre in ffdb.WorkPackageResponsibleEngineers on (wp.projId + wp.wpId) equals (wpre.projId + wpre.wpId)
+                      where (wpre.responsibleEngineer == user.empId) || (p.manager == user.empId)
+                      select new {
+                           WpID = wp.wpId,
+                           WpName = wp.name + " (" + wp.wpId + ")"
+                      };
+            ddlWorkpackages.DataValueField = "WpID";
+            ddlWorkpackages.DataTextField = "WpName";
+            ddlWorkpackages.DataBind();
+
         } else {
-            // Load all workpackages for now.
-            ddlWorkpackages.DataSource = ffdb.WorkPackages
-                                         .Where(wp => wp.projId == Convert.ToInt32(ddlAllProjects.SelectedValue))
-                                         .Select(wp => new {
-                                             WpID = wp.wpId,
-                                             WpName = wp.name + " (" + wp.wpId + ")"
-                                         });
+            Response.Redirect("~/Login.aspx");
         }
-
-        ddlWorkpackages.DataValueField = "WpID";
-        ddlWorkpackages.DataTextField = "WpName";
-        ddlWorkpackages.DataBind();
+       
     }
 
     /// <summary>
@@ -214,6 +191,8 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         // Store the ETC for each employee
         allEmployeeWpETCs = getEtcForAll();
 
+        SetResults(String.Empty, false);
+
         // Get the WP's responsible engineer
         Employee respEng = (Employee)
                            (from re in ffdb.WorkPackageResponsibleEngineers
@@ -242,13 +221,8 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
                        ETC = getEtcForEmployee(tse.empId, allEmployeeWpETCs)
                    }).Distinct();
 
-        // Check if no results found
         if (qry.Count() == 0) {
-            gvStatus.DataSource = null;
-            gvStatus.DataBind();
-            lblResults.Visible = true;
-            divReportData.Visible = false;
-            return;
+            SetResults("No employees are assigned to this workpackage.", false);
         }
 
         // Format the data for the Grid View
@@ -400,7 +374,6 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         
         // Get the WorkPackageStatusReport details
         WorkPackageStatusReport wpsr = getExistingReportDetails();
-        ViewState["isNewReport"] = false;
 
         // Create empty WorkPackageStatusReport
         if (wpsr == null) {
@@ -409,7 +382,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             tbWorkPlannedNext.Text = "";
             tbProblemsEncountered.Text = "";
             tbProblemsAncticipatedNext.Text = "";
-            ViewState["isNewReport"] = true;
+            SetResults("No reports found.\nCreating a blank report.\n", true);
         }
         // Populate WorkPackageStatusReport details
         else {
@@ -420,10 +393,9 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             tbProblemsAncticipatedNext.Text = wpsr.problemsAnticipated;
         }
 
-        // Hide any error messages
-        lblResults.Visible = false;
         // Show the report
         divReportData.Visible = true;
+        btnSave.Visible = true;
     }
 
     // NOT TESTED
@@ -717,6 +689,15 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         }
     }
 
+    private void SetResults(String newResults, Boolean append) {
+        lblResults.Visible = true;
+        if (append) {
+            lblResults.Text += newResults;
+        } else {
+            lblResults.Text = newResults;
+        }
+    }
+
     /// <summary>
     /// Get the percent complete of the two String parameters, how much has been done given the ACWP and EAC.
     /// The percent complete (formatted String to 1 decimal place)
@@ -755,18 +736,12 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e) {
+        btnSave.Visible = false;
         ViewState["projId"] = Convert.ToInt32(ddlAllProjects.SelectedValue);
         ViewState["wpId"] = ddlWorkpackages.SelectedValue;
         ViewState["cutOffDate"] = Convert.ToDateTime(tbCutOffDate.Text);
         ViewState["WorkPackage"] = ddlWorkpackages.SelectedItem.Text;
         ViewState["Project"] = ddlAllProjects.SelectedItem.Text;
-        GetWorkPackageStatusReport();
-    }
-
-    protected void btnNewReport_Click(object sender, EventArgs e) {
-        ViewState["projId"] = Convert.ToInt32(ddlAllProjects.SelectedValue);
-        ViewState["wpId"] = ddlWorkpackages.SelectedValue;
-        ViewState["cutOffDate"] = Convert.ToDateTime(tbCutOffDate.Text);
         GetWorkPackageStatusReport();
     }
 
@@ -943,8 +918,7 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
     /// <param name="e">The event.</param>
     protected void btnSave_Click(object sender, EventArgs e) {
         if (Page.IsValid) {
-            lblResults.Text = "";
-            lblResults.Visible = true;
+            SetResults(String.Empty, false);
             Boolean isNewReport = false;
 
             WorkPackageStatusReport wpsr = getExistingReportDetails();

@@ -98,7 +98,9 @@
             </tr>
         </table>
         <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" />
-        <asp:Button ID="btnNewReport" runat="server" Text="Create New Report" OnClick="btnNewReport_Click" />
+        &nbsp;
+                    <asp:Button ID="btnSave" runat="server" Text="Save Report" 
+                        OnClick="btnSave_Click" Visible="False" />
     </div>
     <br />
     <asp:UpdatePanel ID="udpReportResults" runat="server">
@@ -308,8 +310,7 @@
                         </center>
                     </fieldset>
                     <br />
-                    <asp:Button ID="btnSave" runat="server" Text="Save Report" OnClick="btnSave_Click" />
-            </div>
+                    </div>
         </ContentTemplate>
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="btnSubmit" EventName="Click" />
