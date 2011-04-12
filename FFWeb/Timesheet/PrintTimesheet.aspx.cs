@@ -87,7 +87,7 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
                       EmployeeName = emp.firstName + " " + emp.lastName + "(" + th.empId + ")",
                       Date = th.tsDate,
                       Project = tse.projId,
-                      WorkPackage = tse.wpId,
+                      WP = tse.wpId,
                       Mon = tse.mon,
                       Tue = tse.tue,
                       Wed = tse.wed,
@@ -97,7 +97,8 @@ public partial class Timesheet_PrintTimesheet : System.Web.UI.Page
                       Sun = tse.sun,
                       Note = tse.notes,
                       Status = th.status,
-                      Comments = th.comments
+                      Comments = th.comments,
+                      total = tse.sun + tse.mon + tse.tue + tse.wed + tse.thu + tse.fri + tse.sat,
                   };
 
         gvPrintTimesheet.DataSource = qry;
