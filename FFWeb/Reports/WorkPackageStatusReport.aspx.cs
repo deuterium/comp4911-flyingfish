@@ -302,67 +302,67 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
         decimal totalEacDollars = 0;
         decimal totalPercentCompleteDollars = 0;
 
-        for (int i = 1; i <= gvStatus.Rows.Count; i++) {
-            String acwp = gvStatus.Rows[i - 1].Cells[1].Text;
-            String etc = gvStatus.Rows[i - 1].Cells[2].Text;
-            String eac = gvStatus.Rows[i - 1].Cells[3].Text;
-            String pc = gvStatus.Rows[i - 1].Cells[4].Text;
+        //for (int i = 1; i <= gvStatus.Rows.Count; i++) {
+        //    String acwp = gvStatus.Rows[i - 1].Cells[1].Text;
+        //    String etc = gvStatus.Rows[i - 1].Cells[2].Text;
+        //    String eac = gvStatus.Rows[i - 1].Cells[3].Text;
+        //    String pc = gvStatus.Rows[i - 1].Cells[4].Text;
             
-            if (!(acwp.Equals(String.Empty) || acwp.Equals(UnknownValue))) {
-                totalAcwpDays += Convert.ToDecimal(acwp);
-            }
-            if (!(etc.Equals(String.Empty) || etc.Equals(UnknownValue))) {
-                totalEtcDays += Convert.ToDecimal(etc);
-            }
-            if (!(eac.Equals(String.Empty) || eac.Equals(UnknownValue))) {
-                totalEacDays += Convert.ToDecimal(eac);
-            }
-            if (!(pc.Equals(String.Empty) || pc.Equals(UnknownValue))) {
-                totalPercentCompleteDollars += Convert.ToDecimal(stripFormatting(pc));
-            }
+        //    if (!(acwp.Equals(String.Empty) || acwp.Equals(UnknownValue))) {
+        //        totalAcwpDays += Convert.ToDecimal(acwp);
+        //    }
+        //    if (!(etc.Equals(String.Empty) || etc.Equals(UnknownValue))) {
+        //        totalEtcDays += Convert.ToDecimal(etc);
+        //    }
+        //    if (!(eac.Equals(String.Empty) || eac.Equals(UnknownValue))) {
+        //        totalEacDays += Convert.ToDecimal(eac);
+        //    }
+        //    if (!(pc.Equals(String.Empty) || pc.Equals(UnknownValue))) {
+        //        totalPercentCompleteDollars += Convert.ToDecimal(stripFormatting(pc));
+        //    }
 
-            acwp = gvStatus.Rows[i + 1].Cells[1].Text;
-            etc = gvStatus.Rows[i + 1].Cells[2].Text;
-            eac = gvStatus.Rows[i + 1].Cells[3].Text;
-            pc = gvStatus.Rows[i + 1].Cells[4].Text;
+        //    acwp = gvStatus.Rows[i + 1].Cells[1].Text;
+        //    etc = gvStatus.Rows[i + 1].Cells[2].Text;
+        //    eac = gvStatus.Rows[i + 1].Cells[3].Text;
+        //    pc = gvStatus.Rows[i + 1].Cells[4].Text;
             
-            if (!(acwp.Equals(String.Empty) || acwp.Equals(UnknownValue))) {
-                totalAcwpDollars += Convert.ToDecimal(stripFormatting(acwp));
-            }
-            if (!(etc.Equals(String.Empty) || etc.Equals(UnknownValue))) {
-                totalEtcDollars += Convert.ToDecimal(stripFormatting(etc));
-            }
-            if (!(eac.Equals(String.Empty) || eac.Equals(UnknownValue))) {
-                totalEacDollars += Convert.ToDecimal(stripFormatting(eac));
-            }
-            if (!(pc.Equals(String.Empty) || pc.Equals(UnknownValue))) {
-                totalPercentCompleteDollars += Convert.ToDecimal(stripFormatting(pc));
-            }
+        //    if (!(acwp.Equals(String.Empty) || acwp.Equals(UnknownValue))) {
+        //        totalAcwpDollars += Convert.ToDecimal(stripFormatting(acwp));
+        //    }
+        //    if (!(etc.Equals(String.Empty) || etc.Equals(UnknownValue))) {
+        //        totalEtcDollars += Convert.ToDecimal(stripFormatting(etc));
+        //    }
+        //    if (!(eac.Equals(String.Empty) || eac.Equals(UnknownValue))) {
+        //        totalEacDollars += Convert.ToDecimal(stripFormatting(eac));
+        //    }
+        //    if (!(pc.Equals(String.Empty) || pc.Equals(UnknownValue))) {
+        //        totalPercentCompleteDollars += Convert.ToDecimal(stripFormatting(pc));
+        //    }
 
-            i += 3;
-        }
+        //    i += 3;
+        //}
 
-        DataRow drTotalHeader = dt.NewRow();
-        drTotalHeader["Employee"] = "Total";
-        dt.Rows.Add(drTotalHeader);
+        //DataRow drTotalHeader = dt.NewRow();
+        //drTotalHeader["Employee"] = "Total";
+        //dt.Rows.Add(drTotalHeader);
         
-        // P-Days
-        DataRow drTotalDays = dt.NewRow();
-        drTotalDays["Employee"] = "Days:";
-        drTotalDays["ACWP"] = String.Format(decimalFormat, totalAcwpDays);
-        drTotalDays["ETC"] = String.Format(decimalFormat, totalEtcDays);
-        drTotalDays["EAC"] = String.Format(decimalFormat, totalEacDays);
-        drTotalDays["PercentComplete"] = String.Format(decimalFormat, totalPercentCompleteDays);
-        dt.Rows.Add(drTotalDays);
+        //// P-Days
+        //DataRow drTotalDays = dt.NewRow();
+        //drTotalDays["Employee"] = "Days:";
+        //drTotalDays["ACWP"] = String.Format(decimalFormat, totalAcwpDays);
+        //drTotalDays["ETC"] = String.Format(decimalFormat, totalEtcDays);
+        //drTotalDays["EAC"] = String.Format(decimalFormat, totalEacDays);
+        //drTotalDays["PercentComplete"] = String.Format(decimalFormat, totalPercentCompleteDays);
+        //dt.Rows.Add(drTotalDays);
         
-        // P-Dollars
-        DataRow drTotalDollars = dt.NewRow();
-        drTotalDollars["Employee"] = "Dollars:";
-        drTotalDollars["ACWP"] = String.Format(currencyFormat, totalAcwpDollars);
-        drTotalDollars["ETC"] = String.Format(currencyFormat, totalEtcDollars);
-        drTotalDollars["EAC"] = String.Format(currencyFormat, totalEacDollars);
-        drTotalDollars["PercentComplete"] = String.Format(percentFormat, totalPercentCompleteDollars);
-        dt.Rows.Add(drTotalDollars);
+        //// P-Dollars
+        //DataRow drTotalDollars = dt.NewRow();
+        //drTotalDollars["Employee"] = "Dollars:";
+        //drTotalDollars["ACWP"] = String.Format(currencyFormat, totalAcwpDollars);
+        //drTotalDollars["ETC"] = String.Format(currencyFormat, totalEtcDollars);
+        //drTotalDollars["EAC"] = String.Format(currencyFormat, totalEacDollars);
+        //drTotalDollars["PercentComplete"] = String.Format(percentFormat, totalPercentCompleteDollars);
+        //dt.Rows.Add(drTotalDollars);
 
         // Populate the Grid View with the formatted data
         gvStatus.DataSource = dt;
