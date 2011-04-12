@@ -79,6 +79,10 @@ public partial class Timesheet_ApproveTimesheet : System.Web.UI.Page
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
+        ViewState["empId"] = GridView1.SelectedRow.Cells[1].Text;
+        ViewState["date"] = GridView1.SelectedRow.Cells[2].Text;
+        ViewState["proj"] = GridView1.SelectedRow.Cells[3].Text;
+        ViewState["wp"] = GridView1.SelectedRow.Cells[4].Text;
 
         var selectedStatus = (from th in ff.TimesheetHeaders
                               join tse in ff.TimesheetEntries on new { th.tsDate, th.empId } equals new { tse.tsDate, tse.empId }
