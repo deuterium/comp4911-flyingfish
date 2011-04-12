@@ -132,12 +132,6 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
                                     select w1.totalHours).Sum()
                   };
 
-        //foreach (var row in qry) {
-        //    if (row.Week1.Value.ToString().Equals("0.0")) {
-
-        //    }
-        //}
-
         gvSummary.DataSource = qry;
         gvSummary.DataBind();
         gvSummary.Visible = true;
@@ -161,11 +155,9 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
         gvSummary.HeaderRow.Cells[8].Text = dateFor.AddMonths(-2).ToString("MMM");
         // month 4
         gvSummary.HeaderRow.Cells[9].Text = dateFor.AddMonths(-3).ToString("MMM");
-        //gvSummary.HeaderRow.Cells[10].Text = "Total Hours to Date";
+        gvSummary.HeaderRow.Cells[10].Text = "Total Hours to Date";
 
-        // gvSummary.EmptyDataText = "-"; // does not work
     }
-
 
     private Object getTotalMonthlyHours(int empId, DateTime cutOffDate, int projId, String wpId) {
         String strEmp = empId.ToString();
@@ -194,14 +186,7 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
     /// <param name="sender">Object that called the event</param>
     /// <param name="e">the action event</param>
     protected void btnSubmit_Click(object sender, EventArgs e) {
-        //gvSummary.DataSource = null;
-        //gvSummary.DataBind();
-        //gvSummary.Visible = false;
-        
-        if (tbForDate.Text.Equals("")) {
-            tbForDate.Text = DateTime.Now.ToString("yyyy/MM/dd");
-        }
-
-        this.GetTimesheetSummaryReport(Convert.ToInt16(ddlAllProjects.SelectedValue), Convert.ToDateTime(tbForDate.Text));
+        GetTimesheetSummaryReport(Convert.ToInt16(ddlAllProjects.SelectedValue),
+                                  Convert.ToDateTime(tbForDate.Text));
     }
 }

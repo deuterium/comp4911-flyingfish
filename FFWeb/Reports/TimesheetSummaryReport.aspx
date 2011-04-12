@@ -34,14 +34,12 @@
                         ErrorMessage="End date must be between 2010/01/01 and 2500/01/01." MaximumValue="2500/01/01"
                         MinimumValue="2010/01/01" Text="*">
                     </asp:RangeValidator>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <asp:ValidationSummary ForeColor="Red" ID="vsAllValidationErrors" runat="server" />
+                    <asp:RequiredFieldValidator ID="rfvForDate" runat="server" ControlToValidate="tbForDate" ForeColor="Red"
+                        ErrorMessage="Cut-off date is required." Text="*"></asp:RequiredFieldValidator>
                 </td>
             </tr>
         </table>
+        <asp:ValidationSummary ForeColor="Red" ID="vsAllValidationErrors" runat="server" />
         <br />
         <asp:Button ID="btnSubmit" runat="server" Text="Submit" 
                         onclick="btnSubmit_Click" />
