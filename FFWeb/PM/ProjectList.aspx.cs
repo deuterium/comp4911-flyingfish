@@ -52,7 +52,7 @@ public partial class PM_ProjectList : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
 
