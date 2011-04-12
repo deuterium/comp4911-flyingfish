@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Text.RegularExpressions;
 
 /// <summary>
 /// Code behind for teh TimesheetSummaryReport.
@@ -23,15 +24,41 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack) {
-            ddlAllProjects.DataSource = ffdb.Projects.Select(p => new {
-                ProjID = p.projId,
-                ProjectName = (p.projName + " (") + p.projId + ")"
-            });
-            ddlAllProjects.DataValueField = "ProjId";
+            Employee user = getUser();
+            if (!User.IsInRole("ProjectManager")) {
+                Response.Redirect("~/Login.aspx");           
+            }
+
+            var qry = (from p in ffdb.Projects
+                       where (p.manager == user.empId)
+                       select new {
+                           ProjID = p.projId,
+                           ProjectName = p.projName + " (" + p.projId + ")"
+                       }).Distinct();
+            
+            ddlAllProjects.DataSource = qry;
+            ddlAllProjects.DataValueField = "ProjID";
             ddlAllProjects.DataTextField = "ProjectName";
             ddlAllProjects.DataBind();
+            
             tbForDate.Text = DateTime.Now.ToString("yyyy/MM/dd");
+            
         }
+    }
+
+    private Employee getUser() {
+        if (!(User.IsInRole("ProjectManager") || User.IsInRole("ResponsibleEngineer"))) {
+            return null;
+        }
+        String[] tokens = Regex.Split(User.Identity.Name, "_");
+        String firstName = tokens[0];
+        String lastName = tokens[1];
+        Employee e = (from emp in ffdb.Employees
+                      where (String.Compare(firstName, emp.firstName, true) == 0)
+                         && (String.Compare(lastName, emp.lastName, true) == 0)
+                      select emp).FirstOrDefault();
+
+        return e;
     }
 
     /// <summary>
