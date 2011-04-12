@@ -71,7 +71,7 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
     /// <param name="projId">The ID of the project to get data for.</param>
     /// <param name="dateFor">The last date to get data for. Data beyond this date will excluded.</param>
     public void GetTimesheetSummaryReport(int projId, DateTime dateFor) {
-
+        ViewState["ProjectID"] = Convert.ToInt32(ddlAllProjects.SelectedValue);
 
         /*
          * A giant database query calculates the hours worked on each workpackage by each employee of the specified project
@@ -84,6 +84,7 @@ public partial class Reports_TimesheetSummaryReport : System.Web.UI.Page
                   join wp in ffdb.WorkPackages on tse.wpId equals wp.wpId
                   orderby tse.projId, tse.wpId, tse.empId
                   where tse.TimesheetHeader.status.Equals("APPROVED")
+                        && tse.projId == Convert.ToInt32(ViewState["ProjectID"])
                   group tse by new { tse.projId, wp, emp } into g
                   select new {
                       WorkPackage = g.Key.wp.name + " (" + g.Key.wp.wpId + ")",

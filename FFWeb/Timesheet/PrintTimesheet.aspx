@@ -34,8 +34,8 @@
     </asp:CalendarExtender>
     <asp:CompareValidator ID="CompareValidator1" runat="server" 
         ControlToCompare="tbPeriodStart" ControlToValidate="tbPeriodEnd" 
-        ErrorMessage="End date should be larger than start date!" ForeColor="Red" 
-        Operator="GreaterThan" Type="Date"></asp:CompareValidator>
+        ErrorMessage="End date must be larger than start date!" ForeColor="Red" 
+        Operator="GreaterThan" Type="Date">*</asp:CompareValidator>
     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Text="*" ControlToValidate="tbPeriodEnd"
         ErrorMessage="Please specifiy a start date." ForeColor="Red">
     </asp:RequiredFieldValidator>
@@ -43,7 +43,7 @@
         ValidationExpression="^[0-9]{4}/{1}[0-9]{2}/{1}[0-9]{2}$" ControlToValidate="tbPeriodEnd"
         ErrorMessage="End date must be in format 'YYYY/MM/DD'">*</asp:RegularExpressionValidator>
     <asp:RangeValidator ForeColor="Red" ID="RangeValidator1" runat="server" ControlToValidate="tbPeriodEnd"
-        ErrorMessage="Start date must be between 2010/01/01 and 2500/01/01." MaximumValue="2500/01/01"
+        ErrorMessage="End date must be between 2010/01/01 and 2500/01/01." MaximumValue="2500/01/01"
         MinimumValue="2010/01/01" Text="*">
     </asp:RangeValidator>
     <br /><br />
