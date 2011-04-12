@@ -68,29 +68,20 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         // Get all projects where this employee is a manager or a responsible engineer
         if (User.IsInRole("ProjectManager") || User.IsInRole("ResponsibleEngineer")) {
-            var qry = from wp in ffdb.WorkPackages
+            var qry = (from wp in ffdb.WorkPackages
                       join p in ffdb.Projects on wp.projId equals p.projId
                       join wpre in ffdb.WorkPackageResponsibleEngineers on (wp.projId + wp.wpId) equals (wpre.projId + wpre.wpId)
                       where (wpre.responsibleEngineer == user.empId) || (p.manager == user.empId)
                       select new {
                           ProjID = p.projId,
                           ProjectName = p.projName + " (" + p.projId + ")"
-                      };
+                      }).Distinct();
             ddlAllProjects.DataSource = qry;
             ddlAllProjects.DataValueField = "ProjID";
             ddlAllProjects.DataTextField = "ProjectName";
             ddlAllProjects.DataBind();
         } else {
-            var qry = from p in ffdb.Projects
-                      select new {
-                          ProjID = p.projId,
-                          ProjectName = p.projName + " (" + p.projId + ")"
-                      };
-            ddlAllProjects.DataSource = qry;
-            ddlAllProjects.DataValueField = "ProjID";
-            ddlAllProjects.DataTextField = "ProjectName";
-            ddlAllProjects.DataBind();
-            //Response.Redirect("~/Login.aspx");
+            Response.Redirect("~/Login.aspx");
         }
     }
 
@@ -119,32 +110,21 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
 
         // Get all projects where this employee is a manager or a responsible engineer
         if (User.IsInRole("ProjectManager") || User.IsInRole("ResponsibleEngineer")) {
-            var qry = from wp in ffdb.WorkPackages
+            var qry = (from wp in ffdb.WorkPackages
                       join p in ffdb.Projects on wp.projId equals p.projId
                       join wpre in ffdb.WorkPackageResponsibleEngineers on (wp.projId + wp.wpId) equals (wpre.projId + wpre.wpId)
                       where (wpre.responsibleEngineer == user.empId) || (p.manager == user.empId)
                       select new {
                            WpID = wp.wpId,
                            WpName = wp.name + " (" + wp.wpId + ")"
-                      };
+                      }).Distinct();
             ddlWorkpackages.DataSource = qry;
             ddlWorkpackages.DataValueField = "WpID";
             ddlWorkpackages.DataTextField = "WpName";
             ddlWorkpackages.DataBind();
 
         } else {
-
-            var qry = from wp in ffdb.WorkPackages
-                      select new {
-                          WpID = wp.wpId,
-                          WpName = wp.name + " (" + wp.wpId + ")"
-                      };
-            ddlWorkpackages.DataSource = qry; 
-            ddlWorkpackages.DataValueField = "WpID";
-            ddlWorkpackages.DataTextField = "WpName";
-            ddlWorkpackages.DataBind();
-
-            //Response.Redirect("~/Login.aspx");
+            Response.Redirect("~/Login.aspx");
         }
     }
 
