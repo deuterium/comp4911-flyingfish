@@ -80,6 +80,8 @@
                     <td>
                         <div id="divREisAssigned" runat="server" visible="false">
                             <asp:Label ID="lblRE2" runat="server" Text=""></asp:Label>
+                            <asp:Button ID="btnRemove" runat="server" Text="Remove" 
+                                onclick="btnRemove_Click" />
                         </div>
                         <div id="divREnotAssigned" runat="server" visible="false">
                             <asp:Label ID="lblREnotAssigned" runat="server" Visible="false" Text="No Responsible Engineer assigned."></asp:Label>
@@ -250,8 +252,7 @@
         <div id="divAssignRE" visible="false" runat="server" >
             <asp:Label ID="lblAssignRE" runat="server" Text="Assign any of the employees listed below to be a Responsible Engineer:"></asp:Label>
             <br />
-            <font color="#000066"  >***If no employees appear, there is no employees assigned to project. Go to 
-            <asp:LinkButton ID="lbUM2" runat="server" PostBackUrl="~/HR/AssignEmployee.aspx">User Management</asp:LinkButton> to assign employees to the project.</font>
+            <font color="#000066"  >***If no employees appear, there is no employees assigned to project. Ask the HR to assign employees to the project.</font>
             <br />
             <asp:GridView ID="gvAssignRE" runat="server" 
                 OnRowCommand="gvAssignRE_RowCommand" AutoGenerateColumns="False" 

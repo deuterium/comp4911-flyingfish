@@ -29,7 +29,7 @@ public partial class RE_WorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
 
@@ -70,7 +70,7 @@ public partial class RE_WorkPackage : System.Web.UI.Page
         }
         catch (Exception exception)
         {
-            lblException.Text = exception.StackTrace;
+            //lblException.Text = exception.StackTrace;
         }
     }
     protected void btnManage_Click(object sender, EventArgs e)
