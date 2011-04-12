@@ -234,9 +234,9 @@
                 <td>
                     <asp:TextBox ID="tbSun" runat="server"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="tbSun"
-                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                        ErrorMessage="Hours for Sun are required. Put 0 if you did nothing." ForeColor="Red">*</asp:RequiredFieldValidator>
                     <asp:RangeValidator ID="RangeValidator1" runat="server" ControlToValidate="tbSun"
-                        ErrorMessage="You worked too hard!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        ErrorMessage="Sun must be a number between between 0 and 24." ForeColor="Red" MaximumValue="15" MinimumValue="0"
                         Type="Integer">*</asp:RangeValidator>
                 </td>
             </tr>
@@ -247,10 +247,10 @@
                 <td>
                     <asp:TextBox ID="tbMon" runat="server"></asp:TextBox>
                     <asp:RangeValidator ID="RangeValidator2" runat="server" ControlToValidate="tbMon"
-                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        ErrorMessage="Hours for Mon are required. Put 0 if you did nothing." ForeColor="Red" MaximumValue="15" MinimumValue="0"
                         Type="Integer">*</asp:RangeValidator>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="tbMon"
-                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                        ErrorMessage="Mon must be a number between between 0 and 24." ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
@@ -260,10 +260,10 @@
                 <td>
                     <asp:TextBox ID="tbTue" runat="server"></asp:TextBox>
                     <asp:RangeValidator ID="RangeValidator3" runat="server" ControlToValidate="tbThu"
-                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        ErrorMessage="Hours for Tue are required. Put 0 if you did nothing." ForeColor="Red" MaximumValue="15" MinimumValue="0"
                         Type="Integer">*</asp:RangeValidator>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="tbThu"
-                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                        ErrorMessage="Tue must be a number between between 0 and 24." ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
@@ -273,10 +273,10 @@
                 <td>
                     <asp:TextBox ID="tbWed" runat="server"></asp:TextBox>
                     <asp:RangeValidator ID="RangeValidator4" runat="server" ControlToValidate="tbWed"
-                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        ErrorMessage="Hours for Wed are required. Put 0 if you did nothing." ForeColor="Red" MaximumValue="15" MinimumValue="0"
                         Type="Integer">*</asp:RangeValidator>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="tbWed"
-                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                        ErrorMessage="Wed must be a number between between 0 and 24." ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
@@ -286,10 +286,10 @@
                 <td>
                     <asp:TextBox ID="tbThu" runat="server"></asp:TextBox>
                     <asp:RangeValidator ID="RangeValidator5" runat="server" ControlToValidate="tbThu"
-                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        ErrorMessage="Hours for Thu are required. Put 0 if you did nothing." ForeColor="Red" MaximumValue="15" MinimumValue="0"
                         Type="Integer">*</asp:RangeValidator>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="tbThu"
-                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                        ErrorMessage="Thu must be a number between between 0 and 24." ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
@@ -299,10 +299,10 @@
                 <td>
                     <asp:TextBox ID="tbFri" runat="server"></asp:TextBox>
                     <asp:RangeValidator ID="RangeValidator6" runat="server" ControlToValidate="tbFri"
-                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        ErrorMessage="Hours for Fri are required. Put 0 if you did nothing." ForeColor="Red" MaximumValue="15" MinimumValue="0"
                         Type="Integer">*</asp:RangeValidator>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="tbFri"
-                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                        ErrorMessage="Fri must be a number between between 0 and 24." ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
@@ -312,10 +312,10 @@
                 <td>
                     <asp:TextBox ID="tbSat" runat="server"></asp:TextBox>
                     <asp:RangeValidator ID="RangeValidator7" runat="server" ControlToValidate="tbSat"
-                        ErrorMessage="Invalid Amount of Hours!" ForeColor="Red" MaximumValue="15" MinimumValue="0"
+                        ErrorMessage="Hours for Sat are required. Put 0 if you did nothing." ForeColor="Red" MaximumValue="15" MinimumValue="0"
                         Type="Integer">*</asp:RangeValidator>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="tbSat"
-                        ErrorMessage="Work hour is required!" ForeColor="Red">*</asp:RequiredFieldValidator>
+                        ErrorMessage="Sat must be a number between between 0 and 24." ForeColor="Red">*</asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
