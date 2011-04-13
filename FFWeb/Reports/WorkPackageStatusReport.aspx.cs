@@ -777,12 +777,12 @@ public partial class Reports_WorkPackageStatusReport : System.Web.UI.Page {
             }
         }
 
-        if (Regex.IsMatch(strEac, "^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$")) {
+        if (!Regex.IsMatch(strEac, "^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$")) {
             SetResults("* EAC can only contain a dollar sign, comma, period, positive numbers, or 'Unknown'.", false, FailColour);
             return;
         }
 
-        if (Regex.IsMatch(strEtc, "^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$")) {
+        if (!Regex.IsMatch(strEtc, "^(^[U]{1}[n]{1}[k]{1}[n]{1}[o]{1}[w]{1}[n]{1}$)|(^[0-9]*([.]+[0-9]*)*)$")) {
             SetResults("* ETC can only contain a dollar sign, comma, period, positive numbers, or 'Unknown'.", false, FailColour);
             return;
         }
