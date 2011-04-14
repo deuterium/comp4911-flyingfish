@@ -817,9 +817,10 @@ public partial class RE_ManageWorkPackage : System.Web.UI.Page
         {
             User.Identity.Name.ToString();
             employeeRoleFunctionality();
+            return;
         }
 
-        if (User.IsInRole("Employee") && !User.IsInRole("HRStaff") && !User.IsInRole("ProjectManager"))
+        if (User.IsInRole("Employee"))
         {
             var qry =
                 from username in ff.aspnet_Users
